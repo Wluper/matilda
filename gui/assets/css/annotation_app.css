@@ -1,0 +1,446 @@
+
+/********************************
+* ANNOTATION GRID
+********************************/
+#annotation-app {
+    background-color: #ffffff;
+
+    height: 100%;
+
+    display: grid !important;
+    grid-template-columns: minmax(0,3fr) minmax(0,1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 12fr) minmax(0,3fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+
+    /*overflow: hidden;*/
+}
+
+
+#dialogue-menu {
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    background-color: #0e181e;
+
+    height: 100%;
+
+    color: white;
+
+    overflow-y: scroll;
+
+    display: grid;
+    grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
+                   [row2-start] ". button-section . title-section . status-section" 5fr [row2-end]
+                   [row3-start] ". . . . . ." 1fr [row3-end]
+                   / 0.05fr 1fr 0.05fr 1fr 2fr 1fr;
+
+}
+
+.back-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    grid-area: button-section;
+}
+
+.dialogue-name {
+    grid-area: title-section;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dialogue-name-edit {
+    display: none;
+}
+
+.dialogue-title-span {
+
+}
+
+.saved-status {
+    grid-area: status-section;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+}
+
+.is-saved {
+    color: green;
+}
+
+.is-not-saved {
+    color:red;
+}
+
+#dialogue-turns{
+    background-color: #ffffff !important; /* +10 */
+    border-radius: 5px;
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    height: 100%;
+
+    overflow-y: scroll;
+}
+
+
+#annotations {
+    grid-column-start: -2;
+    grid-column-end: -1;
+    grid-row-start: 2;
+    grid-row-end: -1;
+
+    background-color: #15232d;
+
+    overflow-y: scroll;
+
+}
+
+#input-box {
+    grid-column-start: 1;
+    grid-column-end: -2;
+    grid-row-start: -2;
+    grid-row-end: -1;
+
+
+    background-color: #1c2f3d;
+}
+
+/*
+Nice: 15232d
+
+Ok: 1c2f3d
+
+Standard: 293e4c
+
+Light: d5e3ed
+
+WluperDark: 0e181e
+ */
+
+/********************************
+* Dialogue Turn
+********************************/
+
+.turn-header {
+    display: grid;
+    grid-template: [row1-start] ". . . ." 5px [row1-end]
+                   [row2-start] ". turn-id del-turn-button ." 8fr [row2-end]
+                   [row3-start] ". . . ." 5px [row3-end] / 10px 9fr 1fr 10px;
+}
+
+.active-turn-id {
+    grid-area: turn-id;
+}
+
+.turn-deleter {
+    grid-area: del-turn-button;
+    border: 3px solid white;
+    cursor: pointer;
+}
+
+.turn-deleter:hover {
+    background-color: red;
+    border: 3px solid red;
+    color: white;
+}
+
+.turn-deleter:active {
+    transition: 0s;
+    background-color: inherit;
+    border: 3px solid red;
+    color: red;
+}
+
+.user-string-type-name{
+    background-color: #1c2f3d !important;
+    border-radius: 2px;
+
+    /* width: 100%; */
+    height: 100%;
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    text-align: center;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-string-type-text{
+    background-color: #ffffff!important;
+    border-radius: 2px;
+
+    height: 100%;
+    margin:0;
+
+    grid-column-start: 2;
+    grid-column-end: -1;
+
+}
+
+
+.user-string-type-text input{
+    /* background-color: #1c2f3d!important; */
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin:0;
+    border-radius: 2px;
+    outline:none;
+}
+
+
+.user-string-type{
+    background-color: #ffffff !important;
+    border-radius: 3px;
+
+    height: 2em;
+    margin: 0.3em 1em;
+
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) minmax(0,9fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+    overflow: hidden;
+}
+
+
+
+.dialogue-turn-selected > .user-string-type{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+}
+
+.dialogue-turn > .user-string-type{
+    color: #666666;
+    background-color: #eaeff2 !important;
+
+}
+
+.dialogue-turn:hover > .user-string-type{
+    color: #888888;
+    background-color: #5c99c4 !important;
+
+}
+
+.dialogue-turn-selected{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    height: auto;
+    margin: 0.5em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+}
+
+.dialogue-turn{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    height: auto;
+    margin: 0.5em 8em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+    /* -webkit-animation: adjust_size 0.3s forwards; /* Chrome, Safari, Opera */ */
+
+}
+
+.dialogue-turn:hover{
+    background-color: #5c99c4 !important;
+    color: #888888;
+    margin: 0.5em 2em;
+    cursor: pointer;
+    /* -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */ */
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes expand {
+  50% {margin: 0.5em 15em;}
+}
+
+/* Standard syntax */
+@keyframes expand {
+    to {margin: 0.5em 15em;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes adjust_size {
+  to {margin: 0.5em 20em;}
+}
+
+/* Standard syntax */
+@keyframes adjust_size {
+    to {margin: 0.5em 20em;}
+}
+
+/********************************
+* Annotation
+********************************/
+
+.classification-annotation{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+    /*height: 30%;*/
+    margin: 1em;
+    padding-bottom: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.collapsor {
+    cursor: pointer;
+}
+
+.collapsor:hover {
+    color: white;
+}
+
+.collapsor hr {
+    width: 95%;
+    border-color: #aaaaaa;
+}
+
+.highlighted-hr {
+    border: #fff;
+}
+
+.soft-text {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.multilabel-string-item-wrapper {
+    display: grid;
+    grid-template: [row1-start] "checkboxZone labelZone" 1fr [row1-end]
+                   [row2-start] ". inputZone" 1fr [row2-end]
+                   / 1fr 9fr;
+    padding: 10px;
+}
+
+.multilabel-string-checkbox-container {
+    grid-area: checkboxZone;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.multilabel-string-label {
+    grid-area: labelZone;
+}
+
+.multilabel-string-input {
+    grid-area: inputZone;
+}
+
+.checkbox {
+    margin-left: 1em;
+    padding-bottom: 10px;
+}
+
+.annotation-header {
+    color: #aaaaaa;
+}
+
+.bold-label {
+  color: #fff;
+}
+
+/********************************
+* Input Box
+********************************/
+
+.new-input{
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    border-style: hidden;
+
+
+    width: 40%;
+    height: 2em;
+
+    /* background-color: magenta !important;
+
+    height: 10%;
+    margin: 1em; */
+}
+
+
+
+.input-button {
+    /* background-color: #12ff12 !important;
+
+    margin: 1em; */
+    border-style: hidden;
+    border-radius: 1px;
+
+    height: 3em;
+    width: 8em;
+    margin: auto;
+    margin-left: 1em;
+    margin-right: 1em;
+    display: inline-block;
+    cursor: pointer;
+    /* justify-content: center; */
+}
+
+#input-box{
+    text-align: center;
+}
+
+#input-box:focus{
+    text-align: left;
+}
+
+/********************************
+* Dialogue Turn ID
+********************************/
+
+.dialogue-turn-id{
+    background-color: magenta !important;
+
+    height: 10%;
+    margin: 1em;
+}
+
+.dialogue-turn-id-selected{
+    background-color: #12ff12 !important;
+
+    height: 10%;
+    margin: 1em;
+}

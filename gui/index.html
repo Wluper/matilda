@@ -1,0 +1,345 @@
+<!-- MAIN APP -->
+<script type="text/x-template" id="main-app-template">
+
+  <annotation-app v-if="status === 'annotating'"
+                  v-bind:dialogueId="displayingDialogue"
+                  v-on:go_back="clear_annotation($event)"
+                  v-on:dialogue_id_change="change_dialogue_name($event)">
+  </annotation-app>
+
+  <text-splitter v-else-if="status === 'splitting-text-file'"
+                 v-bind:file="splittingFile"
+                 v-bind:sourceFname="splittingTextSourceFile"
+                 v-on:cancel="clear_text_split($event)"
+                 v-on:splitting_complete="clear_text_split($event)">
+  </text-splitter>
+
+  <all-dialogues v-else
+                 v-on:dialogue_selected="load_in_dialogue_to_annotate($event)"
+                 v-on:dialogue_deleted="remove_dialogue_from_visited_list($event)"
+                 v-on:loaded_text_file="handle_loaded_text_file($event)"
+                 v-bind:alreadyVisited="alreadyVisited">
+  </all-dialogues>
+
+</script>
+
+
+<!-- TEXT SPLITTER VIEW -->
+<script type="text/x-template" id="text-splitter-template">
+
+    <div class="text-splitter-container">
+
+        <div class="fname-info-container">
+            <h2 class="fname-info">Source File: {{ sourceFname }}</h2>
+        </div>
+
+        <textarea class="text-editor"
+                  v-on:input="log_change_occured($event)"
+                  v-bind:value="text">
+        </textarea>
+
+        <div class="options-container">
+
+            <h3 class="bold-text">Dialogue Splitter</h3>
+            <hr>
+            <span class="white-text">
+
+                In the pane, separate utterances so that there is a clear blank line
+                between each utterance.
+                <br><br>
+                If there are multiple dialogues, separate each one with a triple
+                equals sign - "===" - with a blank line on either side.
+                <br><br>
+                This system assumes that:
+                <ul>
+                    <li>There are two participants in the dialogue, the "user" and the "system"</li>
+                    <li>The user always asks the first query</li>
+                </ul>
+
+            </span>
+
+        </div>
+
+        <div class="text-buttons-container">
+            <button class="text-split-button warning-button"
+                    v-on:click="cancel_splitting($event)">
+                    Go Back
+            </button>
+            <button class="text-split-button"
+                    v-on:click="process_into_dialogue()">
+                    Done
+            </button>
+        </div>
+    </div>
+
+</script>
+
+<!-- template for the modal component -->
+<script type="text/x-template" id="modal-template">
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              Dialogue File Format
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+              Files can be uploaded to the annotation system in one of two
+              formats: either as a raw .txt file or as a JSON file in the
+              correct format.
+              <br><br>
+              If you upload a .txt file, there are no format restrictions and
+              you will be taken to a screen to process it into a dialogue.
+              <br><br>
+              If you upload a JSON file, it must be in the correct format. This
+              format is as follows:
+
+              <ul>
+                  <li>
+                      File is a dict with keys as the names of each dialogue
+                      and values as lists.
+                  </li>
+                  <li>
+                      Each value is a list of dictionaries, where each
+                      dictionary contains a number of key-value pairs which
+                      are used to display the dialogue data for annotation.
+                  </li>
+                  <li>
+                      Some key-value pairs are compulsory in order to correctly
+                      display the dialogue.
+                  </li>
+                  <li>
+                      The key-value pairs which are compulsory are defined in
+                      the annotator_config.py file in the "server" folder.
+                  </li>
+                  <li>
+                      By default, the only required key-value pair in each turn
+                      is called "usr" and should be the user's query as
+                      a string.
+                  </li>
+              </ul>
+
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</script>
+
+<!-- ALL DIALOGUES VIEW -->
+<script type="text/x-template" id="main-all-dialogues-template">
+
+  <div class="all-dialogues-container"
+       id="listedDialoguesContainer"
+       v-on:dragover="handleDragOver($event)"
+       v-on:dragleave="handleDragOut($event)"
+       v-on:drop="handleDrop($event)">
+
+    <modal v-if="showModal" @close="showModal = false"></modal>
+
+    <div class="dialogue-list-title-container">
+        <h2 v-if="!(dragging)" class="all-dialogues-list-title">
+            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
+        </h2>
+
+        <h2 v-else class="all-dialogues-list-title">
+            Drop Files Anywhere to Upload!
+        </h2>
+
+        <div class="help-button-container">
+            <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
+            <button class="help-button" @click="showModal = true">File Format Info</button>
+        </div>
+    </div>
+
+    <ul class="dialogue-list">
+
+      <li class="listed-dialogue"
+          v-for="(dat, index) in allDialogueMetadata"
+          v-bind:id="index">
+
+          <div class="dialogue-list-single-item-container">
+
+            <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
+              Del
+            </div>
+
+
+            <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
+                <div class="dialogue-id">
+                  {{dat.id}}
+                </div>
+
+                <div v-if="dialogue_already_visited(dat.id)"
+                     class="visited-indicator">
+                     Visited
+                </div>
+
+                <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
+            </div>
+
+          </div>
+
+      </li>
+
+    </ul>
+
+    <div class="add-button-container">
+      <button class="add-dialogue-button" v-on:click="create_new_dialogue()">Add a New Dialogue</button>
+    </div>
+
+    <div class="upload-file-container">
+
+        <!-- <div id="fileInputLabelContainer">
+            Upload a Raw Text File to Process Into a Dialogue:
+        </div> -->
+
+        <div id="fileInputContainer">
+
+            <input type="file"
+                   id="fileInput"
+                   name="fileInput"
+                   accept=".txt, .json"
+                   v-on:change="open_file($event)">
+
+            <label for="fileInput"
+                   id="fileInputLabel">
+                   Upload File or Drag and Drop
+            </label>
+
+        </div>
+
+    </div>
+
+  </div>
+
+</script>
+
+
+<!-- ANNOTATION VIEW -->
+<script type="text/x-template" id="main-annotation-template">
+  <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
+
+      <dialogue-menu v-on:go_back="go_back($event)"
+                     v-on:dialogue_name_changed="handle_dialogue_name_change($event)"
+                     v-bind:changesSaved="allDataSaved"
+                     v-bind:dialogueTitle="dialogueId">
+      </dialogue-menu>
+
+      <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+                      v-bind:turns="dTransformedTurns"
+                      v-bind:currentId="dCurrentId"
+                      v-on:update_string="turn_update($event)"
+                      v-on:update_turn_id="id_updated_from_ids_list($event)"
+                      v-on:delete_turn="remove_turn($event)">
+      </dialogue-turns>
+
+      <annotations v-bind:classifications="dCurrentTurn.multilabel_classification"
+                   v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
+                   v-bind:currentId="dCurrentId"
+                   v-bind:dialogueNonEmpty="dialogueNonEmpty"
+                   v-on:dialogue_turn_update_classification="turn_update($event)"
+                   v-on:dialogue_turn_update_classification_string="turn_update($event)">
+      </annotations>
+
+      <input-box v-on:new_turn="append_new_turn($event)" v-on:save_dialogue="save_dialogue($event)">
+      </input-box>
+
+  </div>
+</script>
+
+
+<!DOCTYPE html>
+<html>
+<!-- =============================================
+HEAD
+============================================= -->
+    <head>
+        <!-- META -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+        <title> LIDA </title>
+
+        <!-- LINKS -->
+        <link rel="shortcut icon" href="assets/images/lida_favicon.png">
+        <link rel="stylesheet" href="assets/css/main.css">
+        <link rel="stylesheet" href="assets/css/annotation_app.css">
+
+        <!-- SCRIPTS -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+
+
+
+<!-- =============================================
+BODY
+============================================= -->
+    <body>
+        <div id=mainContainer>
+
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <a  href="https://github.com/Wluper/lida">
+                         <img src="assets/images/LidaLogo.svg" style="width:auto; height:100%;">
+                    </a>
+
+                    <!-- <nav class="menu-wrapper page-wrapper">
+                    <ul id="menu-nav-menu" class="navigation clearfix mb0">
+                    <li class="menu__item"><a class="small block  menu__link flip-trigger menu-item menu-item-type-post_type menu-item-object-page" href="https://wluper.com/about"><span class="flip  block"><span class="flip__flipped f-bold">About</span><span class="flip__default f-bold">About</span></span></a> </li>
+                    <li class="menu__item"><a class="small block  menu__link flip-trigger menu-item menu-item-type-post_type menu-item-object-page" href="https://wluper.com/technology"><span class="flip  block"><span class="flip__flipped f-bold">Technology</span><span class="flip__default f-bold">Technology</span></span></a> </li>
+                    <li class="menu__item"><a class="small block  menu__link flip-trigger menu-item menu-item-type-post_type menu-item-object-page" href="https://wluper.com/team"><span class="flip  block"><span class="flip__flipped f-bold">Team</span><span class="flip__default f-bold">Team</span></span></a> </li>
+                    <li class="menu__item"><a class="small block  menu__link flip-trigger menu-item menu-item-type-post_type menu-item-object-page" href="https://wluper.com/careers"><span class="flip  block"><span class="flip__flipped f-bold">Careers</span><span class="flip__default f-bold">Careers</span></span></a> </li>
+                </ul>
+            </nav> -->
+                </div>
+            </div>
+
+
+
+            <!-- MAIN APP -->
+            <div id="main-app">
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="foot-bar">
+                    <span class="copyright"><span class="rights">Copyright © 2019 Wluper Ltd.</span></span>
+            </div>
+
+        </div>
+        <!-- =============================================
+        SCRIPTS
+        ============================================= -->
+        <script src="source/utils.js"></script>
+        <script src="source/data.js"></script>
+        <script src="source/components.js"></script>
+
+        <script src="source/dialogue_view.js"></script>
+
+
+    </body>
+
+</html>
