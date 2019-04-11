@@ -49,7 +49,7 @@ It is strongly recommended that you clone into a Python virtual environment:
 $ mkdir LIDA/
 $ python3 -m venv LIDA/
 $ cd LIDA/ && source bin/activate
-(LIDA)$ git clone PUT GITHUB LINK HERE
+(LIDA)$ git clone https://github.com/Wluper/lida.git
 (LIDA)$ cd lida/
 (LIDA)$ pip3 install -r requirements.txt
 ```
