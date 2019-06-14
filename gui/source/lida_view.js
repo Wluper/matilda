@@ -74,7 +74,7 @@ var mainApp = new Vue({
     change_dialogue_name: function (event) {
         console.log('---- CHANGING DIALOGUE NAME ----');
         console.log(event);
-        utils.change_dialogue_name_async(this.displayingDialogue, event.target.value)
+        backend.change_dialogue_name_async(this.displayingDialogue, event.target.value)
             .then( (response) => {
 
                 if (response) {
@@ -97,7 +97,7 @@ var mainApp = new Vue({
   },
 
   template:
-  ```
+  `
     <annotation-app v-if="status === 'annotating'"
                     v-bind:dialogueId="displayingDialogue">
     </annotation-app>
@@ -110,7 +110,7 @@ var mainApp = new Vue({
     <all-dialogues v-else
                    v-bind:alreadyVisited="alreadyVisited">
     </all-dialogues>
-  ```
+  `
 
 
 })

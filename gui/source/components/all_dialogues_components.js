@@ -72,7 +72,7 @@ Vue.component("all-dialogues", {
 
     create_new_dialogue(event) {
 
-        utils.create_empty_dialogue()
+        backend.post_empty_dialogue()
             .then( (newDialogueId) => {
 
                 this.allDialogueMetadata.push({id: newDialogueId, num_turns: 0});
@@ -161,7 +161,7 @@ Vue.component("all-dialogues", {
   },
 
   template:
-  ```
+  `
   <div class="all-dialogues-container"
        id="listedDialoguesContainer"
        v-on:dragover="handleDragOver($event)"
@@ -245,7 +245,7 @@ Vue.component("all-dialogues", {
     </div>
 
   </div>
-  ```
+  `
 
 });
 
@@ -262,7 +262,7 @@ Vue.component("all-dialogues", {
 *************************************/
 Vue.component('modal', {
   template:
-  ```
+  `
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
@@ -330,5 +330,5 @@ Vue.component('modal', {
       </div>
     </div>
   </transition>
-  ```
+  `
 })

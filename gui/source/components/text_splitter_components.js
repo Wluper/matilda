@@ -72,7 +72,7 @@ Vue.component("text-splitter", {
     },
 
     template:
-    ```
+    `
         <div class="text-splitter-container">
 
             <div class="fname-info-container">
@@ -117,6 +117,6 @@ Vue.component("text-splitter", {
                 </button>
             </div>
         </div>
-    ```
+    `
 
 });

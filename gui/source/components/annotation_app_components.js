@@ -45,7 +45,7 @@ Vue.component("annotation-app", {
         this.init();
         this.focus_on_new_query_box();
     },
-    
+
 /***************************************************************************
 *
 * EVENTS GO HERE
@@ -160,7 +160,7 @@ Vue.component("annotation-app", {
 
         append_new_turn: function(event){
             this.allDataSaved = false;
-            backend.get_annotate_turn_async(event)
+            backend.annotate_query(event)
                 .then( (response) => {
                     console.log("+++++++++++++ GOT ANNOTATED TURN FROM API ++++++++++++")
                     console.log(response)
@@ -194,7 +194,7 @@ Vue.component("annotation-app", {
     },
 
     template:
-    ```
+    `
     <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
         <dialogue-menu v-bind:changesSaved="allDataSaved"
@@ -216,9 +216,8 @@ Vue.component("annotation-app", {
         </input-box>
 
     </div>
-    ```
+    `
 });
-
 
 
 
@@ -241,7 +240,7 @@ Vue.component('dialogue-menu',{
                 this.allDataSaved = false;
                 annotationAppEventBus.$emit('dialogue_id_change', event)
             }
-        }
+        },
 
         go_back_to_all_dialogues: function(event){
             annotationAppEventBus.$emit("go_back", event)
@@ -454,6 +453,8 @@ Vue.component('annotations',{
 
 
 
+
+
 /********************************
 * Input Box Component
 ********************************/
@@ -492,11 +493,6 @@ Vue.component('input-box',{
     </div>
     `
 })
-
-
-
-
-
 
 
 

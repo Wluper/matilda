@@ -2,6 +2,7 @@
 
 # == Native ==
 import os
+import sys
 import json
 import copy
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
@@ -330,19 +331,19 @@ def change_dialogue_name(oldName, newName):
 
     response_object = {
         "status": "success",
-        "id"    : dialogue_id
+        "id"    : oldName
     }
 
 
     try:
         DIALOGUES[newName] = copy.deepcopy(DIALOGUES[oldName])
-        del DIALOGUES[oldname]
+        del DIALOGUES[oldName]
 
     except KeyError:
 
         response_object["status"] = "error"
         response_object["error"] = \
-        "Name to replace, \'{}\', doesn't exist on server".format(oldname)
+        "Name to replace, \'{}\', doesn't exist on server".format(oldName)
 
     return jsonify(response_object)
 
@@ -359,8 +360,9 @@ def single_dialogue(dialogue_id):
         error = None
         data  = request.get_json()
 
-        if data["id"]:
-            return change_dialogue_name(dialogue_id, data["id"])
+        if not (type(data)==list):
+            if data["id"]:
+                return change_dialogue_name(dialogue_id, data["id"])
 
         data  = check_dialogue(data)
 
