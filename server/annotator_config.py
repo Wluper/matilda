@@ -30,7 +30,7 @@ class Configuration(object):
     class responsible for configuration and valid annotation structure
     """
 
-    __configDict = {
+    configDict = {
 
         "usr": {
             "description" : "The user's query",
@@ -106,7 +106,7 @@ class Configuration(object):
 
         for i, turn in enumerate(dialogue):
 
-            for labelName, info in self.__configDict.items():
+            for labelName, info in self.configDict.items():
 
                 try:
                     turn[labelName]
@@ -141,7 +141,7 @@ class Configuration(object):
         """
         out = {}
 
-        for key,value in annotator_config.configDict.items():
+        for key,value in self.configDict.items():
 
             temp = list(value["labels"]) if value.get("labels") else ""
 
