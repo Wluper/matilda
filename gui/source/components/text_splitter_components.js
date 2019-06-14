@@ -46,12 +46,12 @@ Vue.component("text-splitter", {
             if (this.inputChanged) {
 
                 if (confirm("You have made changes, going back will delete them. Are you sure you wish to do this?")) {
-                    this.$emit('cancel')
+                    textSplitterEventBus.$emit('cancel')
                 }
 
             } else {
 
-                this.$emit('cancel')
+                textSplitterEventBus.$emit('cancel')
 
             }
 
@@ -63,9 +63,9 @@ Vue.component("text-splitter", {
 
             console.log("DIALOGUES LIST:", dialoguesList)
 
-            utils.post_new_dialogues_from_string_lists_async(dialoguesList)
+            backend.post_new_dialogues_from_string_lists_async(dialoguesList)
                 .then( (response) => {
-                    this.$emit('splitting_complete')
+                    textSplitterEventBus.$emit('splitting_complete')
                 });
         }
 

@@ -3,7 +3,6 @@
 *************************************/
 
 Vue.component("annotation-app", {
-    // el: "#annotation-app",
 
     props: [
       "dialogueId"
@@ -23,24 +22,16 @@ Vue.component("annotation-app", {
     // COMPUTED properties
     computed:{
         dIds: function() {
-            console.log("Dialogue Turns instantiated part: 1");
             temp = utils.range(1, this.dTurns.length);
             return temp;
-
         },
 
         dCurrentTurn: function() {
-            console.log("Dialogue Turns instantiated part: 2");
-            console.log(this.dCurrentId)
-            console.log(this.dTurns)
             temp = utils.get_turn_data(this.dTurns[ this.dCurrentId - 1 ], this.validAnnotations, this.annotationFormat);
-            console.log('---- DATA IN DISPLAY FORMAT ----')
-            console.log(temp)
             return temp;
         },
 
         dTransformedTurns: function(){
-            console.log("Dialogue Turns instantiated part: 3");
             temp = utils.get_all_turns_data(this.dTurns, this.validAnnotations, this.annotationFormat);
             return temp;
         },
@@ -54,6 +45,28 @@ Vue.component("annotation-app", {
         this.init();
         this.focus_on_new_query_box();
     },
+    
+/***************************************************************************
+*
+* EVENTS GO HERE
+*
+***************************************************************************/
+    created (){
+        // GENERAL EVENT LISTENERS
+        window.addEventListener('keyup', this.change_turn);
+        // DIALOGUE TURNS EVENTS
+        annotationAppEventBus.$on( "turn_updated_string", this.turn_update );
+        annotationAppEventBus.$on( "update_turn_id", this.id_updated_from_ids_list );
+        annotationAppEventBus.$on( "delete_turn", this.remove_turn );
+
+        // ANNOTATION EVENTS
+        annotationAppEventBus.$on( "update_classification", this.turn_update );
+        annotationAppEventBus.$on( "classification_string_updated", this.turn_update );
+
+        // INPUT BOX EVENTS
+        annotationAppEventBus.$on( "new_turn", this.append_new_turn );
+        annotationAppEventBus.$on( "save_dialogue", this.save_dialogue );
+    },
 
     // METHODS
     methods:{
@@ -61,7 +74,7 @@ Vue.component("annotation-app", {
         init: function() {
 
           // Step One :: Download a Single Dialogue
-          utils.get_single_dialogue_async(this.dialogueId)
+         backend.get_single_dialogue_async(this.dialogueId)
               .then( (response) => {
                   console.log('---- RECEIVED DATA FROM THE SERVER ----')
                   console.log(response)
@@ -70,18 +83,11 @@ Vue.component("annotation-app", {
               })
 
           // Step Two :: Get the Annotation Styles
-          utils.get_annotation_style_async()
+          backend.get_annotation_style_async()
               .then( (response) => {
                   this.annotationFormat = response;
               });
 
-        },
-
-        handle_dialogue_name_change: function(event) {
-            if (event.target.value !== '') {
-                this.allDataSaved = false;
-                this.$emit('dialogue_id_change', event)
-            }
         },
 
         remove_turn: function(event) {
@@ -154,7 +160,7 @@ Vue.component("annotation-app", {
 
         append_new_turn: function(event){
             this.allDataSaved = false;
-            utils.get_annotate_turn_async(event)
+            backend.get_annotate_turn_async(event)
                 .then( (response) => {
                     console.log("+++++++++++++ GOT ANNOTATED TURN FROM API ++++++++++++")
                     console.log(response)
@@ -170,14 +176,9 @@ Vue.component("annotation-app", {
             toFocus.focus()
         },
 
-        go_back : function (event) {
-            console.log('firing go back again');
-            this.$emit('go_back', event);
-        },
-
         save_dialogue: function(event) {
 
-            utils.put_single_dialogue_async(event, this.dialogueId, this.dTurns)
+            backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns)
                 .then( (status) => {
 
                     if (status == "success") {
@@ -191,39 +192,330 @@ Vue.component("annotation-app", {
         }
 
     },
-    created: function () {
-        window.addEventListener('keyup', this.change_turn);
-    },
 
     template:
     ```
     <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
-        <dialogue-menu v-on:go_back="go_back($event)"
-                       v-on:dialogue_name_changed="handle_dialogue_name_change($event)"
-                       v-bind:changesSaved="allDataSaved"
+        <dialogue-menu v-bind:changesSaved="allDataSaved"
                        v-bind:dialogueTitle="dialogueId">
         </dialogue-menu>
 
         <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
                         v-bind:turns="dTransformedTurns"
-                        v-bind:currentId="dCurrentId"
-                        v-on:update_string="turn_update($event)"
-                        v-on:update_turn_id="id_updated_from_ids_list($event)"
-                        v-on:delete_turn="remove_turn($event)">
+                        v-bind:currentId="dCurrentId">
         </dialogue-turns>
 
         <annotations v-bind:classifications="dCurrentTurn.multilabel_classification"
                      v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
                      v-bind:currentId="dCurrentId"
-                     v-bind:dialogueNonEmpty="dialogueNonEmpty"
-                     v-on:dialogue_turn_update_classification="turn_update($event)"
-                     v-on:dialogue_turn_update_classification_string="turn_update($event)">
+                     v-bind:dialogueNonEmpty="dialogueNonEmpty">
         </annotations>
 
-        <input-box v-on:new_turn="append_new_turn($event)" v-on:save_dialogue="save_dialogue($event)">
+        <input-box>
         </input-box>
 
     </div>
     ```
 });
+
+
+
+
+/********************************
+* Dialogue Turns Component
+********************************/
+
+Vue.component('dialogue-menu',{
+    props : ["turn","currentId", "changesSaved", "dialogueTitle"],
+
+    data () {
+      return {
+          editingTitle: false,
+      }
+    },
+
+    methods :{
+        handle_dialogue_id_change : function(event){
+            if (event.target.value !== '') {
+                this.allDataSaved = false;
+                annotationAppEventBus.$emit('dialogue_id_change', event)
+            }
+        }
+
+        go_back_to_all_dialogues: function(event){
+            annotationAppEventBus.$emit("go_back", event)
+        },
+
+        toggleTitleEdit: function() {
+
+            let inputSection = document.getElementById(this.dialogueTitle + '-name-input')
+            let titleSpan    = document.getElementById(this.dialogueTitle + '-dialogue-title-span')
+
+            if (this.editingTitle) {
+                this.editingTitle          = false;
+                inputSection.style.display = 'none';
+                titleSpan.style.display    = 'inherit';
+            } else {
+                this.editingTitle          = true;
+                inputSection.style.display = 'inherit';
+                inputSection.focus();
+                titleSpan.style.display    = 'none';
+            }
+
+        },
+
+    },
+    template:
+    `
+    <div id="dialogue-menu">
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button">Back to All Dialgoues</button>
+
+        <div class="dialogue-name">
+
+            <input type="text"
+                   class="dialogue-name-edit"
+                   v-bind:id="dialogueTitle + '-name-input'"
+                   v-bind:value="dialogueTitle"
+                   v-on:input="handle_dialogue_id_change($event)"
+                   v-on:focusout="toggleTitleEdit()">
+
+            <span v-bind:id="dialogueTitle + '-dialogue-title-span'"
+                  v-on:click="toggleTitleEdit()">
+                  {{ dialogueTitle }}
+            </span>
+
+        </div>
+
+        <div class="saved-status">
+            <span v-if="changesSaved" class="is-saved">All Changes Saved</span>
+            <span v-else class="is-not-saved">Unsaved Changes</span>
+        </div>
+    </div>
+    `
+})
+
+
+
+
+/********************************
+* Dialogue Turn Component
+********************************/
+
+
+Vue.component('dialogue-turns',{
+
+    // primaryElementClass is the class used to select the correct input field
+    // to correctly set the focus when turns are changed with arrow keys or enter
+    props : ["turns","currentId", "primaryElementClass"],
+
+    template:
+    `
+    <div id="dialogue-turns">
+
+        <dialogue-turn v-for="(turn, index) in turns"
+                       v-bind:primaryElementClass="primaryElementClass"
+                       v-bind:turn="turn.string"
+                       v-bind:currentId="currentId"
+                       v-bind:myId="index + 1">
+        </dialogue-turn>
+
+    </div>
+    `
+})
+
+
+Vue.component('dialogue-turn',{
+    // primaryElementClass is the class used to select the correct input field
+    // to correctly set the focus when turns are changed with arrow keys or enter
+    props : ["turn","currentId","myId", "primaryElementClass"],
+
+    methods :{
+        turn_updated_string : function(event){
+            annotationAppEventBus.$emit("turn_updated_string", event )
+        },
+        check_if_selected(){
+            return this.currentId==this.myId;
+        },
+        update_id(){
+            annotationAppEventBus.$emit("update_turn_id", this.myId)
+        },
+        delete_this_turn(event) {
+            annotationAppEventBus.$emit("delete_turn", this.myId)
+        }
+    },
+    mounted(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+        }
+    },
+    updated(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+        }
+    },
+
+    directives: {
+
+        blur: {
+            componentUpdated: function(el) {
+                el.blur();
+            }
+        }
+
+    },
+
+    template:
+    `
+    <div v-if="check_if_selected()" class="dialogue-turn-selected">
+
+        <div class="turn-header">
+            <div class="active-turn-id">
+                Turn Id: {{myId}}
+            </div>
+
+            <button class="turn-deleter" v-on:click="delete_this_turn($event)">Delete</button>
+        </div>
+
+        <div v-for="stringType in turn" class="user-string-type">
+            <div class="user-string-type-name">
+                {{stringType.name}}
+            </div>
+
+            <div class="user-string-type-text">
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+            </div>
+
+        </div>
+    </div>
+
+    <div v-else v-on:click="update_id()" class="dialogue-turn">
+        <div class="sticky">
+            Turn Id: {{myId}}
+        </div>
+
+        <div v-for="stringType in turn" class="user-string-type">
+            <div class="user-string-type-name">
+                {{stringType.name}}
+            </div>
+
+            <div class="user-string-type-text">
+                <comm-input v-blur v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" class="user-string-type-text" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+            </div>
+
+        </div>
+    </div>
+    `
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********************************
+* Annotation Component
+********************************/
+
+Vue.component('annotations',{
+    props : ["classifications", "classifications_strings", "currentId", "dialogueNonEmpty"],
+
+    template:
+    `
+    <div id="annotations">
+        <div class="annotation-header sticky">
+        Current Turn: {{currentId}}
+        </div>
+        <classification-annotation v-if="dialogueNonEmpty"
+                                   v-for="classification in classifications"
+                                   v-bind:classification="classification.data"
+                                   v-bind:classFormat="classification.params"
+                                   v-bind:uniqueName="classification.name">
+        </classification-annotation>
+        <classification-string-annotation v-if="dialogueNonEmpty"
+                                          v-for="classString in classifications_strings"
+                                          v-bind:classification_strings="classString.data"
+                                          v-bind:uniqueName="classString.name"
+                                          v-bind:classes="classString.params">
+        </classification-string-annotation>
+
+    </div>
+    `
+})
+
+
+
+/********************************
+* Input Box Component
+********************************/
+
+Vue.component('input-box',{
+    props : ["message"],
+    data: function (){
+        return {
+            input : this.message
+        }
+    },
+    methods:{
+
+        new_turn : function(event){
+            console.log('NEW TURN EMISSION', event)
+            this.input="";
+            if ( !(event.target.value=="") )
+                annotationAppEventBus.$emit("new_turn",event.target.value)
+        },
+
+        save : function(event) {
+            console.log(event);
+            annotationAppEventBus.$emit("save_dialogue", event)
+        }
+    },
+    template:
+    `
+    <div id="input-box">
+        <input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" placeholder="Enter New Query">
+        </input>
+
+        <button v-on:click="new_turn({target:{value:input}})" class="input-button">Enter</button>
+
+        <button class="input-button" v-on:click="save()">Save</button>
+
+    </div>
+    `
+})
+
+
+
+
+
+
+
+
+/************************
+* Helper Components
+************************/
+
+Vue.component("comm-input",{
+    props : ["uniqueName","inputValue", "placeholder", "componentId", "inputClassName"],
+
+    methods :{
+        input_updated : function(event){
+            //cause input is inbuild it has complicated event.target.value thing
+            this.$emit("comm_input_update",{data: event.target.value, name: this.uniqueName})
+        }
+    },
+
+    template:
+    `
+    <input v-bind:class="inputClassName" v-bind:id="componentId" v-bind:placeholder="placeholder" v-bind:value="inputValue" v-on:input="input_updated($event)">
+    `
+})

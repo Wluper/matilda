@@ -53,7 +53,7 @@ Vue.component("all-dialogues", {
 
     getAllDialogueIdsFromServer() {
 
-      utils.get_all_dialogue_ids_async()
+      backend.get_all_dialogue_ids_async()
           .then( (response) => {
 
               this.allDialogueMetadata = response;
@@ -67,7 +67,7 @@ Vue.component("all-dialogues", {
     },
 
     clicked_dialogue(clickedDialogue) {
-        this.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
+        allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
     },
 
     create_new_dialogue(event) {
@@ -88,12 +88,12 @@ Vue.component("all-dialogues", {
             console.log()
             idToDelete = event.target.parentNode.parentNode.id;
             nameToDelete = this.allDialogueMetadata[idToDelete].id
-            utils.del_single_dialogue_async(nameToDelete)
+            backend.del_single_dialogue_async(nameToDelete)
                 .then( () => {
                     this.getAllDialogueIdsFromServer();
                 });
 
-            this.$emit('dialogue_deleted', nameToDelete);
+            allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
 
         } else {
 
@@ -114,7 +114,7 @@ Vue.component("all-dialogues", {
 
         if (file.type.match(textType)) {
 
-            this.$emit('loaded_text_file', file);
+            allDialoguesEventBus.$emit('loaded_text_file', file);
 
         } else if (file.type.match(jsonType)) {
 
@@ -124,7 +124,7 @@ Vue.component("all-dialogues", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                utils.post_new_dialogue_from_json_string_async(text)
+                backend.post_new_dialogue_from_json_string_async(text)
                     .then( (response) => {
 
                         if ('error' in response.data) {
@@ -146,7 +146,7 @@ Vue.component("all-dialogues", {
     },
 
     download_all_dialogues_from_server(event) {
-        utils.get_all_dialogues_async()
+        backend.get_all_dialogues_async()
             .then( (response) => {
                 let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                 const url = window.URL.createObjectURL(blob)

@@ -1,4 +1,13 @@
-// This is the main view
+/*******************************************************************************
+* IMPORT STATEMENTS
+*******************************************************************************/
+
+
+
+
+/*******************************************************************************
+* MAIN VIEW
+*******************************************************************************/
 
 var mainApp = new Vue({
   el: '#main-app',
@@ -11,6 +20,21 @@ var mainApp = new Vue({
       splittingFile: '',
       splittingTextSourceFile: '',
     }
+  },
+
+  created () {
+      // Annotation APP EVENTS
+      annotationAppEventBus.$on("go_back", this.clear_annotation );
+      annotationAppEventBus.$on("dialogue_id_change", this.change_dialogue_name );
+
+      // Split View EVENTS
+      textSplitterEventBus.$on("cancel", this.clear_text_split)
+      textSplitterEventBus.$on("splitting_complete", this.clear_text_split)
+
+      // All Dialogue (MAIN VIEW) Event Bus
+      allDialoguesEventBus.$on( "dialogue_selected", this.load_in_dialogue_to_annotate )
+      allDialoguesEventBus.$on( "dialogue_deleted", this.remove_dialogue_from_visited_list )
+      allDialoguesEventBus.$on( "loaded_text_file", this.handle_loaded_text_file )
   },
 
   methods: {
@@ -75,22 +99,15 @@ var mainApp = new Vue({
   template:
   ```
     <annotation-app v-if="status === 'annotating'"
-                    v-bind:dialogueId="displayingDialogue"
-                    v-on:go_back="clear_annotation($event)"
-                    v-on:dialogue_id_change="change_dialogue_name($event)">
+                    v-bind:dialogueId="displayingDialogue">
     </annotation-app>
 
     <text-splitter v-else-if="status === 'splitting-text-file'"
                    v-bind:file="splittingFile"
-                   v-bind:sourceFname="splittingTextSourceFile"
-                   v-on:cancel="clear_text_split($event)"
-                   v-on:splitting_complete="clear_text_split($event)">
+                   v-bind:sourceFname="splittingTextSourceFile">
     </text-splitter>
 
     <all-dialogues v-else
-                   v-on:dialogue_selected="load_in_dialogue_to_annotate($event)"
-                   v-on:dialogue_deleted="remove_dialogue_from_visited_list($event)"
-                   v-on:loaded_text_file="handle_loaded_text_file($event)"
                    v-bind:alreadyVisited="alreadyVisited">
     </all-dialogues>
   ```
