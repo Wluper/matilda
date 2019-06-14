@@ -348,7 +348,7 @@ async function create_empty_dialogue() {
 }
 
 
-async function post_new_dialogues_from_string_lists(stringLists) {
+async function post_new_dialogues_from_string_lists_async(stringLists) {
 
     const apiPath = 'http://127.0.0.1:5000/dialogues'
 
@@ -370,13 +370,11 @@ async function post_new_dialogues_from_string_lists(stringLists) {
 }
 
 
-async function post_new_dialogue_from_json_string(jsonString) {
-
-    const apiPath = 'http://127.0.0.1:5000/dialogues'
+async function post_new_dialogue_from_json_string_async(jsonString) {
 
     try {
 
-        const response = await axios.post(apiPath, JSON.parse(jsonString))
+        const response = RESTdialogues( "POST", JSON.parse(jsonString) )
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)
@@ -394,16 +392,9 @@ async function post_new_dialogue_from_json_string(jsonString) {
 
 async function put_single_dialogue_async(event, dialogueId, dTurns) {
 
-    console.log("********** SAVING DIALOGUE **********");
-    console.log(event);
-    console.log(dialogueId);
-    console.log(dTurns);
-
-    const putLink = `http://127.0.0.1:5000/dialogues/${dialogueId}`
-
     try {
 
-        const response = await axios.put(putLink, dTurns);
+        const response = RESTdialogues( "PUT", dialogueId, {turns : dTurns} )
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
@@ -420,14 +411,9 @@ async function put_single_dialogue_async(event, dialogueId, dTurns) {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    console.log('********** CHANGING DIALOGUE NAME **********');
-    console.log('OLD NAME:', oldName, 'NEW NAME:', newName)
-
-    const putLink = `http://127.0.0.1:5000/dialogues/change_name/${oldName}`
-
     try {
 
-        const response = await axios.put(putLink, {old_name: oldName, new_name: newName})
+        const response = RESTdialogues( "PUT", oldName, {id: newName} )
         console.log('---- RESPONSE TO NAME CHANGE ----', response);
         return true;
 
@@ -436,7 +422,6 @@ async function change_dialogue_name_async(oldName, newName) {
         console.log(error);
 
     }
-
     return false;
 
 };
@@ -444,14 +429,9 @@ async function change_dialogue_name_async(oldName, newName) {
 
 async function del_single_dialogue_async(dialogueId) {
 
-    console.log("********** SAVING DIALOGUE **********");
-    console.log(dialogueId)
-
-    const delLink = `http://127.0.0.1:5000/dialogues/${dialogueId}`
-
     try {
 
-        const response = await axios.delete(delLink);
+        const response = RESTdialogues( "DELETE", dialogueId )
         console.log('---- RESPONSE TO DEL ----', response);
 
     } catch(error) {
@@ -462,6 +442,38 @@ async function del_single_dialogue_async(dialogueId) {
 
 };
 
+
+
+async function RESTdialogues(method, id, params){
+    console.log("********** ACCESSING DIALOGUES RESOURCE **********");
+    console.log("ID:"+dialogueId)
+    console.log("METHOD"+method)
+    console.log("PARAMS"+params)
+
+    //
+    if (id==NONE) const apiLink = `http://127.0.0.1:5000/dialogues`;
+    else const apiLink = `http://127.0.0.1:5000/${dialogueId}`;
+
+    //
+    if (method=="DELETE") {
+        var response = await axios.delete( apiLink );
+    }
+    else if (method=="PUT") {
+        var response = await axios.put( apiLink, params );
+    }
+    else if (method=="POST") {
+        var response = await axios.post( apiLink, params );
+    }
+    else if (method=="GET") {
+        var response = await axios.get( apiLink, params );
+    }
+    else{
+        console.log("********** INVALID METHOD **********")
+    }
+    return response
+
+
+}
 /********************************
 * HELPER FUNCTIONS
 ********************************/
@@ -524,9 +536,6 @@ utils =
     range                              : range,
     get_all_dialogues_async            : get_all_dialogues_async,
     get_annotation_style_async         : get_annotation_style_async,
-    update_turn                        : update_turn,
-    get_turn_data                      : get_turn_data,
-    get_all_turns_data                 : get_all_turns_data,
     get_annotate_turn_async            : get_annotate_turn_async,
     put_single_dialogue_async          : put_single_dialogue_async,
     get_all_dialogue_ids_async         : get_all_dialogue_ids_async,
@@ -534,9 +543,8 @@ utils =
     create_empty_dialogue              : create_empty_dialogue,
     del_single_dialogue_async          : del_single_dialogue_async,
     change_dialogue_name_async         : change_dialogue_name_async,
-    post_new_dialogues_from_string_lists : post_new_dialogues_from_string_lists,
-    post_new_dialogue_from_json_string : post_new_dialogue_from_json_string,
-    determine_drag_and_drop_capable    : determine_drag_and_drop_capable
+    post_new_dialogues_from_string_lists_async : post_new_dialogues_from_string_lists_async,
+    post_new_dialogue_from_json_string_async : post_new_dialogue_from_json_string_async,
 }
 
 //

@@ -1,27 +1,14 @@
+<!-- MAIN APP -->
+<script type="text/x-template"  id="main-app-template">
 
+  <all-dialogues
+                 v-on:dialogue_selected="load_in_dialogue_to_annotate($event)"
+                 v-on:dialogue_deleted="remove_dialogue_from_visited_list($event)"
+                 v-on:loaded_text_file="handle_loaded_text_file($event)"
+                 v-bind:alreadyVisited="alreadyVisited">
+  </all-dialogues>
 
-
-
-
-
-
-
-
-<!-- ============================================================================================================================
-============================================================================================================================
-============================================================================================================================
-============================================================================================================================
-+
-+
-+ BODY
-+
-+
-============================================================================================================================
-============================================================================================================================
-============================================================================================================================
-============================================================================================================================ -->
-
-
+</script>
 
 
 
@@ -61,7 +48,7 @@ BODY
             <div class="header">
                 <div class="logo">
                     <!-- <a  href="https://github.com/Wluper/lida"> -->
-                    <a  href="./admin.html">
+                    <a  href="./index.html">
                          <img src="assets/images/LidaLogo.svg" style="width:auto; height:100%;">
                     </a>
                 </div>
@@ -91,10 +78,10 @@ BODY
         SCRIPTS
         ============================================= -->
         <script src="source/utils.js"></script>
-        <!-- <script src="source/data.js"></script> -->
+        <script src="source/data.js"></script>
         <script src="source/components.js"></script>
 
-        <script src="source/dialogue_view.js"></script>
+        <script src="source/admin.js"></script>
 
 
     </body>

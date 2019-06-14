@@ -72,6 +72,28 @@ var mainApp = new Vue({
 
   },
 
-  template: '#main-app-template'
+  template:
+  ```
+    <annotation-app v-if="status === 'annotating'"
+                    v-bind:dialogueId="displayingDialogue"
+                    v-on:go_back="clear_annotation($event)"
+                    v-on:dialogue_id_change="change_dialogue_name($event)">
+    </annotation-app>
+
+    <text-splitter v-else-if="status === 'splitting-text-file'"
+                   v-bind:file="splittingFile"
+                   v-bind:sourceFname="splittingTextSourceFile"
+                   v-on:cancel="clear_text_split($event)"
+                   v-on:splitting_complete="clear_text_split($event)">
+    </text-splitter>
+
+    <all-dialogues v-else
+                   v-on:dialogue_selected="load_in_dialogue_to_annotate($event)"
+                   v-on:dialogue_deleted="remove_dialogue_from_visited_list($event)"
+                   v-on:loaded_text_file="handle_loaded_text_file($event)"
+                   v-bind:alreadyVisited="alreadyVisited">
+    </all-dialogues>
+  ```
+
 
 })
