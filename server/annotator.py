@@ -57,14 +57,20 @@ class DialogueAnnotator(object):
         return self.__dialogues
 
 
-    def get_dialogues_name(self):
+    def get_dialogues_metadata(self):
         """
         Gets the name of dialogues, returns a list
         """
 
-        outList = [x for x,_ in self.__dialogues.items()]
+        metadata = []
 
-        return outList
+        for dialogueID, dialogueTurnList in self.__dialogues.items():
+            print(dialogueID)
+
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList)})
+
+        return metadata
+
 
     def get_new_dialogue_id(self):
         """
@@ -76,17 +82,18 @@ class DialogueAnnotator(object):
         return newId
 
 
+
+
+
     def update_dialogue_name(self, id, newName):
         """
         updates the dialogue name
         """
-        currentDialogue = self.__dialogues[id]
+        self.__dialogues[newName] = copy.deepcopy( self.__dialogues[id] )
 
         del self.__dialogues[id]
 
-        self.__dialogues[id] = currentDialogue
-
-        save_json_file( obj=self.__dialogues, path=self.__filePath )
+        # save_json_file( obj=self.__dialogues, path=self.__filePath )
 
 
 

@@ -160,7 +160,32 @@ class Configuration(object):
         """
         creates an empty turn based on the configuration dictionary
         """
-        pass
+        out = {}
+
+        for key,value in self.configDict.items():
+
+            labelType = value["label_type"]
+
+            if labelType == "data":
+                out[key] = query
+
+            elif labelType == "multilabel_classification" or \
+                 labelType == "multilabel_classification_string":
+
+                out[key] = []
+
+            elif labelType == "string":
+
+                out[key] = ""
+
+            else:
+
+                raise ValueError("The label type, {}, is not supported"
+                                 .format(labelType))
+
+        return out
+
+
 
     @staticmethod
     def create_empty_dialogue():

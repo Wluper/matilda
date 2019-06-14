@@ -1,4 +1,6 @@
-# ====>> IMPORTS <<====
+##############################################
+#  IMPORT STATEMENTS
+##############################################
 
 # == Native ==
 import os
@@ -13,173 +15,69 @@ from flask_cors import CORS
 
 # == Local ==
 from annotator_config import Configuration
-
-# ====>> CONFIG <<====
-
-
-def load_json_file(path: str) -> Any:
-    """Loads a JSON file."""
-    with open(path, "r") as f:
-        content = json.load(f)
-    return content
+from annotator import DialogueAnnotator
+from text_splitter import convert_string_list_into_dialogue
 
 
-def save_json_file(obj: Any, path: str) -> None:
-    """Saves a JSON file."""
-    with open(path, "w") as f:
-        json.dump(obj, f, indent=4)
 
-
-# Settings
-DIALOGUE_PATH = ""  # os.path.join(os.getcwd(), "dummy_data.json")
-WRITE_PATH    = os.path.join(os.getcwd(), "labelled_data.json")
-DIALOGUES     = load_json_file(DIALOGUE_PATH) if DIALOGUE_PATH else {}
-DEBUG         = True
-DIALOGUES_CREATED_THIS_SESSION = 0
-
-# Flask
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-# Enable CORS so that the app can communicate with the front end
-CORS(app)
-
-
-# ====>> APP HELPER FUNCS <<====
-
-def generate_empty_turn(query):
-    """
-    generates a turn according to  the annotation config
-    """
-    out = {}
-
-    for key,value in Configuration.configDict.items():
-
-        labelType = value["label_type"]
-
-        if labelType == "data":
-            out[key] = query
-
-        elif labelType == "multilabel_classification" or \
-             labelType == "multilabel_classification_string":
-
-            out[key] = []
-
-        elif labelType == "string":
-
-            out[key] = ""
-
-        else:
-
-            raise ValueError("The label type, {}, is not supported"
-                             .format(labelType))
-
-    return out
+##############################################
+#  CODE
+##############################################
 
 
 def generate_new_dialogue_id() -> str:
-    """Generates a new string ID for a dialogue."""
-    global DIALOGUES_CREATED_THIS_SESSION
-    newId = "Dialogue" + str(DIALOGUES_CREATED_THIS_SESSION)
-    DIALOGUES_CREATED_THIS_SESSION += 1
-    return newId
-
-
-def check_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
-    """Checks if a new piece of data conforms to the config dict"""
-
-    for i, turn in enumerate(dialogue):
-
-        for labelName, info in Configuration.configDict.items():
-
-            try:
-                turn[labelName]
-            except KeyError:
-                if info["required"]:
-                    return "Label \'{}\' is listed as \"required\" in the " \
-                           "config.py file, but is missing from the provided " \
-                           "dialogue in turn {}.".format(labelName, i)
-
-            if info["required"] and not turn[labelName]:
-                return "Required label, \'{}\', does not have a value " \
-                       "provided in the dialogue in turn {}".format(labelName, i)
-
-            if "classificaiton" in info["label_type"]:
-
-                providedLabels = turn[labelName]
-
-                if not all(x in info["labels"] for x in providedLabels):
-                    return "One of the provided labels in the list: " \
-                           "\'{}\' is not in allowed list according to " \
-                           "config.py in turn {}".format(providedLabels, i)
-
-    return dialogue
-
-
-def generate_annotation_dict() -> Dict[str, Tuple[str, Union[str, List[str]]]]:
-    """
-    Generates a dictionary mapping label names to a tuple of their label types
-    and, if applicable, the possible values the label can take.
-    """
-    out = {}
-
-    for key,value in Configuration.configDict.items():
-
-        temp = list(value["labels"]) if value.get("labels") else ""
-
-        out[key] = (value["label_type"], temp)
-
-    return out
-
 
 def get_dialogues_metadata() -> List[Dict[str, Union[str, int]]]:
-    """Gets the metadata associated with each dialogue"""
 
-    metadata = []
+#TODO ANNOTATOR
+def add_new_dialogues_from_json_dict(currentResponseObject: Dict[str, Union[str, List[str]]],
+                                     dialogueDict: Dict[str, List[dict]]) -> Dict[str, Union[str, List[str]]]:
+    """Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict."""
 
-    for dialogueID, dialogueTurnList in DIALOGUES.items():
-        print(dialogueID)
+    added_dialogues = []
 
-        metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList)})
+    for dialouge_name, dialogue in dialogueDict.items():
 
-    return metadata
+        dialogue = Configuration.validate_dialogue(dialogue)
+
+        if isinstance(dialogue, str):
+            currentResponseObject["error"] = dialogue
+            currentResponseObject["status"] = "error"
+            break
+
+        DIALOGUES[dialouge_name] = dialogue
+        added_dialogues.append(dialouge_name)
+
+    if "error" not in currentResponseObject:
+        currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
+
+    return currentResponseObject
 
 
-def convert_string_list_into_dialogue(stringList: List[str]) -> List[Dict[str, Any]]:
+
+def add_new_dialogues_from_string_lists(currentResponseObject: Dict[str, Union[str, List[str]]],
+                                        dialogueList: List[str]) -> Dict[str, Union[str, List[str]]]:
     """
-    Converts a list of strings into a dialogue with the following assumptions:
-
-        - (1) :: there are only two participants in the dialogue: user and sys
-        - (2) :: user speaks first
+    Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
+    through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
     """
 
-    dialogue    = []
-    userTurn    = True
-    currentTurn = {}
-    turnIdx     = 1
+    currentResponseObject["message"] = []
+    currentResponseObject["new_dialogue_id"] = []
 
-    for providedString in stringList:
+    for string_list in dialogueList:
 
-        if userTurn:
+        string_list      = [x for x in string_list.split("\n") if x.strip()]
+        newId            = generate_new_dialogue_id()
+        DIALOGUES[newId] = run_models_on_dialogue(convert_string_list_into_dialogue(string_list))
 
-            currentTurn["usr"] = providedString
-            userTurn = False
+        currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
+        currentResponseObject["new_dialogue_id"].append(newId)
 
-        else:
+    return currentResponseObject
 
-            currentTurn["sys"]      = providedString
-            currentTurn["turn_idx"] = turnIdx
-            dialogue.append(currentTurn)
-            turnIdx    += 1
-            currentTurn = {}
-            userTurn    = True
 
-    if currentTurn:
-        currentTurn["turn_idx"] = turnIdx
-        dialogue.append(currentTurn)
-        turnIdx                += 1
 
-    return dialogue
 
 
 def run_models_on_dialogue(dialogue: List[Dict[str, Any]], dontRun: Tuple[str] = tuple(["sys"])) -> \
@@ -217,50 +115,9 @@ def run_models_on_dialogue(dialogue: List[Dict[str, Any]], dontRun: Tuple[str] =
     return newDialogue
 
 
-def add_new_dialogues_from_string_lists(currentResponseObject: Dict[str, Union[str, List[str]]],
-                                        dialogueList: List[str]) -> Dict[str, Union[str, List[str]]]:
-    """
-    Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
-    through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
-    """
-
-    currentResponseObject["message"] = []
-    currentResponseObject["new_dialogue_id"] = []
-
-    for string_list in dialogueList:
-
-        string_list      = [x for x in string_list.split("\n") if x.strip()]
-        newId            = generate_new_dialogue_id()
-        DIALOGUES[newId] = run_models_on_dialogue(convert_string_list_into_dialogue(string_list))
-
-        currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
-        currentResponseObject["new_dialogue_id"].append(newId)
-
-    return currentResponseObject
 
 
-def add_new_dialogues_from_json_dict(currentResponseObject: Dict[str, Union[str, List[str]]],
-                                     dialogueDict: Dict[str, List[dict]]) -> Dict[str, Union[str, List[str]]]:
-    """Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict."""
 
-    added_dialogues = []
-
-    for dialouge_name, dialogue in dialogueDict.items():
-
-        dialogue = check_dialogue(dialogue)
-
-        if isinstance(dialogue, str):
-            currentResponseObject["error"] = dialogue
-            currentResponseObject["status"] = "error"
-            break
-
-        DIALOGUES[dialouge_name] = dialogue
-        added_dialogues.append(dialouge_name)
-
-    if "error" not in currentResponseObject:
-        currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
-
-    return currentResponseObject
 
 
 def handle_new_dialogues_post(currentResponseObject: Dict[str, Union[str, List[str]]]) -> \
@@ -284,6 +141,10 @@ def handle_new_dialogues_post(currentResponseObject: Dict[str, Union[str, List[s
         return add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict=string_list_or_json_dict)
 
     return currentResponseObject
+
+
+
+
 
 
 # ====>> ROUTES <<====
@@ -364,7 +225,7 @@ def single_dialogue(dialogue_id):
             if data["id"]:
                 return change_dialogue_name(dialogue_id, data["id"])
 
-        data  = check_dialogue(data)
+        data  = Configuration.validate_dialogue(data)
 
         if isinstance(data, str):
             error = data
@@ -403,7 +264,7 @@ def get_annotation_style():
 
     response_object = {
         "status": "success",
-        "annotation": generate_annotation_dict()
+        "annotation": Configuration.create_annotation_dict()
     }
 
     return jsonify(response_object)
@@ -428,7 +289,7 @@ def get_annotate_turn():
 
     response_object = {
         "status":"success",
-        "turn": generate_empty_turn(query)
+        "turn": Configuration.create_empty_dialogue(query)
     }
 
     for key, val in Configuration.configDict.items():
@@ -447,4 +308,20 @@ def get_annotate_turn():
 # ====>> MAIN <<====
 
 if __name__ == '__main__':
+
+    DIRECTORY = "ANNOTATED_DATA"
+
+    if not os.path.exists(DIRECTORY):
+
+        os.mkdir(DIRECTORY)
+
+    ANNOTATOR  = DialogueAnnotator( )
+
+    # Flask
+    app = Flask(__name__)
+    app.config.from_object(__name__)
+
+    # Enable CORS so that the app can communicate with the front end
+    CORS(app)
+
     app.run(port=5000)
