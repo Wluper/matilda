@@ -1,4 +1,7 @@
-# ====>> IMPORTS <<====
+################################################################################
+# IMPORTS
+################################################################################
+
 
 # == Native ==
 import os
@@ -16,33 +19,11 @@ import annotator_config
 # ====>> CONFIG <<====
 
 
-def load_json_file(path: str) -> Any:
-    """Loads a JSON file."""
-    with open(path, "r") as f:
-        content = json.load(f)
-    return content
 
 
-def save_json_file(obj: Any, path: str) -> None:
-    """Saves a JSON file."""
-    with open(path, "w") as f:
-        json.dump(obj, f, indent=4)
-
-
-# Settings
-DIALOGUE_PATH = ""  # os.path.join(os.getcwd(), "dummy_data.json")
-WRITE_PATH    = os.path.join(os.getcwd(), "labelled_data.json")
-DIALOGUES     = load_json_file(DIALOGUE_PATH) if DIALOGUE_PATH else {}
-DEBUG         = True
-DIALOGUES_CREATED_THIS_SESSION = 0
-
-# Flask
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-# Enable CORS so that the app can communicate with the front end
-CORS(app)
-
+################################################################################
+# CODE
+################################################################################
 
 # ====>> APP HELPER FUNCS <<====
 
@@ -76,59 +57,6 @@ def generate_empty_turn(query):
     return out
 
 
-def generate_new_dialogue_id() -> str:
-    """Generates a new string ID for a dialogue."""
-    global DIALOGUES_CREATED_THIS_SESSION
-    newId = "Dialogue" + str(DIALOGUES_CREATED_THIS_SESSION)
-    DIALOGUES_CREATED_THIS_SESSION += 1
-    return newId
-
-
-def check_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
-    """Checks if a new piece of data conforms to the config dict"""
-
-    for i, turn in enumerate(dialogue):
-
-        for labelName, info in annotator_config.configDict.items():
-
-            try:
-                turn[labelName]
-            except KeyError:
-                if info["required"]:
-                    return "Label \'{}\' is listed as \"required\" in the " \
-                           "config.py file, but is missing from the provided " \
-                           "dialogue in turn {}.".format(labelName, i)
-
-            if info["required"] and not turn[labelName]:
-                return "Required label, \'{}\', does not have a value " \
-                       "provided in the dialogue in turn {}".format(labelName, i)
-
-            if "classificaiton" in info["label_type"]:
-
-                providedLabels = turn[labelName]
-
-                if not all(x in info["labels"] for x in providedLabels):
-                    return "One of the provided labels in the list: " \
-                           "\'{}\' is not in allowed list according to " \
-                           "config.py in turn {}".format(providedLabels, i)
-
-    return dialogue
-
-
-def generate_annotation_dict() -> Dict[str, Tuple[str, Union[str, List[str]]]]:
-    """
-    Generates a dictionary mapping label names to a tuple of their label types
-    and, if applicable, the possible values the label can take.
-    """
-    out = {}
-
-    for key,value in annotator_config.configDict.items():
-
-        temp = list(value["labels"]) if value.get("labels") else ""
-
-        out[key] = (value["label_type"], temp)
-
-    return out
 
 
 def get_dialogues_metadata() -> List[Dict[str, Union[str, int]]]:
@@ -286,32 +214,6 @@ def handle_new_dialogues_post(currentResponseObject: Dict[str, Union[str, List[s
 
 
 # ====>> ROUTES <<====
-
-@app.route("/dialogues", methods=["GET", "POST"])
-def get_dialouge_id_list():
-    """
-    TODO this function needs to be less monolithic
-    """
-    response_object = {"status": "success"}
-
-    if request.method == "POST":
-
-        response_object = handle_new_dialogues_post(response_object)
-
-    elif request.method == "GET":
-
-        response_object["metadata"] = get_dialogues_metadata()
-
-    return jsonify(response_object)
-
-
-@app.route("/create_empty_dialogue", methods=["GET"])
-def generate_dialogue_id():
-    newId = generate_new_dialogue_id()
-    DIALOGUES[newId] = []
-    return jsonify({"generated_id": newId})
-
-
 @app.route("/dialogues/change_name/<dialogue_id>", methods=["PUT"])
 def change_dialogue_name(dialogue_id):
     """Changes a dialogue name."""
@@ -386,6 +288,7 @@ def single_dialogue(dialogue_id):
     return jsonify(response_object)
 
 
+
 @app.route("/get_annotation_style", methods=["GET"])
 def get_annotation_style():
 
@@ -397,42 +300,59 @@ def get_annotation_style():
     return jsonify(response_object)
 
 
-@app.route("/get_all_dialogues", methods=["GET"])
-def get_all_dialogues():
-
-    response_object = {
-        "status": "success",
-        "dialogues": DIALOGUES
-    }
-
-    return jsonify(response_object)
 
 
-@app.route("/get_annotate_turn", methods=["GET"])
-def get_annotate_turn():
-    """Annotates a single turn with the models in the backend."""
 
-    query = request.args.get("query")
 
-    response_object = {
-        "status":"success",
-        "turn": generate_empty_turn(query)
-    }
+@app.route("/dialogues", methods=["GET", "POST", "DELETE", "PUT"])
+def allDialogues():
+    """
+    RESTful allDialogues resource
+    """
+    response_object = {"status": "success"}
 
-    for key, val in annotator_config.configDict.items():
+    if request.method == "POST":
 
-        try:
+        response_object = handle_new_dialogues_post(response_object)
 
-            response_object["turn"][key] = val["model"].transform(query)
+    elif request.method == "GET":
 
-        except KeyError:
-
-            pass
+        response_object["metadata"] = get_dialogues_metadata()
 
     return jsonify(response_object)
 
+@app.route("/dialogues/<dialogue_id>", methods=["GET", "POST", "DELETE", "PUT"])
+def singleDialogue():
+    """
+    RESTful singleDialogue resource
+    """
+    
 
-# ====>> MAIN <<====
+
+################################################################################
+# MAIN
+################################################################################
 
 if __name__ == '__main__':
+    # Settings
+    DIALOGUE_PATH = ""  # os.path.join(os.getcwd(), "dummy_data.json")
+    WRITE_PATH    = os.path.join(os.getcwd(), "labelled_data.json")
+    DIALOGUES     = load_json_file(DIALOGUE_PATH) if DIALOGUE_PATH else {}
+    DEBUG         = True
+    DIALOGUES_CREATED_THIS_SESSION = 0
+
+    # Flask
+    app = Flask(__name__)
+    app.config.from_object(__name__)
+
+    # Enable CORS so that the app can communicate with the front end
+    CORS(app)
+
     app.run(port=5000)
+
+
+
+
+
+
+# EOF
