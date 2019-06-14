@@ -296,7 +296,16 @@ def get_dialouge_id_list():
 
     if request.method == "POST":
 
-        response_object = handle_new_dialogues_post(response_object)
+        data = request.get_json()
+
+        if data:
+
+            response_object = handle_new_dialogues_post(response_object)
+
+        else:
+
+            return generate_dialogue_id()
+
 
     elif request.method == "GET":
 
@@ -305,38 +314,35 @@ def get_dialouge_id_list():
     return jsonify(response_object)
 
 
-@app.route("/create_empty_dialogue", methods=["GET"])
+# @app.route("/create_empty_dialogue", methods=["GET"])
 def generate_dialogue_id():
     newId = generate_new_dialogue_id()
     DIALOGUES[newId] = []
     return jsonify({"generated_id": newId})
 
 
-@app.route("/dialogues/change_name/<dialogue_id>", methods=["PUT"])
-def change_dialogue_name(dialogue_id):
-    """Changes a dialogue name."""
+# @app.route("/dialogues/change_name/<dialogue_id>", methods=["PUT"])
+# def change_dialogue§_name(dialogue_id):
+def change_dialogue_name(oldName, newName):
+    """
+    Changes a dialogue name.
+    """
 
     response_object = {
         "status": "success",
         "id"    : dialogue_id
     }
 
-    if request.method == "PUT":
-        error = None
-        data  = request.get_json()
 
-        try:
+    try:
+        DIALOGUES[newName] = copy.deepcopy(DIALOGUES[oldName])
+        del DIALOGUES[oldname]
 
-            oldname            = data["old_name"]
-            newname            = data["new_name"]
-            DIALOGUES[newname] = copy.deepcopy(DIALOGUES[oldname])
-            del DIALOGUES[oldname]
+    except KeyError:
 
-        except KeyError:
-
-            response_object["status"] = "error"
-            response_object["error"] = \
-            "Name to replace, \'{}\', doesn't exist on server".format(oldname)
+        response_object["status"] = "error"
+        response_object["error"] = \
+        "Name to replace, \'{}\', doesn't exist on server".format(oldname)
 
     return jsonify(response_object)
 
@@ -352,6 +358,10 @@ def single_dialogue(dialogue_id):
     if request.method == "PUT":
         error = None
         data  = request.get_json()
+
+        if data["id"]:
+            return change_dialogue_name(dialogue_id, data["id"])
+
         data  = check_dialogue(data)
 
         if isinstance(data, str):

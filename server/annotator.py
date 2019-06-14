@@ -87,7 +87,7 @@ class DialogueAnnotator(object):
         self.__dialogues[id] = currentDialogue
 
         save_json_file( obj=self.__dialogues, path=self.__filePath )
-        
+
 
 
 
