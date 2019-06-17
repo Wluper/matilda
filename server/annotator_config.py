@@ -111,7 +111,7 @@ class Configuration(object):
 
         for i, turn in enumerate(dialogue):
 
-            for labelName, info in self.configDict.items():
+            for labelName, info in Configuration.configDict.items():
 
                 try:
                     turn[labelName]
@@ -146,7 +146,7 @@ class Configuration(object):
         """
         out = {}
 
-        for key,value in self.configDict.items():
+        for key,value in Configuration.configDict.items():
 
             temp = list(value["labels"]) if value.get("labels") else ""
 
@@ -162,7 +162,7 @@ class Configuration(object):
         """
         out = {}
 
-        for key,value in self.configDict.items():
+        for key,value in Configuration.configDict.items():
 
             labelType = value["label_type"]
 
@@ -187,12 +187,6 @@ class Configuration(object):
 
 
 
-    @staticmethod
-    def create_empty_dialogue():
-        """
-        creates an empty turn based on the configuration dictionary
-        """
-        pass
 
 
 ##############################################

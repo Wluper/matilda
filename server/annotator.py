@@ -159,7 +159,7 @@ class DialogueAnnotator(object):
         del self.__dialogues[id]
 
 
-    def add_new_dialogue(self, dialogue, id=None):
+    def add_new_dialogue(self, dialogue=None, id=None):
         """
         creates a new dialogue with an optional name
         """
@@ -168,7 +168,10 @@ class DialogueAnnotator(object):
         if not id:
             id = self.__get_new_dialogue_id()
 
-        self.__dialogues[id] = dialogue
+
+        self.__dialogues[ id ] = dialogue if dialogue else {}
+
+        return {"id":id}
 
 
     def delete_dialogue(self, id):
@@ -182,7 +185,7 @@ class DialogueAnnotator(object):
         """
         Save the dialogues dictionary
         """
-        save_json_file( path = os.path.join( self.__filePath, self.__fileName ) )
+        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName ) )
 
 
 

@@ -17,7 +17,7 @@ from flask_cors import CORS
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 from text_splitter import convert_string_list_into_dialogue
-from utils import EndpointAction
+# from utils import EndpointAction
 
 
 ##############################################
@@ -35,7 +35,7 @@ class LidaAppWrapper(object):
         """
         Creates the Flask App & setups all the api calls
         """
-        # Flask & CORS
+        # Flask
         self.app = Flask(__name__)
         self.app.config.from_object(__name__)
         CORS(self.app)
@@ -74,7 +74,7 @@ class LidaAppWrapper(object):
         """
         adds an endpoint to the API.
         """
-        self.app.add_url_rule( endpoint, endpoint_name, EndpointAction(handler) )
+        self.app.add_url_rule( endpoint, endpoint_name, handler, methods=methods )
 
 
 
@@ -86,40 +86,40 @@ class LidaAppWrapper(object):
                             endpoint="/dialogues_metadata",
                             endpoint_name="/dialogues_metadata",
                             methods=["GET"],
-                            handler=EndpointAction( self.handle_dialogues_metadata_resource ) )
+                            handler= self.handle_dialogues_metadata_resource  )
 
 
         self.add_endpoint( \
                             endpoint="/dialogues_metadata/<id>",
                             endpoint_name="/dialogues_metadata/<id>",
                             methods=["PUT"],
-                            handler=EndpointAction( self.handle_dialogues_metadata_resource ) )
+                            handler= self.handle_dialogues_metadata_resource  )
 
 
         self.add_endpoint( \
                             endpoint="/dialogues",
                             endpoint_name="/dialogues",
-                            methods=["GET"],
-                            handler=EndpointAction(self.handle_dialogues_resource) )
+                            methods=["GET","POST","DELETE"],
+                            handler= self.handle_dialogues_resource )
 
         self.add_endpoint( \
                             endpoint="/dialogues/<id>",
                             endpoint_name="/dialogues/<id>",
                             methods=["GET", "POST", "PUT", "DELETE"],
-                            handler=EndpointAction(self.handle_dialogues_resource) )
+                            handler= self.handle_dialogues_resource )
 
 
         self.add_endpoint( \
                             endpoint="/dialogue_annotationstyle",
                             endpoint_name="/dialogue_annotationstyle",
                             methods=["GET"],
-                            handler=EndpointAction(self.handle_annotations_resource) )
+                            handler= self.handle_annotations_resource )
 
         self.add_endpoint( \
                             endpoint="/turns",
                             endpoint_name="/turns",
                             methods=["POST"],
-                            handler=EndpointAction(self.handle_annotations_resource) )
+                            handler= self.handle_annotations_resource  )
 
 
     def handle_dialogues_resource(self, id=None):
@@ -133,23 +133,26 @@ class LidaAppWrapper(object):
         if id:
 
             if request.method == "GET":
-                return self.dialogueFile.get_dialogues(id = id)
+                responseObject = self.dialogueFile.get_dialogues(id = id)
 
             if request.method == "PUT":
                 data = request.get_json()
                 Configuration.validate_dialogue( data )
-                return self.dialogueFile.update_dialogue( id=id, newDialogue=data )
+                responseObject = self.dialogueFile.update_dialogue( id=id, newDialogue=data )
 
             if request.method == "DELETE":
-                self.dialogueFile.delete_dialogue(id = id)
+                responseObject = self.dialogueFile.delete_dialogue(id=id)
 
         else:
 
             if request.method == "GET":
-                return self.dialogueFile.get_dialogues()
+                responseObject = self.dialogueFile.get_dialogues()
 
             if request.method == "POST":
-                return self.__handle_post_of_new_dialogues()
+                responseObject = self.__handle_post_of_new_dialogues()
+
+        self.dialogueFile.save()
+        return jsonify( responseObject )
 
 
     def handle_dialogues_metadata_resource(self,id=None):
@@ -159,20 +162,25 @@ class LidaAppWrapper(object):
         PUT - Handle
         """
         if request.method == "GET":
-            return self.dialogueFile.get_dialogues_metadata
+            responseObject = self.dialogueFile.get_dialogues_metadata()
+
 
         if request.method == "PUT":
             error = None
             data  = request.get_json()
 
-            return self.dialogueFile.update_dialogue_name(id,data["id"])
+            responseObject = self.dialogueFile.update_dialogue_name( id, data["id"])
+
+        self.dialogueFile.save()
+        return jsonify( responseObject )
 
 
     def handle_annotations_resource(self):
         """
         GET - Returns the annotation style
         """
-        return Configuration.create_annotation_dict()
+        return jsonify( Configuration.create_annotation_dict() )
+
 
 
     def handle_turns_resource(self):
@@ -196,7 +204,7 @@ class LidaAppWrapper(object):
                 "error"  : "not available"
             }
 
-        return jsonify(responseObject)
+        return jsonify( responseObject )
 
 
     def __handle_post_of_new_dialogues(self):
@@ -207,19 +215,18 @@ class LidaAppWrapper(object):
 
         stringListOrJsonDict = request.get_json()
 
-        if isinstance(stringListOrJsonDict, str) or stringListOrJsonDict is None:
-
+        if isinstance(stringListOrJsonDict, str):
             responseObject["error"]  = "JSON parsing failed"
             responseObject["status"] = "error"
-            return responseObject
+
+        elif not stringListOrJsonDict:
+            responseObject = self.dialogueFile.add_new_dialogue()
 
         elif isinstance(stringListOrJsonDict, list):
-
-            return self.__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
+            responseObject = self.__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
 
         elif isinstance(stringListOrJsonDict, dict):
-
-            return self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict)
+            responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict)
 
         return responseObject
 
@@ -279,7 +286,7 @@ class LidaAppWrapper(object):
         runs the model on the query
         """
         outDict = {
-            "turn"  : Configuration.create_empty_dialogue(query)
+            "turn"  : {}
         }
 
         for key, val in Configuration.configDict.items():

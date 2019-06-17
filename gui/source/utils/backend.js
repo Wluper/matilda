@@ -10,9 +10,9 @@ async function annotate_query(query){
 
     var dialogues = {}
 
+    const apiLink = 'http://127.0.0.1:5000/turns'
     try {
-        var response = await axios.get(
-            'http://127.0.0.1:5000/get_annotate_turn',{ params:{query: query} } );
+        var response = await axios.post( apiLink, { params:{query: query} } );
 
         dialogueStyle = response.data
         console.log("=============TURN ANNOTATION==============")
@@ -37,8 +37,10 @@ async function get_annotation_style_async(){
 
     var dialogues = {}
 
+    const apiLink = 'http://127.0.0.1:5000/dialogue_annotationstyle'
+
     try {
-        var response = await axios.get('http://127.0.0.1:5000/get_annotation_style')
+        var response = await axios.get(apiLink)
 
 
         dialogueStyle = response.data
@@ -55,6 +57,58 @@ async function get_annotation_style_async(){
 
 };
 
+
+/***************************************
+* DIALOGUES METADATA RESOURCE
+***************************************/
+async function get_all_dialogue_ids_async() {
+
+  var dialogues = {}
+
+  const apiLink = 'http://127.0.0.1:5000/dialogues_metadata'
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    dialoguesList = response.data
+    console.log("=========== ALL DIALOGUE METADATA LIST ===========")
+    console.log(dialoguesList)
+    return dialoguesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
+
+async function change_dialogue_name_async(oldName, newName) {
+
+    const apiLink = `http://127.0.0.1:5000/dialogues_metadata/${oldName}`
+
+    try {
+
+        var response = await axios.put( apiLink, {id:newName} )
+        console.log('---- RESPONSE TO NAME CHANGE ----', response);
+        return true;
+
+    } catch(error) {
+
+        console.log(error);
+
+    }
+    return false;
+
+};
+
+
+
 /***************************************
 * DIALOGUES RESOURCE
 ***************************************/
@@ -64,10 +118,10 @@ async function get_all_dialogues_async(){
     var dialogues = {}
 
     try {
-        var response = await axios.get('http://127.0.0.1:5000/get_all_dialogues');
+        var response = await RESTdialogues( "GET", null, {})
 
         dialogues = response.data
-        return dialogues.dialogues
+        return dialogues
 
     } catch(error) {
 
@@ -97,39 +151,15 @@ async function get_single_dialogue_async(id) {
 }
 
 
-async function get_all_dialogue_ids_async() {
-
-  var dialogues = {}
-
-  try {
-
-    var response = await RESTdialogues("GET", null, {})
-
-    console.log(response)
-
-    dialoguesList = response.data.metadata
-    console.log("=========== ALL DIALOGUE METADATA LIST ===========")
-    console.log(dialoguesList)
-    return dialoguesList
-
-  } catch(error) {
-
-    console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
-
-  }
-
-}
-
-
 
 async function post_empty_dialogue() {
 
     try {
 
-        const response = await RESTdialogues("POST", null, {});
+        const response = await RESTdialogues("POST", null, null);
 
-        return response.data.generated_id
+        console.log(response)
+        return response.data.id
 
     } catch(error) {
 
@@ -247,24 +277,6 @@ async function RESTdialogues(method, id, params){
 
 
 }
-
-async function change_dialogue_name_async(oldName, newName) {
-
-    try {
-
-        const response = await RESTdialogues( "PUT", oldName, {id: newName} )
-        console.log('---- RESPONSE TO NAME CHANGE ----', response);
-        return true;
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
-    return false;
-
-};
-
 
 
 
