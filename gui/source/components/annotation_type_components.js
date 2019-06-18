@@ -18,6 +18,7 @@ Vue.component('classification-annotation',{
     computed: {
         correctClassification : function(){
             console.log("Classification Computed");
+            console.log(this.classification);
             return this.classification
         }
     },

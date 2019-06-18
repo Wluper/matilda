@@ -26,6 +26,8 @@ Vue.component("resolution-app", {
 
         currentError: function() {
             temp = this.errorList[ this.currentErrorId - 1 ];
+            console.log("===This is the current Resolution===")
+            console.log(temp)
             return temp;
         },
 

@@ -143,20 +143,166 @@ Vue.component("resolutions", {
       "error"
     ],
 
+    data () {
+        return {
+            annotationStyle : {}
+        }
+    },
+
+    computed : {
+        annotationFormat : function() {
+
+            temp =  this.annotationStyle[ this.error.name ];
+            if (temp){
+                temp = temp[1]
+            }
+
+            console.log("+++++ Annotation Format +++++");
+            console.log(temp)
+
+            return temp;
+        }
+    },
+
+    mounted () {
+        this.init();
+    },
+
+    methods : {
+        init : function(){
+            // Step One :: Get the Annotation Styles
+            backend.get_annotation_style_async()
+                .then( (response) => {
+                    this.annotationStyle = response;
+                });
+        }
+
+    },
+
 
     template:
     `
     <div id="resolutions">
         <div class="left">
-        PLACEHOLDER
+            <string-type-data v-bind:usr="error.usr" v-bind:sys="error.sys">
+            </string-type-data>
         </div>
 
         <div class="right">
-        PLACEHOLDER 2
+            <annotation-component
+                v-bind:type="error.type"
+                v-bind:predictions="error.predictions"
+                v-bind:uniqueName="error.name"
+                v-bind:annotationFormat="annotationFormat" >
+            </annotation-component>
         </div>
     </div>
     `
 });
+
+
+Vue.component("annotation-component", {
+
+    props: [
+      "type",
+      "predictions",
+      "annotationFormat",
+      "uniqueName"
+    ],
+
+    updated () {
+        this.log_myself();
+    },
+    // METHODS
+    methods:{
+        turn_updated_string : function(event) {
+            annotationAppEventBus.$emit("turn_updated_string", event )
+        },
+
+        log_myself : function() {
+            console.log("=== Logging ANNOTATATION COMPONENT ===")
+            console.log(this.type)
+            console.log(this.predictions)
+            console.log(this.annotationFormat)
+            console.log(this.uniqueName)
+        }
+    },
+
+
+
+    template:
+    `
+    <div id="annotation-component">
+
+        <classification-annotation
+            v-if="type=='multilabel_classification'"
+            v-bind:classification="predictions"
+            v-bind:classFormat="annotationFormat"
+            v-bind:uniqueName="uniqueName">
+        </classification-annotation>
+
+        <classification-string-annotation
+            v-else-if="type=='multilabel_classification_string'"
+            v-bind:classification_strings="predictions"
+            v-bind:uniqueName="uniqueName"
+            v-bind:classes="annotationFormat">
+        </classification-string-annotation>
+
+        <div v-else >
+            FAIL!
+        </div>
+    </div>
+    `
+});
+
+
+
+
+Vue.component("string-type-data", {
+
+    props: [
+      "usr",
+      "sys",
+    ],
+    // METHODS
+    methods:{
+
+        turn_updated_string : function(event) {
+            console.log("------Updating System Response------")
+            console.log(event)
+            annotationAppEventBus.$emit("turn_updated_string", event )
+        },
+    },
+
+
+    template:
+    `
+    <div class="string-type-data">
+        <div class="string-type">
+            <div class="string-type-name">
+                usr
+            </div>
+
+            <div class="string-type-text">
+                {{usr}}
+            </div>
+
+        </div>
+
+        <div class="string-type">
+            <div class="string-type-name">
+                sys
+            </div>
+
+            <div class="user-string-type-text">
+                <comm-input v-bind:inputClassName="'primaryElementClass'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+            </div>
+
+        </div>
+    </div>
+    `
+});
+
 
 
 /************************************

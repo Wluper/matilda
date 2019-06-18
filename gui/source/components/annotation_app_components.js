@@ -384,7 +384,7 @@ Vue.component('dialogue-turn',{
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
             </div>
 
         </div>
@@ -495,23 +495,4 @@ Vue.component('input-box',{
 })
 
 
-
-/************************
-* Helper Components
-************************/
-
-Vue.component("comm-input",{
-    props : ["uniqueName","inputValue", "placeholder", "componentId", "inputClassName"],
-
-    methods :{
-        input_updated : function(event){
-            //cause input is inbuild it has complicated event.target.value thing
-            this.$emit("comm_input_update",{data: event.target.value, name: this.uniqueName})
-        }
-    },
-
-    template:
-    `
-    <input v-bind:class="inputClassName" v-bind:id="componentId" v-bind:placeholder="placeholder" v-bind:value="inputValue" v-on:input="input_updated($event)">
-    `
-})
+// EOF

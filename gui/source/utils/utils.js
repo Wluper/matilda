@@ -13,7 +13,7 @@ function create_empty_turn(validAnnotations){
     var out = {};
 
     for (idx = 0, len = validAnnotations.length; idx<len; idx++){
-        out[validAnnotations[idx]]=[];
+        out[ validAnnotations[idx] ]=[];
     }
 
     return out;

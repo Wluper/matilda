@@ -86,7 +86,7 @@ var errorList = {
             name : "hotel_belief_state",
             predictions: [
                 ["hotel-book people",5]
-            ]
+            ],
         },
         {
             usr : "Hi, how do I get to the moon?",
