@@ -5,15 +5,12 @@
 # >>>> Native <<<<
 import os
 import json
+from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 
 # >>>> Packages <<<<
 from flask import Response
 
 # >>>> Local <<<<
-from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
-
-
-
 
 
 

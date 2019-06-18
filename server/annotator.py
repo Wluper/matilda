@@ -13,7 +13,6 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # >>>> Local <<<<
-import annotator_config
 from utils import load_json_file, save_json_file
 
 
@@ -147,6 +146,8 @@ class DialogueAnnotator(object):
         updates the dialogue
         """
         self.__dialogues[ id ] = newDialogue
+
+        return {"status" : "success"}
 
 
 

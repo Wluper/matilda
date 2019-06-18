@@ -119,7 +119,7 @@ class LidaAppWrapper(object):
                             endpoint="/turns",
                             endpoint_name="/turns",
                             methods=["POST"],
-                            handler= self.handle_annotations_resource  )
+                            handler= self.handle_turns_resource  )
 
 
     def handle_dialogues_resource(self, id=None):
@@ -189,13 +189,13 @@ class LidaAppWrapper(object):
         """
 
         if request.method == "POST":
-            query = request.args.get("query")
+            query = request.get_json()['query']
 
             responseObject = {
-                "status":"success",
+                "status" : "success",
             }
 
-            responseObject.update( self.__run_models_on_query(query) )
+            responseObject.update( LidaAppWrapper.run_models_on_query(query) )
 
         else:
 
@@ -272,7 +272,7 @@ class LidaAppWrapper(object):
         for string_list in dialogueList:
 
             string_list      = [x for x in string_list.split("\n") if x.strip()]
-            DIALOGUES[newId] = self.__run_models_on_dialogue(convert_string_list_into_dialogue(string_list))
+            DIALOGUES[newId] = LidaAppWrapper.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) )
 
             currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
             currentResponseObject["new_dialogue_id"].append(newId)
@@ -280,14 +280,16 @@ class LidaAppWrapper(object):
         return currentResponseObject
 
 
-
-    def __run_models_on_query(self):
+    @staticmethod
+    def run_models_on_query(query):
         """
         runs the model on the query
         """
         outDict = {
             "turn"  : {}
         }
+
+        outDict["turn"]["usr"] = query
 
         for key, val in Configuration.configDict.items():
 
@@ -301,7 +303,8 @@ class LidaAppWrapper(object):
 
         return outDict
 
-    def __run_models_on_dialogue(self, dialogue, dontRun= tuple(["sys"])):
+    @staticmethod
+    def run_models_on_dialogue(dialogue, dontRun= tuple(["sys"])):
         """
         Runs the models in the config dict on the user transcripts in each dialogue
         turn.
@@ -317,7 +320,7 @@ class LidaAppWrapper(object):
 
             userQuery = turn["usr"]
 
-            newDialogue.append( self.__run_models_on_query(userQuery)["turn"] )
+            newDialogue.append( LidaAppWrapper.run_models_on_query(userQuery)["turn"] )
 
         return newDialogue
 

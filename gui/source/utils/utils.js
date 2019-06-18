@@ -97,9 +97,6 @@ function get_turn_data(turnData, validAnnotations, annotationStyle){
         }
     }
 
-    console.log("+++++++++++++++++++++++ Yuhu ++++++++++++++++++++++++++++++++")
-    console.log(out)
-    
     return out;
 }
 

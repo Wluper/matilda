@@ -12,9 +12,10 @@ async function annotate_query(query){
 
     const apiLink = 'http://127.0.0.1:5000/turns'
     try {
-        var response = await axios.post( apiLink, { params:{query: query} } );
+        var response = await axios.post( apiLink, { query: query}  );
+        console.log(response.data)
 
-        dialogueStyle = response.data
+        dialogueStyle = response.data.turn
         console.log("=============TURN ANNOTATION==============")
         console.log(dialogueStyle)
         return dialogueStyle
@@ -46,7 +47,7 @@ async function get_annotation_style_async(){
         dialogueStyle = response.data
         console.log("=============ANNOTATION==============")
         console.log(dialogueStyle)
-        return dialogueStyle["annotation"]
+        return dialogueStyle
 
     } catch (error) {
 
