@@ -141,7 +141,7 @@ class Configuration(object):
     @staticmethod
     def create_annotation_dict():
         """
-        Generates a dictionary mapping label names to a tuple of their label types
+        Generates a dictionary mapping label names to a dictionary of their description, label types
         and, if applicable, the possible values the label can take.
         """
         out = {}
@@ -150,7 +150,11 @@ class Configuration(object):
 
             temp = list(value["labels"]) if value.get("labels") else ""
 
-            out[key] = (value["label_type"], temp)
+            out[key] = {
+                "label_type": value["label_type"],
+                "labels": temp,
+                "info": value["description"]
+            }
 
         return out
 

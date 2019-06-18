@@ -3,13 +3,14 @@
 ********************************/
 
 Vue.component('classification-annotation',{
-    props: ["classification", "classFormat", "uniqueName"],
+    props: ["classification", "classFormat", "uniqueName", "info"],
 
     data () {
 
         return {
 
             collapsed: false,
+            showInfo: false,
 
         }
 
@@ -93,7 +94,10 @@ Vue.component('classification-annotation',{
                  v-on:click="toggleCollapse()"
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
-                {{uniqueName}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+
+                {{uniqueName}}
+                <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+
                 <span class="soft-text">[Click to Expand]</span>
             </div>
 
@@ -101,8 +105,33 @@ Vue.component('classification-annotation',{
 
         <div v-else class="classification-annotation">
 
-            <div class="sticky space collapsor" v-on:click="toggleCollapse()">
-                {{uniqueName}}
+            <div class="single-annotation-header">
+                <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    {{uniqueName}}
+                </div>
+
+                <div class="info-button-container">
+                    <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                        Close
+                    </button>
+
+                    <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                        Info
+                    </button>
+                </div>
+
+            </div>
+
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ info }}
+                </div>
+
+                <hr>
+
             </div>
 
             <div v-for="labelName in classFormat" class="checkbox-wrapper">
@@ -154,14 +183,14 @@ Vue.component('classification-annotation',{
 
 
 Vue.component('classification-string-annotation', {
-    props: ["classification_strings", "uniqueName", "classes"],
+    props: ["classification_strings", "uniqueName", "classes", "info"],
 
     data () {
 
         return {
 
             collapsed: false,
-
+            showInfo: false,
         }
 
     },
@@ -293,9 +322,37 @@ Vue.component('classification-string-annotation', {
 
         <div v-else class="classification-annotation">
 
-            <div class="sticky space collapsor" v-on:click="toggleCollapse()">
-                {{uniqueName}}
+            <div class="single-annotation-header">
+                <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    {{uniqueName}}
+                </div>
+
+                <div class="info-button-container">
+
+                    <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                        Close
+                    </button>
+
+                    <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                        Info
+                    </button>
+
+                </div>
+
             </div>
+
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ info }}
+                </div>
+
+                <hr>
+
+            </div>
+
 
             <div v-for="labelName in classes" class="multilabel-string-item-wrapper">
 

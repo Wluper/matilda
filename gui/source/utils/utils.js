@@ -70,7 +70,7 @@ function get_turn_data(turnData, validAnnotations, annotationStyle){
     // Iterate through
     for ( [key, value] of Object.entries(annotationStyle) ){
 
-        type = annotationStyle[key][0];
+        type = annotationStyle[key]["label_type"];
 
         try {
             dataToAppend = turnData[key]
@@ -87,11 +87,21 @@ function get_turn_data(turnData, validAnnotations, annotationStyle){
 
                 // If type is data, which means it's the user's query, then put
                 // it at the front of the list to ensure it's displayed first
-                out["string"].unshift({name: key, data: dataToAppend, params: annotationStyle[key][1]})
+                out["string"].unshift({
+                    name: key,
+                    data: dataToAppend,
+                    params: annotationStyle[key]["labels"],
+                    info: annotationStyle[key]["info"]
+                })
 
             } else {
 
-                out[type].push({name: key, data: dataToAppend, params: annotationStyle[key][1]})
+                out[type].push({
+                    name: key,
+                    data: dataToAppend,
+                    params: annotationStyle[key]["labels"],
+                    info: annotationStyle[key]["info"]
+                })
 
             }
         }
