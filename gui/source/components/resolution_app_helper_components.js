@@ -61,14 +61,27 @@ Vue.component("error-list", {
       "currentId"
     ],
 
+    // mounted () {
+    //     this.init();
+    // },
+    //
+    // // METHODS
+    // methods:{
+    //
+    //     init : function(){
+    //         console.log(this.metaList)
+    //     },
+    // },
 
     template:
     `
     <div id="error-list">
 
-        <error-element v-for="(turn, index) in metaList"
+        <error-element v-for="(meta, index) in metaList"
                        v-bind:currentId="currentId"
-                       v-bind:myId="index + 1">
+                       v-bind:myId="index + 1"
+                       v-bind:metaData="meta">
+        </error-element>
 
     </div>
     `
@@ -84,16 +97,15 @@ Vue.component("error-element", {
       "myId"
     ],
 
-
     // METHODS
     methods:{
 
         update_id : function() {
-            annotationAppEventBus.$emit("update_id", myId );
+            annotationAppEventBus.$emit("update_id", this.myId );
         },
 
         selected : function() {
-            temp = (currentId==myId);
+            temp = (this.currentId==this.myId);
             return temp;
         }
 
@@ -128,52 +140,20 @@ Vue.component("error-element", {
 Vue.component("resolutions", {
 
     props: [
-      "dialogueId"
+      "error"
     ],
 
-    data () {
-        return {
-            dCurrentId: data.currentTurnId,
-        }
-    },
-
-    // COMPUTED properties
-    computed:{
-        dIds: function() {
-            temp = utils.range(1, this.dTurns.length);
-            return temp;
-        },
-
-    },
-
-    mounted () {
-
-    },
-
-    // METHODS
-    methods:{
-
-    },
 
     template:
     `
-    <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div id="resolutions">
+        <div class="left">
+        PLACEHOLDER
+        </div>
 
-        <resolution-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId">
-        </resolution-menu>
-
-        <disagreement-list v-bind:primaryElementClass="primaryElementClassName"
-                        v-bind:errorListMeta="errorList.meta"
-                        v-bind:currentId="currentId">
-        </disagreement-list>
-
-        <resolutions v-bind:error="errorList.errors[currentId]">
-        </resolutions>
-
-        <input-box>
-        </input-box>
-
+        <div class="right">
+        PLACEHOLDER 2
+        </div>
     </div>
     `
 });
@@ -185,53 +165,19 @@ Vue.component("resolutions", {
 
 Vue.component("accept", {
 
-    props: [
-      "dialogueId"
-    ],
-
-    data () {
-        return {
-            dCurrentId: data.currentTurnId,
-        }
-    },
-
-    // COMPUTED properties
-    computed:{
-        dIds: function() {
-            temp = utils.range(1, this.dTurns.length);
-            return temp;
-        },
-
-    },
-
-    mounted () {
-
-    },
-
     // METHODS
     methods:{
+
+        accept : function(){
+            return true
+        }
 
     },
 
     template:
     `
-    <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
-
-        <resolution-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId">
-        </resolution-menu>
-
-        <disagreement-list v-bind:primaryElementClass="primaryElementClassName"
-                        v-bind:errorListMeta="errorList.meta"
-                        v-bind:currentId="currentId">
-        </disagreement-list>
-
-        <resolutions v-bind:error="errorList.errors[currentId]">
-        </resolutions>
-
-        <input-box>
-        </input-box>
-
+    <div id="accept">
+        PLACEHOLDER
     </div>
     `
 });

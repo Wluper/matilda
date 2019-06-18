@@ -129,5 +129,6 @@ data = {
     annotationStyle : annotationStyle,
     annotationTestStructure : annotationTestStructure,
     currentTurnId : currentTurnId,
-    validAnnotations : validAnnotations
+    validAnnotations : validAnnotations,
+    errorList : errorList,
 }

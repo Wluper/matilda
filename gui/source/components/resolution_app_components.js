@@ -5,7 +5,7 @@
 Vue.component("resolution-app", {
 
     props: [
-      "dialogueId"
+        "dialogueId"
     ],
 
     data () {
@@ -36,14 +36,13 @@ Vue.component("resolution-app", {
 
     mounted () {
         this.init();
-        this.focus_on_new_query_box();
     },
 
-/***************************************************************************
-*
-* EVENTS GO HERE
-*
-***************************************************************************/
+    /***************************************************************************
+    *
+    * EVENTS GO HERE
+    *
+    ***************************************************************************/
     created (){
         // GENERAL EVENT LISTENERS
         window.addEventListener('keyup', this.change_turn);
@@ -59,12 +58,12 @@ Vue.component("resolution-app", {
     methods:{
 
         init: function() {
-
-          // Step One :: Get the Annotation Styles
-          backend.get_annotation_style_async()
-              .then( (response) => {
-                  this.annotationFormat = response;
-              });
+            console.log(this.metaDataList)
+            // Step One :: Get the Annotation Styles
+            backend.get_annotation_style_async()
+            .then( (response) => {
+                this.annotationFormat = response;
+            });
 
         },
 
@@ -79,7 +78,7 @@ Vue.component("resolution-app", {
             else if (event.key=="ArrowRight" || event.key=="ArrowDown" || event.key=="Enter"){
                 temp=1;
             } else {
-              return;
+                return;
             }
 
             if ( !( this.currentErrorId==this.dTurns.length ) ){
@@ -97,7 +96,7 @@ Vue.component("resolution-app", {
         },
 
         set_current_id : function(event){
-            this.currentTurnId = event
+            this.currentErrorId = event
         },
 
     },
@@ -106,18 +105,18 @@ Vue.component("resolution-app", {
     `
     <div id="resolution-app">
 
-        <resolution-menu>
-        </resolution-menu>
+    <resolution-menu>
+    </resolution-menu>
 
-        <error-list v-bind:metaList="metaDataList"
-                    v-bind:currentId="currentErrorId">
-        </error-list>
+    <error-list v-bind:metaList="metaDataList"
+    v-bind:currentId="currentErrorId">
+    </error-list>
 
-        <resolutions v-bind:error="currentError">
-        </resolutions>
+    <resolutions v-bind:error="currentError">
+    </resolutions>
 
-        <accept>
-        </accept>
+    <accept>
+    </accept>
 
     </div>
     `

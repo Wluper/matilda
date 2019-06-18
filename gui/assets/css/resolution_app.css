@@ -1,3 +1,62 @@
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION APP LAYOUT
+********************************************************************************
+*******************************************************************************/
+#resolution-app {
+    background-color: #ffffff;
+
+    height: 100%;
+
+    display: grid !important;
+    /* grid-template-columns: minmax(0,3fr) minmax(0,1fr); */
+    grid-template-rows: minmax(0, 1fr) minmax(0, 6fr) minmax(0,10fr) minmax(0, 1fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+
+    /*overflow: hidden;*/
+}
+
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION MENU
+********************************************************************************
+*******************************************************************************/
+#resolution-menu{
+
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    background-color: #0e181e;
+
+    height: 100%;
+
+    color: white;
+
+}
+
+/*******************************************************************************
+********************************************************************************
+* ERROR ELEMENTS
+********************************************************************************
+*******************************************************************************/
+
+#error-list{
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    background-color: #ffffff !important; /* +10 */
+    border-radius: 5px;
+
+    height: 100%;
+
+    color: white;
+}
 
 .error-element-selected > .error-element-id{
     background-color: #3d6582 !important;
@@ -22,6 +81,7 @@
     border-radius: 5px;
 
     height: auto;
+    width: auto;
     margin: 0.5em;
 
     padding-bottom: 0.5em;
@@ -64,7 +124,68 @@
 
 
 
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION
+********************************************************************************
+*******************************************************************************/
 
+#resolution{
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    grid-row-start: 3;
+    grid-row-end: 4;
+
+    background-color: #ffffff !important; /* +10 */
+    border-radius: 5px;
+    color: white;
+
+    height: 100%;
+
+    display: grid !important;
+    grid-template-columns: minmax(0,3fr) minmax(0,1fr);
+
+}
+
+.left {
+    background-color: #ff0000 !important; /* +10 */
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    height: 100%;
+    width: 100%;
+}
+
+.right {
+    background-color: #00ff00 !important; /* +10 */
+
+    grid-column-start: -2;
+    grid-column-end: -1;
+
+    height: 100%;
+    width: 100%;
+}
+
+/*******************************************************************************
+********************************************************************************
+* ACCEPT BUTTON
+********************************************************************************
+*******************************************************************************/
+
+#accept{
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    grid-row-start: -2;
+    grid-row-end: -1;
+
+    background-color: #ffffff !important; /* +10 */
+    border-radius: 5px;
+
+    height: 100%;
+
+    color: white;
+}
 
 
 
