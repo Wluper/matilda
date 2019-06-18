@@ -1,0 +1,71 @@
+
+.error-element-selected > .error-element-id{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+}
+
+/* .error-element > .user-string-type{
+    color: #666666;
+    background-color: #eaeff2 !important;
+
+}
+
+.error-element:hover > .user-string-type{
+    color: #888888;
+    background-color: #5c99c4 !important;
+
+} */
+
+.error-element-selected{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    height: auto;
+    margin: 0.5em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+}
+
+.error-element{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    height: auto;
+    margin: 0.5em 8em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+    /* -webkit-animation: adjust_size 0.3s forwards; /* Chrome, Safari, Opera */ */
+
+}
+
+.error-element:hover{
+    background-color: #5c99c4 !important;
+    color: #888888;
+    margin: 0.5em 2em;
+    cursor: pointer;
+    /* -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */ */
+}
+
+
+
+
+
+
+
+
+
+/* EOF */
