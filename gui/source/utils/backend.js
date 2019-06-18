@@ -17,7 +17,7 @@ async function annotate_query(query){
         dialogueStyle = response.data
         console.log("=============TURN ANNOTATION==============")
         console.log(dialogueStyle)
-        return dialogueStyle["turn"]
+        return dialogueStyle
 
     } catch (error) {
 

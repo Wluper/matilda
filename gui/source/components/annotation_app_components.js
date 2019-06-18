@@ -166,6 +166,8 @@ Vue.component("annotation-app", {
                     console.log(response)
                     this.dTurns.push(response);
                     this.dCurrentId = this.dTurns.length;
+                    console.log(this.dTurns)
+                    console.log(this.dCurrentId)
                     this.focus_on_new_query_box();
                 });
         },

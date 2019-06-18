@@ -63,7 +63,10 @@ function get_turn_data(turnData, validAnnotations, annotationStyle){
     // """
     // needs to be the type defined above
     var out = create_empty_turn(validAnnotations);
-
+    if (turnData ==null) {
+        console.log("+++++++++++++++++++++++ EXITING TURN DATA ++++++++++++++++++++++++++++++++")
+        return {}
+    }
     // Iterate through
     for ( [key, value] of Object.entries(annotationStyle) ){
 
@@ -94,6 +97,9 @@ function get_turn_data(turnData, validAnnotations, annotationStyle){
         }
     }
 
+    console.log("+++++++++++++++++++++++ Yuhu ++++++++++++++++++++++++++++++++")
+    console.log(out)
+    
     return out;
 }
 

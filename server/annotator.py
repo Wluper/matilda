@@ -122,7 +122,7 @@ class DialogueAnnotator(object):
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
         if id:
-            return {id : self.__dialogues[id]}
+            return {"dialogue" : self.__dialogues[id]}
 
         return self.__dialogues
 
@@ -169,7 +169,7 @@ class DialogueAnnotator(object):
             id = self.__get_new_dialogue_id()
 
 
-        self.__dialogues[ id ] = dialogue if dialogue else {}
+        self.__dialogues[ id ] = dialogue if dialogue else []
 
         return {"id":id}
 
