@@ -130,7 +130,7 @@
 ********************************************************************************
 *******************************************************************************/
 
-#resolution{
+#resolutions{
     /* grid-column-start: 1;
     grid-column-end: -1; */
     grid-row-start: 3;
@@ -141,6 +141,7 @@
     color: white;
 
     height: 100%;
+    width: 100%;
 
     display: grid !important;
     grid-template-columns: minmax(0,3fr) minmax(0,1fr);
@@ -154,7 +155,6 @@
     grid-column-end: 2;
 
     height: 100%;
-    width: 100%;
 }
 
 .right {
@@ -164,7 +164,6 @@
     grid-column-end: -1;
 
     height: 100%;
-    width: 100%;
 }
 
 /*******************************************************************************
