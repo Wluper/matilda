@@ -1,0 +1,237 @@
+/*******************************************************************************
+********************************************************************************
+* ALL DIALOGUES
+********************************************************************************
+*******************************************************************************/
+
+.all-dialogues-container {
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+.dialogue-list-title-container {
+    display: grid;
+    grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
+                   / 1fr 1fr
+}
+
+.all-dialogues-list-title {
+    grid-area: title-zone;
+    padding-left: 20px;
+    color:white;
+}
+
+.help-button-container {
+    grid-area: help-button-zone;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.help-button {
+    margin-right: 30px;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    padding: 10px;
+    /*height: 50px;*/
+    /*width: 60%;*/
+    /*font-size: 18px;*/
+}
+
+.help-button:hover {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.help-button:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+.dialogue-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.listed-dialogue {
+    /*background-color: blue;*/
+    /*padding: 10px;*/
+    margin: 10px;
+    color: white;
+    transition: 0.1s;
+}
+
+.dialogue-list-single-item-container{
+    display: grid;
+    grid-template: [row1-start] "del . info" [row1-end] / 1fr 0.2fr 22fr;
+    /*background-color: green;*/
+    /*padding:10px;*/
+}
+
+.del-dialogue-button {
+    grid-area: del;
+    border: 3px solid red;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.del-dialogue-button:hover {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.del-dialogue-button:active {
+    background-color: white;
+    color:red;
+    border: 3px solid white;
+}
+
+.dialouge-info {
+    grid-area: info;
+    display: grid;
+    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 2fr 6fr 1fr 1fr;
+    cursor: pointer;
+    background-color: #293e4c;
+}
+
+.dialouge-info:hover {
+    cursor: pointer;
+    color: #ee59ff;
+    /*border: 3px solid #ee59ff;*/
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.dialouge-info:active {
+    color: white;
+}
+
+.visited-indicator{
+    grid-area:visited;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #a2ffa0;
+    font-weight: bold;
+    /*text-shadow: 0px 0px 2px #a2ffa0;
+    box-shadow: 0px 0px 5px #a2ffa0;*/
+}
+
+.dialogue-id {
+    background-color: #15232d;
+    grid-area: id;
+    overflow-x: hidden;
+    padding:10px;
+}
+
+.dialogue-num-turns {
+    grid-area: numTurns;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.add-button-container {
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-dialogue-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    height: 50px;
+    width: 60%;
+    font-size: 18px;
+}
+
+.add-dialogue-button:hover {
+    width: 70%;
+}
+
+.add-dialogue-button:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+.upload-file-container {
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*text-align: center;*/
+    /*display: grid;
+    grid-template: [row1-start] "label-zone" 1fr [row1-end]
+                   [row2-start] "." 0.5fr [row2-end]
+                   [row3-start] "input-zone" 1fr [row3-end]
+                   / 1fr;*/
+}
+
+#fileInputContainer {
+    /*grid-area: input-zone;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: buttonface;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    height: 50px;
+    width: 60%;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+#fileInputContainer:hover {
+    background-color: #a1c45c;
+    width: 70%;
+}
+
+#fileInputContainer:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+#fileInput {
+    display: none;
+}
+
+#fileInputLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+    cursor: pointer
+}
