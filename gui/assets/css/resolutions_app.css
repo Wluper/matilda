@@ -114,7 +114,7 @@
 
 .error-element:hover{
     background-color: #5c99c4 !important;
-    color: #888888;
+    color: #666666;
     margin: 0.5em 2em;
     cursor: pointer;
     /* -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */ */

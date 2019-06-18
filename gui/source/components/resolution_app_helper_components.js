@@ -115,13 +115,29 @@ Vue.component("error-element", {
     `
     <div v-if="selected()" class="error-element-selected">
         <div class="error-element-id">
-            Turn Id: {{myId}}
+            Error Id: {{myId}}
+        </div>
+
+        <div class="error-element-turn">
+            Turn {{metaData.turn}}
+        </div>
+
+        <div class="error-element-annotation">
+            Name:  {{metaData.name}}
         </div>
     </div>
 
     <div v-else class="error-element" v-on:click="update_id()">
         <div class="error-element-id">
-            Turn Id: {{myId}}
+            Error Id: {{myId}}
+        </div>
+
+        <div class="error-element-turn">
+            Turn {{metaData.turn}}
+        </div>
+
+        <div class="error-element-annotation">
+            Name:  {{metaData.name}}
         </div>
     </div>
     `

@@ -66,13 +66,13 @@ var errorList = {
     meta : [
         {
             turn: 1,
-            error: "hotel_belief_state",
+            name: "hotel_belief_state",
             accepted: "false",
             annotateBy: 5
         },
         {
             turn: 1,
-            error: "query_type",
+            name: "query_type",
             accepted: "false",
             annotateBy: 5
         }
