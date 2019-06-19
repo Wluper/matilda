@@ -3,7 +3,7 @@
 ********************************/
 
 Vue.component('classification-annotation',{
-    props: ["classification", "classFormat", "uniqueName"],
+    props: ["classification", "classFormat", "uniqueName", "turn"],
 
     data () {
 
@@ -74,7 +74,7 @@ Vue.component('classification-annotation',{
              */
             this.$forceUpdate();
 
-            outEvent = {name: this.uniqueName, data: this.correctClassification}
+            outEvent = {name: this.uniqueName, data: this.correctClassification, turn: this.turn}
             annotationAppEventBus.$emit("update_classification", outEvent)
         },
 

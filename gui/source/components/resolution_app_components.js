@@ -5,7 +5,7 @@
 Vue.component("resolution-app", {
 
     props: [
-        "dialogueId"
+        "dialogueId", "dialogue"
     ],
 
     data () {
@@ -14,6 +14,8 @@ Vue.component("resolution-app", {
             metaDataList : data.errorList.meta,
             validAnnotations: data.validAnnotations,
             currentErrorId: 1,
+            annotationFormat : {},
+            goldDialogue : this.dialogue,
         }
     },
 
@@ -47,11 +49,11 @@ Vue.component("resolution-app", {
     ***************************************************************************/
     created (){
         // GENERAL EVENT LISTENERS
-        window.addEventListener('keyup', this.change_turn);
+        window.addEventListener('keyup', this.resolve_keyboard_input);
 
         // meta-error-list Listener
         annotationAppEventBus.$on("update_id", this.set_current_id );
-
+        annotationAppEventBus.$on("accept", this.accept );
     },
 
 
@@ -69,10 +71,29 @@ Vue.component("resolution-app", {
 
         },
 
+        resolve_keyboard_input : function(event){
+            console.log(" ************ KEY PRESSED ************ ")
+            console.log(event.key)
+            if (event.key=="Enter"){
+                this.accept(event);
+            }
+            else if (event.key.includes("Arrow")){
+                this.change_turn(event);
+            }
+            else {
+                return;
+            }
+
+        },
+
+        accept: function(event) {
+            this.metaDataList[this.currentErrorId-1].accepted=true;
+            this.change_turn( {key:"ArrowRight"})
+        },
+
         change_turn: function(event) {
 
-            console.log(" ************ DTURNS ************ ")
-            console.log(this.dCurrentId)
+            console.log(" ************ CHANGING ERROR TURN ************ ")
             console.log(event)
             if (event.key=="ArrowLeft" || event.key=="ArrowUp"){
                 temp=-1;
@@ -83,7 +104,7 @@ Vue.component("resolution-app", {
                 return;
             }
 
-            if ( !( this.currentErrorId==this.dTurns.length ) ){
+            if ( !( this.currentErrorId==this.errorList.length ) ){
                 if ( !( this.currentErrorId==1 ) ){
                     this.currentErrorId += temp;
                 }
@@ -95,6 +116,13 @@ Vue.component("resolution-app", {
                 this.currentErrorId += temp;
             }
 
+        },
+
+        turn_update: function(event){
+            console.log("-----> Updating turn", event)
+            this.allDataSaved = false;
+            utils.update_turn( this.dTurns[this.dCurrentId - 1], event);
+            console.log("-----> Turn Updated", this.dCurrentTurn)
         },
 
         set_current_id : function(event){
@@ -114,7 +142,7 @@ Vue.component("resolution-app", {
     v-bind:currentId="currentErrorId">
     </error-list>
 
-    <resolutions v-bind:error="currentError">
+    <resolutions v-bind:error="currentError" v-bind:errorId="currentErrorId">
     </resolutions>
 
     </div>

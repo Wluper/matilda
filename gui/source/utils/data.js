@@ -67,13 +67,13 @@ var errorList = {
         {
             turn: 1,
             name: "hotel_belief_state",
-            accepted: "false",
+            accepted: false,
             annotateBy: 5
         },
         {
             turn: 1,
             name: "query_type",
-            accepted: "false",
+            accepted: false,
             annotateBy: 5
         }
     ],

@@ -11,12 +11,16 @@ Vue.component("resolution-menu", {
     //     }
     // },
 
-    // methods :{
-    //
-    // },
+    methods :{
+        go_back_to_all_dialogues : function(){
+            annotationAppEventBus.$emit("go_back")
+        }
+    },
     template:
     `
     <div id="resolution-menu">
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button">Back to All Dialgoues</button>
+
     </div>
     `
 })
@@ -114,35 +118,62 @@ Vue.component("error-element", {
     template:
     `
     <div v-if="selected()" class="error-element-selected">
-        <div class="error-element-id">
-            Error Id: {{myId}}
-        </div>
-
-        <div class="error-element-turn">
-            Turn {{metaData.turn}}
-        </div>
-
-        <div class="error-element-annotation">
-            Name:  {{metaData.name}}
-        </div>
+        <error-element-body
+            v-bind:accepted="metaData.accepted"
+            v-bind:turn="metaData.turn"
+            v-bind:name="metaData.name"
+            v-bind:id="myId">
+        </error-element-body>
     </div>
 
     <div v-else class="error-element" v-on:click="update_id()">
-        <div class="error-element-id">
-            Error Id: {{myId}}
-        </div>
-
-        <div class="error-element-turn">
-            Turn {{metaData.turn}}
-        </div>
-
-        <div class="error-element-annotation">
-            Name:  {{metaData.name}}
-        </div>
+        <error-element-body
+            v-bind:accepted="metaData.accepted"
+            v-bind:turn="metaData.turn"
+            v-bind:name="metaData.name"
+            v-bind:id="myId">
+        </error-element-body>
     </div>
     `
 });
 
+Vue.component("error-element-body", {
+
+    props: [
+      "accepted",
+      "turn",
+      "name",
+      "id"
+    ],
+
+    template:
+    `
+
+    <div>
+
+        <div class="error-element-id">
+            Error Id: {{id}}
+        </div>
+
+        <div class="error-element-turn">
+            Turn {{turn}}
+        </div>
+
+        <div class="error-element-annotation">
+            Name:  {{name}}
+        </div>
+
+        <div v-if="accepted" class="saved">
+            Accepted
+        </div>
+
+        <div v-if="!(accepted)" class="not-saved">
+            Review
+        </div>
+
+    </div>
+    `
+});
 
 
 
@@ -156,7 +187,7 @@ Vue.component("error-element", {
 Vue.component("resolutions", {
 
     props: [
-      "error"
+      "error", "errorId"
     ],
 
     data () {
@@ -213,7 +244,7 @@ Vue.component("resolutions", {
             </annotation-component>
         </div>
 
-        <accept>
+        <accept v-bind:metaData="{ id : errorId, turn: error.turn, name: error.name }">
         </accept>
     </div>
     `
@@ -329,12 +360,14 @@ Vue.component("string-type-data", {
 *************************************/
 
 Vue.component("accept", {
-
+    props :[
+        "metaData"
+    ],
     // METHODS
     methods:{
 
         accept : function(){
-            annotationAppEventBus.$emit("accept")
+            annotationAppEventBus.$emit("accept", { meta : this.metaData } )
         }
 
     },

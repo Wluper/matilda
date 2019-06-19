@@ -22,6 +22,8 @@ var mainApp = new Vue({
 
   template:
   `
+    <main-admin v-if="!(status === resolving)">
+    </main-admin>
     <resolution-app v-if="status === 'resolving'"
                     v-bind:dialogueId="displayingDialogue">
     </resolution-app>
