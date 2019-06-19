@@ -117,9 +117,6 @@ Vue.component("resolution-app", {
     <resolutions v-bind:error="currentError">
     </resolutions>
 
-    <accept>
-    </accept>
-
     </div>
     `
 });

@@ -89,7 +89,12 @@ button:hover{
 }
 
 
-
+.back-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    grid-area: button-section;
+}
 
 
 

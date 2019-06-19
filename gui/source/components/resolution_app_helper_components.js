@@ -212,6 +212,9 @@ Vue.component("resolutions", {
                 v-bind:annotationFormat="annotationFormat" >
             </annotation-component>
         </div>
+
+        <accept>
+        </accept>
     </div>
     `
 });
@@ -311,7 +314,7 @@ Vue.component("string-type-data", {
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-bind:inputClassName="'primaryElementClass'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
             </div>
 
         </div>
@@ -331,7 +334,7 @@ Vue.component("accept", {
     methods:{
 
         accept : function(){
-            return true
+            annotationAppEventBus.$emit("accept")
         }
 
     },
@@ -339,7 +342,7 @@ Vue.component("accept", {
     template:
     `
     <div id="accept">
-        PLACEHOLDER
+        <button v-on:click="accept()" class="accept-button"> Accept </button>
     </div>
     `
 });

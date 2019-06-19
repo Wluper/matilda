@@ -10,7 +10,7 @@
 
     display: grid !important;
     /* grid-template-columns: minmax(0,3fr) minmax(0,1fr); */
-    grid-template-rows: minmax(0, 1fr) minmax(0, 6fr) minmax(0,10fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 6fr) minmax(0,11fr);
 
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
@@ -144,37 +144,36 @@
     width: 100%;
 
     display: grid !important;
+    grid-template-rows: minmax(0,7fr) minmax(0,1fr);
     grid-template-columns: minmax(0,3fr) minmax(0,1fr);
 
 }
 
 .left {
     background-color: #ff0000 !important; /* +10 */
-
+    grid-row-start: 1;
+    grid-row-end: 2;
     grid-column-start: 1;
     grid-column-end: 2;
 
     height: 100%;
 }
 
+
+
 .right {
     background-color: #00ff00 !important; /* +10 */
-
+    grid-row-start: 1;
+    grid-row-end: -1;
     grid-column-start: -2;
     grid-column-end: -1;
 
     height: 100%;
 }
 
-/*******************************************************************************
-********************************************************************************
-* ACCEPT BUTTON
-********************************************************************************
-*******************************************************************************/
-
 #accept{
-    /* grid-column-start: 1;
-    grid-column-end: -1; */
+    grid-column-start: 1;
+    grid-column-end: 2;
     grid-row-start: -2;
     grid-row-end: -1;
 
@@ -186,6 +185,130 @@
     color: white;
 }
 
+.accept-button {
+    /* background-color: #12ff12 !important;
 
+    margin: 1em; */
+    border-style: hidden;
+    border-radius: 1px;
+
+    height: 3em;
+    width: 8em;
+    margin: auto;
+    margin-left: 1em;
+    margin-right: 1em;
+    display: inline-block;
+    cursor: pointer;
+    /* justify-content: center; */
+}
+
+
+/*******************************************************************************
+********************************************************************************
+* OTHER
+********************************************************************************
+*******************************************************************************/
+
+
+
+/* .string-type{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    margin: 0.5em 8em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+    -webkit-animation: adjust_size 0.3s forwards;
+
+} */
+
+.string-type{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+
+    border-radius: 3px;
+
+    height: 3em;
+    margin: 0.3em 1em;
+
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) minmax(0,9fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+    overflow: hidden;
+}
+
+
+
+.string-type-name{
+    background-color: #1c2f3d !important;
+    border-radius: 2px;
+
+    /* width: 100%; */
+    height: 100%;
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    text-align: center;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.string-type-text{
+    background-color: #ffffff!important;
+    color: #000000;
+    border-radius: 2px;
+
+    height: 100%;
+    width: 100%;
+    /* margin: 2% 5%; */
+    /* text-align: center; */
+    grid-column-start: 2;
+    grid-column-end: -1;
+/* 
+    align-items: center;
+    justify-self: center; */
+
+}
+
+
+
+
+.user-string-type-text{
+    background-color: #ffffff!important;
+    border-radius: 2px;
+
+    height: 100%;
+    /* margin: 2% 5%; */
+
+    grid-column-start: 2;
+    grid-column-end: -1;
+
+}
+
+
+.user-string-type-text input{
+    /* background-color: #1c2f3d!important; */
+
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin:0;
+    border-radius: 2px;
+    outline:none;
+}
 
 /* EOF */
