@@ -4,7 +4,7 @@
 
 # >>>> Native <<<<
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
-
+from collections import defaultdict
 
 # >>>> Local <<<<
 from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel, SysDummyModel
@@ -30,10 +30,12 @@ from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel
 #  CODE
 ##############################################
 
+
 class Configuration(object):
     """
     class responsible for configuration and valid annotation structure
     """
+
 
     configDict = {
 
@@ -184,6 +186,9 @@ class Configuration(object):
                                  .format(labelType))
 
         return out
+
+
+
 
 
 

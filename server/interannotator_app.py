@@ -114,17 +114,17 @@ class InterAnnotatorApp(object):
                             methods=["GET"],
                             handler= self.handle_annotations_resource )
 
-        self.add_endpoint( \
-                            endpoint="/turns",
-                            endpoint_name="/turns",
-                            methods=["POST"],
-                            handler= self.handle_turns_resource  )
-
         # self.add_endpoint( \
-        #                     endpoint="/errors/<id>",
-        #                     endpoint_name="/turns/<id>",
-        #                     methods=["GET"],
+        #                     endpoint="/turns",
+        #                     endpoint_name="/turns",
+        #                     methods=["POST"],
         #                     handler= self.handle_turns_resource  )
+
+        self.add_endpoint( \
+                            endpoint="/errors/<id>",
+                            endpoint_name="/errors/<id>",
+                            methods=["GET"],
+                            handler= self.handle_errors_resource  )
 
 
     def handle_dialogues_resource(self, id=None):
@@ -210,6 +210,31 @@ class InterAnnotatorApp(object):
             }
 
         return jsonify( responseObject )
+
+
+
+    def handle_errors_resource(self, id=None):
+        """
+        POST - Returns the annotation style
+        """
+
+        if request.method == "GET":
+
+            responseObject = {
+                "status" : "success",
+            }
+
+            responseObject.update( InterAnnotatorApp.run_models_on_query(query) )
+
+        else:
+
+            responseObject = {
+                "status" : "error",
+                "error"  : "not available"
+            }
+
+        return jsonify( responseObject )
+
 
 
     def __handle_post_of_new_dialogues(self):

@@ -80,8 +80,8 @@ class MultiAnnotator(object):
         """
         Magic Methods++
         """
-        
-        temp = functools.partial(self.dialogue_file_function_call, attr)
+
+        temp = functools.partial( self.dialogue_file_function_call, attr )
 
         return temp
 
