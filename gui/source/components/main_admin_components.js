@@ -4,7 +4,7 @@
 
 
 
-Vue.component("all-dialogues", {
+Vue.component("main-admin", {
 
   props: [
       "alreadyVisited"
