@@ -13,16 +13,28 @@ var mainApp = new Vue({
   el: '#main-app',
 
   data() {
-    return {
-      displayingDialogue: 'Dialogue1',
-      status : 'resolving'
-    }
+      return {
+            displayingDialogue: 'Dialogue1',
+            status : 'resolving',
+            alreadyVisited: [],
+      }
   },
 
+  methods: {
+
+      switchStatusToMain() {
+          this.status = "listview"
+      }
+
+  },
+
+  created (){
+       annotationAppEventBus.$on("go_back", this.switchStatusToMain);
+  },
 
   template:
   `
-      <main-admin v-if="!(status === 'resolving')">
+      <main-admin v-if="!(status === 'resolving')" v-bind:alreadyVisited="alreadyVisited">
       </main-admin>
 
       <resolution-app v-else-if="status === 'resolving'"

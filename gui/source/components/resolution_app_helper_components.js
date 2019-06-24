@@ -20,7 +20,6 @@ Vue.component("resolution-menu", {
     `
     <div id="resolution-menu">
         <button v-on:click="go_back_to_all_dialogues($event)" class="back-button">Back to All Dialgoues</button>
-
     </div>
     `
 })
