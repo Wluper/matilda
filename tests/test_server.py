@@ -43,6 +43,11 @@ clsStringList2 = [
     [("a", "Bye"), ("b", "Bye")]
 ]
 
+clsStringList3 = [
+    [("a","Hi"), ("b","Hi")],
+    [("a", "Hi"), ("b", "Hi")]
+]
+
 
 ##############################################
 #  MAIN
@@ -52,7 +57,7 @@ if __name__ == '__main__':
 
     # print( json.dumps( agreementConfig["multilabel_classification"](classificationList2) , indent=4 ) )
 
-    print( json.dumps( agreementConfig["multilabel_classification_string"](clsStringList) , indent=4 ) )
+    print( json.dumps( agreementConfig["multilabel_classification_string"](clsStringList3) , indent=4 ) )
 
 
     # print( json.dumps(lida.LidaApp.run_models_on_query("Hi"), indent=4 ) )

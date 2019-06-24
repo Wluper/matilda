@@ -82,7 +82,14 @@ def agreement_classification_string(listOfClassificationStrings):
         for label in prediction:
 
             countDict["counts"][label[0]] += 1
-            valueDict[label[0]] = label[1]
+
+            temp = valueDict.get(label[0])
+
+            if temp:
+                if not (temp==label[1]):
+                    errorFlag = True
+            else:
+                valueDict[label[0]] = label[1]
 
     if counter > 0:
 
