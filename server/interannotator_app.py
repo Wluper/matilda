@@ -431,6 +431,8 @@ class InterAnnotatorApp(object):
 
             for annotationName, listOfAnnotations in turn.items():
 
+                predictions = None
+
                 if annotationName=="turn_idx":
                     continue
 
@@ -449,7 +451,7 @@ class InterAnnotatorApp(object):
                     error["sys"] = listOfDialogue[0][turnId]["usr"]
                     error["type"] = annotationType
                     error["name"] = annotationName
-                    error[annotationName] = predictions
+                    error["predictions"] = predictions
 
                     meta["name"] = annotationName
                     meta["annotateBy"] = len(listOfAnnotations)
