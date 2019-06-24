@@ -10,8 +10,11 @@ Vue.component("resolution-app", {
 
     data () {
         return {
-            errorList : data.errorList.errors,
-            metaDataList : data.errorList.meta,
+            // errorList : data.errorList.errors,
+            // metaDataList : data.errorList.meta,
+            // validAnnotations: data.validAnnotations,
+            errorList : [],
+            metaDataList : [],
             validAnnotations: data.validAnnotations,
             currentErrorId: 1,
             annotationFormat : {},
@@ -28,7 +31,7 @@ Vue.component("resolution-app", {
 
         currentError: function() {
             temp = this.errorList[ this.currentErrorId - 1 ];
-            console.log("===This is the current Resolution===")
+            console.log("===This is the current ERROR===")
             console.log(temp)
             return temp;
         },
@@ -62,11 +65,19 @@ Vue.component("resolution-app", {
     methods:{
 
         init: function() {
-            console.log(this.metaDataList)
+            // console.log(this.metaDataList)
             // Step One :: Get the Annotation Styles
             backend.get_annotation_style_async()
             .then( (response) => {
                 this.annotationFormat = response;
+            });
+
+            // Step TWO :: Get the ERRORS
+            backend.get_errors_async(this.dialogueId)
+            .then( (response) => {
+                this.errorList = response.errors
+                this.metaList = response.meta;
+                console.log(this.errorList);
             });
 
         },

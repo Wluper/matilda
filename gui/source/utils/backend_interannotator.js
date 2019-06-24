@@ -1,3 +1,58 @@
+
+
+/********************************
+* ERRORS RESOURCE
+********************************/
+
+async function get_errors_async(dialogueId){
+
+    var dialogues = {}
+
+    const apiLink = `http://127.0.0.1:5000/errors/${dialogueId}`
+    try {
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+};
+/********************************
+* API INTERACTION FUNCTIONS
+********************************/
+
+async function annotate_query(query){
+
+    var dialogues = {}
+
+    const apiLink = 'http://127.0.0.1:5000/turns'
+    try {
+        var response = await axios.post( apiLink, { query: query}  );
+        console.log(response.data)
+
+        dialogueStyle = response.data.turn
+        console.log("=============TURN ANNOTATION==============")
+        console.log(dialogueStyle)
+        return dialogueStyle
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+};
+
+
 /***************************************
 * ANNOTATON STYLE RESOURCE
 ***************************************/
@@ -258,6 +313,7 @@ async function RESTdialogues(method, id, params){
 
 backend =
 {
+    get_errors_async                            : get_errors_async,
     annotate_query                              : annotate_query,
 
     get_annotation_style_async                  : get_annotation_style_async,
