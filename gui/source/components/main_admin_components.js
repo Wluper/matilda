@@ -12,6 +12,15 @@ Vue.component("main-admin", {
 
   data () {
       return {
+
+          /*
+              `allDialogueMetadata` will always be a list of tuples of the form:
+
+                  List[Tuple[str, List[str]]]
+
+              Where the first item of each tuple is the name of the dialogue and the second item is a list
+              of the different dialogue files on the backend which contain that dialogue ID.
+          */
           allDialogueMetadata: [],
           dragging: false,
           showModal: false
@@ -157,17 +166,17 @@ Vue.component("main-admin", {
     <ul class="dialogue-list">
 
       <li class="listed-dialogue"
-          v-for="(dat, index) in allDialogueMetadata.names"
-          v-bind:id="dat.name">
+          v-for="(dat, index) in allDialogueMetadata"
+          v-bind:id="index">
 
           <div class="dialogue-list-single-item-container">
 
             <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
                 <div class="dialogue-id">
-                  {{dat.name}}
+                    {{dat[0]}} {{dat[1]}}
                 </div>
 
-                <div v-if="dialogue_already_visited(dat.id)"
+                <div v-if="dialogue_already_visited(dat)"
                      class="visited-indicator">
                      Visited
                 </div>

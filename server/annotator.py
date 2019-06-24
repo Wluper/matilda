@@ -4,6 +4,7 @@
 
 # >>>> Native <<<<
 import os
+import collections
 import sys
 import json
 import copy
@@ -46,7 +47,7 @@ class MultiAnnotator(object):
 
         for fileName, fileObject in self.allFiles.items():
 
-            temp = fileObject.get_dialogues(id=dialogueId)["dialogue"]
+            temp = fileObject.get_dialogue(id=dialogueId)["dialogue"]
 
             if temp:
                 outList.append( temp )
@@ -60,7 +61,7 @@ class MultiAnnotator(object):
 
         if not fileName:
             fileName = self.__get_new_file_id()
-            save_json_file( obj=jsonObjectOrFileName, path= os.path.join( self.path, fileName ) )
+            save_json_file( obj=jsonObject, path= os.path.join( self.path, fileName ) )
             # self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObjectOrFileName)
 
         self.filesAdded += 1
@@ -93,6 +94,24 @@ class MultiAnnotator(object):
 
         # By this point we know that all of the dialogues must have the same keys (i.e. dialogue names)
         return list(allDialogues[0].keys())
+
+    def get_dialogues_metadata(self) -> List[Tuple[str, List[str]]]:
+        """
+        Gets a list of tuples of the dialogue names in each file and a list of the filenames that contain those
+        dialogues.
+        """
+        allDialogues = collections.defaultdict(list)
+
+        for fname, dialogObj in self.allFiles.items():
+
+            if fname == self.__GOLD_FILE_NAME:
+                continue
+
+            for dialogueName, turnList in dialogObj.get_dialogues().items():
+
+                allDialogues[dialogueName].append(fname)
+
+        return [(key, val) for key, val in allDialogues.items()]
 
     def get_gold_dialogue_metadata(self):
         """Gets the metadata of the gold dialogue file"""
@@ -177,7 +196,7 @@ class DialogueAnnotator(object):
         else:
             self.__fileName = DialogueAnnotator.__DEFAULT_FILENAME
 
-    def get_single_dialogue(self, id: Hashable) -> Dict[str, Any]:
+    def get_dialogue(self, id: Hashable) -> Dict[str, Any]:
         """Gets a single dialogue"""
         return {"dialogue": self.__dialogues.get(id)}
 
