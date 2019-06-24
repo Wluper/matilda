@@ -417,7 +417,7 @@ class InterAnnotatorApp(object):
                     turnsData.append(temp)
 
 
-        print(turnsData)
+        # print(turnsData)
 
         # Getting the errors
         for turnId, turn in enumerate(turnsData):
@@ -448,7 +448,7 @@ class InterAnnotatorApp(object):
 
                     errorFlag = True
                     error["usr"] = listOfDialogue[0][turnId]["usr"]
-                    error["sys"] = listOfDialogue[0][turnId]["usr"]
+                    error["sys"] = listOfDialogue[0][turnId]["sys"]
                     error["type"] = annotationType
                     error["name"] = annotationName
                     error["predictions"] = predictions
