@@ -60,8 +60,11 @@ Vue.component("resolution-app", {
         // meta-error-list Listener
         annotationAppEventBus.$on("update_id", this.set_current_id );
         annotationAppEventBus.$on("accept", this.accept );
-    },
 
+        annotationAppEventBus.$on("update_classification", this.print );
+        annotationAppEventBus.$on("classification_string_updated", this.print );
+
+    },
 
 
     // METHODS
@@ -85,6 +88,15 @@ Vue.component("resolution-app", {
 
         },
 
+        update_annotation : function(event){
+
+        },
+
+        print : function(event){
+            console.log("****** PRINTING ******");
+            console.log(event);
+        },
+
         resolve_keyboard_input : function(event){
             console.log(" ************ KEY PRESSED ************ ")
             console.log(event.key)
@@ -102,6 +114,9 @@ Vue.component("resolution-app", {
 
         accept: function(event) {
             this.metaDataList[this.currentErrorId-1].accepted=true;
+
+            backend.put_single_dialogue_async(this.dialogueId, this.dialogue)
+
             this.change_turn( {key:"ArrowRight"})
         },
 
@@ -130,13 +145,6 @@ Vue.component("resolution-app", {
                 this.currentErrorId += temp;
             }
 
-        },
-
-        turn_update: function(event){
-            console.log("-----> Updating turn", event)
-            this.allDataSaved = false;
-            utils.update_turn( this.dTurns[this.dCurrentId - 1], event);
-            console.log("-----> Turn Updated", this.dCurrentTurn)
         },
 
         set_current_id : function(event){

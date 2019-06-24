@@ -153,7 +153,13 @@ class InterAnnotatorApp(object):
 
             if request.method == "PUT":
                 data = request.get_json()
-                Configuration.validate_dialogue( data )
+                data = Configuration.validate_dialogue( data )
+
+                if isinstance(dialogue, str):
+                    currentResponseObject["error"] = data
+                    currentResponseObject["status"] = "error"
+                    return jsonify( currentResponseObject )
+
                 responseObject = self.annotationFiles.update_dialogue( id=id, newDialogue=data )
 
             if request.method == "DELETE":
@@ -179,7 +185,6 @@ class InterAnnotatorApp(object):
         """
         if request.method == "GET":
             responseObject = self.annotationFiles.get_dialogues_metadata()
-            print("MADE IT SOFAR", file=sys.stderr)
 
         if request.method == "PUT":
             error = None
@@ -274,10 +279,6 @@ class InterAnnotatorApp(object):
         stringListOrJsonDict = dialoguesData["payload"]
 
         optionalFileName = dialoguesData["name"]
-        print("MADE IT SOFAR 1.0", file=sys.stderr)
-        print(optionalFileName, file=sys.stderr)
-        print(dialoguesData, file=sys.stderr)
-        print(type(dialoguesData), file=sys.stderr)
 
         if isinstance(stringListOrJsonDict, str):
             responseObject["error"]  = "JSON parsing failed"
@@ -290,7 +291,7 @@ class InterAnnotatorApp(object):
             responseObject = self.__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
 
         elif isinstance(stringListOrJsonDict, dict):
-            print("MADE IT SOFAR 2.0", file=sys.stderr)
+            # print("MADE IT SOFAR 2.0", file=sys.stderr)
             responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
 
         return responseObject

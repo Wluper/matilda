@@ -214,11 +214,11 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName=nul
 }
 
 
-async function put_single_dialogue_async(event, dialogueId, dTurns) {
+async function put_single_dialogue_async(event, dialogueId, dialogue) {
 
     try {
 
-        const response = await RESTdialogues( "PUT", dialogueId, dTurns )
+        const response = await RESTdialogues( "PUT", dialogueId, dialogue )
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
