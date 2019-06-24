@@ -1,0 +1,55 @@
+{
+    "Dialogue1": [
+        {
+            "hotel_belief_state": [
+                [
+                    "hotel-book people",
+                    "2"
+                ]
+            ],
+            "policy_funcs": [
+                "Find And Offer Booking",
+                "Ask For Missing Slots"
+            ],
+            "query_type": [
+                "inform"
+            ],
+            "sys": "I am a mock model response",
+            "usr": "Hello I am a test string"
+        },
+        {
+            "hotel_belief_state": [
+                [
+                    "hotel-book stay",
+                    "2"
+                ]
+            ],
+            "policy_funcs": [
+                "Try Book",
+                "Ask For Missing Slots"
+            ],
+            "query_type": [
+                "request"
+            ],
+            "sys": "I am a mock model response",
+            "usr": "I am the second test string in the dialogue"
+        },
+        {
+            "hotel_belief_state": [
+                [
+                    "hotel-book people",
+                    "5"
+                ]
+            ],
+            "policy_funcs": [
+                "Find And Offer Booking",
+                "Ask For Missing Slots"
+            ],
+            "query_type": [
+                "farewell"
+            ],
+            "sys": "I am a mock model response",
+            "usr": "I am the last"
+        }
+    ]
+}

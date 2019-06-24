@@ -145,7 +145,11 @@ class InterAnnotatorApp(object):
         if id:
 
             if request.method == "GET":
-                responseObject = self.annotationFiles.get_dialogues(id = id)
+
+                if id:
+                    responseObject = self.annotationFiles.get_dialogue(id)
+                else:
+                    responseObject = self.annotationFiles.get_dialogues()
 
             if request.method == "PUT":
                 data = request.get_json()
@@ -174,7 +178,7 @@ class InterAnnotatorApp(object):
         PUT - Handle
         """
         if request.method == "GET":
-            responseObject = self.annotationFiles.get_dialogue_names()
+            responseObject = self.annotationFiles.get_dialogues_metadata()
             print("MADE IT SOFAR", file=sys.stderr)
 
         if request.method == "PUT":
