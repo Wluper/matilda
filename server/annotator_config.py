@@ -119,20 +119,20 @@ class Configuration(object):
                     turn[labelName]
                 except KeyError:
                     if info["required"]:
-                        return "Label \'{}\' is listed as \"required\" in the " \
+                        return "ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                "config.py file, but is missing from the provided " \
                                "dialogue in turn {}.".format(labelName, i)
 
                 if info["required"] and not turn[labelName]:
-                    return "Required label, \'{}\', does not have a value " \
+                    return "ERROR2: Required label, \'{}\', does not have a value " \
                            "provided in the dialogue in turn {}".format(labelName, i)
 
-                if "classificaiton" in info["label_type"]:
+                if "multilabel_classification" == info["label_type"]:
 
                     providedLabels = turn[labelName]
 
                     if not all(x in info["labels"] for x in providedLabels):
-                        return "One of the provided labels in the list: " \
+                        return "ERROR3: One of the provided labels in the list: " \
                                "\'{}\' is not in allowed list according to " \
                                "config.py in turn {}".format(providedLabels, i)
 

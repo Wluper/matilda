@@ -269,7 +269,15 @@ class InterAnnotatorApp(object):
         """
         responseObject = {}
 
-        stringListOrJsonDict = request.get_json()
+        dialoguesData = request.get_json()
+
+        stringListOrJsonDict = dialoguesData["payload"]
+
+        optionalFileName = dialoguesData["name"]
+        print("MADE IT SOFAR 1.0", file=sys.stderr)
+        print(optionalFileName, file=sys.stderr)
+        print(dialoguesData, file=sys.stderr)
+        print(type(dialoguesData), file=sys.stderr)
 
         if isinstance(stringListOrJsonDict, str):
             responseObject["error"]  = "JSON parsing failed"
@@ -282,21 +290,22 @@ class InterAnnotatorApp(object):
             responseObject = self.__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
 
         elif isinstance(stringListOrJsonDict, dict):
-            responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict)
+            print("MADE IT SOFAR 2.0", file=sys.stderr)
+            responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
 
         return responseObject
 
 
 
 
-    def __add_new_dialogues_from_json_dict(self, currentResponseObject, dialogueDict):
+    def __add_new_dialogues_from_json_dict(self, currentResponseObject, dialogueDict, fileName=None):
         """
         Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
         """
 
-        added_dialogues = []
+        addedDialogues = []
 
-        for dialouge_name, dialogue in dialogueDict.items():
+        for dialougeName, dialogue in dialogueDict.items():
 
             dialogue = Configuration.validate_dialogue(dialogue)
 
@@ -305,10 +314,12 @@ class InterAnnotatorApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            self.annotationFiles.add_dialogue_file(dialogue)
+            addedDialogues.append(dialougeName)
+
 
         if "error" not in currentResponseObject:
-            currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
+            self.annotationFiles.add_dialogue_file(dialogueDict, fileName=fileName)
+            currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
 
         return currentResponseObject
 
@@ -424,10 +435,6 @@ class InterAnnotatorApp(object):
 
                     turnsData.append(temp)
 
-
-        print(len(turnsData))
-        print(turnsData[0])
-
         # Getting the errors
         for turnId, turn in enumerate(turnsData):
 
@@ -453,7 +460,6 @@ class InterAnnotatorApp(object):
 
                     predictions = agreementFunc( listOfAnnotations ).get("predictions")
 
-                    print(predictions)
                 if predictions: #means there is discrepency
 
                     error["usr"] = listOfDialogue[0][turnId]["usr"]

@@ -105,7 +105,7 @@ Vue.component("main-admin", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                backend.post_new_dialogue_from_json_string_async(text)
+                backend.post_new_dialogue_from_json_string_async(text, file.name)
                     .then( (response) => {
 
                         if ('error' in response.data) {

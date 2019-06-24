@@ -58,13 +58,15 @@ class MultiAnnotator(object):
         """
         adds a new DialogueAnnotator
         """
+        print(jsonObject)
 
         if not fileName:
             fileName = self.__get_new_file_id()
-            save_json_file( obj=jsonObject, path= os.path.join( self.path, fileName ) )
-            # self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObjectOrFileName)
+            self.filesAdded += 1
 
-        self.filesAdded += 1
+        save_json_file( obj=jsonObject, path= os.path.join( self.path, fileName ) )
+        self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObject)
+
         self.allFiles[ fileName ] = DialogueAnnotator( self.path, fileName )
         self.save()
 
@@ -204,8 +206,6 @@ class DialogueAnnotator(object):
         """
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
-        if id:
-            return self.get_single_dialogue(id=id)
         return self.__dialogues
 
     def get_dialogues_metadata(self):

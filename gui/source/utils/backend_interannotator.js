@@ -194,32 +194,11 @@ async function post_empty_dialogue() {
 }
 
 
-async function post_new_dialogues_from_string_lists_async(stringLists) {
-
-
-    try {
-
-        const response = await RESTdialogues("POST", null, stringLists );
-
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
-
-        return response
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
-
-}
-
-
-async function post_new_dialogue_from_json_string_async(jsonString) {
+async function post_new_dialogue_from_json_string_async(jsonString, fileName=null) {
 
     try {
 
-        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString) )
+        const response = await RESTdialogues( "POST", null, {payload: JSON.parse(jsonString), name: fileName } )
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)
@@ -326,7 +305,6 @@ backend =
     change_dialogue_name_async                  : change_dialogue_name_async,
 
     post_empty_dialogue                         : post_empty_dialogue,
-    post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async
 }
 
