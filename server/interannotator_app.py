@@ -8,6 +8,7 @@ import sys
 import json
 import copy
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
+from collections import defaultdict
 
 # == Flask ==
 from flask import Flask, jsonify, request
@@ -15,6 +16,8 @@ from flask_cors import CORS
 
 # == Local ==
 from annotator_config import Configuration
+from interannotator_config import agreementConfig
+
 from annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
 
@@ -224,7 +227,9 @@ class InterAnnotatorApp(object):
                 "status" : "success",
             }
 
-            responseObject.update( InterAnnotatorApp.run_models_on_query(query) )
+            listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
+
+            responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
 
         else:
 
@@ -235,6 +240,19 @@ class InterAnnotatorApp(object):
 
         return jsonify( responseObject )
 
+
+    def mock_handle_errors_resource(self, id=None):
+        with self.app.app_context():
+
+            responseObject = {
+            "status" : "success",
+            }
+
+            listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
+
+            responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
+
+            return responseObject
 
 
     def __handle_post_of_new_dialogues(self):
@@ -353,3 +371,106 @@ class InterAnnotatorApp(object):
             newDialogue.append( InterAnnotatorApp.run_models_on_query(userQuery)["turn"] )
 
         return newDialogue
+
+
+
+    @staticmethod
+    def find_errors_in_list_of_dialogue(listOfDialogue):
+        """
+        finds errors in the list of dialogues
+
+            meta : [
+                {
+                    turn: 1,
+                    name: "hotel_belief_state",
+                    accepted: false,
+                    annotateBy: 5
+                },...
+            errors : [
+                {
+                    usr : "Hi, how do I get to the moon?",
+                    sys : "Call Elon, find 500K and fly.",
+                    turn : 1,
+                    type : "multilabel_classification_string",
+                    name : "hotel_belief_state",
+                    predictions: [
+                        ["hotel-book people",5]
+                    ],
+                },...
+        """
+        errorList = []
+        metaList = []
+
+        turnsData = []
+        #create per turn data
+        for dialogue in listOfDialogue:
+
+            for turnId,turn in enumerate( dialogue ):
+
+                if len(turnsData)>turnId:
+                    InterAnnotatorApp.update_defaultdict_list_with_dict( turnsData[turnId], turn )
+
+                else:
+                    temp = defaultdict(list)
+                    InterAnnotatorApp.update_defaultdict_list_with_dict( temp, turn )
+
+                    turnsData.append(temp)
+
+
+        print(turnsData)
+
+        # Getting the errors
+        for turnId, turn in enumerate(turnsData):
+
+            error = {}
+            error["turn"] = turnId
+
+            meta = {}
+            meta["turn"] = turnId
+            meta["accepted"] = False
+
+            for annotationName, listOfAnnotations in turn.items():
+
+                if annotationName=="turn_idx":
+                    continue
+
+                annotationType = Configuration.configDict[annotationName]["label_type"]
+
+                agreementFunc = agreementConfig[ annotationType ]
+
+                if agreementFunc:
+
+                    predictions = agreementFunc( listOfAnnotations ).get("predictions")
+
+                if predictions: #means there is discrepency
+
+                    errorFlag = True
+                    error["usr"] = listOfDialogue[0][turnId]["usr"]
+                    error["sys"] = listOfDialogue[0][turnId]["usr"]
+                    error["type"] = annotationType
+                    error["name"] = annotationName
+                    error[annotationName] = predictions
+
+                    meta["name"] = annotationName
+                    meta["annotateBy"] = len(listOfAnnotations)
+
+
+                    errorList.append(error)
+                    metaList.append(meta)
+
+        return {"errors": errorList, "meta": metaList}
+
+
+    @staticmethod
+    def update_defaultdict_list_with_dict(defaultDict, newDict):
+        """
+        appends on the keys
+        """
+        for key, value in newDict.items():
+
+            defaultDict[key].append(value)
+
+
+
+
+# EOF

@@ -38,20 +38,37 @@ class MultiAnnotator(object):
 
         self.__load_all_jsons(self.path)
 
+    def get_all_files(self, dialogueId):
+        """
+        Gets all dialogues
+        """
+        outList = []
 
-    def add_dialogue_file( self, jsonObjectOrFileName ):
+        for fileName, fileObject in self.allFiles.items():
+
+            temp = fileObject.get_dialogues(id=dialogueId)["dialogue"]
+
+            if temp:
+                outList.append( temp )
+
+        return outList
+
+    def add_dialogue_file( self, jsonObject, fileName=None ):
         """
         adds a new DialogueAnnotator
         """
-        if type( jsonObjectOrFileName )==str:
-            fileName = jsonObjectOrFileName
-        else:
+
+        if not fileName:
             fileName = self.__get_new_file_id()
-            save_json_file( obj=jsonObjectOrFileName, path= os.path.join( self.path, fileName ) )
-            self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObjectOrFileName)
+
+
+        save_json_file( obj=jsonObject, path= os.path.join( self.path, fileName ) )
+        self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObject)
 
         self.filesAdded += 1
         self.allFiles[ fileName ] = DialogueAnnotator( self.path, fileName )
+
+        self.save()
 
 
     def get_metadata(self):
@@ -87,17 +104,20 @@ class MultiAnnotator(object):
 
 
 
-    def __load_all_jsons(self,path):
+    def __load_all_jsons(self, targetPath):
         """
         loads all files from directory
         """
-        files = [ x for x in os.listdir('.') if os.path.isfile(x) ]
+        currentDir = os.path.join( os.getcwd(), targetPath)
+
+
+        files = [ x for x in os.listdir( currentDir ) if os.path.isfile( os.path.join(currentDir, x) ) ]
 
         for file in files:
 
             if file.endswith('.json'):
-
-                self.add_dialogue_file( file )
+                jsonObject = load_json_file( os.path.join(currentDir,file) )
+                self.add_dialogue_file( jsonObject=jsonObject, fileName=file )
 
 
     def __get_new_file_id(self):
