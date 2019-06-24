@@ -34,6 +34,10 @@ class InterAnnotatorApp(object):
         """
         Creates the Flask App & setups all the api calls
         """
+
+        if path is None:
+            path = self.__DEFAULT_PATH
+
         # Flask
         self.app = Flask(__name__)
         self.app.config.from_object(__name__)
@@ -167,7 +171,7 @@ class InterAnnotatorApp(object):
         PUT - Handle
         """
         if request.method == "GET":
-            responseObject = self.annotationFiles.get_dialogues_metadata()
+            responseObject = self.annotationFiles.get_dialogue_names()
             print("MADE IT SOFAR", file=sys.stderr)
 
         if request.method == "PUT":
@@ -279,7 +283,7 @@ class InterAnnotatorApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            self.annotationFiles.add_new_dialogue(dialogue)
+            self.annotationFiles.add_dialogue_file(dialogue)
 
         if "error" not in currentResponseObject:
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)

@@ -38,7 +38,6 @@ class MultiAnnotator(object):
 
         self.__load_all_jsons(self.path)
 
-
     def add_dialogue_file( self, jsonObjectOrFileName ):
         """
         adds a new DialogueAnnotator
@@ -48,11 +47,10 @@ class MultiAnnotator(object):
         else:
             fileName = self.__get_new_file_id()
             save_json_file( obj=jsonObjectOrFileName, path= os.path.join( self.path, fileName ) )
-            self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObjectOrFileName)
+            # self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObjectOrFileName)
 
         self.filesAdded += 1
         self.allFiles[ fileName ] = DialogueAnnotator( self.path, fileName )
-
 
     def get_metadata(self):
         """
@@ -60,7 +58,30 @@ class MultiAnnotator(object):
         """
         return { "names" : [ {"name":x} for x,_ in self.allFiles.items() ] }
 
+    def get_dialogue_names(self) -> List[str]:
+        """Gets a list of the names of the dialogues and checks that all JSON files have the same dialogues."""
 
+        allDialogues = []
+
+        for fname, dialogObj in self.allFiles.items():
+
+            if fname == self.__GOLD_FILE_NAME:
+                continue
+
+            allDialogues.append(dialogObj.get_dialogues())
+
+        for dialogue in allDialogues:
+
+            for key in dialogue:
+
+                assert all(key in d for d in allDialogues), "Dialogue in {} that's not in all other dialogues".format(dialogue)
+
+        # By this point we know that all of the dialogues must have the same keys (i.e. dialogue names)
+        return list(allDialogues[0].keys())
+
+    def get_gold_dialogue_metadata(self):
+        """Gets the metadata of the gold dialogue file"""
+        return self.allFiles[self.__GOLD_FILE_NAME].get_dialogues_metadata()
 
     def dialogue_file_function_call(self, methodName, fileId=None, **args):
         """
@@ -75,7 +96,6 @@ class MultiAnnotator(object):
 
         return method(**args)
 
-
     def __getattr__(self, attr):
         """
         Magic Methods++
@@ -85,13 +105,12 @@ class MultiAnnotator(object):
 
         return temp
 
-
-
     def __load_all_jsons(self,path):
         """
         loads all files from directory
         """
-        files = [ x for x in os.listdir('.') if os.path.isfile(x) ]
+
+        files = [ x for x in os.listdir(path) if os.path.isfile(os.path.join(path, x)) ]
 
         for file in files:
 
@@ -99,20 +118,11 @@ class MultiAnnotator(object):
 
                 self.add_dialogue_file( file )
 
-
     def __get_new_file_id(self):
         """
         Creates a new file ID
         """
         return self.__DEFAULT_NAME + str( self.filesAdded ) + ".json"
-
-
-
-
-
-
-
-
 
 
 
@@ -151,17 +161,15 @@ class DialogueAnnotator(object):
         else:
             self.__fileName = DialogueAnnotator.__DEFAULT_FILENAME
 
+    def get_single_dialogue(self, id: Hashable) -> Dict[str, Any]:
+        """Gets a single dialogue"""
+        return {"dialogue": self.__dialogues.get(id)}
 
-
-    def get_dialogues(self, id=None):
+    def get_dialogues(self):
         """
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
-        if id:
-            return { "dialogue" : self.__dialogues.get(id) }
-
         return self.__dialogues
-
 
     def get_dialogues_metadata(self):
         """

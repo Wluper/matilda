@@ -80,43 +80,15 @@ Vue.component("main-admin", {
             });
     },
 
-    delete_dialogue(event) {
-
-        if (confirm("Are you sure you want to permanently delete this dialogue? This cannot be undone!")) {
-
-            console.log('-------- DELETING --------')
-            console.log()
-            idToDelete = event.target.parentNode.parentNode.id;
-            nameToDelete = this.allDialogueMetadata[idToDelete].id
-            backend.del_single_dialogue_async(nameToDelete)
-                .then( () => {
-                    this.getAllDialogueIdsFromServer();
-                });
-
-            allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
-
-        } else {
-
-            return
-
-        }
-
-    },
-
     open_file(event){
         let file = event.target.files[0];
         this.handle_file(file);
     },
 
     handle_file(file) {
-        let textType = /text.plain/;
         let jsonType = /application.json/;
 
-        if (file.type.match(textType)) {
-
-            allDialoguesEventBus.$emit('loaded_text_file', file);
-
-        } else if (file.type.match(jsonType)) {
+        if (file.type.match(jsonType)) {
 
             console.log('---- HANDLING LOADED JSON FILE ----');
             let reader = new FileReader();
@@ -140,7 +112,7 @@ Vue.component("main-admin", {
 
         } else {
 
-            alert('Only .txt or .json files are supported.')
+            alert('Only .json files are supported.')
 
         }
     },
@@ -168,8 +140,6 @@ Vue.component("main-admin", {
        v-on:dragleave="handleDragOut($event)"
        v-on:drop="handleDrop($event)">
 
-    <modal v-if="showModal" @close="showModal = false"></modal>
-
     <div class="dialogue-list-title-container">
         <h2 v-if="!(dragging)" class="all-dialogues-list-title">
             {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
@@ -181,26 +151,20 @@ Vue.component("main-admin", {
 
         <div class="help-button-container">
             <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
-            <button class="help-button" @click="showModal = true">File Format Info</button>
         </div>
     </div>
 
     <ul class="dialogue-list">
 
       <li class="listed-dialogue"
-          v-for="(dat, index) in allDialogueMetadata"
-          v-bind:id="index">
+          v-for="(dat, index) in allDialogueMetadata.names"
+          v-bind:id="dat.name">
 
           <div class="dialogue-list-single-item-container">
 
-            <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
-              Del
-            </div>
-
-
             <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
                 <div class="dialogue-id">
-                  {{dat.id}}
+                  {{dat.name}}
                 </div>
 
                 <div v-if="dialogue_already_visited(dat.id)"
@@ -216,10 +180,6 @@ Vue.component("main-admin", {
       </li>
 
     </ul>
-
-    <div class="add-button-container">
-      <button class="add-dialogue-button" v-on:click="create_new_dialogue()">Add a New Dialogue</button>
-    </div>
 
     <div class="upload-file-container">
 
