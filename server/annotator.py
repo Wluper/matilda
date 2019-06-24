@@ -181,10 +181,12 @@ class DialogueAnnotator(object):
         """Gets a single dialogue"""
         return {"dialogue": self.__dialogues.get(id)}
 
-    def get_dialogues(self):
+    def get_dialogues(self, id=None):
         """
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
+        if id:
+            return self.get_single_dialogue(id=id)
         return self.__dialogues
 
     def get_dialogues_metadata(self):

@@ -29,12 +29,15 @@ Vue.component("resolution-app", {
             return temp;
         },
 
+
         currentError: function() {
             temp = this.errorList[ this.currentErrorId - 1 ];
             console.log("===This is the current ERROR===")
             console.log(temp)
             return temp;
         },
+
+
 
         dialogueNonEmpty: function() {
             return this.errorList.length > 0
@@ -76,7 +79,7 @@ Vue.component("resolution-app", {
             backend.get_errors_async(this.dialogueId)
             .then( (response) => {
                 this.errorList = response.errors
-                this.metaList = response.meta;
+                this.metaDataList = response.meta;
                 console.log(this.errorList);
             });
 
@@ -149,11 +152,11 @@ Vue.component("resolution-app", {
     <resolution-menu>
     </resolution-menu>
 
-    <error-list v-bind:metaList="metaDataList"
+    <error-list v-if="metaDataList" v-bind:metaList="metaDataList"
     v-bind:currentId="currentErrorId">
     </error-list>
 
-    <resolutions v-bind:error="currentError" v-bind:errorId="currentErrorId">
+    <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId">
     </resolutions>
 
     </div>

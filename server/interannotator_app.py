@@ -421,21 +421,22 @@ class InterAnnotatorApp(object):
                     turnsData.append(temp)
 
 
-        # print(turnsData)
+        print(len(turnsData))
+        print(turnsData[0])
 
         # Getting the errors
         for turnId, turn in enumerate(turnsData):
 
-            error = {}
-            error["turn"] = turnId
-
-            meta = {}
-            meta["turn"] = turnId
-            meta["accepted"] = False
-
             for annotationName, listOfAnnotations in turn.items():
+                error = {}
+                error["turn"] = turnId
+
+                meta = {}
+                meta["turn"] = turnId
+                meta["accepted"] = False
 
                 predictions = None
+
 
                 if annotationName=="turn_idx":
                     continue
@@ -448,9 +449,9 @@ class InterAnnotatorApp(object):
 
                     predictions = agreementFunc( listOfAnnotations ).get("predictions")
 
+                    print(predictions)
                 if predictions: #means there is discrepency
 
-                    errorFlag = True
                     error["usr"] = listOfDialogue[0][turnId]["usr"]
                     error["sys"] = listOfDialogue[0][turnId]["sys"]
                     error["type"] = annotationType
@@ -459,7 +460,6 @@ class InterAnnotatorApp(object):
 
                     meta["name"] = annotationName
                     meta["annotateBy"] = len(listOfAnnotations)
-
 
                     errorList.append(error)
                     metaList.append(meta)
