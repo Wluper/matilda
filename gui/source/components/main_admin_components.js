@@ -200,7 +200,7 @@ Vue.component("main-admin", {
                 <div class="filler-space" v-on:click="clicked_dialogue(dat[0])">
                 </div>
 
-                <div v-if="dialogue_already_visited(dat)"
+                <div v-if="dialogue_already_visited(dat[0])"
                      class="visited-indicator"
                      v-on:click="clicked_dialogue(dat[0])">
                      Visited
