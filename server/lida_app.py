@@ -132,7 +132,7 @@ class LidaApp(object):
         if id:
 
             if request.method == "GET":
-                responseObject = self.dialogueFile.get_dialogues(id = id)
+                responseObject = self.dialogueFile.get_dialogue(id = id)
 
             if request.method == "PUT":
                 data = request.get_json()
@@ -322,3 +322,15 @@ class LidaApp(object):
             newDialogue.append( LidaApp.run_models_on_query(userQuery)["turn"] )
 
         return newDialogue
+
+
+
+##############################################
+# MAIN
+##############################################
+
+if __name__ == '__main__':
+
+    app = LidaApp()
+
+    app.run()

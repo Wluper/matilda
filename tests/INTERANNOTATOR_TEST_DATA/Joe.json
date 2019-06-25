@@ -4,52 +4,55 @@
             "hotel_belief_state": [
                 [
                     "hotel-book people",
-                    "2"
+                    "1"
                 ]
             ],
             "policy_funcs": [
-                "Find And Offer Booking",
-                "Ask For Missing Slots"
-            ],
-            "query_type": [
-                "inform"
-            ],
-            "sys": "I am a mock model response",
-            "usr": "Hello I am a test string"
-        },
-        {
-            "hotel_belief_state": [
-                [
-                    "hotel-book stay",
-                    "2"
-                ]
-            ],
-            "policy_funcs": [
-                "Try Book",
-                "Ask For Missing Slots"
-            ],
-            "query_type": [
-                "request"
-            ],
-            "sys": "I am a mock model response",
-            "usr": "I am the second test string in the dialogue"
-        },
-        {
-            "hotel_belief_state": [
-                [
-                    "hotel-book people",
-                    "5"
-                ]
-            ],
-            "policy_funcs": [
-                "Find And Offer Booking",
                 "Ask For Missing Slots"
             ],
             "query_type": [
                 "farewell"
             ],
             "sys": "I am a mock model response",
-            "usr": "I am the last"
+            "usr": "Hi"
+        },
+        {
+            "hotel_belief_state": [
+                [
+                    "hotel-book people",
+                    "1"
+                ],
+                [
+                    "hotel-book stay",
+                    "true"
+                ]
+            ],
+            "policy_funcs": [
+                "Ask For Missing Slots",
+                "Try Book"
+            ],
+            "query_type": [
+                "farewell"
+            ],
+            "sys": "I am a mock model response",
+            "usr": "how do I get there"
+        },
+        {
+            "hotel_belief_state": [
+                [
+                    "hotel-book people",
+                    "five"
+                ]
+            ],
+            "policy_funcs": [
+                "Find And Offer Booking",
+                "Ask For Missing Slots"
+            ],
+            "query_type": [
+                "request"
+            ],
+            "sys": "I am a mock model response",
+            "usr": "book me a hotel for five at five o'clock"
         }
     ]
 }

@@ -1,0 +1,248 @@
+{
+    "Dialogue4.json":[
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"Yes, but I am unable to make a booking for you.  Would you like to do anything else?",
+            "usr":"Hi, could you tell me if Cambridge Book and Print Gallery is still open?",
+            "turn_idx":1,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"The address is 49 newnham road, is there anything else I could do for you?",
+            "usr":"That's fine, could you give me the address for the gallery please?",
+            "turn_idx":2,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Ask For Missing Slots"
+            ],
+            "sys":"Absolutely, where would you like to go?",
+            "usr":"Yes, I also need to find a train leaving from cambridge.  Can you help me with that?",
+            "turn_idx":3,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info",
+                "Ask For Missing Slots"
+            ],
+            "sys":"There are 4 trains that run during that period, do you have a preference for your arrival time?",
+            "usr":"I would like to go to london liverpool street on Thursday. I would like to leave after 16:00.",
+            "turn_idx":4,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Try Book"
+            ],
+            "sys":"Booking was successful, the total fee is 83 GBP payable at the station .\nReference number is : IG0M4C9S.",
+            "usr":"Just any time leaving after 16:00, and I need tickets for 5 people.",
+            "turn_idx":5,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Say Goodbye"
+            ],
+            "sys":"Glad I could help you. Have a nice day.",
+            "usr":"Great! I think that is all I need. I appreciate your help today.",
+            "turn_idx":6,
+            "query_type":[
+                "farewell"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Say Goodbye"
+            ],
+            "sys":"Thank you for contacting Cambridge TownInfo Centre, have a great day!",
+            "usr":"Thank you! You have a nice day as well. ",
+            "turn_idx":7,
+            "query_type":[
+                "farewell"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Say Goodbye"
+            ],
+            "sys":"Goodbye to you as well. I hope you have a wonderful day.",
+            "usr":"Thank you, you as well, goodbye.",
+            "turn_idx":8,
+            "query_type":[
+                "farewell"
+            ]
+        }
+    ],
+    "Dialogue5.json":[
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"The TR3702 to london kings cross departs wednesday at 05:00.",
+            "usr":"I'm looking for a train to anywhere on Wednesday.",
+            "turn_idx":1,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"The train arrives by 05:51 and departs from Cambridge, the price is 23.60 pounds.",
+            "usr":"Wonderful! How much is that ticket? When does it arrive? Where does it depart from?",
+            "turn_idx":2,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info",
+                "Find And Offer Booking"
+            ],
+            "sys":"There are 3 trains that would work for you. The TR4626 arrives at 10:43. Would you be interested in that one?",
+            "usr":"Now that I think about it, I will need a way to get from Stevenage to Cambridge. I'd like to take a train on Wednesday and arrive by 12:30.",
+            "turn_idx":3,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"Train TR4626 departing from stevenage and arrivign at cambridge at 10:43 is 12.80 pounds. ",
+            "usr":"What is the travel time for that train?",
+            "turn_idx":4,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"Sure, cherry hinton water play, milton country park, sheep's green and lammas land park fen causeway, wandlebury country park are free, cambridge university botanic gardens is four pounds. ",
+            "usr":"Great I'm also looking for a park in cambridge.",
+            "turn_idx":5,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Provide Info"
+            ],
+            "sys":"Sure! Cherry Hinton Water Play is at postcode cb18dw. Anything else I can help you with?",
+            "usr":"Please just pick a great park for me and provide the postcode.",
+            "turn_idx":6,
+            "query_type":[
+                "request"
+            ]
+        },
+        {
+            "policy_funcs":[
+                "Say Goodbye"
+            ],
+            "sys":"You are welcome, goodbye.",
+            "usr":"Nope, that's all I needed!  You've been a big help!",
+            "turn_idx":7,
+            "query_type":[
+                "farewell"
+            ]
+        }
+    ],
+    "Dialogue6.json":[
+        {
+            "hotel_belief_state":[
+                [
+                    "hotel-name",
+                    "University Arms Hotel"
+                ],
+                [
+                    "hotel-book people",
+                    "5"
+                ]
+            ],
+            "policy_funcs":[
+                "Ask For Missing Slots"
+            ],
+            "sys":"What day would you like to book?",
+            "usr":"Can you check the availability at the University Arms Hotel for five people?",
+            "turn_idx":1,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "hotel_belief_state":[
+                [
+                    "hotel-book day",
+                    "Thursday"
+                ]
+            ],
+            "policy_funcs":[
+                "Ask For Missing Slots"
+            ],
+            "sys":"For just one day?",
+            "usr":"Thursday please. ",
+            "turn_idx":2,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "hotel_belief_state":[
+                [
+                    "hotel-book stay",
+                    "5"
+                ],
+                [
+                    "hotel-book people",
+                    "5"
+                ]
+            ],
+            "policy_funcs":[
+                "Try Book"
+            ],
+            "sys":"Sure thing! Your reference number is LW8PBD97. ",
+            "usr":"Actually for 5 nights and there will be 5 of us staying",
+            "turn_idx":3,
+            "query_type":[
+                "inform"
+            ]
+        },
+        {
+            "hotel_belief_state":[
+
+            ],
+            "policy_funcs":[
+                "Say Goodbye"
+            ],
+            "sys":"You are welcome.",
+            "usr":"Thank you so much, that is all that I need for now. Have a wonderful day.",
+            "turn_idx":4,
+            "query_type":[
+                "farewell"
+            ]
+        }
+    ]
+}

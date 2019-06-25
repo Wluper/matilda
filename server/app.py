@@ -25,7 +25,7 @@ from interannotator_app import InterAnnotatorApp
 
 if __name__ == '__main__':
 
-    # app = LidaApp()
-    app = InterAnnotatorApp()
+    app = LidaApp()
+    # app = InterAnnotatorApp()
 
     app.run()

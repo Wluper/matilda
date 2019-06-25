@@ -88,10 +88,6 @@ Vue.component("resolution-app", {
 
         },
 
-        update_annotation : function(event){
-
-        },
-
         print : function(event){
             console.log("****** PRINTING ******");
             console.log(event);

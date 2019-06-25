@@ -496,7 +496,8 @@ class InterAnnotatorApp(object):
 
                 if agreementFunc:
 
-                    predictions = agreementFunc( listOfAnnotations ).get("predictions")
+                    temp = agreementFunc( listOfAnnotations )
+                    predictions = temp.get("predictions")
 
                 if predictions: #means there is discrepency
 
@@ -505,6 +506,7 @@ class InterAnnotatorApp(object):
                     error["type"] = annotationType
                     error["name"] = annotationName
                     error["predictions"] = predictions
+                    error["counts"] = temp.get("counts")
 
                     meta["name"] = annotationName
                     meta["annotateBy"] = len(listOfAnnotations)
@@ -540,5 +542,17 @@ class InterAnnotatorApp(object):
             responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
 
             return responseObject
+
+
+##############################################
+# MAIN
+##############################################
+
+if __name__ == '__main__':
+
+    app = InterAnnotatorApp()
+
+    app.run()
+
 
 # EOF

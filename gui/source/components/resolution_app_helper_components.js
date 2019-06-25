@@ -239,7 +239,10 @@ Vue.component("resolutions", {
                 v-bind:type="error.type"
                 v-bind:predictions="error.predictions"
                 v-bind:uniqueName="error.name"
-                v-bind:annotationFormat="annotationFormat" >
+                v-bind:annotationFormat="annotationFormat"
+                v-bind:confidences="error.counts">
+
+
             </annotation-component>
         </div>
 
@@ -256,7 +259,8 @@ Vue.component("annotation-component", {
       "type",
       "predictions",
       "annotationFormat",
-      "uniqueName"
+      "uniqueName",
+      "confidences"
     ],
 
     updated () {
@@ -287,14 +291,17 @@ Vue.component("annotation-component", {
             v-if="type=='multilabel_classification'"
             v-bind:classification="predictions"
             v-bind:classFormat="annotationFormat"
-            v-bind:uniqueName="uniqueName">
+            v-bind:uniqueName="uniqueName"
+            v-bind:confidences="confidences">
         </classification-annotation>
 
         <classification-string-annotation
             v-else-if="type=='multilabel_classification_string'"
             v-bind:classification_strings="predictions"
             v-bind:uniqueName="uniqueName"
-            v-bind:classes="annotationFormat">
+            v-bind:classes="annotationFormat"
+            v-bind:confidences="confidences">
+
         </classification-string-annotation>
 
         <div v-else >
