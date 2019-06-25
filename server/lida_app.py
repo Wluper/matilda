@@ -120,6 +120,32 @@ class LidaApp(object):
                             methods=["POST"],
                             handler= self.handle_turns_resource  )
 
+        self.add_endpoint( \
+                            endpoint="/name",
+                            endpoint_name="/name",
+                            methods=["GET", "PUT"],
+                            handler= self.handle_name_resource  )
+
+
+    def handle_name_resource(self):
+        """
+        GET - Gets the fileName
+
+        PUT - Updates the fileName
+        """
+        responseObject = {
+            "status" : "success",
+        }
+        if request.method == "GET":
+            responseObject.update( self.dialogueFile.get_file_name() )
+
+        if request.method == "PUT":
+            newName = request.get_json()["name"]
+            self.dialogueFile.change_file_name(newName=newName)
+
+        return jsonify(responseObject)
+
+
 
     def handle_dialogues_resource(self, id=None):
         """

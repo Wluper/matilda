@@ -1,6 +1,53 @@
 
 
 /********************************
+* FILE NAME FUNCTIONS
+********************************/
+
+
+
+async function get_name(){
+
+    var dialogues = {}
+
+    const apiLink = 'http://127.0.0.1:5000/name'
+    try {
+        var response = await axios.get( apiLink );
+
+        name = response.data.name
+        console.log("=============File Name==============")
+        console.log(name)
+        return name
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+};
+
+async function put_name(name){
+
+    var dialogues = {}
+
+    const apiLink = 'http://127.0.0.1:5000/name'
+    try {
+        var response = await axios.put( apiLink, {name : name} )
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+};
+
+
+
+/********************************
 * API INTERACTION FUNCTIONS
 ********************************/
 
@@ -290,6 +337,8 @@ async function RESTdialogues(method, id, params){
 
 backend =
 {
+    get_name                                    : get_name,
+    put_name                                    : put_name,
     annotate_query                              : annotate_query,
 
     get_annotation_style_async                  : get_annotation_style_async,

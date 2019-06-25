@@ -174,6 +174,21 @@ class DialogueAnnotator(object):
         self.set_file( filePath, fileName )
         self.addedDialogues = 0
 
+    def get_file_name(self):
+        """
+        """
+        return {"name": self.__fileName}
+
+    def change_file_name(self, newName, remove=True):
+        """
+        """
+        oldFileName = self.__fileName
+        self.__fileName = newName
+
+        self.save()
+        
+        if remove:
+            os.remove( os.path.join( self.__filePath, oldFileName ) )
 
     def set_dialogues( self, dialogues=None ):
         """

@@ -14,16 +14,30 @@ Vue.component("all-dialogues", {
       return {
           allDialogueMetadata: [],
           dragging: false,
-          showModal: false
+          showModal: false,
+          name : ''
       }
   },
 
   mounted () {
-      this.getAllDialogueIdsFromServer();
+      this.init();
   },
 
   methods: {
 
+        init : function(){
+
+            // Step ONE: Get FILE NAME
+            backend.get_name()
+                .then( (response) => {
+
+                    this.name = response;
+
+                });
+
+            this.getAllDialogueIdsFromServer();
+
+        },
     handleDragOver(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -161,6 +175,7 @@ Vue.component("all-dialogues", {
   },
 
   template:
+  
   `
   <div class="all-dialogues-container"
        id="listedDialoguesContainer"
@@ -172,7 +187,7 @@ Vue.component("all-dialogues", {
 
     <div class="dialogue-list-title-container">
         <h2 v-if="!(dragging)" class="all-dialogues-list-title">
-            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
+            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited, {{name}}
         </h2>
 
         <h2 v-else class="all-dialogues-list-title">
