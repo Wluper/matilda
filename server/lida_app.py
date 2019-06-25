@@ -297,10 +297,10 @@ class LidaApp(object):
         for string_list in dialogueList:
 
             string_list      = [x for x in string_list.split("\n") if x.strip()]
-            DIALOGUES[newId] = LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) )
+            newId = self.dialogueFile.add_new_dialogue( LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ) )
 
-            currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
-            currentResponseObject["new_dialogue_id"].append(newId)
+            currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
+            currentResponseObject["new_dialogue_id"].append(newId["id"])
 
         return currentResponseObject
 
