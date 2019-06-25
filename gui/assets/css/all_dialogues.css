@@ -11,12 +11,17 @@
 
 .dialogue-list-title-container {
     display: grid;
-    grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
-                   / 1fr 1fr
+    grid-template: [row1-start] "title-zone name-zone help-button-zone" [row1-end]
+                   / 1fr 1fr 1fr
 }
 
 .all-dialogues-list-title {
     grid-area: title-zone;
+    color:white;
+}
+
+.file-name-container{
+    grid-area: name-zone;
     padding-left: 20px;
     color:white;
 }

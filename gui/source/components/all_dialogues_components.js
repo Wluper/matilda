@@ -18,6 +18,14 @@ Vue.component("all-dialogues", {
           name : ''
       }
   },
+  computed : {
+      userName : function(){
+          console.log("computing un");
+          var restOfName = this.name.split(".json")[0]
+          var userName = restOfName.split("USER_")[1]
+          return userName
+      }
+  },
 
   mounted () {
       this.init();
@@ -30,7 +38,7 @@ Vue.component("all-dialogues", {
             // Step ONE: Get FILE NAME
             backend.get_name()
                 .then( (response) => {
-
+                    console.log();
                     this.name = response;
 
                 });
@@ -159,6 +167,41 @@ Vue.component("all-dialogues", {
         }
     },
 
+    handle_file_name_change : function(event){
+        console.log('---- CHANGING FILE NAME ----');
+        console.log(event);
+
+        backend.put_name("USER_"+event.target.value+".json")
+            .then( (response) => {
+
+                if (response) {
+                    console.log("Name Changed");
+                } else {
+                    alert('Server error, name not changed.')
+                }
+
+            })
+    },
+
+    //
+    // toggleFileEdit: function() {
+    //
+    //     let inputSection = document.getElementById('fileName')
+    //     let titleSpan    = document.getElementById('fileNameInput')
+    //
+    //     if (this.editingTitle) {
+    //         this.editingTitle          = false;
+    //         inputSection.style.display = 'none';
+    //         titleSpan.style.display    = 'inherit';
+    //     } else {
+    //         this.editingTitle          = true;
+    //         inputSection.style.display = 'inherit';
+    //         inputSection.focus();
+    //         titleSpan.style.display    = 'none';
+    //     }
+    //
+    // },
+
     download_all_dialogues_from_server(event) {
         backend.get_all_dialogues_async()
             .then( (response) => {
@@ -175,7 +218,7 @@ Vue.component("all-dialogues", {
   },
 
   template:
-  
+
   `
   <div class="all-dialogues-container"
        id="listedDialoguesContainer"
@@ -186,13 +229,27 @@ Vue.component("all-dialogues", {
     <modal v-if="showModal" @close="showModal = false"></modal>
 
     <div class="dialogue-list-title-container">
-        <h2 v-if="!(dragging)" class="all-dialogues-list-title">
-            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited, {{name}}
-        </h2>
 
-        <h2 v-else class="all-dialogues-list-title">
-            Drop Files Anywhere to Upload!
-        </h2>
+        <div class="all-dialogues-list-title">
+            <h2 v-if="!(dragging)" >
+                {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited
+            </h2>
+
+            <h2 v-else>
+                Drop Files Anywhere to Upload!
+            </h2>
+        </div>
+
+        <div class="file-name-container">
+            <span> USER_ </span>
+            <input id="fileNameInput"
+                    type="text"
+                   v-bind:value="userName"
+                   v-on:input="handle_file_name_change($event)">
+            </input>
+            <span> .json </span>
+
+        </div>
 
         <div class="help-button-container">
             <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>

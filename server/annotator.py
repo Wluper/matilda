@@ -161,11 +161,16 @@ class MultiAnnotator(object):
 
 
 
+
+
+
+
+
 class DialogueAnnotator(object):
     """
     class that handles everything which relates to managing a single dialogues file
     """
-    __DEFAULT_FILENAME="labelled_data.json"
+    __DEFAULT_FILENAME="USER_1.json"
 
     def __init__( self, filePath, fileName=None, dialogues=None ):
         """
@@ -186,7 +191,7 @@ class DialogueAnnotator(object):
         self.__fileName = newName
 
         self.save()
-        
+
         if remove:
             os.remove( os.path.join( self.__filePath, oldFileName ) )
 

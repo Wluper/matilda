@@ -35,11 +35,11 @@ async function put_name(name){
     const apiLink = 'http://127.0.0.1:5000/name'
     try {
         var response = await axios.put( apiLink, {name : name} )
-
+        return true;
     } catch (error) {
 
         console.log(error);
-
+        return false;
     }
 
 
