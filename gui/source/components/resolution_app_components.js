@@ -61,8 +61,8 @@ Vue.component("resolution-app", {
         annotationAppEventBus.$on("update_id", this.set_current_id );
         annotationAppEventBus.$on("accept", this.accept );
 
-        annotationAppEventBus.$on("update_classification", this.print );
-        annotationAppEventBus.$on("classification_string_updated", this.print );
+        annotationAppEventBus.$on("update_classification", this.resolve_annotation_update );
+        annotationAppEventBus.$on("classification_string_updated", this.resolve_annotation_update );
 
     },
 
@@ -97,6 +97,13 @@ Vue.component("resolution-app", {
             console.log(event);
         },
 
+        resolve_annotation_update : function(event){
+            console.log("****** RESOLVING ******");
+            console.log(event);
+
+            this.errorList[this.currentErrorId-1]["predictions"]=event.data
+        },
+
         resolve_keyboard_input : function(event){
             console.log(" ************ KEY PRESSED ************ ")
             console.log(event.key)
@@ -115,7 +122,7 @@ Vue.component("resolution-app", {
         accept: function(event) {
             this.metaDataList[this.currentErrorId-1].accepted=true;
 
-            backend.put_single_dialogue_async(this.dialogueId, this.dialogue)
+            backend.put_error_async(this.errorList[this.currentErrorId-1],this.metaDataList[this.currentErrorId-1], this.currentErrorId-1,this.dialogueId )
 
             this.change_turn( {key:"ArrowRight"})
         },

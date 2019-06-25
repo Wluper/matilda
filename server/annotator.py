@@ -58,8 +58,6 @@ class MultiAnnotator(object):
         """
         adds a new DialogueAnnotator
         """
-        print(jsonObject)
-
         if not fileName:
             fileName = self.__get_new_file_id()
             self.filesAdded += 1
@@ -216,7 +214,6 @@ class DialogueAnnotator(object):
         metadata = []
 
         for dialogueID, dialogueTurnList in self.__dialogues.items():
-            print(dialogueID)
 
             metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList)})
 

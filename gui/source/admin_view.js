@@ -14,8 +14,9 @@ var mainApp = new Vue({
 
   data() {
       return {
-            displayingDialogue: 'Dialogue1',
-            status : 'resolving',
+            // displayingDialogue: 'Dialogue1',
+            displayingDialogue: '',
+            status : 'listview',
             alreadyVisited: [],
       }
   },

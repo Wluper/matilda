@@ -49,9 +49,10 @@ class InterAnnotatorApp(object):
         # Initialising all the necessary classes & default paths.
         self.set_main_path(path)
 
-        #AT THE MOMENT SINGLE FILE ONLY
+        #MAIN APP RESOURCES
         self.annotationFiles = MultiAnnotator(self.path)
-
+        self.annotatorErrors = {}
+        self.annotatorErrorsMeta = {}
         # Setting the final endpoints
         self.setup_endpoints()
 
@@ -126,6 +127,11 @@ class InterAnnotatorApp(object):
         #                     endpoint_name="/turns",
         #                     methods=["POST"],
         #                     handler= self.handle_turns_resource  )
+        self.add_endpoint( \
+                            endpoint="/errors",
+                            endpoint_name="/errors",
+                            methods=["PUT"],
+                            handler= self.handle_errors_resource  )
 
         self.add_endpoint( \
                             endpoint="/errors/<id>",
@@ -241,10 +247,40 @@ class InterAnnotatorApp(object):
             }
 
             listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
+            errorList = self.annotatorErrors.get(id)
 
-            print(len(listOfDialogue))
+            if errorList:
+                metaList = self.annotatorErrorsMeta[id]
+                errorMetaDict = {"errors": errorList, "meta": metaList}
 
-            responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
+            else:
+                errorMetaDict = InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue )
+                self.annotatorErrors[id] = errorMetaDict["errors"]
+                self.annotatorErrorsMeta[id] = errorMetaDict["meta"]
+
+            for error in errorMetaDict["errors"]:
+                self.__update_gold_from_error_id(id, error)
+
+            responseObject.update(errorMetaDict)
+
+
+        elif request.method == "PUT":
+
+            responseObject = {
+                "status" : "success",
+            }
+
+            data = request.get_json()
+
+            meta = data["meta"]
+            error = data["errorObject"]
+            dialogueId = data["dialogueId"]
+            errorId = data["errorId"]
+
+            self.__update_gold_from_error_id(dialogueId, error)
+
+            self.annotatorErrors[dialogueId][errorId] = error
+            self.annotatorErrorsMeta[dialogueId][errorId] = meta
 
         else:
 
@@ -256,18 +292,17 @@ class InterAnnotatorApp(object):
         return jsonify( responseObject )
 
 
-    def mock_handle_errors_resource(self, id=None):
-        with self.app.app_context():
+    def __update_gold_from_error_id(self, dialogueId, error):
+        """
+        updates GOLD from error
+        """
+        dialogue = self.annotationFiles.get_dialogue(id=dialogueId)["dialogue"]
+        annotationName = error["name"]
+        turnId = error["turn"]
+        dialogue[turnId][annotationName]= error["predictions"]
 
-            responseObject = {
-            "status" : "success",
-            }
-
-            listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
-
-            responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
-
-            return responseObject
+        self.annotationFiles.update_dialogue(id=dialogueId, newDialogue=dialogue)
+        self.annotationFiles.save()
 
 
     def __handle_post_of_new_dialogues(self):
@@ -491,5 +526,19 @@ class InterAnnotatorApp(object):
 
 
 
+
+
+    def mock_handle_errors_resource(self, id=None):
+        with self.app.app_context():
+
+            responseObject = {
+            "status" : "success",
+            }
+
+            listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
+
+            responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
+
+            return responseObject
 
 # EOF

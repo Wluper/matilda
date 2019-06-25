@@ -25,6 +25,33 @@ async function get_errors_async(dialogueId){
 
 
 };
+
+async function put_error_async(error, meta, errorId, dialogueId){
+
+    params = {
+        errorObject : error,
+        meta : meta,
+        errorId : errorId,
+        dialogueId : dialogueId
+    }
+    const apiLink = `http://127.0.0.1:5000/errors`
+    try {
+        var response = await axios.put( apiLink, params );
+
+
+        console.log("=============ERRORS==============")
+        console.log(response)
+        return true
+
+    } catch (error) {
+
+        console.log(error);
+        return false
+
+    }
+
+
+};
 /********************************
 * API INTERACTION FUNCTIONS
 ********************************/
@@ -293,6 +320,8 @@ async function RESTdialogues(method, id, params){
 backend =
 {
     get_errors_async                            : get_errors_async,
+    put_error_async                             : put_error_async,
+    
     annotate_query                              : annotate_query,
 
     get_annotation_style_async                  : get_annotation_style_async,
