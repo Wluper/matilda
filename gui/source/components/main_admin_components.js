@@ -23,7 +23,10 @@ Vue.component("main-admin", {
           */
           allDialogueMetadata: [],
           dragging: false,
-          showModal: false
+          showModal: false,
+
+          // A list of dialogue IDs for which annotator names should be displayed
+          showAnnotatorNamesForIds: []
       }
   },
 
@@ -76,7 +79,24 @@ Vue.component("main-admin", {
     },
 
     clicked_dialogue(clickedDialogue) {
-        allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
+        allDialoguesEventBus.$emit("dialogue_clicked", clickedDialogue)
+    },
+
+    toggle_show_annotators(dialogueName){
+
+        if (this.show_annotators(dialogueName)) {
+            index = this.showAnnotatorNamesForIds.indexOf(dialogueName)
+            this.showAnnotatorNamesForIds.splice(index, 1)
+        } else {
+            this.showAnnotatorNamesForIds.push(dialogueName)
+        }
+
+    },
+
+    show_annotators(dialogueName){
+
+        return this.showAnnotatorNamesForIds.includes(dialogueName)
+
     },
 
     create_new_dialogue(event) {
@@ -171,17 +191,33 @@ Vue.component("main-admin", {
 
           <div class="dialogue-list-single-item-container">
 
-            <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
-                <div class="dialogue-id">
-                    {{dat[0]}} {{dat[1]}}
+            <div class="dialouge-info">
+
+                <div class="dialogue-id" v-on:click="clicked_dialogue(dat[0])">
+                    {{dat[0]}}
+                </div>
+
+                <div class="filler-space" v-on:click="clicked_dialogue(dat[0])">
                 </div>
 
                 <div v-if="dialogue_already_visited(dat)"
-                     class="visited-indicator">
+                     class="visited-indicator"
+                     v-on:click="clicked_dialogue(dat[0])">
                      Visited
                 </div>
 
-                <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
+                <div v-if="show_annotators(dat[0])"
+                     class="dialogue-num-turns"
+                     v-on:click="toggle_show_annotators(dat[0])">
+                    Annotators: {{ dat[1] }}
+                </div>
+
+                <div v-else
+                     class="dialogue-num-turns"
+                     v-on:click="toggle_show_annotators(dat[0])">
+                    Annotators: {{ dat[1].length }}
+                </div>
+
             </div>
 
           </div>

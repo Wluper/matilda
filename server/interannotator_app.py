@@ -242,6 +242,8 @@ class InterAnnotatorApp(object):
 
             listOfDialogue = self.annotationFiles.get_all_files( dialogueId = id )
 
+            print(len(listOfDialogue))
+
             responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
 
         else:

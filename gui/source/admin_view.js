@@ -24,12 +24,19 @@ var mainApp = new Vue({
 
       switchStatusToMain() {
           this.status = "listview"
+      },
+
+      switchStatusToResolving(dialogueName) {
+          this.displayingDialogue = dialogueName
+          this.status = 'resolving'
+          this.alreadyVisited.push(dialogueName)
       }
 
   },
 
   created (){
        annotationAppEventBus.$on("go_back", this.switchStatusToMain);
+       allDialoguesEventBus.$on("dialogue_clicked", this.switchStatusToResolving);
   },
 
   template:
