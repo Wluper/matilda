@@ -56,6 +56,7 @@ Vue.component("resolution-app", {
     created (){
         // GENERAL EVENT LISTENERS
         window.addEventListener('keyup', this.resolve_keyboard_input);
+        annotationAppEventBus.$on("go_back", this.go_back)
 
         // meta-error-list Listener
         annotationAppEventBus.$on("update_id", this.set_current_id );
@@ -70,6 +71,21 @@ Vue.component("resolution-app", {
     // METHODS
     methods:{
 
+        go_back : function(){
+            console.log("==================================");
+            console.log("==================================");
+            console.log("==================================");
+            // GENERAL EVENT LISTENERS
+            window.removeEventListener('keyup', this.resolve_keyboard_input);
+            annotationAppEventBus.$off("go_back", this.go_back)
+
+            // meta-error-list Listener
+            annotationAppEventBus.$off("update_id", this.set_current_id );
+            annotationAppEventBus.$off("accept", this.accept );
+
+            annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
+            annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
+        },
         init: function() {
             // console.log(this.metaDataList)
             // Step One :: Get the Annotation Styles
