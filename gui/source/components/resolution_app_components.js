@@ -175,17 +175,15 @@ Vue.component("resolution-app", {
     template:
     `
     <div id="resolution-app">
+        <resolution-menu>
+        </resolution-menu>
 
-    <resolution-menu>
-    </resolution-menu>
+        <error-list v-if="metaDataList" v-bind:metaList="metaDataList"
+        v-bind:currentId="currentErrorId">
+        </error-list>
 
-    <error-list v-if="metaDataList" v-bind:metaList="metaDataList"
-    v-bind:currentId="currentErrorId">
-    </error-list>
-
-    <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId">
-    </resolutions>
-
+        <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId">
+        </resolutions>
     </div>
     `
 });

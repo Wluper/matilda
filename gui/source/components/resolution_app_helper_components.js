@@ -113,6 +113,18 @@ Vue.component("error-element", {
         }
 
     },
+    mounted(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+        }
+    },
+    updated(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+        }
+    },
 
     template:
     `
@@ -148,7 +160,7 @@ Vue.component("error-element-body", {
     template:
     `
 
-    <div>
+    <div class="error-element-body">
 
         <div class="error-element-id">
             Error Id: {{id}}
@@ -162,11 +174,11 @@ Vue.component("error-element-body", {
             Name:  {{name}}
         </div>
 
-        <div v-if="accepted" class="saved">
+        <div v-if="accepted" class="accepted-indicator">
             Accepted
         </div>
 
-        <div v-if="!(accepted)" class="not-saved">
+        <div v-if="!(accepted)" class="not-accepted-indicator">
             Review
         </div>
 
