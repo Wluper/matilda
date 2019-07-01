@@ -7,9 +7,10 @@
 LIDA is an open source dialogue annotation system which supports the full
 pipeline of dialogue annotation from dialogue / turn segmentation from raw
 text (as may be output by a transcription service) to labeling of structured
-conversation data. LIDA supports integration of arbitrary machine learning (ML)
-models as annotation recommenders to speed up annotation, and more generally any
-system which conforms to the required API.
+conversation data to inter-annotator disagreement resolution. LIDA supports 
+integration of arbitrary machine learning (ML) models as annotation recommenders 
+to speed up annotation, and more generally any system which conforms to the 
+required API.
 
 LIDA was designed with three use cases in mind:
 
@@ -29,7 +30,9 @@ LIDA was designed with three use cases in mind:
    a .txt file, the user will be taken to the turn and dialogue segmentation
    screen to split the text file into turns and dialogues. If the file is a
    .json file, it must be in the correct format (described below). Users will
-   then be able to label their uploaded data using LIDA's front end.
+   then be able to label their uploaded data using LIDA's front end. Once 
+   annotations have been obatined, LIDA's inter-annotator disagreement resolution
+   screen can be used to solve conflicts between annotators.
 
 
 ## Installation
@@ -54,7 +57,7 @@ $ cd LIDA/ && source bin/activate
 (LIDA)$ pip3 install -r requirements.txt
 ```
 
-### Running the Server
+### Running the Main Server
 
 Assuming you have just followed the steps to Download and Install Requirements:
 
@@ -62,14 +65,29 @@ Assuming you have just followed the steps to Download and Install Requirements:
 (LIDA)$ pwd
 ~/LIDA/lida
 (LIDA)$ cd server/
-(LIDA)$ python app.py
+(LIDA)$ python lida_app.py
+```
+
+You should see the Flask server running in the Terminal now on port 5000.
+
+
+### Running the Inter-Annotator Disagreement Resolution Server
+
+Assuming you have just followed the steps to Download and Install Requirements:
+
+```bash
+(LIDA)$ pwd
+~/LIDA/lida
+(LIDA)$ cd server/
+(LIDA)$ python interannotator_app.py
 ```
 
 You should see the Flask server running in the Terminal now on port 5000.
 
 ### Running the Front End
 
-Simply double click on `gui/index.html`.
+Simply double click on `gui/index.html` for the main LIDA app, and on `gui/admin.html` 
+for the inter-annotator disagreement resolution page.
 
 
 ## Adding Custom Labels
