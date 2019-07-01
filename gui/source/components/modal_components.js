@@ -101,23 +101,23 @@ Vue.component('agreement-modal', {
               <slot name="body">
                   This represents a report for your data:
                   <br><br>
-                        Available Annotations: [Difficulty, policy_funcs, quality ]
+                        Available Annotations: [query_type, policy_funcs, hotel_belief_state ]
                   <br><br>
                   <strong>
-                    quality:
+                    query_type:
                   </strong>
                   <ul>
                       <li>
-                        Total Errors: 35
+                        Total Errors: 7
                       </li>
                       <li>
-                        Total Annotations: 1226
+                        Total Annotations: 18
                       </li>
                       <li>
-                        Kappa: 0.81
+                        Kappa: 0.21
                       </li>
                       <li>
-                        Alpha: 0.68
+                        Alpha: 0.11
                       </li>
                   </ul>
 
