@@ -1,7 +1,8 @@
-/********************************
-* General
-********************************/
-
+/*******************************************************************************
+********************************************************************************
+* GENERAL
+********************************************************************************
+*******************************************************************************/
 
 html, body{
     margin: 0;
@@ -59,390 +60,11 @@ button:hover{
     margin: 3%;
 }
 
-.header{
-    background-color: #ffffff;
-    display: flex;
-    align-items:center;
-}
-
-.logo{
-    /* margin: 0.6em 1em; */
-    padding: 10px;
-    /* height: calc(100% - 1.em); */
-    height: 80%;
-}
-.copyright {
-    font-size: .6875em;
-    line-height: 4.7272727273em;
-    color: #4a4f54;
-    margin-left: 20px;
-}
-.foot-bar {
-    background-color: #0e181e;
-}
-
-.all-dialogues-container {
-    overflow-y: scroll;
-    padding-bottom: 50px;
-}
-
-.dialogue-list-title-container {
-    display: grid;
-    grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
-                   / 1fr 1fr
-}
-
-.all-dialogues-list-title {
-    grid-area: title-zone;
-    padding-left: 20px;
-    color:white;
-}
-
-.help-button-container {
-    grid-area: help-button-zone;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.help-button {
-    margin-right: 30px;
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    padding: 10px;
-    /*height: 50px;*/
-    /*width: 60%;*/
-    /*font-size: 18px;*/
-}
-
-.help-button:hover {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-.help-button:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
-
-.dialogue-list {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-}
-
-.listed-dialogue {
-    /*background-color: blue;*/
-    /*padding: 10px;*/
-    margin: 10px;
-    color: white;
-    transition: 0.1s;
-}
-
-/*.listed-dialogue:hover {
-    transition: 0.1s;
-    padding-left:10px;
-    padding-right: 10px;
-    cursor: pointer;
-    color: #ee59ff;
-}
-
-.listed-dialogue:active {
-    padding: 0px;
-}*/
-
-.dialogue-list-single-item-container{
-    display: grid;
-    grid-template: [row1-start] "del . info" [row1-end] / 1fr 0.2fr 22fr;
-    /*background-color: green;*/
-    /*padding:10px;*/
-}
-
-.del-dialogue-button {
-    grid-area: del;
-    border: 3px solid red;
-    color: red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.del-dialogue-button:hover {
-    background-color: red;
-    color: white;
-    cursor: pointer;
-}
-
-.del-dialogue-button:active {
-    background-color: white;
-    color:red;
-    border: 3px solid white;
-}
-
-.dialouge-info {
-    grid-area: info;
-    display: grid;
-    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 2fr 6fr 1fr 1fr;
-    cursor: pointer;
-    background-color: #293e4c;
-}
-
-.dialouge-info:hover {
-    cursor: pointer;
-    color: #ee59ff;
-    /*border: 3px solid #ee59ff;*/
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.dialouge-info:active {
-    color: white;
-}
-
-.visited-indicator{
-    grid-area:visited;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #a2ffa0;
-    font-weight: bold;
-    /*text-shadow: 0px 0px 2px #a2ffa0;
-    box-shadow: 0px 0px 5px #a2ffa0;*/
-}
-
-.dialogue-id {
-    background-color: #15232d;
-    grid-area: id;
-    overflow-x: hidden;
-    padding:10px;
-}
-
-.dialogue-num-turns {
-    grid-area: numTurns;
-    overflow-x: hidden;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    text-align: right;
-    padding-right: 20px;
-}
-
-.add-button-container {
-    width: 50%;
-    margin: auto;
-    margin-top: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.add-dialogue-button {
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    height: 50px;
-    width: 60%;
-    font-size: 18px;
-}
-
-.add-dialogue-button:hover {
-    width: 70%;
-}
-
-.add-dialogue-button:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
-
-.upload-file-container {
-    width: 50%;
-    margin: auto;
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*text-align: center;*/
-    /*display: grid;
-    grid-template: [row1-start] "label-zone" 1fr [row1-end]
-                   [row2-start] "." 0.5fr [row2-end]
-                   [row3-start] "input-zone" 1fr [row3-end]
-                   / 1fr;*/
-}
-
-/*#fileInputLabelContainer {
-    grid-area: label-zone;
-    text-align: center;
-}*/
-
-#fileInputContainer {
-    /*grid-area: input-zone;*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-color: buttonface;
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    height: 50px;
-    width: 60%;
-    font-size: 18px;
-    transition: 0.3s;
-}
-
-#fileInputContainer:hover {
-    background-color: #a1c45c;
-    width: 70%;
-}
-
-#fileInputContainer:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
-
-#fileInput {
-    display: none;
-}
-
-#fileInputLabel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
-    cursor: pointer
-}
-
-/********************************
-* MAIN GRID
-********************************/
-#mainContainer{
-    display: grid !important;
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0,1fr) minmax(0, 11fr) minmax(0,1fr);
-
-    background-color: gray;
-
-    height: 100%;
-
-    min-height: 0;  /* NEW */
-    min-width: 0;   /* NEW; needed for Firefox */
-
-    overflow: hidden;
-}
-
-
-.header {
-    grid-column-start: 1;
-    grid-column-end: -1;
-    grid-row-start: 1;
-    grid-row-end: 2;
-
-    background-color: #ffffff;
-
-    height: 100%;
-
-    /*justify-self: center;*/
-}
-
-
-#footer {
-    grid-column-start: 1;
-    grid-column-end: -1;
-    grid-row-start: -2;
-    grid-row-end: -1;
-
-    background-color: #ffffff;
-
-    height: 100%;
-
-    /* justify-self: center; */
-}
-
-
-#main-app {
-    grid-column-start: 1;
-    grid-column-end: -1;
-    grid-row-start: 2;
-    grid-row-end: 3;
-
-    /*background-color: green;*/
-
-    height: 100%;
-}
 
 .bold-text {
     color: white;
     font-weight:bold;
     margin: 0;
-}
-
-.text-splitter-container {
-    display: grid;
-    grid-template: [row1-start] ". info-bar . . ." 1fr [row1-end]
-                   [row2-start] ". text-edit . text-options ." 8fr [row2-end]
-                   [row3-start] ". text-buttons . . ." 1fr [row3-end]
-                   / 1fr 8fr 1fr 4fr 1fr;
-}
-
-.fname-info-container {
-    grid-area: info-bar;
-    display: flex;
-    align-items: center;
-}
-
-.fname-info {
-    margin: 0;
-    color: white;
-}
-
-.text-editor {
-    grid-area: text-edit;
-    display: block;
-    font-family: CoreSansNR35Light;
-    font-size: 16px;
-    resize: none;
-    border: none;
-}
-
-.options-container {
-    grid-area: text-options;
-}
-
-.text-buttons-container {
-
-    grid-area: text-buttons;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.text-split-button {
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    height: 30px;
-    width: 30%;
-    font-size: 14px;
-    margin: 10px;
 }
 
 .white-text {
@@ -466,132 +88,42 @@ button:hover{
     color:red;
 }
 
-#text-split-complete-button:hover {
-    width: 25%;
-}
 
-#text-split-complete-button:active {
-    background-color: white;
-    transition: 0s;
-}
-
-/********************************
-* MODAL
-********************************/
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 60%;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-body li {
-    padding: 5px;
-}
-
-.modal-footer {
-    font-style: italic;
-    color: #777;
-}
-
-.modal-default-button {
-    float: right;
+.back-button {
     border-style: hidden;
     border-radius: 1px;
     cursor: pointer;
-    background-color: #ddd;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.modal-default-button:hover {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-.modal-default-button:active {
-    transition: 0s;
-    color:black;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
-
-/********************************
-* FONTS
-********************************/
-
-@font-face {
-    font-family: 'CoreSansNR35Light';
-    src: url('../fonts/coresansnr35light-webfont.eot');
-    src: url('../fonts/coresansnr35light-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/coresansnr35light-webfont.woff2') format('woff2'), url('../fonts/coresansnr35light-webfont.woff') format('woff'), url('../fonts/coresansnr35light-webfont.ttf') format('truetype'), url('../fonts/coresansnr35light-webfont.svg#core_sans_nr_35_lightregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'CoreSansNR55Medium';
-    src: url('../fonts/coresansnr55medium-webfont.eot');
-    src: url('../fonts/coresansnr55medium-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/coresansnr55medium-webfont.woff2') format('woff2'), url('https://data.wluper.comcontent/themes/main/static/webfonts/coresansnr55medium-webfont.woff') format('woff'), url('../fonts/coresansnr55medium-webfont.ttf') format('truetype'), url('../fonts/coresansnr55medium-webfont.svg#core_sans_nr_55_mediumregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+    grid-area: button-section;
 }
 
 
-@font-face {
-    font-family: 'Montserrat-Bold';
-    src: url('../fonts/Montserrat-Bold.otf');
+
+
+/*******************************************************************************
+********************************************************************************
+* LAYOUT SPECIFIC
+********************************************************************************
+*******************************************************************************/
+.header{
+    background-color: #ffffff;
+    display: flex;
+    align-items:center;
 }
+
+.logo{
+    /* margin: 0.6em 1em; */
+    padding: 10px;
+    /* height: calc(100% - 1.em); */
+    height: 80%;
+}
+.copyright {
+    font-size: .6875em;
+    line-height: 4.7272727273em;
+    color: #4a4f54;
+    margin-left: 20px;
+}
+.foot-bar {
+    background-color: #0e181e;
+}
+
+/* EOF */

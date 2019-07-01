@@ -1,0 +1,660 @@
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION APP LAYOUT
+********************************************************************************
+*******************************************************************************/
+#resolution-app {
+    background-color: #ffffff;
+
+    height: 100%;
+    margin: 0;
+    display: grid !important;
+    /* grid-template-columns: minmax(0,3fr) minmax(0,1fr); */
+    /* grid-template-rows: minmax(0, 1fr) minmax(0, 9fr) minmax(0,11fr); */
+
+
+    grid-template: [row1-start] "resolution-menu" 1fr [row1-end]
+                   [row2-start] "error-list" 9fr [row2-end]
+                   [row3-start] "resolutions" 9fr [row3-end]
+                   / 1fr ;
+
+    /* grid-template: [row1-start] "resolution-menu resolution-menu" 1fr [row1-end]
+                   [row2-start] "error-list resolutions" 20fr [row2-end]
+                   / 1fr 10fr; */
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+
+    /*overflow: hidden;*/
+}
+
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION MENU
+********************************************************************************
+*******************************************************************************/
+#resolution-menu{
+
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    /* grid-row-start: 1;
+    grid-row-end: 2; */
+    grid-area: resolution-menu;
+
+    background-color: #0e181e;
+
+    height: 100%;
+
+    color: white;
+
+    display: grid;
+    grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
+                   [row2-start] ". button-section . . . ." 5fr [row2-end]
+                   [row3-start] ". . . . . ." 1fr [row3-end]
+                   / 0.05fr 1fr 0.05fr 1fr 2fr 1fr;
+
+}
+
+/*******************************************************************************
+********************************************************************************
+* ERROR ELEMENTS
+********************************************************************************
+*******************************************************************************/
+
+#error-list{
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    /* grid-row-start: 2;
+    grid-row-end: 3; */
+    grid-area : error-list;
+
+    background-color: #ffffff !important; /* +10 */
+    border-radius: 5px;
+
+    height: 100%;
+
+    color: white;
+    overflow-y:scroll !important
+    -webkit-overflow-scrolling: touch;
+}
+
+.error-element-selected > .error-element-id{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+}
+
+/* .error-element > .user-string-type{
+    color: #666666;
+    background-color: #eaeff2 !important;
+
+}
+
+.error-element:hover > .user-string-type{
+    color: #888888;
+    background-color: #5c99c4 !important;
+
+} */
+
+.error-element-selected{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    height: auto;
+    width: auto;
+    /* margin: 2%; */
+    margin: 0.5em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+}
+
+.error-element{
+    background-color: #eaeff2 !important;
+    color: #888888;
+    font-weight: bold !important;
+    border-radius: 5px;
+
+    height: auto;
+    margin: 0.5em 8em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+}
+
+.error-element:hover{
+    background-color: #5c99c4 !important;
+    color: #666666;
+    margin: 0.5em 2em;
+    cursor: pointer;
+    -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */
+}
+
+.error-element-body{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
+                   [row2-start] "error-id . turn-id annotation-type . accepted" 5fr [row2-end]
+                   [row3-start] ". . . . . ." 1fr [row3-end]
+                   / 1fr 0.5fr 1fr 3fr 2fr 1fr;
+}
+
+/* .error-element-body{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template: [row1-start] "error-id" 1fr [row1-end]
+                   [row2-start] "turn-id" 1fr [row1-end]
+                   [row3-start] "annotation-type" 1fr [row3-end]
+                   [row4-start] "accepted" 1fr [row4-end]
+                   / 1fr;
+
+
+}
+*/
+
+
+
+
+.error-element-id{
+    grid-area : error-id;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.error-element-turn{
+    grid-area : turn-id;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.error-element-annotation{
+    grid-area : annotation-type;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.accepted-indicator{
+    grid-area:accepted;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* color: #a2ffa0; */
+    color: #62bf60;
+    font-weight: bold;
+    /*text-shadow: 0px 0px 2px #a2ffa0;
+    box-shadow: 0px 0px 5px #a2ffa0;*/
+}
+
+.not-accepted-indicator {
+    grid-area:accepted;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* color: #ffa2a0; */
+    color: #ef9290;
+    font-weight: bold;
+}
+
+
+
+
+
+/*******************************************************************************
+********************************************************************************
+* RESOLUTION
+********************************************************************************
+*******************************************************************************/
+
+#resolutions{
+    /* grid-column-start: 1;
+    grid-column-end: -1; */
+    /* grid-row-start: 3;
+    grid-row-end: 4; */
+    grid-area : resolutions;
+
+    background-color: #000000 !important; /* +10 */
+    border-radius: 5px;
+    color: white;
+
+    height: 100%;
+    width: 100%;
+
+    display: grid !important;
+    /* grid-template-rows: minmax(0,7fr) minmax(0,1fr);
+    grid-template-columns: minmax(0,3fr) minmax(0,2fr); */
+
+    /* grid-template: [row1-start] "input-data" 7fr [row1-end]
+                   [row2-start] "annotation-data" 7fr [row2-end]
+                   [row3-start] "accept-area" 1fr [row3-end]
+                   / 20fr ; */
+
+
+    grid-template:  [row1-start] "input-data annotation-data" 7fr [row1-end]
+                    [row2-start] "accept-area annotation-data" 1fr [row2-end]
+                    / 3fr 2fr ;
+}
+
+.left {
+    background-color: #5c99c4 !important; /* +10 */
+    /* grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2; */
+    grid-area: input-data;
+
+    height: 100%;
+}
+
+
+
+.right {
+    background-color: #15232d !important; /* +10 */
+    /* grid-row-start: 1;
+    grid-row-end: -1;
+    grid-column-start: -2;
+    grid-column-end: -1; */
+    grid-area: annotation-data;
+
+    height: 100%;
+}
+
+#accept{
+    /* grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: -2;
+    grid-row-end: -1; */
+
+    grid-area: accept-area;
+
+    background-color: #1c2f3d !important; /* +10 */
+
+    height: 100%;
+    margin: 0;
+    color: white;
+
+    display: grid !important;
+    grid-template: ". accept-button ." 2fr
+
+                    / 2fr 3fr 2fr ;
+}
+
+.accept-button {
+    background-color: #ffffff !important;
+    grid-area: accept-button;
+
+    /* margin: 1em;  */
+    border-style: hidden;
+
+    margin: 1% 0;
+    height: 98%;
+    width: 100%;
+    cursor: pointer;
+}
+
+.accept-button:hover{
+    background-color: #a1c45c;
+    margin: 1% 0;
+    cursor: pointer;
+}
+
+/*******************************************************************************
+********************************************************************************
+* OTHER
+********************************************************************************
+*******************************************************************************/
+
+
+
+/* .string-type{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+
+    margin: 0.5em 8em;
+
+    padding-bottom: 0.5em;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    transition: 0.3s;
+
+    -webkit-animation: adjust_size 0.3s forwards;
+
+} */
+
+.string-type{
+    background-color: #eaeff2 !important;
+    color: #aaaaaa;
+
+    border-radius: 3px;
+
+    height: 3em;
+    margin: 0.3em 1em;
+
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) minmax(0,9fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+    overflow: hidden;
+}
+
+
+
+.string-type-name{
+    background-color: #1c2f3d !important;
+    border-radius: 2px;
+
+    /* width: 100%; */
+    height: 100%;
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    text-align: center;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.string-type-text{
+    background-color: #ffffff!important;
+    color: #000000;
+    border-radius: 2px;
+
+    height: 100%;
+    width: 100%;
+    /* margin: 2% 5%; */
+    /* text-align: center; */
+    grid-column-start: 2;
+    grid-column-end: -1;
+/*
+    align-items: center;
+    justify-self: center; */
+
+}
+
+
+
+
+.user-string-type-text{
+    background-color: #ffffff!important;
+    border-radius: 2px;
+
+    height: 100%;
+    /* margin: 2% 5%; */
+
+    grid-column-start: 2;
+    grid-column-end: -1;
+
+}
+
+
+.user-string-type-text input{
+    /* background-color: #1c2f3d!important; */
+
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin:0;
+    border-radius: 2px;
+    outline:none;
+}
+
+/*******************************************************************************
+********************************************************************************
+* MAIN LIST SCREEN
+********************************************************************************
+*******************************************************************************/
+
+.all-dialogues-container {
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+.dialogue-list-title-container {
+    display: grid;
+    grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
+                   / 1fr 1fr
+}
+
+.all-dialogues-list-title {
+    grid-area: title-zone;
+    padding-left: 20px;
+    color:white;
+}
+
+.help-button-container {
+    grid-area: help-button-zone;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.help-button {
+    margin-right: 30px;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    padding: 10px;
+    /*height: 50px;*/
+    /*width: 60%;*/
+    /*font-size: 18px;*/
+}
+
+.help-button:hover {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.help-button:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+.dialogue-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.listed-dialogue {
+    /*background-color: blue;*/
+    /*padding: 10px;*/
+    margin: 10px;
+    color: white;
+    transition: 0.1s;
+}
+
+.dialogue-list-single-item-container{
+    display: grid;
+    grid-template: [row1-start] "info" [row1-end] / 1fr;
+    /*background-color: green;*/
+    /*padding:10px;*/
+}
+
+
+.dialouge-info {
+    grid-area: info;
+    display: grid;
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 2fr 5fr 1fr 2fr;
+    cursor: pointer;
+    background-color: #293e4c;
+}
+
+.dialouge-info:hover {
+    cursor: pointer;
+    color: #ee59ff;
+    /*border: 3px solid #ee59ff;*/
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.dialouge-info:active {
+    color: white;
+}
+
+.filler-space {
+    grid-area: filler;
+}
+
+.visited-indicator{
+    grid-area:visited;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #a2ffa0;
+    font-weight: bold;
+    /*text-shadow: 0px 0px 2px #a2ffa0;
+    box-shadow: 0px 0px 5px #a2ffa0;*/
+}
+
+.dialogue-id {
+    background-color: #15232d;
+    grid-area: id;
+    overflow-x: hidden;
+    padding:10px;
+    display: flex;
+    align-items: center;
+}
+
+.dialogue-num-turns {
+    grid-area: numTurns;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding: 10px;
+    padding-right: 20px;
+}
+
+.dialogue-num-turns:hover {
+    background-color: #999;
+    transition:0.2s;
+    color:white;
+}
+
+.add-button-container {
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-dialogue-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    height: 50px;
+    width: 60%;
+    font-size: 18px;
+}
+
+.add-dialogue-button:hover {
+    width: 70%;
+}
+
+.add-dialogue-button:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+.upload-file-container {
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*text-align: center;*/
+    /*display: grid;
+    grid-template: [row1-start] "label-zone" 1fr [row1-end]
+                   [row2-start] "." 0.5fr [row2-end]
+                   [row3-start] "input-zone" 1fr [row3-end]
+                   / 1fr;*/
+}
+
+#fileInputContainer {
+    /*grid-area: input-zone;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: buttonface;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    height: 50px;
+    width: 60%;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+#fileInputContainer:hover {
+    background-color: #a1c45c;
+    width: 70%;
+}
+
+#fileInputContainer:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+#fileInput {
+    display: none;
+}
+
+#fileInputLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+    cursor: pointer
+}
+
+
+/* EOF */

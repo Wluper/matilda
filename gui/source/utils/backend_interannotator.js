@@ -1,23 +1,19 @@
-
-
 /********************************
-* FILE NAME FUNCTIONS
+* AGREEMENT SCORES
 ********************************/
 
-
-
-async function get_name(){
+async function get_scores_async(){
 
     var dialogues = {}
 
-    const apiLink = 'http://127.0.0.1:5000/name'
+    const apiLink = `http://127.0.0.1:5000/agreements`
     try {
         var response = await axios.get( apiLink );
 
-        name = response.data.name
-        console.log("=============File Name==============")
-        console.log(name)
-        return name
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
 
     } catch (error) {
 
@@ -28,30 +24,61 @@ async function get_name(){
 
 };
 
-async function put_name(name){
+/********************************
+* ERRORS RESOURCE
+********************************/
+
+async function get_errors_async(dialogueId){
 
     var dialogues = {}
 
-    const apiLink = 'http://127.0.0.1:5000/name'
+    const apiLink = `http://127.0.0.1:5000/errors/${dialogueId}`
     try {
-        var response = await axios.put( apiLink, {name : name} )
-        return true;
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
     } catch (error) {
 
         console.log(error);
-        return false;
+
     }
 
 
 };
 
+async function put_error_async(error, meta, errorId, dialogueId){
+
+    params = {
+        errorObject : error,
+        meta : meta,
+        errorId : errorId,
+        dialogueId : dialogueId
+    }
+    const apiLink = `http://127.0.0.1:5000/errors`
+    try {
+        var response = await axios.put( apiLink, params );
 
 
+        console.log("=============ERRORS==============")
+        console.log(response)
+        return true
+
+    } catch (error) {
+
+        console.log(error);
+        return false
+
+    }
+
+
+};
 /********************************
 * API INTERACTION FUNCTIONS
 ********************************/
-
-
 
 async function annotate_query(query){
 
@@ -218,12 +245,11 @@ async function post_empty_dialogue() {
 }
 
 
-async function post_new_dialogues_from_string_lists_async(stringLists) {
-
+async function post_new_dialogue_from_json_string_async(jsonString, fileName=null) {
 
     try {
 
-        const response = await RESTdialogues("POST", null, stringLists );
+        const response = await RESTdialogues( "POST", null, {payload: JSON.parse(jsonString), name: fileName } )
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)
@@ -239,31 +265,11 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
 }
 
 
-async function post_new_dialogue_from_json_string_async(jsonString) {
+async function put_single_dialogue_async(event, dialogueId, dialogue) {
 
     try {
 
-        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString) )
-
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
-
-        return response
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
-
-}
-
-
-async function put_single_dialogue_async(event, dialogueId, dTurns) {
-
-    try {
-        
-        const response = await RESTdialogues( "PUT", dialogueId, dTurns )
+        const response = await RESTdialogues( "PUT", dialogueId, dialogue )
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
@@ -337,8 +343,10 @@ async function RESTdialogues(method, id, params){
 
 backend =
 {
-    get_name                                    : get_name,
-    put_name                                    : put_name,
+    get_scores_async                            : get_scores_async,
+    get_errors_async                            : get_errors_async,
+    put_error_async                             : put_error_async,
+
     annotate_query                              : annotate_query,
 
     get_annotation_style_async                  : get_annotation_style_async,
@@ -351,7 +359,6 @@ backend =
     change_dialogue_name_async                  : change_dialogue_name_async,
 
     post_empty_dialogue                         : post_empty_dialogue,
-    post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async
 }
 

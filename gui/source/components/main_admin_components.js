@@ -4,7 +4,7 @@
 
 
 
-Vue.component("all-dialogues", {
+Vue.component("main-admin", {
 
   props: [
       "alreadyVisited"
@@ -12,40 +12,30 @@ Vue.component("all-dialogues", {
 
   data () {
       return {
+
+          /*
+              `allDialogueMetadata` will always be a list of tuples of the form:
+
+                  List[Tuple[str, List[str]]]
+
+              Where the first item of each tuple is the name of the dialogue and the second item is a list
+              of the different dialogue files on the backend which contain that dialogue ID.
+          */
           allDialogueMetadata: [],
           dragging: false,
-          showModal: false,
-          name : ''
-      }
-  },
-  computed : {
-      userName : function(){
-          console.log("computing un");
-          var restOfName = this.name.split(".json")[0]
-          var userName = restOfName.split("USER_")[1]
-          return userName
+          showAgreement: false,
+
+          // A list of dialogue IDs for which annotator names should be displayed
+          showAnnotatorNamesForIds: []
       }
   },
 
   mounted () {
-      this.init();
+      this.getAllDialogueIdsFromServer();
   },
 
   methods: {
 
-        init : function(){
-
-            // Step ONE: Get FILE NAME
-            backend.get_name()
-                .then( (response) => {
-                    console.log();
-                    this.name = response;
-
-                });
-
-            this.getAllDialogueIdsFromServer();
-
-        },
     handleDragOver(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -89,7 +79,24 @@ Vue.component("all-dialogues", {
     },
 
     clicked_dialogue(clickedDialogue) {
-        allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
+        allDialoguesEventBus.$emit("dialogue_clicked", clickedDialogue)
+    },
+
+    toggle_show_annotators(dialogueName){
+
+        if (this.show_annotators(dialogueName)) {
+            index = this.showAnnotatorNamesForIds.indexOf(dialogueName)
+            this.showAnnotatorNamesForIds.splice(index, 1)
+        } else {
+            this.showAnnotatorNamesForIds.push(dialogueName)
+        }
+
+    },
+
+    show_annotators(dialogueName){
+
+        return this.showAnnotatorNamesForIds.includes(dialogueName)
+
     },
 
     create_new_dialogue(event) {
@@ -102,43 +109,15 @@ Vue.component("all-dialogues", {
             });
     },
 
-    delete_dialogue(event) {
-
-        if (confirm("Are you sure you want to permanently delete this dialogue? This cannot be undone!")) {
-
-            console.log('-------- DELETING --------')
-            console.log()
-            idToDelete = event.target.parentNode.parentNode.id;
-            nameToDelete = this.allDialogueMetadata[idToDelete].id
-            backend.del_single_dialogue_async(nameToDelete)
-                .then( () => {
-                    this.getAllDialogueIdsFromServer();
-                });
-
-            allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
-
-        } else {
-
-            return
-
-        }
-
-    },
-
     open_file(event){
         let file = event.target.files[0];
         this.handle_file(file);
     },
 
     handle_file(file) {
-        let textType = /text.plain/;
         let jsonType = /application.json/;
 
-        if (file.type.match(textType)) {
-
-            allDialoguesEventBus.$emit('loaded_text_file', file);
-
-        } else if (file.type.match(jsonType)) {
+        if (file.type.match(jsonType)) {
 
             console.log('---- HANDLING LOADED JSON FILE ----');
             let reader = new FileReader();
@@ -146,7 +125,7 @@ Vue.component("all-dialogues", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                backend.post_new_dialogue_from_json_string_async(text)
+                backend.post_new_dialogue_from_json_string_async(text, file.name)
                     .then( (response) => {
 
                         if ('error' in response.data) {
@@ -162,45 +141,10 @@ Vue.component("all-dialogues", {
 
         } else {
 
-            alert('Only .txt or .json files are supported.')
+            alert('Only .json files are supported.')
 
         }
     },
-
-    handle_file_name_change : function(event){
-        console.log('---- CHANGING FILE NAME ----');
-        console.log(event);
-
-        backend.put_name("USER_"+event.target.value+".json")
-            .then( (response) => {
-
-                if (response) {
-                    console.log("Name Changed");
-                } else {
-                    alert('Server error, name not changed.')
-                }
-
-            })
-    },
-
-    //
-    // toggleFileEdit: function() {
-    //
-    //     let inputSection = document.getElementById('fileName')
-    //     let titleSpan    = document.getElementById('fileNameInput')
-    //
-    //     if (this.editingTitle) {
-    //         this.editingTitle          = false;
-    //         inputSection.style.display = 'none';
-    //         titleSpan.style.display    = 'inherit';
-    //     } else {
-    //         this.editingTitle          = true;
-    //         inputSection.style.display = 'inherit';
-    //         inputSection.focus();
-    //         titleSpan.style.display    = 'none';
-    //     }
-    //
-    // },
 
     download_all_dialogues_from_server(event) {
         backend.get_all_dialogues_async()
@@ -218,7 +162,6 @@ Vue.component("all-dialogues", {
   },
 
   template:
-
   `
   <div class="all-dialogues-container"
        id="listedDialoguesContainer"
@@ -226,34 +169,21 @@ Vue.component("all-dialogues", {
        v-on:dragleave="handleDragOut($event)"
        v-on:drop="handleDrop($event)">
 
-    <modal v-if="showModal" @close="showModal = false"></modal>
+    <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
 
     <div class="dialogue-list-title-container">
+        <h2 v-if="!(dragging)" class="all-dialogues-list-title">
+            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
+        </h2>
 
-        <div class="all-dialogues-list-title">
-            <h2 v-if="!(dragging)" >
-                {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited
-            </h2>
-
-            <h2 v-else>
-                Drop Files Anywhere to Upload!
-            </h2>
-        </div>
-
-        <div class="file-name-container">
-            <span> USER_ </span>
-            <input id="fileNameInput"
-                    type="text"
-                   v-bind:value="userName"
-                   v-on:input="handle_file_name_change($event)">
-            </input>
-            <span> .json </span>
-
-        </div>
+        <h2 v-else class="all-dialogues-list-title">
+            Drop Files Anywhere to Upload!
+        </h2>
 
         <div class="help-button-container">
             <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
-            <button class="help-button" @click="showModal = true">File Format Info</button>
+            <button class="help-button" @click="showAgreement = true">Inter-annotator Agreement</button>
+
         </div>
     </div>
 
@@ -265,22 +195,33 @@ Vue.component("all-dialogues", {
 
           <div class="dialogue-list-single-item-container">
 
-            <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
-              Del
-            </div>
+            <div class="dialouge-info">
 
-
-            <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
-                <div class="dialogue-id">
-                  {{dat.id}}
+                <div class="dialogue-id" v-on:click="clicked_dialogue(dat[0])">
+                    {{dat[0]}}
                 </div>
 
-                <div v-if="dialogue_already_visited(dat.id)"
-                     class="visited-indicator">
+                <div class="filler-space" v-on:click="clicked_dialogue(dat[0])">
+                </div>
+
+                <div v-if="dialogue_already_visited(dat[0])"
+                     class="visited-indicator"
+                     v-on:click="clicked_dialogue(dat[0])">
                      Visited
                 </div>
 
-                <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
+                <div v-if="show_annotators(dat[0])"
+                     class="dialogue-num-turns"
+                     v-on:click="toggle_show_annotators(dat[0])">
+                    Annotators: {{ dat[1] }}
+                </div>
+
+                <div v-else
+                     class="dialogue-num-turns"
+                     v-on:click="toggle_show_annotators(dat[0])">
+                    Annotators: {{ dat[1].length }}
+                </div>
+
             </div>
 
           </div>
@@ -288,10 +229,6 @@ Vue.component("all-dialogues", {
       </li>
 
     </ul>
-
-    <div class="add-button-container">
-      <button class="add-dialogue-button" v-on:click="create_new_dialogue()">Add a New Dialogue</button>
-    </div>
 
     <div class="upload-file-container">
 

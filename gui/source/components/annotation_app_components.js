@@ -54,6 +54,8 @@ Vue.component("annotation-app", {
     created (){
         // GENERAL EVENT LISTENERS
         window.addEventListener('keyup', this.change_turn);
+        annotationAppEventBus.$on("go_back", this.go_back );
+
         // DIALOGUE TURNS EVENTS
         annotationAppEventBus.$on( "turn_updated_string", this.turn_update );
         annotationAppEventBus.$on( "update_turn_id", this.id_updated_from_ids_list );
@@ -68,8 +70,33 @@ Vue.component("annotation-app", {
         annotationAppEventBus.$on( "save_dialogue", this.save_dialogue );
     },
 
+    beforeDestroyed() {
+        console.log("==================================");
+        console.log("I am being destroyed");
+        console.log(this.dialogueId);
+    },
     // METHODS
     methods:{
+        go_back : function(){
+            console.log("==================================");
+            console.log("==================================");
+            console.log("==================================");
+            window.removeEventListener('keyup', this.change_turn);
+            annotationAppEventBus.$off("go_back", this.go_back );
+
+            // DIALOGUE TURNS EVENTS
+            annotationAppEventBus.$off( "turn_updated_string", this.turn_update );
+            annotationAppEventBus.$off( "update_turn_id", this.id_updated_from_ids_list );
+            annotationAppEventBus.$off( "delete_turn", this.remove_turn );
+
+            // ANNOTATION EVENTS
+            annotationAppEventBus.$off( "update_classification", this.turn_update );
+            annotationAppEventBus.$off( "classification_string_updated", this.turn_update );
+
+            // INPUT BOX EVENTS
+            annotationAppEventBus.$off( "new_turn", this.append_new_turn );
+            annotationAppEventBus.$off( "save_dialogue", this.save_dialogue );
+        },
 
         init: function() {
 
@@ -177,6 +204,8 @@ Vue.component("annotation-app", {
         },
 
         save_dialogue: function(event) {
+            console.log("DIALOGUE ID BEING SENT");
+            console.log(this.dialogueId);
 
             backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns)
                 .then( (status) => {
@@ -324,6 +353,9 @@ Vue.component('dialogue-turns',{
 })
 
 
+
+
+
 Vue.component('dialogue-turn',{
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
@@ -384,7 +416,7 @@ Vue.component('dialogue-turn',{
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
             </div>
 
         </div>
@@ -495,23 +527,4 @@ Vue.component('input-box',{
 })
 
 
-
-/************************
-* Helper Components
-************************/
-
-Vue.component("comm-input",{
-    props : ["uniqueName","inputValue", "placeholder", "componentId", "inputClassName"],
-
-    methods :{
-        input_updated : function(event){
-            //cause input is inbuild it has complicated event.target.value thing
-            this.$emit("comm_input_update",{data: event.target.value, name: this.uniqueName})
-        }
-    },
-
-    template:
-    `
-    <input v-bind:class="inputClassName" v-bind:id="componentId" v-bind:placeholder="placeholder" v-bind:value="inputValue" v-on:input="input_updated($event)">
-    `
-})
+// EOF

@@ -3,7 +3,7 @@
 ********************************/
 
 Vue.component('classification-annotation',{
-    props: ["classification", "classFormat", "uniqueName"],
+    props: ["classification", "classFormat", "uniqueName", "turn", "confidences"],
 
     data () {
 
@@ -18,11 +18,29 @@ Vue.component('classification-annotation',{
     computed: {
         correctClassification : function(){
             console.log("Classification Computed");
+            console.log(this.classification);
             return this.classification
         }
     },
 
     methods:{
+        get_confidence : function (id){
+            if (this.confidences){
+
+                x = this.confidences[id];
+                if (x){
+                    return x;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else{
+                return '';
+            }
+
+        },
+
         toggleCollapse: function () {
 
             if (this.collapsed) {
@@ -73,7 +91,7 @@ Vue.component('classification-annotation',{
              */
             this.$forceUpdate();
 
-            outEvent = {name: this.uniqueName, data: this.correctClassification}
+            outEvent = {name: this.uniqueName, data: this.correctClassification, turn: this.turn}
             annotationAppEventBus.$emit("update_classification", outEvent)
         },
 
@@ -115,8 +133,8 @@ Vue.component('classification-annotation',{
                        v-on:input="update_classification($event)">
 
                 <label v-bind:for="labelName">
-                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} </span>
-                    <span v-else> {{labelName}} </span>
+                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}}</span>
+                    <span v-else> {{labelName}} || {{get_confidence(labelName)}} </span>
                 </label>
 
             </div>
@@ -154,7 +172,7 @@ Vue.component('classification-annotation',{
 
 
 Vue.component('classification-string-annotation', {
-    props: ["classification_strings", "uniqueName", "classes"],
+    props: ["classification_strings", "uniqueName", "classes", "confidences"],
 
     data () {
 
@@ -167,6 +185,23 @@ Vue.component('classification-string-annotation', {
     },
 
     methods: {
+        get_confidence : function (id){
+            if (this.confidences){
+
+                x = this.confidences[id];
+                if (x){
+                    return x;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else{
+                return ''
+            }
+
+        },
+
 
       toggleCollapse: function () {
 
@@ -309,8 +344,8 @@ Vue.component('classification-string-annotation', {
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
-                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} </span>
-                    <span v-else> {{labelName}} </span>
+                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} </span>
+                    <span v-else> {{labelName}} || {{get_confidence(labelName)}}</span>
                 </label>
 
                 <input class="multilabel-string-input"

@@ -1,0 +1,64 @@
+/*******************************************************************************
+********************************************************************************
+* TEXT SPLITTER
+********************************************************************************
+*******************************************************************************/
+.text-splitter-container {
+    display: grid;
+    grid-template: [row1-start] ". info-bar . . ." 1fr [row1-end]
+                   [row2-start] ". text-edit . text-options ." 8fr [row2-end]
+                   [row3-start] ". text-buttons . . ." 1fr [row3-end]
+                   / 1fr 8fr 1fr 4fr 1fr;
+}
+
+.fname-info-container {
+    grid-area: info-bar;
+    display: flex;
+    align-items: center;
+}
+
+.fname-info {
+    margin: 0;
+    color: white;
+}
+
+.text-editor {
+    grid-area: text-edit;
+    display: block;
+    font-family: CoreSansNR35Light;
+    font-size: 16px;
+    resize: none;
+    border: none;
+}
+
+.options-container {
+    grid-area: text-options;
+}
+
+.text-buttons-container {
+
+    grid-area: text-buttons;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.text-split-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    height: 30px;
+    width: 30%;
+    font-size: 14px;
+    margin: 10px;
+}
+
+#text-split-complete-button:hover {
+    width: 25%;
+}
+
+#text-split-complete-button:active {
+    background-color: white;
+    transition: 0s;
+}
