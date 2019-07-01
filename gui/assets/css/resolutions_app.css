@@ -74,7 +74,8 @@
     height: 100%;
 
     color: white;
-    overflow:scroll;
+    overflow-y:scroll !important
+    -webkit-overflow-scrolling: touch;
 }
 
 .error-element-selected > .error-element-id{
@@ -115,7 +116,8 @@
 
 .error-element{
     background-color: #eaeff2 !important;
-    color: #aaaaaa;
+    color: #888888;
+    font-weight: bold !important;
     border-radius: 5px;
 
     height: auto;
@@ -195,7 +197,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #a2ffa0;
+    /* color: #a2ffa0; */
+    color: #62bf60;
     font-weight: bold;
     /*text-shadow: 0px 0px 2px #a2ffa0;
     box-shadow: 0px 0px 5px #a2ffa0;*/
@@ -207,7 +210,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #ffa2a0;
+    /* color: #ffa2a0; */
+    color: #ef9290;
     font-weight: bold;
 }
 

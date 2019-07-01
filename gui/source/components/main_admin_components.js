@@ -23,7 +23,7 @@ Vue.component("main-admin", {
           */
           allDialogueMetadata: [],
           dragging: false,
-          showModal: false,
+          showAgreement: false,
 
           // A list of dialogue IDs for which annotator names should be displayed
           showAnnotatorNamesForIds: []
@@ -169,6 +169,8 @@ Vue.component("main-admin", {
        v-on:dragleave="handleDragOut($event)"
        v-on:drop="handleDrop($event)">
 
+    <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
+
     <div class="dialogue-list-title-container">
         <h2 v-if="!(dragging)" class="all-dialogues-list-title">
             {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
@@ -180,6 +182,8 @@ Vue.component("main-admin", {
 
         <div class="help-button-container">
             <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
+            <button class="help-button" @click="showAgreement = true">Inter-annotator Agreement</button>
+
         </div>
     </div>
 

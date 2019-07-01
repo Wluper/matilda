@@ -73,3 +73,70 @@ Vue.component('modal', {
   </transition>
   `
 })
+
+
+
+
+
+/*************************************
+* MODAL COMPONENT
+*************************************/
+Vue.component('agreement-modal', {
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              Inter-annotator Agreement Scores
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+              <slot name="body">
+                  This represents a report for your data:
+                  <br><br>
+                        Available Annotations: [Difficulty, policy_funcs, quality ]
+                  <br><br>
+                  <strong>
+                    quality:
+                  </strong>
+                  <ul>
+                      <li>
+                        Total Errors: 35
+                      </li>
+                      <li>
+                        Total Annotations: 1226
+                      </li>
+                      <li>
+                        Kappa: 0.81
+                      </li>
+                      <li>
+                        Alpha: 0.68
+                      </li>
+                  </ul>
+
+              </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
