@@ -123,6 +123,62 @@ def agreement_classification_string(listOfClassificationStrings):
 
 
 
+##############################################
+# FUNCTIONS FOR CALCULATING THE SCORES
+##############################################
+
+def agreement_classification_score(listOfClassifications, totalLabels):
+    """
+    computes, whether there is diagreement, the most likely prediction and confidences of each.
+    """
+    countDict = { "counts" : defaultdict(float), "total" : 0 , "errors":0, "annotatedBy" : 0, "alpha" : 0.0 , "kappa" : 0.0, "accuracy" : 0 }
+    counter = 0
+
+    #getting raw counts
+    for prediction in listOfClassifications:
+
+        counter += 1
+
+        for label in prediction:
+
+            countDict["counts"][label] += 1
+
+    countDict["annotatedBy"] = counter
+
+    #getting error, `alpha` and `kappa` -> slightly modified version of Fleiss Kappa & Krippendorff Alpha
+    errorCount = 0
+    totalLabel = 0
+    for label, count in countDict["counts"].items():
+
+        totalLabel += 1
+
+        if counter > count:
+
+            errorCount += 1
+
+    countDict["errors"] = errorCount
+    countDict["total"] = totalLabel
+
+
+    #alpha is calculated with uniform random probabilty for the chance
+    A0 = (1 / (totalLabels * totalLabels ) )
+    Ae = errorCount / totalLabels
+    countDict["alpha"] = (Ae-A0) / (1-A0)
+
+
+    #A02
+    countDict["accuracy"] = errorCount/totalLabels
+
+    return countDict
+
+
+
+
+
+
+##############################################
+# API to the outside world
+##############################################
 
 agreementConfig = {
     "data" : None,
@@ -130,3 +186,16 @@ agreementConfig = {
     "multilabel_classification" : agreement_classification,
     "multilabel_classification_string" : agreement_classification_string
 }
+
+agreementScoreConfig = {
+    "data" : None,
+    "string" : None,
+    "multilabel_classification" : agreement_classification_score,
+    "multilabel_classification_string" : None
+}
+
+
+
+
+
+# EOF

@@ -1,4 +1,28 @@
+/********************************
+* AGREEMENT SCORES
+********************************/
 
+async function get_scores_async(){
+
+    var dialogues = {}
+
+    const apiLink = `http://127.0.0.1:5000/agreements`
+    try {
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+};
 
 /********************************
 * ERRORS RESOURCE
@@ -319,9 +343,10 @@ async function RESTdialogues(method, id, params){
 
 backend =
 {
+    get_scores_async                            : get_scores_async,
     get_errors_async                            : get_errors_async,
     put_error_async                             : put_error_async,
-    
+
     annotate_query                              : annotate_query,
 
     get_annotation_style_async                  : get_annotation_style_async,

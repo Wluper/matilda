@@ -16,7 +16,7 @@ from flask_cors import CORS
 
 # == Local ==
 from annotator_config import Configuration
-from interannotator_config import agreementConfig
+from interannotator_config import agreementConfig, agreementScoreConfig
 
 from annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
@@ -138,6 +138,12 @@ class InterAnnotatorApp(object):
                             endpoint_name="/errors/<id>",
                             methods=["GET"],
                             handler= self.handle_errors_resource  )
+
+        self.add_endpoint( \
+                            endpoint="/agreements",
+                            endpoint_name="/agreements",
+                            methods=["GET"],
+                            handler= self.handle_agreements_resource  )
 
 
     def handle_dialogues_resource(self, id=None):
@@ -290,6 +296,68 @@ class InterAnnotatorApp(object):
             }
 
         return jsonify( responseObject )
+
+    def handle_agreements_resource(self):
+        """
+        GET - Returns the interannotator agreement
+        """
+
+        if request.method == "GET":
+
+            responseObject = {
+                "status" : "success",
+            }
+            totalTurns = 0
+
+            totalAnnotations = 0
+            errors = 0
+            alpha = 0
+            accuracy = 0
+
+            dialogues = [ x[0] for x in self.annotationFiles.get_dialogues_metadata() ]
+
+            for name in dialogues:
+
+                listOfDialogue = self.annotationFiles.get_all_files( dialogueId = name )
+
+                turnsData = InterAnnotatorApp.get_turns_data( listOfDialogue )
+
+                for turn in turnsData:
+                    totalTurns += 1
+                    for annotationName, listOfAnnotations in turn.items():
+
+                        if annotationName=="turn_idx":
+                            continue
+
+                        annotationType = Configuration.configDict[annotationName]["label_type"]
+
+                        agreementScoreFunc = agreementScoreConfig[ annotationType ]
+
+                        if agreementScoreFunc:
+                            totalLabels =   len( Configuration.configDict[annotationName]["labels"] )
+                            temp = agreementScoreFunc( listOfAnnotations, totalLabels )
+
+                            errors += temp.get("errors")
+                            totalAnnotations += totalLabels
+                            alpha += temp.get("alpha")
+                            accuracy += temp.get("accuracy")
+
+            responseObject["errors"] = errors
+            responseObject["total"] = totalAnnotations
+            responseObject["alpha"] = alpha / totalTurns
+            responseObject["accuracy"] = accuracy  / totalTurns
+
+        else:
+
+            responseObject = {
+                "status" : "error",
+                "error" : "Something truly frightening is happening on the backend."
+            }
+
+
+        return jsonify( responseObject )
+
+
 
 
     def __update_gold_from_error_id(self, dialogueId, error):
@@ -458,20 +526,7 @@ class InterAnnotatorApp(object):
         errorList = []
         metaList = []
 
-        turnsData = []
-        #create per turn data
-        for dialogue in listOfDialogue:
-
-            for turnId,turn in enumerate( dialogue ):
-
-                if len(turnsData)>turnId:
-                    InterAnnotatorApp.update_defaultdict_list_with_dict( turnsData[turnId], turn )
-
-                else:
-                    temp = defaultdict(list)
-                    InterAnnotatorApp.update_defaultdict_list_with_dict( temp, turn )
-
-                    turnsData.append(temp)
+        turnsData = InterAnnotatorApp.get_turns_data(listOfDialogue)
 
         # Getting the errors
         for turnId, turn in enumerate(turnsData):
@@ -516,6 +571,27 @@ class InterAnnotatorApp(object):
 
         return {"errors": errorList, "meta": metaList}
 
+    @staticmethod
+    def get_turns_data(listOfDialogue):
+        """
+        list of dialogue - turns data
+        """
+        turnsData = []
+        #create per turn data
+        for dialogue in listOfDialogue:
+
+            for turnId,turn in enumerate( dialogue ):
+
+                if len(turnsData)>turnId:
+                    InterAnnotatorApp.update_defaultdict_list_with_dict( turnsData[turnId], turn )
+
+                else:
+                    temp = defaultdict(list)
+                    InterAnnotatorApp.update_defaultdict_list_with_dict( temp, turn )
+
+                    turnsData.append(temp)
+
+        return turnsData
 
     @staticmethod
     def update_defaultdict_list_with_dict(defaultDict, newDict):
@@ -542,6 +618,28 @@ class InterAnnotatorApp(object):
             responseObject.update( InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue ) )
 
             return responseObject
+
+
+    def mock_analyse_interannotator_agreement(self, dialogueIdCap=None):
+        with self.app.app_context():
+            print(self.annotationFiles.allFiles.keys())
+
+            report = {}
+            totalCount = 0
+
+            if not dialogueIdCap:
+                dialogueIdCap = 74
+
+            for x in range(dialogueIdCap+1):
+                dialogueId = "Dialogue"+str(x)
+                listOfDialogue = self.annotationFiles.get_all_files( dialogueId = dialogueId )
+                responseObject = InterAnnotatorApp.find_errors_in_list_of_dialogue( listOfDialogue )
+                totalCount += len( responseObject["errors"] )
+
+            report["totalCount"] = totalCount
+            return report
+
+
 
 
 ##############################################

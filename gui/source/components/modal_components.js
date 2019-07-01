@@ -82,6 +82,29 @@ Vue.component('modal', {
 * MODAL COMPONENT
 *************************************/
 Vue.component('agreement-modal', {
+    data () {
+        return {
+            scores : {}
+        }
+    },
+    mounted () {
+        this.init();
+    },
+
+    methods: {
+
+          init : function(){
+
+              // Step ONE: Get FILE NAME
+              backend.get_scores_async()
+                  .then( (response) => {
+                      console.log();
+                      this.scores = response;
+
+                  });
+
+          },
+  },
   template:
   `
   <transition name="modal">
@@ -104,20 +127,11 @@ Vue.component('agreement-modal', {
                         Available Annotations: [query_type, policy_funcs, hotel_belief_state ]
                   <br><br>
                   <strong>
-                    query_type:
+                    Overall
                   </strong>
                   <ul>
-                      <li>
-                        Total Errors: 7
-                      </li>
-                      <li>
-                        Total Annotations: 18
-                      </li>
-                      <li>
-                        Kappa: 0.21
-                      </li>
-                      <li>
-                        Alpha: 0.11
+                      <li v-for="(item, key, index) in scores">
+                        {{key}} : {{item}}
                       </li>
                   </ul>
 
