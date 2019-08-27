@@ -1,8 +1,10 @@
 # LIDA: Lightweight Interactive Dialogue Annotator
 
-**Authors:** Ed Collins, Bingbing Zhang, Nikolai Rozanov
+**Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
 
 **Contact:** contact@wluper.com
+
+**Paper:** Link will Follow for the 2019 EMNLP Paper (together with citation)
 
 LIDA is an open source dialogue annotation system which supports the full
 pipeline of dialogue annotation from dialogue / turn segmentation from raw
