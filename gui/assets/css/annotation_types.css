@@ -1,0 +1,73 @@
+/********************************
+* Annotation
+********************************/
+
+.classification-annotation{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    border-radius: 5px;
+    /*height: 30%;*/
+    margin: 1em;
+    padding-bottom: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.collapsor {
+    cursor: pointer;
+}
+
+.collapsor:hover {
+    color: white;
+}
+
+.collapsor hr {
+    width: 95%;
+    border-color: #aaaaaa;
+}
+
+.highlighted-hr {
+    border: #fff;
+}
+
+.soft-text {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.multilabel-string-item-wrapper {
+    display: grid;
+    grid-template: [row1-start] "checkboxZone labelZone" 1fr [row1-end]
+                   [row2-start] ". inputZone" 1fr [row2-end]
+                   / 1fr 9fr;
+    padding: 10px;
+}
+
+.multilabel-string-checkbox-container {
+    grid-area: checkboxZone;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.multilabel-string-label {
+    grid-area: labelZone;
+}
+
+.multilabel-string-input {
+    grid-area: inputZone;
+}
+
+.checkbox {
+    margin-left: 1em;
+    padding-bottom: 10px;
+}
+
+.annotation-header {
+    color: #aaaaaa;
+}
+
+.bold-label {
+  color: #fff;
+}

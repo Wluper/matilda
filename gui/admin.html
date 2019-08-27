@@ -21,13 +21,10 @@ HEAD
         <link rel="stylesheet" href="assets/css/fonts.css">
 
         <!-- APP SPECIFIC -->
+        <link rel="stylesheet" href="assets/css/modal.css">
         <link rel="stylesheet" href="assets/css/lida.css">
         <link rel="stylesheet" href="assets/css/annotation_types.css">
-        <link rel="stylesheet" href="assets/css/annotation_app.css">
-        <link rel="stylesheet" href="assets/css/all_dialogues.css">
-        <link rel="stylesheet" href="assets/css/modal.css">
-        <link rel="stylesheet" href="assets/css/text_splitter.css">
-
+        <link rel="stylesheet" href="assets/css/resolutions_app.css">
 
         <!-- SCRIPTS -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
@@ -56,7 +53,6 @@ BODY
 
             <!-- MAIN APP -->
             <div id="main-app">
-
             </div>
 
 
@@ -77,20 +73,21 @@ BODY
         ============================================= -->
         <!-- UTILS -->
         <script src="source/utils/utils.js"></script>
-        <script src="source/utils/backend.js"></script>
+        <script src="source/utils/backend_interannotator.js"></script>
         <script src="source/utils/event_buses.js"></script>
         <script src="source/utils/data.js"></script>
 
         <!-- COMPONENTS -->
         <script src="source/components/helper_components.js"></script>
         <script src="source/components/modal_components.js"></script>
-        <script src="source/components/all_dialogues_components.js"></script>
+        <script src="source/components/main_admin_components.js"></script>
         <script src="source/components/annotation_type_components.js"></script>
-        <script src="source/components/annotation_app_components.js"></script>
-        <script src="source/components/text_splitter_components.js"></script>
+        <script src="source/components/annotation_type_components.js"></script>
+        <script src="source/components/resolution_app_helper_components.js"></script>
+        <script src="source/components/resolution_app_components.js"></script>
 
         <!-- MAIN COMPONENT -->
-        <script src="source/lida_view.js"></script>
+        <script src="source/admin_view.js"></script>
 
 
     </body>

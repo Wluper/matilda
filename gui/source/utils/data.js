@@ -60,6 +60,47 @@ var turns =
     }
 ];
 
+
+
+var errorList = {
+    meta : [
+        {
+            turn: 1,
+            name: "hotel_belief_state",
+            accepted: false,
+            annotateBy: 5
+        },
+        {
+            turn: 1,
+            name: "query_type",
+            accepted: false,
+            annotateBy: 5
+        }
+    ],
+    errors : [
+        {
+            usr : "Hi, how do I get to the moon?",
+            sys : "Call Elon, find 500K and fly.",
+            turn : 1,
+            type : "multilabel_classification_string",
+            name : "hotel_belief_state",
+            predictions: [
+                ["hotel-book people",5]
+            ],
+        },
+        {
+            usr : "Hi, how do I get to the moon?",
+            sys : "Call Elon, find 500K and fly.",
+            turn : 1,
+            type : "multilabel_classification",
+            name : "query_type",
+            predictions : [
+                "Say Goodbye",
+            ]
+        }
+    ]
+}
+
 // var finalDataFormatForTurn = {
 //     string:
 //     [
@@ -88,5 +129,6 @@ data = {
     annotationStyle : annotationStyle,
     annotationTestStructure : annotationTestStructure,
     currentTurnId : currentTurnId,
-    validAnnotations : validAnnotations
+    validAnnotations : validAnnotations,
+    errorList : errorList,
 }
