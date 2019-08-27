@@ -470,13 +470,15 @@ Vue.component('annotations',{
                                    v-for="classification in classifications"
                                    v-bind:classification="classification.data"
                                    v-bind:classFormat="classification.params"
-                                   v-bind:uniqueName="classification.name">
+                                   v-bind:uniqueName="classification.name"
+                                   v-bind:info="classification.info">
         </classification-annotation>
         <classification-string-annotation v-if="dialogueNonEmpty"
                                           v-for="classString in classifications_strings"
                                           v-bind:classification_strings="classString.data"
                                           v-bind:uniqueName="classString.name"
-                                          v-bind:classes="classString.params">
+                                          v-bind:classes="classString.params"
+                                          v-bind:info="classString.info">
         </classification-string-annotation>
 
     </div>
