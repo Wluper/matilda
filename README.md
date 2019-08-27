@@ -34,6 +34,13 @@ LIDA was designed with three use cases in mind:
    annotations have been obatined, LIDA's inter-annotator disagreement resolution
    screen can be used to solve conflicts between annotators.
 
+### The annotator screen
+
+![Annotator Screen](https://github.com/Wluper/lida/tree/master/images/ann.png)
+
+
+### The inter-annotator screen
+![Inter-annotator Screen](https://github.com/Wluper/lida/tree/master/images/inn.png)
 
 ## Installation
 
@@ -121,6 +128,9 @@ You can optionally add a `description` field and a `model` field which provides
 a recommender for the label (see below for details on API requirement). You can
 see examples of all label types in `server/annotator_config.py`.
 
+### The Annotator Config file
+![Annotator Config](https://github.com/Wluper/lida/tree/master/images/ann_conf.png)
+
 ### LIDA Interannotator Tool
 
 All configuration changes that you would like to add to the Interannotator tool can be done in `server/interannotator_config.py`.
@@ -174,6 +184,9 @@ You can see more examples of this in `server/dummy_models.py` and see how they
 are integrated to LIDA's back end in the current `server/annotator_config.py`
 script.
 
+### Dummy Models
+![Dummy Models](https://github.com/Wluper/lida/tree/master/images/models.png)
+
 ## Uploading JSON File Format
 
 If you upload a JSON file representing a dialogue to be labelled, then it must
@@ -192,3 +205,6 @@ have the following properties:
   `usr` and should be the user's query as a string.
 
 An example of data in the correct form can be seen in `server/dummy_data.json`.
+
+### JSON Format Example
+![JSON format](https://github.com/Wluper/lida/tree/master/images/ann_conf.png)
