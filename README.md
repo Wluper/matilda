@@ -36,11 +36,11 @@ LIDA was designed with three use cases in mind:
 
 ### The annotator screen
 
-![Annotator Screen](https://github.com/Wluper/lida/tree/master/images/ann.png)
+![Annotator Screen](images/ann.png)
 
 
 ### The inter-annotator screen
-![Inter-annotator Screen](https://github.com/Wluper/lida/tree/master/images/inn.png)
+![Inter-annotator Screen](images/inn.png)
 
 ## Installation
 
@@ -129,7 +129,7 @@ a recommender for the label (see below for details on API requirement). You can
 see examples of all label types in `server/annotator_config.py`.
 
 ### The Annotator Config file
-![Annotator Config](https://github.com/Wluper/lida/tree/master/images/ann_conf.png)
+![Annotator Config](images/ann_conf.png)
 
 ### LIDA Interannotator Tool
 
@@ -185,7 +185,7 @@ are integrated to LIDA's back end in the current `server/annotator_config.py`
 script.
 
 ### Dummy Models
-<img align="left" src="images/models.png" width="200"/> ![Dummy Models](images/models.png)
+![Dummy Models](images/models.png)
 
 ## Uploading JSON File Format
 
@@ -207,4 +207,4 @@ have the following properties:
 An example of data in the correct form can be seen in `server/dummy_data.json`.
 
 ### JSON Format Example
-![JSON format](https://github.com/Wluper/lida/tree/master/images/ann_conf.png)
+![JSON format](images/ann_conf.png)
