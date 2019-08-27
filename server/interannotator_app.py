@@ -53,6 +53,7 @@ class InterAnnotatorApp(object):
         self.annotationFiles = MultiAnnotator(self.path)
         self.annotatorErrors = {}
         self.annotatorErrorsMeta = {}
+        
         # Setting the final endpoints
         self.setup_endpoints()
 
