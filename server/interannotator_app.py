@@ -557,8 +557,8 @@ class InterAnnotatorApp(object):
 
                 if predictions: #means there is discrepency
 
-                    error["usr"] = listOfDialogue[0][turnId]["usr"]
-                    error["sys"] = listOfDialogue[0][turnId]["sys"]
+                    error["usr"] = turnsData[turnId]["usr"][0]
+                    error["sys"] = turnsData[turnId]["sys"][0]
                     error["type"] = annotationType
                     error["name"] = annotationName
                     error["predictions"] = predictions
