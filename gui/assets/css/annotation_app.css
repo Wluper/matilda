@@ -311,13 +311,6 @@ WluperDark: 0e181e
 }
 
 
-.single-annotation-header {
-  display: grid;
-  grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
-                 / 4.5fr 1fr 4.5fr
-}
-
-
 /********************************
 * Input Box
 ********************************/
