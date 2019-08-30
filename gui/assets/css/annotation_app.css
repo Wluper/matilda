@@ -14,7 +14,6 @@
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
 
-    /*overflow: hidden;*/
 }
 
 
@@ -282,8 +281,6 @@ WluperDark: 0e181e
 
     transition: 0.3s;
 
-    /* -webkit-animation: adjust_size 0.3s forwards; /* Chrome, Safari, Opera */ */
-
 }
 
 .dialogue-turn:hover{
@@ -291,7 +288,6 @@ WluperDark: 0e181e
     color: #888888;
     margin: 0.5em 2em;
     cursor: pointer;
-    /* -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */ */
 }
 
 /* Chrome, Safari, Opera */
@@ -315,53 +311,6 @@ WluperDark: 0e181e
 }
 
 
-.single-annotation-header {
-  display: grid;
-  grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
-                 / 4.5fr 1fr 4.5fr
-}
-
-.info-button-container {
-    grid-area: info-button-zone;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.info-button {
-    margin-right: 10px;
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    height: 60%;
-    width: 30%;
-    overflow: hidden;
-    /*height: 50px;*/
-    /*width: 60%;*/
-    /*font-size: 18px;*/
-}
-
-.info-button:hover {
-    /*padding-left: 30px;
-    padding-right: 30px;*/
-    /*height: 85%;*/
-    width: 50%;
-
-}
-
-.info-button:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
-
-.text-container {
-    padding: 10px;
-}
-
 /********************************
 * Input Box
 ********************************/
@@ -379,18 +328,12 @@ WluperDark: 0e181e
     width: 40%;
     height: 2em;
 
-    /* background-color: magenta !important;
-
-    height: 10%;
-    margin: 1em; */
 }
 
 
 
 .input-button {
-    /* background-color: #12ff12 !important;
 
-    margin: 1em; */
     border-style: hidden;
     border-radius: 1px;
 
@@ -401,7 +344,6 @@ WluperDark: 0e181e
     margin-right: 1em;
     display: inline-block;
     cursor: pointer;
-    /* justify-content: center; */
 }
 
 #input-box{

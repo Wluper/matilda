@@ -212,7 +212,7 @@ Vue.component("resolutions", {
 
             temp =  this.annotationStyle[ this.error.name ];
             if (temp){
-                temp = temp[1]
+                temp = temp["labels"]
             }
 
             console.log("+++++ Annotation Format +++++");

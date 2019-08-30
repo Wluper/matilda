@@ -53,6 +53,7 @@ class InterAnnotatorApp(object):
         self.annotationFiles = MultiAnnotator(self.path)
         self.annotatorErrors = {}
         self.annotatorErrorsMeta = {}
+
         # Setting the final endpoints
         self.setup_endpoints()
 
@@ -311,7 +312,7 @@ class InterAnnotatorApp(object):
 
             totalAnnotations = 0
             errors = 0
-            alpha = 0
+            kappa = 0
             accuracy = 0
 
             dialogues = [ x[0] for x in self.annotationFiles.get_dialogues_metadata() ]
@@ -339,12 +340,12 @@ class InterAnnotatorApp(object):
 
                             errors += temp.get("errors")
                             totalAnnotations += totalLabels
-                            alpha += temp.get("alpha")
+                            kappa += temp.get("kappa")
                             accuracy += temp.get("accuracy")
 
             responseObject["errors"] = errors
             responseObject["total"] = totalAnnotations
-            responseObject["alpha"] = alpha / totalTurns
+            responseObject["kappa"] = kappa / totalTurns
             responseObject["accuracy"] = accuracy  / totalTurns
 
         else:
@@ -556,8 +557,8 @@ class InterAnnotatorApp(object):
 
                 if predictions: #means there is discrepency
 
-                    error["usr"] = listOfDialogue[0][turnId]["usr"]
-                    error["sys"] = listOfDialogue[0][turnId]["sys"]
+                    error["usr"] = turnsData[turnId]["usr"][0]
+                    error["sys"] = turnsData[turnId]["sys"][0]
                     error["type"] = annotationType
                     error["name"] = annotationName
                     error["predictions"] = predictions

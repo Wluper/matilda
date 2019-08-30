@@ -15,17 +15,17 @@ Vue.component("all-dialogues", {
           allDialogueMetadata: [],
           dragging: false,
           showModal: false,
-          name : ''
+          userName : ''
       }
   },
-  computed : {
-      userName : function(){
-          console.log("computing un");
-          var restOfName = this.name.split(".json")[0]
-          var userName = restOfName.split("USER_")[1]
-          return userName
-      }
-  },
+  // computed : {
+  //     userName : function(){
+  //         console.log("computing un");
+  //         var restOfName = this.name.split(".json")[0]
+  //         var userName = restOfName.split("USER_")[1]
+  //         return userName
+  //     }
+  // },
 
   mounted () {
       this.init();
@@ -39,7 +39,9 @@ Vue.component("all-dialogues", {
             backend.get_name()
                 .then( (response) => {
                     console.log();
-                    this.name = response;
+                    var restOfName = response.split(".json")[0]
+                    var userName = restOfName.split("USER_")[1]
+                    this.userName = userName;
 
                 });
 
@@ -171,6 +173,9 @@ Vue.component("all-dialogues", {
         console.log('---- CHANGING FILE NAME ----');
         console.log(event);
 
+        // for some reason needs manual updating...
+        this.userName = event.target.value;
+
         backend.put_name("USER_"+event.target.value+".json")
             .then( (response) => {
 
@@ -209,7 +214,8 @@ Vue.component("all-dialogues", {
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
-                link.setAttribute('download', 'dialogues.json')
+                fileName = "USER_" + this.userName + ".json"
+                link.setAttribute('download', fileName )
                 document.body.appendChild(link)
                 link.click();
             });

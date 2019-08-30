@@ -29,7 +29,6 @@
 
     height: 100%;
 
-    /*justify-self: center;*/
 }
 
 
@@ -43,7 +42,6 @@
 
     height: 100%;
 
-    /* justify-self: center; */
 }
 
 
@@ -52,8 +50,6 @@
     grid-column-end: -1;
     grid-row-start: 2;
     grid-row-end: 3;
-
-    /*background-color: green;*/
 
     height: 100%;
 }

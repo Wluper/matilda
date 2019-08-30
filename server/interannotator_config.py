@@ -160,10 +160,10 @@ def agreement_classification_score(listOfClassifications, totalLabels):
     countDict["total"] = totalLabel
 
 
-    #alpha is calculated with uniform random probabilty for the chance
+    #kappa is calculated with uniform random probabilty for the chance
     A0 = (1 / (totalLabels * totalLabels ) )
     Ae = errorCount / totalLabels
-    countDict["alpha"] = (Ae-A0) / (1-A0)
+    countDict["kappa"] = (Ae-A0) / (1-A0)
 
 
     #A02

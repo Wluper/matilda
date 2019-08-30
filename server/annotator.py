@@ -253,7 +253,14 @@ class DialogueAnnotator(object):
         """
         updates all the dialogues with a new dictionary
         """
-        self.__dialogues.update( newDialogues )
+        for dId, newDialogue in newDialogues.items():
+
+            temp = self.__dialogues.get( dId )
+            if temp:
+                newDialogue = newDialogue if len(newDialogue)>len(temp) else temp
+
+
+            self.__dialogues[ dId ] = newDialogue
 
         return True
 
