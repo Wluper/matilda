@@ -48,7 +48,6 @@ button:hover{
 
     top:0;
     height: auto;
-    /*width: 100%;*/
     margin: 0.5em;
     margin-left: 1em;
     background-color: inherit;
@@ -111,9 +110,7 @@ button:hover{
 }
 
 .logo{
-    /* margin: 0.6em 1em; */
     padding: 10px;
-    /* height: calc(100% - 1.em); */
     height: 80%;
 }
 .copyright {

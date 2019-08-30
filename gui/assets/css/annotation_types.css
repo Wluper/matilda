@@ -6,7 +6,6 @@
     background-color: #3d6582 !important;
     color: #aaaaaa;
     border-radius: 5px;
-    /*height: 30%;*/
     margin: 1em;
     padding-bottom: 10px;
     overflow-y: scroll;
@@ -100,15 +99,9 @@
     height: 60%;
     width: 30%;
     overflow: hidden;
-    /*height: 50px;*/
-    /*width: 60%;*/
-    /*font-size: 18px;*/
 }
 
 .info-button:hover {
-    /*padding-left: 30px;
-    padding-right: 30px;*/
-    /*height: 85%;*/
     width: 50%;
 
 }

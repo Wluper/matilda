@@ -14,7 +14,6 @@
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
 
-    /*overflow: hidden;*/
 }
 
 
@@ -282,8 +281,6 @@ WluperDark: 0e181e
 
     transition: 0.3s;
 
-    /* -webkit-animation: adjust_size 0.3s forwards; /* Chrome, Safari, Opera */ */
-
 }
 
 .dialogue-turn:hover{
@@ -291,7 +288,6 @@ WluperDark: 0e181e
     color: #888888;
     margin: 0.5em 2em;
     cursor: pointer;
-    /* -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */ */
 }
 
 /* Chrome, Safari, Opera */
@@ -332,18 +328,12 @@ WluperDark: 0e181e
     width: 40%;
     height: 2em;
 
-    /* background-color: magenta !important;
-
-    height: 10%;
-    margin: 1em; */
 }
 
 
 
 .input-button {
-    /* background-color: #12ff12 !important;
 
-    margin: 1em; */
     border-style: hidden;
     border-radius: 1px;
 
@@ -354,7 +344,6 @@ WluperDark: 0e181e
     margin-right: 1em;
     display: inline-block;
     cursor: pointer;
-    /* justify-content: center; */
 }
 
 #input-box{

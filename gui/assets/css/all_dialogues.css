@@ -185,12 +185,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*text-align: center;*/
-    /*display: grid;
-    grid-template: [row1-start] "label-zone" 1fr [row1-end]
-                   [row2-start] "." 0.5fr [row2-end]
-                   [row3-start] "input-zone" 1fr [row3-end]
-                   / 1fr;*/
 }
 
 #fileInputContainer {

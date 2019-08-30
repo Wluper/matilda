@@ -9,8 +9,6 @@
     height: 100%;
     margin: 0;
     display: grid !important;
-    /* grid-template-columns: minmax(0,3fr) minmax(0,1fr); */
-    /* grid-template-rows: minmax(0, 1fr) minmax(0, 9fr) minmax(0,11fr); */
 
 
     grid-template: [row1-start] "resolution-menu" 1fr [row1-end]
@@ -18,14 +16,10 @@
                    [row3-start] "resolutions" 9fr [row3-end]
                    / 1fr ;
 
-    /* grid-template: [row1-start] "resolution-menu resolution-menu" 1fr [row1-end]
-                   [row2-start] "error-list resolutions" 20fr [row2-end]
-                   / 1fr 10fr; */
 
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
 
-    /*overflow: hidden;*/
 }
 
 /*******************************************************************************
@@ -35,10 +29,6 @@
 *******************************************************************************/
 #resolution-menu{
 
-    /* grid-column-start: 1;
-    grid-column-end: -1; */
-    /* grid-row-start: 1;
-    grid-row-end: 2; */
     grid-area: resolution-menu;
 
     background-color: #0e181e;
@@ -62,10 +52,7 @@
 *******************************************************************************/
 
 #error-list{
-    /* grid-column-start: 1;
-    grid-column-end: -1; */
-    /* grid-row-start: 2;
-    grid-row-end: 3; */
+
     grid-area : error-list;
 
     background-color: #ffffff !important; /* +10 */
@@ -83,17 +70,6 @@
     color: #aaaaaa;
 }
 
-/* .error-element > .user-string-type{
-    color: #666666;
-    background-color: #eaeff2 !important;
-
-}
-
-.error-element:hover > .user-string-type{
-    color: #888888;
-    background-color: #5c99c4 !important;
-
-} */
 
 .error-element-selected{
     background-color: #3d6582 !important;
@@ -102,7 +78,6 @@
 
     height: auto;
     width: auto;
-    /* margin: 2%; */
     margin: 0.5em;
 
     padding-bottom: 0.5em;
@@ -149,20 +124,6 @@
                    / 1fr 0.5fr 1fr 3fr 2fr 1fr;
 }
 
-/* .error-element-body{
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template: [row1-start] "error-id" 1fr [row1-end]
-                   [row2-start] "turn-id" 1fr [row1-end]
-                   [row3-start] "annotation-type" 1fr [row3-end]
-                   [row4-start] "accepted" 1fr [row4-end]
-                   / 1fr;
-
-
-}
-*/
-
 
 
 
@@ -197,11 +158,9 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    /* color: #a2ffa0; */
     color: #62bf60;
     font-weight: bold;
-    /*text-shadow: 0px 0px 2px #a2ffa0;
-    box-shadow: 0px 0px 5px #a2ffa0;*/
+
 }
 
 .not-accepted-indicator {
@@ -210,7 +169,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    /* color: #ffa2a0; */
     color: #ef9290;
     font-weight: bold;
 }
@@ -226,10 +184,7 @@
 *******************************************************************************/
 
 #resolutions{
-    /* grid-column-start: 1;
-    grid-column-end: -1; */
-    /* grid-row-start: 3;
-    grid-row-end: 4; */
+
     grid-area : resolutions;
 
     background-color: #000000 !important; /* +10 */
@@ -240,13 +195,7 @@
     width: 100%;
 
     display: grid !important;
-    /* grid-template-rows: minmax(0,7fr) minmax(0,1fr);
-    grid-template-columns: minmax(0,3fr) minmax(0,2fr); */
 
-    /* grid-template: [row1-start] "input-data" 7fr [row1-end]
-                   [row2-start] "annotation-data" 7fr [row2-end]
-                   [row3-start] "accept-area" 1fr [row3-end]
-                   / 20fr ; */
 
 
     grid-template:  [row1-start] "input-data annotation-data" 7fr [row1-end]
@@ -256,10 +205,7 @@
 
 .left {
     background-color: #5c99c4 !important; /* +10 */
-    /* grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 1;
-    grid-column-end: 2; */
+
     grid-area: input-data;
 
     height: 100%;
@@ -269,20 +215,13 @@
 
 .right {
     background-color: #15232d !important; /* +10 */
-    /* grid-row-start: 1;
-    grid-row-end: -1;
-    grid-column-start: -2;
-    grid-column-end: -1; */
+
     grid-area: annotation-data;
 
     height: 100%;
 }
 
 #accept{
-    /* grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: -2;
-    grid-row-end: -1; */
 
     grid-area: accept-area;
 
@@ -302,7 +241,6 @@
     background-color: #ffffff !important;
     grid-area: accept-button;
 
-    /* margin: 1em;  */
     border-style: hidden;
 
     margin: 1% 0;
@@ -324,24 +262,6 @@
 *******************************************************************************/
 
 
-
-/* .string-type{
-    background-color: #eaeff2 !important;
-    color: #aaaaaa;
-    border-radius: 5px;
-
-    margin: 0.5em 8em;
-
-    padding-bottom: 0.5em;
-
-    overflow-y: scroll;
-    overflow-x: hidden;
-
-    transition: 0.3s;
-
-    -webkit-animation: adjust_size 0.3s forwards;
-
-} */
 
 .string-type{
     background-color: #eaeff2 !important;
@@ -366,7 +286,6 @@
     background-color: #1c2f3d !important;
     border-radius: 2px;
 
-    /* width: 100%; */
     height: 100%;
 
     grid-column-start: 1;
@@ -387,13 +306,8 @@
 
     height: 100%;
     width: 100%;
-    /* margin: 2% 5%; */
-    /* text-align: center; */
     grid-column-start: 2;
     grid-column-end: -1;
-/*
-    align-items: center;
-    justify-self: center; */
 
 }
 
@@ -405,7 +319,6 @@
     border-radius: 2px;
 
     height: 100%;
-    /* margin: 2% 5%; */
 
     grid-column-start: 2;
     grid-column-end: -1;
@@ -414,7 +327,6 @@
 
 
 .user-string-type-text input{
-    /* background-color: #1c2f3d!important; */
 
     display: inline-block;
     height: 100%;
@@ -487,8 +399,6 @@
 }
 
 .listed-dialogue {
-    /*background-color: blue;*/
-    /*padding: 10px;*/
     margin: 10px;
     color: white;
     transition: 0.1s;
@@ -497,8 +407,6 @@
 .dialogue-list-single-item-container{
     display: grid;
     grid-template: [row1-start] "info" [row1-end] / 1fr;
-    /*background-color: green;*/
-    /*padding:10px;*/
 }
 
 
@@ -534,8 +442,6 @@
     text-align: center;
     color: #a2ffa0;
     font-weight: bold;
-    /*text-shadow: 0px 0px 2px #a2ffa0;
-    box-shadow: 0px 0px 5px #a2ffa0;*/
 }
 
 .dialogue-id {
@@ -600,16 +506,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*text-align: center;*/
-    /*display: grid;
-    grid-template: [row1-start] "label-zone" 1fr [row1-end]
-                   [row2-start] "." 0.5fr [row2-end]
-                   [row3-start] "input-zone" 1fr [row3-end]
-                   / 1fr;*/
 }
 
 #fileInputContainer {
-    /*grid-area: input-zone;*/
     display: flex;
     justify-content: center;
     align-items: center;
