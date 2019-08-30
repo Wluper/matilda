@@ -3,7 +3,9 @@
 ********************************/
 
 Vue.component('classification-annotation',{
-    props: ["classification", "classFormat", "uniqueName", "turn", "info", "confidences"],
+
+    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences"],
+
 
     data () {
 
@@ -201,6 +203,7 @@ Vue.component('classification-annotation',{
 
 
 Vue.component('classification-string-annotation', {
+
     props: ["classification_strings", "uniqueName", "classes", "info", "confidences"],
 
     data () {
