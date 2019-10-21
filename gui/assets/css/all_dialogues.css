@@ -4,15 +4,31 @@
 ********************************************************************************
 *******************************************************************************/
 
+.inner-wrap {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    margin-top:50px;
+}
+
 .all-dialogues-container {
     overflow-y: scroll;
     padding-bottom: 50px;
 }
 
+.all-dialogues-container .btn-set li:last-of-type {
+    float:right;
+}
+
 .dialogue-list-title-container {
     display: grid;
     grid-template: [row1-start] "title-zone name-zone help-button-zone" [row1-end]
-                   / 1fr 1fr 1fr
+                   / 1fr 1fr 1fr;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px 24px;
 }
 
 .all-dialogues-list-title {
@@ -20,10 +36,28 @@
     color:white;
 }
 
+.all-dialogues-list-title h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+}
+
 .file-name-container{
     grid-area: name-zone;
     padding-left: 20px;
     color:white;
+    position:relative;
+}
+
+.file-name-container .inner {
+    color:#888;
+    position: absolute;
+    top: 50%;
+    /* left: 50%; */
+    transform: translate(0%, -50%);
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .help-button-container {
@@ -36,56 +70,66 @@
 }
 
 .help-button {
-    margin-right: 30px;
-    border-style: hidden;
-    border-radius: 1px;
-    cursor: pointer;
-    padding: 10px;
-    /*height: 50px;*/
-    /*width: 60%;*/
-    /*font-size: 18px;*/
+    margin-right: 10px;
 }
 
-.help-button:hover {
-    padding-left: 30px;
-    padding-right: 30px;
+.help-button:last-of-type {
+    margin-right:0;
 }
 
-.help-button:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
 
 .dialogue-list {
     list-style-type: none;
     margin-left: 0;
     padding-left: 0;
+
+    padding: 0;
+    margin: 0px -10px 35px;
+    overflow:hidden;
 }
 
 .listed-dialogue {
-    /*background-color: blue;*/
-    /*padding: 10px;*/
-    margin: 10px;
+    margin: 10px 0;
     color: white;
-    transition: 0.1s;
+    transition: ease 175ms all;
+    padding:0 10px;
+    width: 50%;
+    float: left;
+}
+
+.listed-dialogue:hover .dialogue-list-single-item-container {
+    border-left:5px solid #259af7;
 }
 
 .dialogue-list-single-item-container{
     display: grid;
-    grid-template: [row1-start] "del . info" [row1-end] / 1fr 0.2fr 22fr;
-    /*background-color: green;*/
-    /*padding:10px;*/
+    grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    /* background-color: green; */
+    /* padding: 10px; */
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+}
+
+.dialogue-list-single-item-container:hover {
+    box-shadow: 0 1px 5px rgba(0,0,0,0.09);
 }
 
 .del-dialogue-button {
     grid-area: del;
-    border: 3px solid red;
+    border: 1px solid red;
     color: red;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: white;
+    /* color: white; */
+    font-weight: bold;
+    font-size: 13px;
+    width: 87%;
+    height: 50%;
+    margin-top: 13px;
 }
 
 .del-dialogue-button:hover {
@@ -103,17 +147,19 @@
 .dialouge-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 2fr 6fr 1fr 1fr;
+    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 6fr 2fr 2fr 2fr;
     cursor: pointer;
-    background-color: #293e4c;
+    background-color: white;
+    color: #222;
+    padding: 5px;
+    transition: ease 250ms all;
+
 }
 
 .dialouge-info:hover {
-    cursor: pointer;
-    color: #ee59ff;
+ 
     /*border: 3px solid #ee59ff;*/
-    margin-left: 10px;
-    margin-right: 10px;
+
 }
 
 .dialouge-info:active {
@@ -121,22 +167,26 @@
 }
 
 .visited-indicator{
-    grid-area:visited;
+        grid-area: visited;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #a2ffa0;
+    color: #10c349;
     font-weight: bold;
-    /*text-shadow: 0px 0px 2px #a2ffa0;
-    box-shadow: 0px 0px 5px #a2ffa0;*/
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
 }
 
 .dialogue-id {
-    background-color: #15232d;
+    /* background-color: #3a9dd6; */
     grid-area: id;
     overflow-x: hidden;
-    padding:10px;
+    padding: 10px;
+    /* background: #3a9dd6; */
+    border-radius: 3px 0 0 3px;
 }
 
 .dialogue-num-turns {
@@ -147,6 +197,11 @@
     align-items: center;
     text-align: right;
     padding-right: 20px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
 }
 
 .add-button-container {
@@ -158,6 +213,7 @@
     justify-content: center;
 }
 
+/*
 .add-dialogue-button {
     border-style: hidden;
     border-radius: 1px;
@@ -166,6 +222,7 @@
     width: 60%;
     font-size: 18px;
 }
+*/
 
 .add-dialogue-button:hover {
     width: 70%;

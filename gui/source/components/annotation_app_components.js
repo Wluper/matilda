@@ -297,7 +297,7 @@ Vue.component('dialogue-menu',{
     template:
     `
     <div id="dialogue-menu">
-        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button">Back to All Dialgoues</button>
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">Back to All Dialgoues</button>
 
         <div class="dialogue-name">
 
@@ -340,14 +340,14 @@ Vue.component('dialogue-turns',{
     template:
     `
     <div id="dialogue-turns">
-
-        <dialogue-turn v-for="(turn, index) in turns"
+        <div class="overflow-hide">
+            <dialogue-turn v-for="(turn, index) in turns"
                        v-bind:primaryElementClass="primaryElementClass"
                        v-bind:turn="turn.string"
                        v-bind:currentId="currentId"
                        v-bind:myId="index + 1">
-        </dialogue-turn>
-
+            </dialogue-turn>
+        </div>
     </div>
     `
 })
@@ -378,13 +378,13 @@ Vue.component('dialogue-turn',{
     mounted(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+            //elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
         }
     },
     updated(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+            //elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
         }
     },
 
@@ -517,12 +517,17 @@ Vue.component('input-box',{
     template:
     `
     <div id="input-box">
-        <input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" placeholder="Enter New Query">
-        </input>
+        <ul>
+            <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" placeholder="Enter New Query">
+        </input></li>
+            <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">Enter</button></li>
+            <li><button class="input-button" v-on:click="save()">Save</button></li>
+        </ul>
+       
 
-        <button v-on:click="new_turn({target:{value:input}})" class="input-button">Enter</button>
+        
 
-        <button class="input-button" v-on:click="save()">Save</button>
+        
 
     </div>
     `

@@ -4,6 +4,14 @@
 ********************************************************************************
 *******************************************************************************/
 
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 html, body{
     margin: 0;
     height: 100%;
@@ -32,16 +40,70 @@ input:focus {
     outline: none;
 }
 
-button{
-    font-family: CoreSansNR35Light;
-    transition: 0.3s;
-    cursor: pointer;
+
+.btn-set {
+    padding:0;
+    margin:0;
+    list-style:none;
+    font-size:0;
 }
 
-button:hover{
-    background-color: #a1c45c;
-    cursor: pointer;
+.btn-set li {
+    display:inline-block;
+    margin-right:15px;
 }
+.btn-set li:last-of-type {
+    margin-right:0;
+}
+
+.btn {
+    width: auto !important;
+    padding:0 25px;
+    line-height:50px;
+    background:white;
+    border:none;
+    display:inline-block !important;
+    font-size:14px;
+    border-radius: 1px;
+    font-family: Montserrat;
+    transition: 0.175s;
+    cursor: pointer;
+    font-weight:700;
+    box-shadow: 0 1px #d1d1d3;
+    transition: ease 175ms all;
+}
+
+.btn:not(.btn-primary){
+    border:1px solid #e1e1e3;
+}
+
+.btn:hover {
+    color:#259af7;
+}
+
+
+
+.btn.btn-sm {
+    font-size: 12px;
+    line-height: 33px;
+    padding: 0 17px;
+}
+
+.btn-primary {
+    background: #259af7;
+    color: white;
+    box-shadow: 0 2px #1675c1;
+}
+
+.btn-primary:hover {
+
+    color:#0c314e;
+}
+
+.overflow-hide > div:first-of-type {
+   margin-top:30px;
+}
+
 
 .sticky{
     position:sticky;
@@ -109,10 +171,22 @@ button:hover{
     align-items:center;
 }
 
-.logo{
-    padding: 10px;
-    height: 80%;
+.header .inner-wrap {
+    margin-top:0;
+    height:100%;
 }
+
+.logo{
+    height: 54px;
+    width: 200px;
+    margin: 8px 0 8px 10px;
+}
+
+.logo img {
+    width: 100%;
+    vertical-align: top;
+}
+
 .copyright {
     font-size: .6875em;
     line-height: 4.7272727273em;

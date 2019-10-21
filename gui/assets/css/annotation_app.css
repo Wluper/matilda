@@ -3,17 +3,13 @@
 * ANNOTATION GRID
 ********************************/
 #annotation-app {
-    background-color: #ffffff;
-
+    background-color: #f1f1f3;
     height: 100%;
-
     display: grid !important;
-    grid-template-columns: minmax(0,3fr) minmax(0,1fr);
-    grid-template-rows: minmax(0, 1fr) minmax(0, 12fr) minmax(0,3fr);
-
-    min-height: 0;  /* NEW */
-    min-width: 0;   /* NEW; needed for Firefox */
-
+    grid-template-columns: minmax(0,0.8fr) minmax(0,3.2fr);
+    grid-template-rows: minmax(0, 1.4fr) minmax(0, 2.4fr) minmax(0,12fr);
+    min-height: 0;
+    min-width: 0;
 }
 
 
@@ -23,24 +19,27 @@
 * DIALOGUE MENU
 ********************************/
 #dialogue-menu {
-    grid-column-start: 1;
+    grid-column-start: 2;
     grid-column-end: -1;
     grid-row-start: 1;
     grid-row-end: 2;
 
-    background-color: #0e181e;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
 
     height: 100%;
 
-    color: white;
+    color: #222;
 
     overflow-y: scroll;
-
+    padding: 10px 24px;
     display: grid;
     grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
                    [row2-start] ". button-section . title-section . status-section" 5fr [row2-end]
                    [row3-start] ". . . . . ." 1fr [row3-end]
-                   / 0.05fr 1fr 0.05fr 1fr 2fr 1fr;
+                   / 0.0fr 0.9fr 0.05fr 1fr 2fr 1fr;
+
 
 }
 
@@ -71,6 +70,9 @@
 
 .is-saved {
     color: green;
+    display: block;
+    text-align: right;
+    width: 100%;
 }
 
 .is-not-saved {
@@ -78,18 +80,15 @@
 }
 
 #dialogue-turns{
-    background-color: #ffffff !important; /* +10 */
-    border-radius: 5px;
-
-    grid-column-start: 1;
+    grid-column-start: -1;
     grid-column-end: 2;
     grid-row-start: 2;
-    grid-row-end: 3;
-
-    height: 100%;
-
+    grid-row-end: 4;
+    padding: 50px 0;
     overflow-y: scroll;
 }
+
+
 
 
 
@@ -99,14 +98,15 @@
 
 #annotations {
     grid-column-start: -2;
-    grid-column-end: -1;
-    grid-row-start: 2;
-    grid-row-end: -1;
-
-    background-color: #15232d;
-
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 5;
     overflow-y: scroll;
-
+    padding: 14px 8px;
+    position:relative;
+    z-index: 10;
+    background:white;
+    overflow-x: hidden;
 }
 
 
@@ -115,13 +115,15 @@
 * INPUT BOX
 ********************************/
 #input-box {
-    grid-column-start: 1;
-    grid-column-end: -2;
-    grid-row-start: -2;
+    grid-column-start: -1;
+    grid-column-end: 2;
+    grid-row-start: -1;
     grid-row-end: -1;
-
-
-    background-color: #1c2f3d;
+    background-color: white;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+    z-index: 9;
 }
 
 /*
@@ -143,25 +145,31 @@ WluperDark: 0e181e
 ********************************/
 
 .turn-header {
+    margin-bottom:20px;
     display: grid;
-    grid-template: [row1-start] ". . . ." 5px [row1-end]
+    grid-template: [row1-start] ". . . ." 0px [row1-end]
                    [row2-start] ". turn-id del-turn-button ." 8fr [row2-end]
-                   [row3-start] ". . . ." 5px [row3-end] / 10px 9fr 1fr 10px;
+                   [row3-start] ". . . ." 0px [row3-end] / 0px 9fr 1fr 0px;
 }
 
 .active-turn-id {
     grid-area: turn-id;
+    font-family: Montserrat-Bold, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    color:#222;
 }
 
 .turn-deleter {
     grid-area: del-turn-button;
     border: 3px solid white;
     cursor: pointer;
+    border: 1px solid red;
+    color: red;
+    padding: 5px 0;
 }
 
 .turn-deleter:hover {
     background-color: red;
-    border: 3px solid red;
+
     color: white;
 }
 
@@ -173,26 +181,22 @@ WluperDark: 0e181e
 }
 
 .user-string-type-name{
-    background-color: #1c2f3d !important;
-    border-radius: 2px;
-
+    background-color: #ececee !important;
     /* width: 100%; */
     height: 100%;
-
     grid-column-start: 1;
     grid-column-end: 2;
-
     text-align: center;
-    color: white;
-
+    color: #222;
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .user-string-type-text{
     background-color: #ffffff!important;
-    border-radius: 2px;
+ 
 
     height: 100%;
     margin:0;
@@ -204,24 +208,25 @@ WluperDark: 0e181e
 
 
 .user-string-type-text input{
-    /* background-color: #1c2f3d!important; */
+   /*background-color: #1c2f3d!important; */
     display: inline-block;
     height: 100%;
     width: 100%;
     justify-self: center;
-    margin:0;
+    margin: 0;
     border-radius: 2px;
-    outline:none;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
+    border-left:none;
 }
 
 
 .user-string-type{
     background-color: #ffffff !important;
+    height: 45px;
+    margin: 0 0 10px;
     border-radius: 3px;
-
-    height: 2em;
-    margin: 0.3em 1em;
-
     display: grid !important;
     grid-template-columns: minmax(0,1fr) minmax(0,9fr);
 
@@ -230,16 +235,22 @@ WluperDark: 0e181e
     overflow: hidden;
 }
 
+.user-string-type:last-of-type {
+    margin:0;
+}
+
 
 
 .dialogue-turn-selected > .user-string-type{
     background-color: #3d6582 !important;
     color: #aaaaaa;
+
 }
 
 .dialogue-turn > .user-string-type{
     color: #666666;
     background-color: #eaeff2 !important;
+    opacity:0.4;
 
 }
 
@@ -249,45 +260,43 @@ WluperDark: 0e181e
 
 }
 
-.dialogue-turn-selected{
-    background-color: #3d6582 !important;
-    color: #aaaaaa;
-    border-radius: 5px;
-
-    height: auto;
-    margin: 0.5em;
-
-    padding-bottom: 0.5em;
-
-    overflow-y: scroll;
-    overflow-x: hidden;
-
+.dialogue-turn,
+.dialogue-turn-selected {
+    max-width: 75%;
+    margin: 0 auto 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff !important;
+    color: #666;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 1px;
     transition: 0.3s;
+    overflow: hidden;
+    height: auto;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: #d1d1d3;
+    cursor:pointer;
+}
+
+.dialogue-turn-selected{
+
+    border-left-color:#259af7;
 
 }
 
 .dialogue-turn{
-    background-color: #eaeff2 !important;
-    color: #aaaaaa;
-    border-radius: 5px;
-
-    height: auto;
-    margin: 0.5em 8em;
-
-    padding-bottom: 0.5em;
-
-    overflow-y: scroll;
-    overflow-x: hidden;
-
-    transition: 0.3s;
-
+   
+    
 }
 
 .dialogue-turn:hover{
-    background-color: #5c99c4 !important;
-    color: #888888;
-    margin: 0.5em 2em;
-    cursor: pointer;
+
+}
+
+.dialogue-turn .sticky {
+    padding:0;
+    margin:0 0 20px;
 }
 
 /* Chrome, Safari, Opera */
@@ -315,19 +324,52 @@ WluperDark: 0e181e
 * Input Box
 ********************************/
 
+#input-box{
+    text-align: center;
+    padding:20px 20px 20px 10px;
+}
+
+#input-box:focus{
+
+}
+
+#input-box ul {
+     padding:0;
+     margin:0;
+     list-style:none;
+     font-size:0;
+}
+
+#input-box ul li {
+    font-size:16px;
+    width:25%;
+    display:inline-block;
+    vertical-align: top;
+    padding:0 10px;
+}
+
+#input-box ul li:first-of-type {
+    width:50%;
+}
+
+#input-box button {
+    height: 43px;
+    background:#f1f1f3;
+    width:100%;
+    margin:0;
+}
+
 .new-input{
-    margin: auto;
-    margin-top: 1em;
-    margin-bottom: 1em;
+       margin: 0;
     display: block;
     text-align: center;
     border-radius: 3px;
     border-style: hidden;
-
-
-    width: 40%;
-    height: 2em;
-
+    width: 100%;
+    height: 43px;
+    border: 1px solid #e1e1e3;
+    text-align: left;
+    padding: 0 15px;
 }
 
 
@@ -346,13 +388,7 @@ WluperDark: 0e181e
     cursor: pointer;
 }
 
-#input-box{
-    text-align: center;
-}
 
-#input-box:focus{
-    text-align: left;
-}
 
 /********************************
 * Dialogue Turn ID
