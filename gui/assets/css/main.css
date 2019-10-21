@@ -27,13 +27,13 @@ input{
     font-size: 16px;
     outline:none;
     border:0;
-    transition: 0.2s;
+    transition: ease-in-out 0.2s;
 }
 input:hover{
-    background-color: #ffff8e;
+    background-color: #ffffb6;
 }
 input:focus {
-  background-color: #ffff00;
+  background-color:#ffffb6;
 }
 
 *:focus {
