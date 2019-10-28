@@ -154,7 +154,8 @@ WluperDark: 0e181e
 
 .active-turn-id {
     grid-area: turn-id;
-    font-family: Montserrat-Bold, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight:600;
     color:#222;
 }
 

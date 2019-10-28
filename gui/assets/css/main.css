@@ -114,7 +114,8 @@ input:focus {
     margin-left: 1em;
     background-color: inherit;
 
-    font-family: Montserrat-Bold, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight:600;
 }
 
 .space{
