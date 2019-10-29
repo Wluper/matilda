@@ -188,7 +188,7 @@
     grid-area : resolutions;
     border-radius: 5px;
     color: white;
-    height: 100%;
+    height:260px;
     width: 100%;
     display: grid !important;
     grid-template:  [row1-start] "input-data annotation-data" 6fr [row1-end]
