@@ -378,13 +378,13 @@ Vue.component('dialogue-turn',{
     mounted(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            elem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            elem.scrollIntoView({ block: "start", behavior: "smooth" });
         }
     },
     updated(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            elem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            elem.scrollIntoView({ block: "start", behavior: "smooth" });
         }
     },
 
