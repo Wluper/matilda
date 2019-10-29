@@ -127,7 +127,7 @@ Vue.component('classification-annotation',{
 
             <div class="single-annotation-header">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
-                    {{uniqueName}}
+                    {{uniqueName.replace(/_/g, ' ')}}
                 </div>
 
                 <div class="info-button-container">
@@ -362,7 +362,7 @@ Vue.component('classification-string-annotation', {
 
             <div class="single-annotation-header">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
-                    {{uniqueName}}
+                    {{uniqueName.replace(/_/g, ' ')}}
                 </div>
 
                 <div class="info-button-container">
