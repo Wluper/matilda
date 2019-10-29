@@ -26,9 +26,9 @@
     height: 100%;
     margin: 0;
     display: grid !important;
-    grid-template:  [row1-start] "resolution-menu" 1fr [row1-end]
-                    [row2-start] "error-list" 8fr [row2-end]
-                    [row3-start] "resolutions" 4fr [row3-end]
+    grid-template:  [row1-start] "resolution-menu" minmax(0,1fr) [row1-end]
+                    [row2-start] "error-list" minmax(0,8fr) [row2-end]
+                    [row3-start] "resolutions" minmax(0,6fr) [row3-end]
                                        / 1fr;
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
@@ -188,7 +188,7 @@
     grid-area : resolutions;
     border-radius: 5px;
     color: white;
-    height:260px;
+    height: 100%;
     width: 100%;
     display: grid !important;
     grid-template:  [row1-start] "input-data annotation-data" 6fr [row1-end]
@@ -232,7 +232,7 @@
 }
 
 .accept-button {
-  
+
     grid-area: accept-button;
     border-style: hidden;
     line-height:38px;
@@ -369,7 +369,7 @@
 
 .help-button {
     margin-right: 10px;
-    
+
     cursor: pointer;
 
     /*height: 50px;*/
