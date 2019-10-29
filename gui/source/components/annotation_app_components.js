@@ -378,13 +378,13 @@ Vue.component('dialogue-turn',{
     mounted(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            //elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+            elem.scrollIntoView({ block: "nearest", behavior: "smooth" });
         }
     },
     updated(){
         if (this.currentId==this.myId){
             var elem = this.$el
-            //elem.scrollIntoView({ inline: "nearest", behavior: "smooth" });
+            elem.scrollIntoView({ block: "nearest", behavior: "smooth" });
         }
     },
 
@@ -523,11 +523,11 @@ Vue.component('input-box',{
             <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">Enter</button></li>
             <li><button class="input-button" v-on:click="save()">Save</button></li>
         </ul>
-       
 
-        
 
-        
+
+
+
 
     </div>
     `
