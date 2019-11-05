@@ -181,12 +181,13 @@ Vue.component("main-admin", {
         </h2>
 
         <div class="help-button-container">
-            <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
-            <button class="help-button" @click="showAgreement = true">Inter-annotator Agreement</button>
+            <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">Download All Data</button>
+            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">Inter-annotator Agreement</button>
 
         </div>
     </div>
-
+    
+    <div class="inner-wrap">
     <ul class="dialogue-list">
 
       <li class="listed-dialogue"
@@ -229,29 +230,23 @@ Vue.component("main-admin", {
       </li>
 
     </ul>
-
-    <div class="upload-file-container">
-
-        <!-- <div id="fileInputLabelContainer">
-            Upload a Raw Text File to Process Into a Dialogue:
-        </div> -->
-
-        <div id="fileInputContainer">
-
-            <input type="file"
+     <ul class="btn-set">
+      <li><input type="file"
                    id="fileInput"
                    name="fileInput"
                    accept=".txt, .json"
                    v-on:change="open_file($event)">
 
             <label for="fileInput"
-                   id="fileInputLabel">
+                   id="fileInputLabel"
+                   class="btn btn-sm">
                    Upload File or Drag and Drop
-            </label>
-
-        </div>
-
+            </label></li>
+    </ul>
     </div>
+
+    
+   
 
   </div>
   `

@@ -6,16 +6,12 @@
 #mainContainer{
     display: grid !important;
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0,1fr) minmax(0, 11fr) minmax(0,1fr);
-
-    background-color: gray;
-
+    grid-template-rows: minmax(0,1fr) minmax(0, 10fr) minmax(0,0.7fr);
     height: 100%;
-
-    min-height: 0;  /* NEW */
-    min-width: 0;   /* NEW; needed for Firefox */
-
+    min-height: 0;
+    min-width: 0;
     overflow: hidden;
+    background-color: #f1f1f3;
 }
 
 
@@ -24,12 +20,12 @@
     grid-column-end: -1;
     grid-row-start: 1;
     grid-row-end: 2;
-
     background-color: #ffffff;
-
     height: 100%;
-
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    z-index:99;
 }
+
 
 
 #footer {

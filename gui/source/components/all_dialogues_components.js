@@ -231,97 +231,99 @@ Vue.component("all-dialogues", {
        v-on:dragover="handleDragOver($event)"
        v-on:dragleave="handleDragOut($event)"
        v-on:drop="handleDrop($event)">
+    
+    
+     <div class="dialogue-list-title-container">
 
-    <modal v-if="showModal" @close="showModal = false"></modal>
+          <div class="all-dialogues-list-title">
+              <h2 v-if="!(dragging)" >
+                  {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited
+              </h2>
 
-    <div class="dialogue-list-title-container">
-
-        <div class="all-dialogues-list-title">
-            <h2 v-if="!(dragging)" >
-                {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited
-            </h2>
-
-            <h2 v-else>
-                Drop Files Anywhere to Upload!
-            </h2>
-        </div>
-
-        <div class="file-name-container">
-            <span> USER_ </span>
-            <input id="fileNameInput"
-                    type="text"
-                   v-bind:value="userName"
-                   v-on:input="handle_file_name_change($event)">
-            </input>
-            <span> .json </span>
-
-        </div>
-
-        <div class="help-button-container">
-            <button class="help-button" @click="download_all_dialogues_from_server()">Download All Data</button>
-            <button class="help-button" @click="showModal = true">File Format Info</button>
-        </div>
-    </div>
-
-    <ul class="dialogue-list">
-
-      <li class="listed-dialogue"
-          v-for="(dat, index) in allDialogueMetadata"
-          v-bind:id="index">
-
-          <div class="dialogue-list-single-item-container">
-
-            <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
-              Del
-            </div>
-
-
-            <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
-                <div class="dialogue-id">
-                  {{dat.id}}
-                </div>
-
-                <div v-if="dialogue_already_visited(dat.id)"
-                     class="visited-indicator">
-                     Visited
-                </div>
-
-                <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
-            </div>
-
+              <h2 v-else>
+                  Drop Files Anywhere to Upload!
+              </h2>
           </div>
 
-      </li>
+          <div class="file-name-container">
+            <div class="inner">
+              <span> USER_ </span>
+              <input id="fileNameInput"
+                      type="text"
+                     v-bind:value="userName"
+                     v-on:input="handle_file_name_change($event)">
+              </input>
+              <span> .json </span>
+            </div>
+          </div>
 
-    </ul>
+          <div class="help-button-container">
+              <button class="help-button btn btn-sm" @click="showModal = true">File Format Info</button>
+              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">Download All Data</button>
+              
+          </div>
+      </div>
 
-    <div class="add-button-container">
-      <button class="add-dialogue-button" v-on:click="create_new_dialogue()">Add a New Dialogue</button>
+    <div class="inner-wrap">
+
+      <modal v-if="showModal" @close="showModal = false"></modal>
+
+      
+
+      <ul class="dialogue-list">
+
+        <li class="listed-dialogue"
+            v-for="(dat, index) in allDialogueMetadata"
+            v-bind:id="index">
+
+            <div class="dialogue-list-single-item-container">
+
+              <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
+                Delete
+              </div>
+
+
+              <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
+                  <div class="dialogue-id">
+                    {{dat.id}}
+                  </div>
+
+                  <div v-if="dialogue_already_visited(dat.id)"
+                       class="visited-indicator">
+                       Visited
+                  </div>
+
+                  <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
+              </div>
+
+            </div>
+
+        </li>
+
+      </ul>
+      
+      <ul class="btn-set">
+        <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">Add a New Dialogue</button></li>
+        <li>
+          
+              <input type="file"
+                     id="fileInput"
+                     name="fileInput"
+                     accept=".txt, .json"
+                     v-on:change="open_file($event)">
+
+              <label for="fileInput"
+                     id="fileInputLabel"
+                     class="btn btn-sm">
+                     Upload File or Drag and Drop
+              </label>
+        </li>
+      </ul>
+      
+
+  
+      
     </div>
-
-    <div class="upload-file-container">
-
-        <!-- <div id="fileInputLabelContainer">
-            Upload a Raw Text File to Process Into a Dialogue:
-        </div> -->
-
-        <div id="fileInputContainer">
-
-            <input type="file"
-                   id="fileInput"
-                   name="fileInput"
-                   accept=".txt, .json"
-                   v-on:change="open_file($event)">
-
-            <label for="fileInput"
-                   id="fileInputLabel">
-                   Upload File or Drag and Drop
-            </label>
-
-        </div>
-
-    </div>
-
   </div>
   `
 

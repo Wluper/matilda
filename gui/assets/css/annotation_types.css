@@ -3,13 +3,17 @@
 ********************************/
 
 .classification-annotation{
-    background-color: #3d6582 !important;
-    color: #aaaaaa;
-    border-radius: 5px;
+    /*background-color: #ffffff !important; */
+    color: #222;
+    border-radius: 0;
     margin: 1em;
-    padding-bottom: 10px;
-    overflow-y: scroll;
+    /* padding: 20px; */
+    overflow-y: hidden;
     overflow-x: hidden;
+    /* box-shadow: 0 1px 3px rgba(0,0,0,0.05); */
+    border-bottom: 1px solid #e1e1e3;
+    padding-bottom: 18px;
+    margin-bottom: 30px;
 }
 
 .collapsor {
@@ -17,7 +21,7 @@
 }
 
 .collapsor:hover {
-    color: white;
+    color: #888;
 }
 
 .collapsor hr {
@@ -58,17 +62,73 @@
     grid-area: inputZone;
 }
 
+.checkbox-wrapper {
+    font-size: 14px;
+    margin: 0 0 14px;
+    line-height: 1;
+}
 .checkbox {
-    margin-left: 1em;
     padding-bottom: 10px;
+    display:none;
+}
+
+.checkbox + label {
+    position:relative;
+    padding-left:20px;
+    cursor:pointer;
+}
+
+.checkbox + label:hover span {
+    color:#999;
+}
+
+.checkbox + label:before {
+    content: '';
+    display:block;
+    width:15px;
+    height:15px;
+    border:1px solid #e1e1e3;
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.checkbox+ label:after  {
+    content: '';
+    display:block;
+    width:7px;
+    height:7px;
+    background: #259af7;
+    position:absolute;
+    left:4px;
+    top:50%;
+    transform:translateY(-50%) scale(0);
+    transition:ease 175ms all;
+    transform-origin: center center;
+
+}
+
+.checkbox:checked + label:after {
+    transform:translateY(-50%) scale(1);
 }
 
 .annotation-header {
-    color: #aaaaaa;
+     color: #222;
+    position: absolute;
+    top: -8px;
+    left: -15px;
+    right: -15px;
+    padding: 16px 15px;
+    border-bottom: 1px solid #e6e6e6;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    display:none;
 }
 
 .bold-label {
-  color: #fff;
+  color: #222;
 }
 
 
@@ -77,11 +137,18 @@
 * Info button
 ********************************/
 .single-annotation-header {
-  display: grid;
-  grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
+    margin:0 0 15px;
+    display: grid;
+    grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
                  / 4.5fr 1fr 4.5fr
 }
 
+.single-annotation-header > div {
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    text-transform: capitalize;
+}
 .info-button-container {
     grid-area: info-button-zone;
     width: 100%;
@@ -92,18 +159,20 @@
 }
 
 .info-button {
-    margin-right: 10px;
+    margin-right: 0;
     border-style: hidden;
     border-radius: 1px;
     cursor: pointer;
-    height: 60%;
+    height: auto;
     width: 30%;
     overflow: hidden;
+    color: #999;
+    transition:ease 175ms all;
 }
 
 .info-button:hover {
-    width: 50%;
-
+    color:white;
+    background:#a2a2a2;
 }
 
 .info-button:active {

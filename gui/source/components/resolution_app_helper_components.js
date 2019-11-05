@@ -19,7 +19,7 @@ Vue.component("resolution-menu", {
     template:
     `
     <div id="resolution-menu">
-        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button">Back to All Dialgoues</button>
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">Back to All Dialgoues</button>
     </div>
     `
 })
@@ -79,13 +79,13 @@ Vue.component("error-list", {
     template:
     `
     <div id="error-list">
-
-        <error-element v-for="(meta, index) in metaList"
-                       v-bind:currentId="currentId"
-                       v-bind:myId="index + 1"
-                       v-bind:metaData="meta">
-        </error-element>
-
+        <div class="inner-wrap">
+            <error-element v-for="(meta, index) in metaList"
+                           v-bind:currentId="currentId"
+                           v-bind:myId="index + 1"
+                           v-bind:metaData="meta">
+            </error-element>
+        </div>
     </div>
     `
 });
@@ -393,7 +393,7 @@ Vue.component("accept", {
     template:
     `
     <div id="accept">
-        <button v-on:click="accept()" class="accept-button"> Accept </button>
+        <button v-on:click="accept()" class="accept-button btn btn-sm- btn-primary"> Accept </button>
     </div>
     `
 });

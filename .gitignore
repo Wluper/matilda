@@ -5,3 +5,5 @@ labelled_data.json
 LIDA_ANNOTATIONS
 GOLD*
 John.json
+/lib
+pyvenv.cfg

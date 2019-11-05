@@ -3,24 +3,39 @@
 * RESOLUTION APP LAYOUT
 ********************************************************************************
 *******************************************************************************/
-#resolution-app {
-    background-color: #ffffff;
 
+
+/* .foot-bar {
+    display:none;
+} */
+
+#mainContainer {
+    grid-template-rows: minmax(0,1fr) minmax(0, 10fr) minmax(0,0.7fr);
+}
+
+.inner-wrap {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    margin-top: 50px;
+}
+
+#resolution-app {
+    background-color: #f1f1f3;
     height: 100%;
     margin: 0;
     display: grid !important;
-
-
-    grid-template: [row1-start] "resolution-menu" 1fr [row1-end]
-                   [row2-start] "error-list" 8fr [row2-end]
-                   [row3-start] "resolutions" 8fr [row3-end]
-                   / 1fr ;
-
-
+    grid-template:  [row1-start] "resolution-menu" minmax(0,1fr) [row1-end]
+                    [row2-start] "error-list" minmax(0,8fr) [row2-end]
+                    [row3-start] "resolutions" minmax(0,6.5fr) [row3-end]
+                                       / 1fr;
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
 
 }
+
+
 
 /*******************************************************************************
 ********************************************************************************
@@ -28,20 +43,19 @@
 ********************************************************************************
 *******************************************************************************/
 #resolution-menu{
-
     grid-area: resolution-menu;
-
-    background-color: #0e181e;
-
     height: 100%;
-
-    color: white;
-
     display: grid;
     grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
                    [row2-start] ". button-section . . . ." 5fr [row2-end]
                    [row3-start] ". . . . . ." 1fr [row3-end]
                    / 0.05fr 1fr 0.05fr 1fr 2fr 1fr;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    height: 100%;
+    color: #222;
+    overflow-y: scroll;
 
 }
 
@@ -52,59 +66,44 @@
 *******************************************************************************/
 
 #error-list{
-
     grid-area : error-list;
-
-    background-color: #ffffff !important; /* +10 */
     border-radius: 5px;
-
     height: 100%;
-
     color: white;
     overflow-y:scroll !important
 }
 
-.error-element-selected > .error-element-id{
-    background-color: #3d6582 !important;
-    color: #aaaaaa;
-}
 
 
-.error-element-selected{
-    background-color: #3d6582 !important;
-    color: #aaaaaa;
-    border-radius: 5px;
 
-    height: auto;
-    width: auto;
-    margin: 0.5em;
 
-    padding-bottom: 0.5em;
 
-    transition: 0.3s;
-
-}
-
-.error-element{
-    background-color: #eaeff2 !important;
-    color: #888888;
+.error-element,
+.error-element-selected {
     font-weight: bold !important;
-    border-radius: 5px;
-
     height: auto;
-    margin: 0.5em 8em;
-
-    padding-bottom: 0.5em;
-
+    margin:10px 0;
     transition: 0.3s;
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+    color: #222;
+    padding:10px 0;
+    cursor:pointer;
+    font-size:14px;
 }
 
 .error-element:hover{
-    background-color: #5c99c4 !important;
-    color: #666666;
-    margin: 0.5em 2em;
-    cursor: pointer;
-    -webkit-animation: expand 0.3s forwards; /* Chrome, Safari, Opera */
+   border-left-color:#888;
+}
+
+.error-element-selected {
+    border-left-color:#259af7;
+}
+
+.error-element {
+
 }
 
 .error-element-body{
@@ -121,11 +120,14 @@
 
 
 .error-element-id{
-    grid-area : error-id;
+    grid-area: error-id;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     text-align: center;
+    padding-left: 15px;
+    font-weight: bold;
+    font-family: montserrat
 }
 
 .error-element-turn{
@@ -176,77 +178,69 @@
 ********************************************************************************
 *******************************************************************************/
 
+
+.classification-annotation {
+    padding: 9px;
+    margin-bottom: 0;
+}
+
 #resolutions{
-
     grid-area : resolutions;
-
-    background-color: #000000 !important; /* +10 */
     border-radius: 5px;
     color: white;
-
     height: 100%;
     width: 100%;
-
     display: grid !important;
-
-
-
     grid-template:  [row1-start] "input-data annotation-data" 6fr [row1-end]
-                    [row2-start] "accept-area annotation-data" 1fr [row2-end]
-                    / 3fr 2fr ;
+                    [row2-start] "accept-area annotation-data" 1.5fr [row2-end]
+                    / 3fr 2fr;
+    background: white;
+    border-top: 1px solid #e1e1e3;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.06);
+
 }
 
 .left {
-    background-color: #5c99c4 !important; /* +10 */
-
     grid-area: input-data;
-
     height: 100%;
 }
 
 
 
 .right {
-    background-color: #15232d !important; /* +10 */
-
+    background: #f1f1f3;
     grid-area: annotation-data;
-
     height: 100%;
+    border-left: 1px solid #e1e1e3;
+    overflow-y: scroll;
 }
 
 #accept{
 
     grid-area: accept-area;
 
-    background-color: #1c2f3d !important; /* +10 */
-
+    background-color: #ececee !important; /* +10 */
+        padding: 8px 0;
     height: 100%;
     margin: 0;
     color: white;
 
     display: grid !important;
-    grid-template: ". accept-button ." 2fr
+    grid-template: ". . accept-button " 2fr
 
-                    / 2fr 3fr 2fr ;
+                    / 2fr 3fr 2fr;
 }
 
 .accept-button {
-    background-color: #ffffff !important;
+
     grid-area: accept-button;
-
     border-style: hidden;
-
-    margin: 1% 0;
-    height: 98%;
-    width: 100%;
-    cursor: pointer;
+    line-height:38px;
+    margin-right: 10px;
 }
 
-.accept-button:hover{
-    background-color: #a1c45c;
-    margin: 1% 0;
-    cursor: pointer;
-}
+
+
 
 /*******************************************************************************
 ********************************************************************************
@@ -254,16 +248,18 @@
 ********************************************************************************
 *******************************************************************************/
 
-
+.string-type-data {
+    padding:20px;
+}
 
 .string-type{
-    background-color: #eaeff2 !important;
+    background-color: white !important;
     color: #aaaaaa;
 
     border-radius: 3px;
 
     height: 3em;
-    margin: 0.3em 1em;
+    margin: 0 0 10px;
 
     display: grid !important;
     grid-template-columns: minmax(0,1fr) minmax(0,9fr);
@@ -276,8 +272,8 @@
 
 
 .string-type-name{
-    background-color: #1c2f3d !important;
-    border-radius: 2px;
+    background-color: #999 !important;
+    border-radius:2px 0 0 2px ;
 
     height: 100%;
 
@@ -293,14 +289,16 @@
 }
 
 .string-type-text{
-    background-color: #ffffff!important;
-    color: #000000;
-    border-radius: 2px;
-
+    color: #aeaeae;
+    border-radius: 0 2px 2px 0;
     height: 100%;
     width: 100%;
     grid-column-start: 2;
     grid-column-end: -1;
+    border: 1px solid #e1e1e3;
+    line-height: 46px;
+    padding: 0 15px;
+    cursor: not-allowed;
 
 }
 
@@ -320,14 +318,15 @@
 
 
 .user-string-type-text input{
-
     display: inline-block;
     height: 100%;
     width: 100%;
     justify-self: center;
-    margin:0;
+    margin: 0;
     border-radius: 2px;
-    outline:none;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
 }
 
 /*******************************************************************************
@@ -344,13 +343,19 @@
 .dialogue-list-title-container {
     display: grid;
     grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
-                   / 1fr 1fr
+                   / 1fr 1fr;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px 24px;
 }
 
 .all-dialogues-list-title {
     grid-area: title-zone;
-    padding-left: 20px;
-    color:white;
+    padding:0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
 }
 
 .help-button-container {
@@ -363,64 +368,67 @@
 }
 
 .help-button {
-    margin-right: 30px;
-    border-style: hidden;
-    border-radius: 1px;
+    margin-right: 10px;
+
     cursor: pointer;
-    padding: 10px;
+
     /*height: 50px;*/
     /*width: 60%;*/
     /*font-size: 18px;*/
 }
 
-.help-button:hover {
-    padding-left: 30px;
-    padding-right: 30px;
+.help-button:last-of-type {
+    margin-right:0;
 }
 
-.help-button:active {
-    transition: 0s;
-    color:white;
-    background-color: inherit;
-    box-shadow: 0px 0px 10px #a1c45c;
-}
+
+
+
 
 .dialogue-list {
-    list-style-type: none;
+   list-style-type: none;
     margin-left: 0;
     padding-left: 0;
+    padding: 0;
+    margin: 0px -10px 35px;
+    overflow: hidden;
+
 }
 
 .listed-dialogue {
-    margin: 10px;
+    margin: 10px 0;
     color: white;
-    transition: 0.1s;
+    transition: ease 175ms all;
+    padding: 0 10px;
+    width: 50%;
+    float: left;
 }
 
 .dialogue-list-single-item-container{
     display: grid;
     grid-template: [row1-start] "info" [row1-end] / 1fr;
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+    color:#222;
 }
 
 
 .dialouge-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 2fr 5fr 1fr 2fr;
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 6fr 2fr 1fr 3fr;
     cursor: pointer;
-    background-color: #293e4c;
 }
 
-.dialouge-info:hover {
-    cursor: pointer;
-    color: #ee59ff;
-    /*border: 3px solid #ee59ff;*/
-    margin-left: 10px;
-    margin-right: 10px;
+.listed-dialogue:hover .dialogue-list-single-item-container {
+    border-left: 5px solid #259af7;
 }
 
 .dialouge-info:active {
     color: white;
+    border-color:#259af7;
 }
 
 .filler-space {
@@ -433,12 +441,15 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #a2ffa0;
+    color: #10c349;
     font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
 }
 
 .dialogue-id {
-    background-color: #15232d;
     grid-area: id;
     overflow-x: hidden;
     padding:10px;
@@ -455,6 +466,11 @@
     text-align: right;
     padding: 10px;
     padding-right: 20px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
 }
 
 .dialogue-num-turns:hover {
