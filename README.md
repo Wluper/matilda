@@ -213,7 +213,7 @@ An example of data in the correct form can be seen in `server/dummy_data.json`.
 
 ## Citation
 The official citation from the EMNLP 2019 conference in Hong Kong. Please cite this when using.
-
+```
 @inproceedings{collins-etal-2019-lida,
     title = "{LIDA}: Lightweight Interactive Dialogue Annotator",
     author = "Collins, Edward  and
@@ -229,3 +229,4 @@ The official citation from the EMNLP 2019 conference in Hong Kong. Please cite t
     pages = "121--126",
     abstract = "Dialogue systems have the potential to change how people interact with machines but are highly dependent on the quality of the data used to train them.It is therefore important to develop good dialogue annotation tools which can improve the speed and quality of dialogue data annotation. With this in mind, we introduce LIDA, an annotation tool designed specifically for conversation data. As far as we know, LIDA is the first dialogue annotation system that handles the entire dialogue annotation pipeline from raw text, as may be the output of transcription services, to structured conversation data. Furthermore it supports the integration of arbitrary machine learning mod-els as annotation recommenders and also has a dedicated interface to resolve inter-annotator disagreements such as after crowdsourcing an-notations for a dataset. LIDA is fully open source, documented and publicly available.[https://github.com/Wluper/lida] {--}{\textgreater} Screen Cast: https://vimeo.com/329824847",
 }
+```
