@@ -1,3 +1,5 @@
+[![Wluper](https://wluper.com/content/themes/main/static/gfx/wluper_logo.png)](https://wluper.com/)     
+
 # LIDA: Lightweight Interactive Dialogue Annotator
 
 **Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
