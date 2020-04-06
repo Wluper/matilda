@@ -2,9 +2,7 @@
 * AGREEMENT SCORES
 ********************************/
 
-//API_LINK_BASE = "http://dialogo.di.unipi.it:5001"
-//API_LINK_BASE = "127.0.0.1:5001"
-API_LINK_BASE = "http://192.168.1.45:5001"
+API_LINK_BASE = "127.0.0.1:5001"
 
 async function get_scores_async(){
 
