@@ -71,7 +71,7 @@ class InterAnnotatorApp(object):
             os.mkdir(self.path)
 
 
-    def run(self, port=5000):
+    def run(self, port=5001):
         """
         runs the app
         """
