@@ -17,6 +17,7 @@ guiMessages = {
       button_delete: "Delete",
       turns: "Turns",
       button_newDialogue: "Add a New Dialogue",
+      interfaceLanguage: "Interface Language:"
     },
     annotation_app: {
       turnId: "Turn Id:"
@@ -35,7 +36,9 @@ guiMessages = {
       button_fileFormatInfo: "Info sui formati",
       button_delete: "Cancella",
       turns: "Turni",
-      button_newDialogue: "Aggiungi un nuovo Dialogo",   
+      button_newDialogue: "Aggiungi un nuovo Dialogo",
+      interfaceLanguage: "Lingua Interfaccia:"  
+
     },
       annotation_app: {
         turnId: "Turno Id:"
@@ -54,6 +57,7 @@ var languageSection = new Vue({
       { name:"Italian", code:"it"}
     ],
     currentLanguage: "en",
+    guiMessages,
   },
   
   methods: {
@@ -67,7 +71,7 @@ var languageSection = new Vue({
 
   `
   	<div class="language-list-title-container">
-  		<label for="droplist_language_selector">Interface Language:</label>
+  		<label for="droplist_language_selector">{{ guiMessages.selected.lida.interfaceLanguage }}</label>
   		<select id="language_selector" class="droplist_language_selector" v-model="currentLanguage" @change="updateGui()">
   			<option v-for="options in gui_languages" v-bind:value="options.code">{{ options.name }}</option>
       </select>
