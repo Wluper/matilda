@@ -158,5 +158,3 @@ guiMessages = {
     ]
   },
 }
-
-guiMessages.selected = guiMessages.en;
