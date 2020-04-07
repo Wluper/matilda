@@ -260,6 +260,7 @@ Vue.component('dialogue-menu',{
     data () {
       return {
           editingTitle: false,
+          guiMessages,
       }
     },
 
@@ -297,7 +298,7 @@ Vue.component('dialogue-menu',{
     template:
     `
     <div id="dialogue-menu">
-        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">Back to All Dialgoues</button>
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
 
         <div class="dialogue-name">
 
@@ -316,8 +317,8 @@ Vue.component('dialogue-menu',{
         </div>
 
         <div class="saved-status">
-            <span v-if="changesSaved" class="is-saved">All Changes Saved</span>
-            <span v-else class="is-not-saved">Unsaved Changes</span>
+            <span v-if="changesSaved" class="is-saved">{{guiMessages.selected.annotation_app.allSaved}}</span>
+            <span v-else class="is-not-saved">{{guiMessages.selected.annotation_app.unsaved}}</span>
         </div>
     </div>
     `
@@ -360,7 +361,11 @@ Vue.component('dialogue-turn',{
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
     props : ["turn","currentId","myId", "primaryElementClass"],
-
+    data: function (){
+        return {
+            guiMessages
+        }
+    },
     methods :{
         turn_updated_string : function(event){
             annotationAppEventBus.$emit("turn_updated_string", event )
@@ -404,10 +409,10 @@ Vue.component('dialogue-turn',{
 
         <div class="turn-header">
             <div class="active-turn-id">
-                Turn Id: {{myId}}
+                {{guiMessages.selected.annotation_app.turnId}}: {{myId}}
             </div>
 
-            <button class="turn-deleter" v-on:click="delete_this_turn($event)">Delete</button>
+            <button class="turn-deleter" v-on:click="delete_this_turn($event)">{{guiMessages.selected.lida.button_delete}}</button>
         </div>
 
         <div v-for="stringType in turn" class="user-string-type">
@@ -424,7 +429,7 @@ Vue.component('dialogue-turn',{
 
     <div v-else v-on:click="update_id()" class="dialogue-turn">
         <div class="sticky">
-            Turn Id: {{myId}}
+            {{guiMessages.selected.annotation_app.turnId}}: {{myId}}
         </div>
 
         <div v-for="stringType in turn" class="user-string-type">
@@ -497,7 +502,8 @@ Vue.component('input-box',{
     props : ["message"],
     data: function (){
         return {
-            input : this.message
+            input : this.message,
+            guiMessages
         }
     },
     methods:{
@@ -518,10 +524,10 @@ Vue.component('input-box',{
     `
     <div id="input-box">
         <ul>
-            <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" placeholder="Enter New Query">
+            <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" :placeholder="guiMessages.selected.annotation_app.enterQuery">
         </input></li>
-            <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">Enter</button></li>
-            <li><button class="input-button" v-on:click="save()">Save</button></li>
+            <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">{{guiMessages.selected.annotation_app.enter}}</button></li>
+            <li><button class="input-button" v-on:click="save()">{{guiMessages.selected.annotation_app.save}}</button></li>
         </ul>
 
 

@@ -1,3 +1,7 @@
+/************************************
+* Language Config file
+*************************************/
+
 guiMessages = {
   en: {
     admin: {
@@ -16,7 +20,13 @@ guiMessages = {
       interfaceLanguage: "Interface Language:"
     },
     annotation_app: {
-      turnId: "Turn Id:"
+      turnId: "Turn Id",
+      enter: "Enter",
+      save: "Save",
+      enterQuery:"Enter New Query",
+      allSaved: "All Changes Saved",
+      unsaved: "Unsaved Changes",
+      backToAll: "Back to All Dialogues"
     }
   },
   it: {
@@ -37,7 +47,13 @@ guiMessages = {
 
     },
       annotation_app: {
-        turnId: "Turno Id:"
+        turnId: "Id Turno",
+        enter: "Invia",
+        save: "Salva",
+        enterQuery: "Nuova richiesta",
+        allSaved: "Modifiche salvate",
+        unsaved: "Cambiamenti non salvati",
+        backToAll: "Indietro"
     }
   },
 }
