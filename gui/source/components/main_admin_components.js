@@ -177,7 +177,7 @@ Vue.component("main-admin", {
 
     <div class="dialogue-list-title-container">
         <h2 v-if="!(dragging)" class="all-dialogues-list-title">
-            {{ allDialogueMetadata.length }} {{ guiLanguage.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiLanguage.selected.admin.visited }}
+            {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
         </h2>
 
         <h2 v-else class="all-dialogues-list-title">
@@ -185,8 +185,8 @@ Vue.component("main-admin", {
         </h2>
 
         <div class="help-button-container">
-            <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiLanguage.selected.admin.button_downloadAll }}</button>
-            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiLanguage.selected.admin.button_interAgreement }}</button>
+            <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
 
         </div>
     </div>
@@ -212,19 +212,19 @@ Vue.component("main-admin", {
                 <div v-if="dialogue_already_visited(dat[0])"
                      class="visited-indicator"
                      v-on:click="clicked_dialogue(dat[0])">
-                     {{ guiLanguage.selected.admin.visited }}
+                     {{ guiMessages.selected.admin.visited }}
                 </div>
 
                 <div v-if="show_annotators(dat[0])"
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiLanguage.selected.admin.annotators }}: {{ dat[1] }}
+                    {{ guiMessages.selected.admin.annotators }}: {{ dat[1] }}
                 </div>
 
                 <div v-else
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiLanguage.selected.admin.annotators }}: {{ dat[1].length }}
+                    {{ guiMessages.selected.admin.annotators }}: {{ dat[1].length }}
                 </div>
 
             </div>
@@ -244,7 +244,7 @@ Vue.component("main-admin", {
             <label for="fileInput"
                    id="fileInputLabel"
                    class="btn btn-sm">
-                   {{ guiLanguage.selected.admin.button_upload }}
+                   {{ guiMessages.selected.admin.button_upload }}
             </label></li>
     </ul>
     </div>

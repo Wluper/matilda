@@ -34,7 +34,7 @@ guiMessages = {
   },
     lida: {
       button_fileFormatInfo: "Info sui formati",
-      button_delete: "Cancella",
+      button_delete: "Elimina",
       turns: "Turni",
       button_newDialogue: "Aggiungi un nuovo Dialogo",
       interfaceLanguage: "Lingua Interfaccia:"  
