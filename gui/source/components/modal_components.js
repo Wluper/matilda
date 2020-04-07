@@ -16,7 +16,7 @@ Vue.component('modal', {
 
           <div class="modal-header">
             <slot name="header">
-              Dialogue File Format
+              {{guiMessages.selected.modal_formatInfo[0]}}
             </slot>
           </div>
 
@@ -24,11 +24,11 @@ Vue.component('modal', {
 
           <div class="modal-body">
             <slot name="body">
-            {{guiMessages.selected.modal_formatInfo[0]}}
-            <br><br>
             {{guiMessages.selected.modal_formatInfo[1]}}
             <br><br>
             {{guiMessages.selected.modal_formatInfo[2]}}
+            <br><br>
+            {{guiMessages.selected.modal_formatInfo[3]}}
               <ul>
                 <li v-for="segment in guiMessages.selected.modal_formatInfo_list" :key="segment">
                   {{ segment }}

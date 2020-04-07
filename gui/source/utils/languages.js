@@ -31,6 +31,9 @@ guiMessages = {
     modal_formatInfo:
     [ 
       `
+        Dialoque File Format
+      `,
+      `
         Files can be uploaded to the annotation system in one of two
         formats: either as a raw .txt file or as a JSON file in the
         correct format.
@@ -105,6 +108,9 @@ guiMessages = {
     },
     modal_formatInfo:
     [ 
+      `
+        Formato dei File Dialogo 
+      `,
       `
         I file possono essere caricati nel sistema in uno dei due formati:
         un file grezzo .txt oppure un file JSON nel formato richiesto.
