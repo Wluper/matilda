@@ -2,6 +2,11 @@
 * MODAL COMPONENT
 *************************************/
 Vue.component('modal', {
+  data() { 
+    return {
+      guiMessages
+    }
+  },
   template:
   `
   <transition name="modal">
@@ -19,39 +24,15 @@ Vue.component('modal', {
 
           <div class="modal-body">
             <slot name="body">
-              Files can be uploaded to the annotation system in one of two
-              formats: either as a raw .txt file or as a JSON file in the
-              correct format.
-              <br><br>
-              If you upload a .txt file, there are no format restrictions and
-              you will be taken to a screen to process it into a dialogue.
-              <br><br>
-              If you upload a JSON file, it must be in the correct format. This
-              format is as follows:
-
+            {{guiMessages.selected.modal_formatInfo[0]}}
+            <br><br>
+            {{guiMessages.selected.modal_formatInfo[1]}}
+            <br><br>
+            {{guiMessages.selected.modal_formatInfo[2]}}
               <ul>
-                  <li>
-                      File is a dict with keys as the names of each dialogue
-                      and values as lists.
-                  </li>
-                  <li>
-                      Each value is a list of dictionaries, where each
-                      dictionary contains a number of key-value pairs which
-                      are used to display the dialogue data for annotation.
-                  </li>
-                  <li>
-                      Some key-value pairs are compulsory in order to correctly
-                      display the dialogue.
-                  </li>
-                  <li>
-                      The key-value pairs which are compulsory are defined in
-                      the annotator_config.py file in the "server" folder.
-                  </li>
-                  <li>
-                      By default, the only required key-value pair in each turn
-                      is called "usr" and should be the user's query as
-                      a string.
-                  </li>
+                <li v-for="segment in guiMessages.selected.modal_formatInfo_list" :key="segment">
+                  {{ segment }}
+                </li>
               </ul>
 
             </slot>
@@ -84,7 +65,8 @@ Vue.component('modal', {
 Vue.component('agreement-modal', {
     data () {
         return {
-            scores : {}
+            scores : {},
+            guiMessages,
         }
     },
     mounted () {
@@ -114,7 +96,7 @@ Vue.component('agreement-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              Inter-annotator Agreement Scores
+              {{guiMessages.selected.modal_agreementScores[0]}}
             </slot>
           </div>
 
@@ -122,12 +104,12 @@ Vue.component('agreement-modal', {
 
           <div class="modal-body">
               <slot name="body">
-                  This represents a report for your data:
+                  {{guiMessages.selected.modal_agreementScores[1]}}
                   <br><br>
-                        Available Annotations: [query_type, policy_funcs, hotel_belief_state ]
+                        {{guiMessages.selected.modal_agreementScores[2]}} [query_type, policy_funcs, hotel_belief_state ]
                   <br><br>
                   <strong>
-                    Overall
+                    {{guiMessages.selected.modal_agreementScores[3]}}
                   </strong>
                   <ul>
                       <li v-for="(item, key, index) in scores">
