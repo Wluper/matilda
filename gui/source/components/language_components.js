@@ -2,6 +2,8 @@
 * Language Options
 *************************************/
 
+guiMessages.selected = guiMessages.en;
+
 var languageSection = new Vue({
   el:"#language-selector",
   
@@ -13,8 +15,22 @@ var languageSection = new Vue({
     currentLanguage: "en",
     guiMessages,
   },
+
+  mounted() {
+    this.detectLanguage();
+  },
   
   methods: {
+
+    detectLanguage() {
+      var browserLanguage = navigator.language.substr(0,2);
+      if (guiMessages[browserLanguage] == undefined)
+        guiMessages.selected = guiMessages.en;
+      else 
+        guiMessages.selected = guiMessages[browserLanguage];
+      this.currentLanguage = browserLanguage;
+    },
+
     updateGui(event) {
       console.log('---- CHANGING GUI LANGUAGE ----');
       guiMessages.selected = guiMessages[this.currentLanguage];
