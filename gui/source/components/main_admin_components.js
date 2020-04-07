@@ -160,10 +160,6 @@ Vue.component("main-admin", {
             });
     },
 
-    lang() {
-       return currentLanguage;
-    }
-
   },
   template:
   `
