@@ -4,6 +4,7 @@
 
 API_LINK_BASE = "127.0.0.1:5001"
 
+
 async function get_scores_async(){
 
     var dialogues = {}
