@@ -3,16 +3,40 @@ from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-app = Flask(__name__)
-client = MongoClient("localhost",27017)
+#********************************
+# CONSTANTS
+#********************************
+
+databaseLocation = "localhost" 
+databasePort = 27017
+
+app = Flask("_database_")
+client = MongoClient(databaseLocation,databasePort)
 db = client.mymongodb
-collection = db.test_collection
+collection = db.lida_annotations
 
-with open("../server/LIDA_ANNOTATIONS/Joe.json") as file:
-	annotations = json.load(file)
+#********************************
+# MAIN
+#********************************
 
-print("Elementi nella collezione",collection.find())
+#retrieve number of file
+#retrieve user id
 
-print("Found by matching",collection.count_documents(annotations))
+def insertFile(location,coll):
+	with open(location) as file:
+		annotations = json.load(file)
+	coll.insert_one(annotations)
+	verifyInsertion(annotations)
+
+def printCollection(coll):
+	for number,entry in enumerate(coll.find(),1):
+		print("\n",number,"\n",entry)
+
+def verifyInsertion(file):
+	print("Matching with file content",collection.count_documents(file))
+	print("Success")
 
 client.close()
+
+insertFile("server/LIDA_ANNOTATIONS/Joe.json",collection)
+printCollection(collection)
