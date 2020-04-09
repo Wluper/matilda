@@ -36,7 +36,6 @@ def verifyInsertion(file):
 	print("Matching with file content",collection.count_documents(file))
 	print("Success")
 
-client.close()
-
 insertFile("server/LIDA_ANNOTATIONS/Joe.json",collection)
 printCollection(collection)
+client.close()
