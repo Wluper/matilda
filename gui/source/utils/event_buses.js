@@ -7,5 +7,6 @@ const textSplitterEventBus = new Vue();
 
 const allDialoguesEventBus = new Vue();
 
+const databaseEventBus = new Vue();
 
 // EOF

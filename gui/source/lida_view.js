@@ -35,6 +35,9 @@ var mainApp = new Vue({
       allDialoguesEventBus.$on( "dialogue_selected", this.load_in_dialogue_to_annotate )
       allDialoguesEventBus.$on( "dialogue_deleted", this.remove_dialogue_from_visited_list )
       allDialoguesEventBus.$on( "loaded_text_file", this.handle_loaded_text_file )
+
+      //Database View Event Bus
+      databaseEventBus.$on( "database_selected", this.load_database_view )
   },
 
   methods: {
@@ -94,6 +97,13 @@ var mainApp = new Vue({
         this.splittingTextSourceFile = event.name;
     },
 
+    load_database_view: function (event) {
+        console.log('---- DATABASE VIEW ----');
+        console.log(event);
+        console.log(databaseEventBus);
+        this.status = 'database-view';
+    },
+
   },
 
   template:
@@ -106,6 +116,9 @@ var mainApp = new Vue({
                    v-bind:file="splittingFile"
                    v-bind:sourceFname="splittingTextSourceFile">
     </text-splitter>
+
+    <database-view v-else-if="status === 'database-view'">
+    </database-view>
 
     <all-dialogues v-else
                    v-bind:alreadyVisited="alreadyVisited">

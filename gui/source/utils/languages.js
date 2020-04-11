@@ -10,7 +10,8 @@ guiMessages = {
       button_downloadAll:"Download All Data",
       button_interAgreement:"Inter-annotator Agreement", 
       annotators:"Annotators", 
-      button_upload:"Upload File or Drag and Drop"
+      button_upload:"Upload File or Drag and Drop",
+      dropAnywhere: "Drop Files Anywhere to Upload!"
     },
     lida: {
       button_fileFormatInfo: "File Format Info",
@@ -78,7 +79,14 @@ guiMessages = {
       "This represents a report for your data.",
       "Available Annotations:",
       "Overall"
-    ]
+    ],
+      database: {
+        title: "Database Management",
+        location:"Database Location",
+        port:"Port",
+        saved: "Database updated",
+        update: "Upload all data"
+    }
   },
   it: {
     admin: {
@@ -87,7 +95,8 @@ guiMessages = {
       button_downloadAll:"Scarica tutti i dati",
       button_interAgreement:"Indice di concordanza", 
       annotators:"Annotatori", 
-      button_upload:"Carica o trascina un file"
+      button_upload:"Carica o trascina un file",
+      dropAnywhere: "Rilascia il file per caricarlo!"
   },
     lida: {
       button_fileFormatInfo: "Info sui formati",
@@ -155,6 +164,13 @@ guiMessages = {
       "Questo è un rapporto suoi tuoi dati.",
       "Annotazioni disponibili:",
       "Riepilogo"
-    ]
+    ],
+    database: {
+      title: "Gestione Database",
+      location: "Indirizzo",
+      port: "Porta",
+      saved: "Database aggiornato",
+      update: "Carica tutti i dati",
+    }
   },
 }

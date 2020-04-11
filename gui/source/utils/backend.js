@@ -2,8 +2,8 @@
 * CONSTANTS
 ********************************/
 
-API_LINK_BASE = `http://127.0.0.1:5000`
-
+API_LINK_BASE = "http://127.0.0.1:5001"
+//API_LINK_BASE = "http://dialogo.di.unipi.it:5001"
 
 /********************************
 * FILE NAME FUNCTIONS
@@ -11,7 +11,7 @@ API_LINK_BASE = `http://127.0.0.1:5000`
 
 async function get_name(){
 
-    var dialogues = {}
+   var dialogues = {}
 
     const apiLink = API_LINK_BASE+'/name'
     try {
@@ -329,10 +329,74 @@ async function RESTdialogues(method, id, params){
 
 }
 
+async function get_all_db_entries_ids() {
 
+  var entries_ids = {}
 
+  const apiLink = API_LINK_BASE+'/database'
 
+  try {
 
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+    console.log("=========== ALL DATABASE ENTRIES LIST ===========")
+    console.log(entriesList)
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
+async function update_all_db() {
+
+  var entries_ids = {}
+
+  const apiLink = API_LINK_BASE+'/database'
+
+  try {
+
+    var response = await axios.put(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+    console.log("=========== UPDATING ===========")
+    console.log(entriesList)
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
+async function del_db_entry_async(entryId) {
+
+    console.log("DELETING",entryId);
+
+    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+
+    try {
+
+        var response = await axios.delete( apiLink, entryId );
+        console.log('---- RESPONSE TO DEL ----', response);
+
+    } catch(error) {
+
+        console.log(error);
+    }
+};
 
 /********************************
 * Exporting
@@ -355,7 +419,10 @@ backend =
 
     post_empty_dialogue                         : post_empty_dialogue,
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
-    post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async
+    post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
+    get_all_db_entries_ids                      : get_all_db_entries_ids,
+    update_all_db                               : update_all_db,
+    del_db_entry_async                          : del_db_entry_async
 }
 
 

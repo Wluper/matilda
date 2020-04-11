@@ -17,6 +17,7 @@ from flask_cors import CORS
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 from text_splitter import convert_string_list_into_dialogue
+from database import DatabaseManagement
 
 
 ##############################################
@@ -44,6 +45,7 @@ class LidaApp(object):
 
         #AT THE MOMENT SINGLE FILE ONLY
         self.dialogueFile = DialogueAnnotator(self.path)
+        self.databaseFile = DatabaseManagement(self.path)
 
         # Setting the final endpoints
         self.setup_endpoints()
@@ -125,7 +127,40 @@ class LidaApp(object):
                             endpoint_name="/name",
                             methods=["GET", "PUT"],
                             handler= self.handle_name_resource  )
+        self.add_endpoint( \
+                            endpoint="/database",
+                            endpoint_name="/database",
+                            methods=["GET", "POST", "PUT"],
+                            handler= self.handle_database_resource )
+        self.add_endpoint( \
+                            endpoint="/database/<id>",
+                            endpoint_name="/database/<id>",
+                            methods=["DELETE"],
+                            handler= self.handle_database_resource )
+    
+    def handle_database_resource(self,id=None):
+        """
+        GET - Gets the database collection
 
+        PUT - Updates the database collection
+        """
+        responseObject = {
+            "status" : "success",
+        }
+
+        if id:
+
+            if request.method == "DELETE":
+                responseObject.update( self.databaseFile.deleteEntry(id=id) )
+        else:
+
+            if request.method == "GET":
+                responseObject.update( self.databaseFile.getDatabaseIds() )
+
+            if request.method == "PUT":
+                responseObject.update( self.databaseFile.updateDatabase() )
+
+        return jsonify(responseObject)
 
     def handle_name_resource(self):
         """

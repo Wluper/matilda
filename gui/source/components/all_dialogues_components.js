@@ -221,7 +221,11 @@ Vue.component("all-dialogues", {
                 document.body.appendChild(link)
                 link.click();
             });
-    }
+    },
+
+    clicked_database_button() {
+       databaseEventBus.$emit("database_selected")
+    },
 
   },
 
@@ -243,7 +247,7 @@ Vue.component("all-dialogues", {
               </h2>
 
               <h2 v-else>
-                  Drop Files Anywhere to Upload!
+                  {{ guiMessages.selected.admin.dropAnywhere }}
               </h2>
           </div>
 
@@ -262,6 +266,7 @@ Vue.component("all-dialogues", {
           <div class="help-button-container">
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
               <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+              <button class="help-button btn btn-sm" @click="clicked_database_button()">Database</button>
               
           </div>
       </div>

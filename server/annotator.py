@@ -26,6 +26,7 @@ from utils import load_json_file, save_json_file
 ################################################################################
 
 class MultiAnnotator(object):
+
     """
     The class that governs several DialogueAnnotator(s)
     """

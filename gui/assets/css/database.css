@@ -1,0 +1,91 @@
+/*******************************************************************************
+********************************************************************************
+* DATABASE SECTION
+********************************************************************************
+*******************************************************************************/
+
+#database-view {
+    overflow-y: scroll;
+    padding-bottom:50px;
+}
+
+.database-menu {
+    display:grid;
+    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1fr;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    color: #222;
+    padding:10px 24px;
+}
+
+.database-title {
+    grid-area: title-zone;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+}
+
+.config-container {
+    grid-area: config-container;
+    padding-left: 20px;
+    color: white;
+    position: relative;
+}
+
+.config-container .inner {
+    color:#888;
+    top: 50%;
+    transform: translate(0%, 50%);
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.collection-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    padding: 0;
+    margin: 0px -10px 35px;
+    overflow: hidden;
+}
+
+.listed-entry {
+    margin: 10px 0;
+    color: white;
+    transition: ease 175ms all;
+    padding: 0 10px;
+    width: 50%;
+    float: left;
+}
+
+.entry-list-single-item-container {
+    display: grid;
+    grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+}
+
+.entry-info {
+    grid-area: info;
+    display: grid;
+    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 9fr 2fr 2fr 2fr;
+    cursor: pointer;
+    background-color: white;
+    color: #222;
+    padding: 5px;
+    transition: ease 250ms all;
+}
+
+.entry-id {
+    /* background-color: #3a9dd6; */
+    grid-area: id;
+    overflow-x: hidden;
+    padding: 10px;
+    /* background: #3a9dd6; */
+    border-radius: 3px 0 0 3px;
+}

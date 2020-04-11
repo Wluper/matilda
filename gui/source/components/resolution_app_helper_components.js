@@ -5,11 +5,11 @@
 Vue.component("resolution-menu", {
     // props : [],
     //
-    // data () {
-    //     return {
-    //
-    //     }
-    // },
+    data () {
+        return {
+            guiMessages
+        }
+    },
 
     methods :{
         go_back_to_all_dialogues : function(){
