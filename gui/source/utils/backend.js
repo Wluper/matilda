@@ -3,7 +3,6 @@
 ********************************/
 
 API_LINK_BASE = "http://127.0.0.1:5000"
-//API_LINK_BASE = "http://dialogo.di.unipi.it:5001"
 
 /********************************
 * FILE NAME FUNCTIONS
@@ -398,6 +397,30 @@ async function del_db_entry_async(entryId) {
     }
 };
 
+async function get_all_entries_async() {
+
+  entriesList = []
+
+  const apiLink = API_LINK_BASE+'/database/download'
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+    console.log("=========== DOWNLOADING ===========")
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+}
+
 /********************************
 * Exporting
 ********************************/
@@ -422,7 +445,8 @@ backend =
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     update_all_db                               : update_all_db,
-    del_db_entry_async                          : del_db_entry_async
+    del_db_entry_async                          : del_db_entry_async,
+    get_all_entries_async                       : get_all_entries_async
 }
 
 

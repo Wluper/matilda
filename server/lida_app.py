@@ -137,16 +137,23 @@ class LidaApp(object):
                             endpoint_name="/database/<id>",
                             methods=["DELETE"],
                             handler= self.handle_database_resource )
-    
+        self.add_endpoint( \
+                            endpoint="/database/download",
+                            endpoint_name="/database/download",
+                            methods=["GET"],
+                            handler= self.handle_database_download )
+
+
     def handle_database_resource(self,id=None):
         """
         GET - Gets the database collection
 
         PUT - Updates the database collection
+
+        DELETE - Delete an entry in collection
+
         """
-        responseObject = {
-            "status" : "success",
-        }
+        responseObject = {}
 
         if id:
 
@@ -155,10 +162,22 @@ class LidaApp(object):
         else:
 
             if request.method == "GET":
-                responseObject.update( self.databaseFile.getDatabaseIds() )
+                responseObject = self.databaseFile.getDatabaseIds()
 
             if request.method == "PUT":
-                responseObject.update( self.databaseFile.updateDatabase() )
+                responseObject.update( self.databaseFile.updateDatabase(self.dialogueFile.get_file_name()) )
+
+        return jsonify(responseObject)
+
+
+    def handle_database_download(self,id=None):
+        """
+        GET - Gets the database collection
+        """
+        responseObject = {}
+
+        if request.method == "GET":
+            responseObject = self.databaseFile.downloadDatabase()
 
         return jsonify(responseObject)
 

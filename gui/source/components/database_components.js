@@ -38,39 +38,56 @@ Vue.component("database-view", {
         getAllEntriesFromServer() {
             backend.get_all_db_entries_ids()
                 .then( (response) => {
+                    console.log();
                     this.allEntryMetadata = response;
+                    console.log(this.allEntryMetadata);
           });
 
         },
 
         clicked_entry(clickedEntry) {
-            databaseEventBus.$emit("entry_selected", this.allEntryMetadata[clickedEntry].id)
+            databaseEventBus.$emit("entry_selected", this.allEntryMetadata[clickedEntry])
         },
 
         update_database() {
             backend.update_all_db()
                 .then( (response) => {
                     console.log(response);
-                    changesSaved = guiMessages.selected.database.saved
+                    this.changesSaved = "true";
                     this.getAllEntriesFromServer();
           });
         },
 
         deleteEntry(event) {
-        if (confirm("Are you sure you want to permanently delete this entry? This cannot be undone!")) {
-            console.log('-------- DELETING --------')
-            idToDelete = event.target.parentNode.parentNode.id;
-            backend.del_db_entry_async(idToDelete)
-                .then( () => {
-                    this.getAllEntriesFromServer();
-                });
+            if (confirm("Are you sure you want to permanently delete this entry? This cannot be undone!")) {
+                console.log('-------- DELETING --------')
+                idToDelete = event.target.parentNode.parentNode.id;
+                backend.del_db_entry_async(idToDelete)
+                    .then( () => {
+                        this.getAllEntriesFromServer();
+                    });
+                databaseEventBus.$emit('dialogue_deleted', idToDelete);
+            } else {
+                return
+            }
+        },
 
-            databaseEventBus.$emit('dialogue_deleted', idToDelete);
-        } else {
-            return
-        }
-    },
-},
+        download_database(event) {
+            backend.get_all_entries_async()
+                .then( (response) => {
+                    console.log()
+                    this.fileContent = response;
+                    let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    fileName = "Database.json";
+                    link.setAttribute('download', fileName );
+                    document.body.appendChild(link);
+                    link.click();
+                });
+            }
+        },
     template:
     `
         <div id="database-view">
@@ -82,17 +99,16 @@ Vue.component("database-view", {
                         <span>{{guiMessages.selected.database.port}}</span> <input v-model="db_port" placeholder="27017">
                     </div>
                 </div>
-                <div>
-                    <span v-if="changesSaved" class="is-saved">{{guiMessages.selected.database.saved}}</span>
-                </div>
                 <div class="help-button-container">
                     <button v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
+                    <button v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
             </div>
             <div class="inner-wrap">
                 <ul class="collection-list">
-                    <li class="listed-entry" v-for="(name,_id) in allEntryMetadata" v-bind:id="_id" v-if="_id !='status'">
+                 <template v-for='name in allEntryMetadata'>
+                    <li class="listed-entry" v-for="_id in name" v-bind:id="_id"">
                         <div class="entry-list-single-item-container">
                             <div class=del-dialogue-button v-on:click="deleteEntry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
@@ -104,7 +120,11 @@ Vue.component("database-view", {
                             </div>
                         </div>
                     </li>
+                </template>
                 </ul>
+                <div>
+                    <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
+                </div>
             </div>
         </div>
     `

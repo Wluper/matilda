@@ -92,7 +92,7 @@ guiMessages = {
     admin: {
       dataItems: "Dialoghi",
       visited: "Visitati",
-      button_downloadAll:"Scarica tutti i dati",
+      button_downloadAll:"Scarica i dati",
       button_interAgreement:"Indice di concordanza", 
       annotators:"Annotatori", 
       button_upload:"Carica o trascina un file",
@@ -170,7 +170,7 @@ guiMessages = {
       location: "Indirizzo",
       port: "Porta",
       saved: "Database aggiornato",
-      update: "Carica tutti i dati",
+      update: "Carica i dati",
     }
   },
 }

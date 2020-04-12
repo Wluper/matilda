@@ -257,7 +257,7 @@ Vue.component("all-dialogues", {
               <input id="fileNameInput"
                       type="text"
                      v-bind:value="userName"
-                     v-on:input="handle_file_name_change($event)">
+                     v-on:keyup.enter="handle_file_name_change($event)">
               </input>
               <span> .json </span>
             </div>

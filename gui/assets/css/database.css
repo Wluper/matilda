@@ -11,7 +11,7 @@
 
 .database-menu {
     display:grid;
-    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1fr;
+    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1.4fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
@@ -29,7 +29,7 @@
 
 .config-container {
     grid-area: config-container;
-    padding-left: 20px;
+    padding-left: 1px;
     color: white;
     position: relative;
 }
@@ -68,6 +68,10 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     transition: ease 175ms all;
     background: white;
+}
+
+.listed-entry:hover .entry-list-single-item-container {
+    border-left:5px solid red
 }
 
 .entry-info {

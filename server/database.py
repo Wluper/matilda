@@ -8,6 +8,7 @@ import sys
 import json
 import copy
 import json
+import datetime
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 import functools
 
@@ -32,7 +33,7 @@ databasePort = 27017
 app = Flask("_database_")
 client = MongoClient(databaseLocation,databasePort)
 db = client.mymongodb
-collection = db.lida
+collection = db.lida_database
 
 #********************************
 # MAIN
@@ -74,27 +75,30 @@ class DatabaseManagement(object):
 	def save(self):
 		save_json_file( obj=self.__entries, path=os.path.join( self.__filePath, self.__fileName ) )
 
-	def getDatabaseIds(self):
-		entries = {}
+	def downloadDatabase(self):
+		entries = []
 		collection_dict = collection.find()
-		print(collection.find())
-		for n,entry in enumerate(collection_dict,1):
-			entries = {str(entry["_id"]):({"_id" : str(entry["_id"]), "data" : str(entry)})}
-		#for key,value in collection_dict.next().items():
-		#	response.append({key,str(value)})
-		print(entries)
+		for index,entry in enumerate(collection_dict,1):
+			entries.append({"File "+str(index):entry})
+		print("Download \n",entries)
+		return entries
+
+	def getDatabaseIds(self):
+		entries = []
+		collection_dict = collection.find()
+		for entry in collection_dict:
+			print("Database Entry *************** \n",entry)
+			entries.append( { "_id":str(entry["_id"]) })
+		print("Response ***********\n",entries)
 		return entries
 
 	def deleteEntry(self,id):
-		print("delete request for",id)
+		print("Delete request for",id)
 		collection.delete_one({"_id":id})
 		return self.responseObject
 
-	def updateDatabase(self,entry=None):
-		#collection = collection #+username
-		with open(self.__DEFAULT_PATH+"/Sara.json") as file:
+	def updateDatabase(self,username):
+		with open(self.__DEFAULT_PATH+"/"+username["name"]) as file:
 			annotations = json.load(file)
-		collection.insert_one({"_id":"15","data":annotations})
+		collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":str(annotations)})
 		return self.responseObject
-
-#client.close()
