@@ -18,6 +18,7 @@ from annotator_config import Configuration
 from annotator import DialogueAnnotator
 from text_splitter import convert_string_list_into_dialogue
 from database import DatabaseManagement
+from login import loginFuncs
 
 
 ##############################################
@@ -46,6 +47,7 @@ class LidaApp(object):
         #AT THE MOMENT SINGLE FILE ONLY
         self.dialogueFile = DialogueAnnotator(self.path)
         self.databaseFile = DatabaseManagement(self.path)
+        self.loginClass = loginFuncs(self.path)
 
         # Setting the final endpoints
         self.setup_endpoints()
@@ -68,7 +70,7 @@ class LidaApp(object):
         """
         runs the app
         """
-        self.app.run(port=port)
+        self.app.run(port=port, host='0.0.0.0')
 
 
     def add_endpoint(self, endpoint=None, endpoint_name=None, methods=None, handler=None):
@@ -142,6 +144,11 @@ class LidaApp(object):
                             endpoint_name="/database/download",
                             methods=["GET"],
                             handler= self.handle_database_download )
+        self.add_endpoint( \
+                            endpoint="/login/<id>",
+                            endpoint_name="login/<id>",
+                            methods=["POST","PUT"],
+                            handler= self.handle_login )
 
 
     def handle_database_resource(self,id=None):
@@ -403,6 +410,25 @@ class LidaApp(object):
 
         return newDialogue
 
+
+    def handle_login(self,id):
+        """
+        GET - Gets the database collection
+        """
+        print("received",id)
+
+        responseObject = {
+            "status" : "success",
+        }
+
+        if request.method == "POST":
+            responseObject.update( self.loginClass.logIn(id) )
+
+        if request.method == "PUT":
+            responseObject.update( self.loginClass.signIn(id) )
+
+
+        return jsonify(responseObject)
 
 
 ##############################################

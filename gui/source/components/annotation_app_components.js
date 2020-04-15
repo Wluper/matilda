@@ -212,6 +212,7 @@ Vue.component("annotation-app", {
 
                     if (status == "success") {
                         this.allDataSaved = true;
+                        backend.update_db();
                     } else {
                         this.allDataSaved = false;
                         alert("Server error, dialogue not saved!")

@@ -30,7 +30,6 @@ from utils import load_json_file, save_json_file
 databaseLocation = "localhost" 
 databasePort = 27017
 
-app = Flask("_database_")
 client = MongoClient(databaseLocation,databasePort)
 db = client.mymongodb
 collection = db.lida_database
@@ -88,7 +87,7 @@ class DatabaseManagement(object):
 		collection_dict = collection.find()
 		for entry in collection_dict:
 			print("Database Entry *************** \n",entry)
-			entries.append( { "_id":str(entry["_id"]) })
+			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
 		print("Response ***********\n",entries)
 		return entries
 

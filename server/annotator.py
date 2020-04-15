@@ -185,7 +185,7 @@ class DialogueAnnotator(object):
         """
         return {"name": self.__fileName}
 
-    def change_file_name(self, newName, remove=True):
+    def change_file_name(self, newName, remove=False):
         """
         """
         oldFileName = self.__fileName

@@ -171,6 +171,14 @@ Vue.component("all-dialogues", {
         }
     },
 
+    log_out() {
+        let ask = confirm("Do you want to log out?");
+        if (ask == true) {
+            localStorage.removeItem("remember");
+            location.reload();
+        }
+    },
+
     handle_file_name_change : function(event){
         console.log('---- CHANGING FILE NAME ----');
         console.log(event);
@@ -254,10 +262,9 @@ Vue.component("all-dialogues", {
           <div class="file-name-container">
             <div class="inner">
               <span> USER_ </span>
-              <input id="fileNameInput"
+              <input readonly id="fileNameInput"
                       type="text"
-                     v-bind:value="userName"
-                     v-on:keyup.enter="handle_file_name_change($event)">
+                     v-bind:value="userName" @click="log_out()">
               </input>
               <span> .json </span>
             </div>

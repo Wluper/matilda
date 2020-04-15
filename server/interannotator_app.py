@@ -75,7 +75,7 @@ class InterAnnotatorApp(object):
         """
         runs the app
         """
-        self.app.run(port=port)
+        self.app.run(port=port, host='0.0.0.0')
 
 
     def add_endpoint(self, endpoint=None, endpoint_name=None, methods=None, handler=None):

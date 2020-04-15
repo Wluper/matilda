@@ -50,7 +50,7 @@ Vue.component("database-view", {
         },
 
         update_database() {
-            backend.update_all_db()
+            backend.update_db()
                 .then( (response) => {
                     console.log(response);
                     this.changesSaved = "true";
@@ -66,7 +66,7 @@ Vue.component("database-view", {
                     .then( () => {
                         this.getAllEntriesFromServer();
                     });
-                databaseEventBus.$emit('dialogue_deleted', idToDelete);
+                databaseEventBus.$emit('entry_deleted', idToDelete);
             } else {
                 return
             }
@@ -107,20 +107,23 @@ Vue.component("database-view", {
             </div>
             <div class="inner-wrap">
                 <ul class="collection-list">
-                 <template v-for='name in allEntryMetadata'>
-                    <li class="listed-entry" v-for="_id in name" v-bind:id="_id"">
+
+                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name._id">
                         <div class="entry-list-single-item-container">
                             <div class=del-dialogue-button v-on:click="deleteEntry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
-                            <div class="entry-info" v-on:click="clicked_entry(_id)">
+                            <div class="entry-info" v-on:click="clicked_entry(name._id)">
                                 <div class="entry-id">
-                                    ID: {{_id}}
+                                    ID: {{name._id}}
+                                </div>
+                                <div class="entry-date">
+                                    {{name.lastUpdate}}
                                 </div>
                             </div>
                         </div>
                     </li>
-                </template>
+
                 </ul>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>

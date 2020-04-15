@@ -212,4 +212,43 @@ input:focus {
     outline:none;
 }
 
+#login-view {
+    text-align:center;
+}
+
+.login_block {
+    display:inline-block;
+    width:30%;
+    background-color:white;
+    margin-bottom:10%;
+    margin-top:10%;
+    font-family:CoreSansNR35Light;
+    color:#888;
+    border: 1px solid #e6e6e6;
+}
+
+.login_form {
+    display:grid;
+    padding:10%;
+    padding-top:5%;
+}
+
+.login_input {
+    text-align:center;
+    font-size:20px;
+    line-height:1.7em;
+    margin-bottom:2%;
+    border:1px solid #e6e6e6;
+}
+
+.login_button {
+    font-family:CoreSansNR35Light;
+    padding:4%;
+    background-color:rgba(0,0,0,0.02);
+}
+
+#login-view form input  {
+    
+}
+
 /* EOF */

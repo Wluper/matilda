@@ -354,7 +354,7 @@ async function get_all_db_entries_ids() {
 
 }
 
-async function update_all_db() {
+async function update_db() {
 
   var entries_ids = {}
 
@@ -421,6 +421,30 @@ async function get_all_entries_async() {
   }
 }
 
+async function login(loginName) {
+
+  console.log("Username inserted",loginName);
+
+  const apiLink = API_LINK_BASE+`/login/${loginName}`;
+
+  try {
+
+    var response = await axios.post(apiLink, loginName);
+
+    console.log(response);
+
+    console.log("=========== LOGGIN IN ===========")
+    return response
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
 /********************************
 * Exporting
 ********************************/
@@ -444,9 +468,10 @@ backend =
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
     get_all_db_entries_ids                      : get_all_db_entries_ids,
-    update_all_db                               : update_all_db,
+    update_db                                   : update_db,
     del_db_entry_async                          : del_db_entry_async,
-    get_all_entries_async                       : get_all_entries_async
+    get_all_entries_async                       : get_all_entries_async,
+    login                                       : login
 }
 
 

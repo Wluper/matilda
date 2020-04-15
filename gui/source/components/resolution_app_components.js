@@ -87,7 +87,7 @@ Vue.component("resolution-app", {
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
         },
         init: function() {
-            // console.log(this.metaDataList)
+            //console.log(this.metaDataList)
             // Step One :: Get the Annotation Styles
             backend.get_annotation_style_async()
             .then( (response) => {

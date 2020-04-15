@@ -11,7 +11,7 @@
 
 .database-menu {
     display:grid;
-    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1.4fr;
+    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1.6fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
@@ -77,7 +77,7 @@
 .entry-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 9fr 2fr 2fr 2fr;
+    grid-template: [row1-start] "id . visited date" [row1-end] / 9fr 2fr 2fr 2fr;
     cursor: pointer;
     background-color: white;
     color: #222;
@@ -93,3 +93,17 @@
     /* background: #3a9dd6; */
     border-radius: 3px 0 0 3px;
 }
+
+.entry-date {
+    grid-area: date;
+    overflow-x: show;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;

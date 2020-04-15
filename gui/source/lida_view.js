@@ -14,7 +14,7 @@ var mainApp = new Vue({
 
   data() {
     return {
-      status: 'list-all',
+      status: 'logging',
       displayingDialogue: '',
       alreadyVisited: [],
       splittingFile: '',
@@ -38,9 +38,22 @@ var mainApp = new Vue({
 
       //Database View Event Bus
       databaseEventBus.$on( "database_selected", this.load_database_view )
+
+      //Check if someone already logged from this browser
+      this.check_login_cookie()
+
   },
 
   methods: {
+
+    check_login_cookie: function() {
+        if (localStorage["remember"] != undefined) {
+          this.logged = localStorage["remember"];
+          this.status = "list-all";
+        } else {
+          return
+        }
+    },
 
     load_in_dialogue_to_annotate: function (event) {
         this.displayingDialogue = event;
@@ -108,7 +121,11 @@ var mainApp = new Vue({
 
   template:
   `
-    <annotation-app v-if="status === 'annotating'"
+
+    <login-view v-if="status === 'logging'">
+    </login-view>
+
+    <annotation-app v-else-if="status === 'annotating'"
                     v-bind:dialogueId="displayingDialogue">
     </annotation-app>
 

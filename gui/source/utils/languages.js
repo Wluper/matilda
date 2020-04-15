@@ -85,8 +85,12 @@ guiMessages = {
         location:"Database Location",
         port:"Port",
         saved: "Database updated",
-        update: "Upload all data"
-    }
+        update: "Upload your data"
+    },
+      login: {
+        welcome: "Welcome",
+        send: "Log in",
+      }
   },
   it: {
     admin: {
@@ -170,7 +174,11 @@ guiMessages = {
       location: "Indirizzo",
       port: "Porta",
       saved: "Database aggiornato",
-      update: "Carica i dati",
+      update: "Carica i tuoi dati",
+    },
+    login: {
+      welcome:"Benvenuto",
+      send: "Accedi",
     }
   },
 }
