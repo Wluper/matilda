@@ -19,7 +19,7 @@ var mainApp = new Vue({
             status : 'listview',
             alreadyVisited: [],
             //reference to the language file
-            guiMessages,
+            guiMessages
       }
   },
 

@@ -23,81 +23,75 @@ from bson.objectid import ObjectId
 # == Local ==
 from utils import load_json_file, save_json_file
 
-#********************************
-# CONSTANTS
-#********************************
-
-databaseLocation = "localhost" 
-databasePort = 27017
-
-client = MongoClient(databaseLocation,databasePort)
-db = client.mymongodb
-collection = db.lida_database
-
-#********************************
-# MAIN
-#********************************
-
 class DatabaseManagement(object):
+
 	"""
-	container for database functions
+	CONSTANTS
 	"""
+	databaseLocation = "localhost" 
+	databasePort = 27017
+
+	client = MongoClient(databaseLocation,databasePort)
+	db = client.mymongodb
+	collection = db.lida_database
+	users = db.lida_users
+
+	"""
+	MAIN PART
+	"""
+
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 
 	responseObject = []
+	
+	def readDatabase(coll,attribute,string):
 
-	def __init__(self, filePath, fileName=None, entries=None):
-		#self.filePath = filePath
-		self.set_entries(entries)
-		self.set_file( filePath, fileName )
-		self.addedEntries = 0
+		print("Searching for '"+string+"' as field value of '"+attribute+"' in collection"+coll)
 
-	def get_file_name(self):
-		return { "name":self.__fileName}
+		entries = []
+		collection_selected = DatabaseManagement.collection
 
-	def set_entries( self, entries=None ):
-		self.__entries = entries if entries else {}
+		if coll == "users":
+			collection_selected = DatabaseManagement.users
 
-	def set_file( self, filePath, fileName=None):
+		collection_selected.find({attribute:string})
 
-		self.__filePath = filePath
+		print("Result:",entries)
 
-		if fileName:
-			self.__fileName = fileName
-			try:
-				self.__entries = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
-			except FileNotFoundError:
-				save_json_file( obj=self.__entries, path=os.path.join( self.__filePath, self.__fileName ) )
-			else:
-				self.__fileName = DatabaseManagement.__DEFAULT_FILENAME
-
-	def save(self):
-		save_json_file( obj=self.__entries, path=os.path.join( self.__filePath, self.__fileName ) )
+		return entries
 
 	def downloadDatabase(self):
+
 		entries = []
-		collection_dict = collection.find()
+
+		collection_dict = DatabaseManagement.collection.find()
 		for index,entry in enumerate(collection_dict,1):
 			entries.append({"File "+str(index):entry})
 		print("Download \n",entries)
+
 		return entries
 
 	def getDatabaseIds(self):
+
 		entries = []
-		collection_dict = collection.find()
+
+		collection_dict = DatabaseManagement.collection.find()
 		for entry in collection_dict:
 			print("Database Entry *************** \n",entry)
 			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
 		print("Response ***********\n",entries)
+
 		return entries
 
 	def deleteEntry(self,id):
-		print("Delete request for",id)
-		collection.delete_one({"_id":id})
-		return self.responseObject
+
+		DatabaseManagement.collection.delete_one({"_id":id})
+		return DatabaseManagement.responseObject
 
 	def updateDatabase(self,username):
-		with open(self.__DEFAULT_PATH+"/"+username["name"]) as file:
+
+		with open(DatabaseManagement.__DEFAULT_PATH+"/"+username["name"]) as file:
 			annotations = json.load(file)
-		collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":str(annotations)})
-		return self.responseObject
+
+		DatabaseManagement.collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":str(annotations)})
+		return DatabaseManagement.responseObject

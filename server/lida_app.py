@@ -18,7 +18,7 @@ from annotator_config import Configuration
 from annotator import DialogueAnnotator
 from text_splitter import convert_string_list_into_dialogue
 from database import DatabaseManagement
-from login import loginFuncs
+from login import LoginFuncs
 
 
 ##############################################
@@ -46,8 +46,9 @@ class LidaApp(object):
 
         #AT THE MOMENT SINGLE FILE ONLY
         self.dialogueFile = DialogueAnnotator(self.path)
-        self.databaseFile = DatabaseManagement(self.path)
-        self.loginClass = loginFuncs(self.path)
+
+        # Container for Database Function
+        self.databaseFuncs = DatabaseManagement
 
         # Setting the final endpoints
         self.setup_endpoints()
@@ -165,14 +166,14 @@ class LidaApp(object):
         if id:
 
             if request.method == "DELETE":
-                responseObject.update( self.databaseFile.deleteEntry(id=id) )
+                responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
         else:
 
             if request.method == "GET":
-                responseObject = self.databaseFile.getDatabaseIds()
+                responseObject = DatabaseManagement.getDatabaseIds(self)
 
             if request.method == "PUT":
-                responseObject.update( self.databaseFile.updateDatabase(self.dialogueFile.get_file_name()) )
+                responseObject.update( DatabaseManagement.updateDatabase(self,self.dialogueFile.get_file_name()) )
 
         return jsonify(responseObject)
 
@@ -184,7 +185,7 @@ class LidaApp(object):
         responseObject = {}
 
         if request.method == "GET":
-            responseObject = self.databaseFile.downloadDatabase()
+            responseObject = DatabaseManagement.downloadDatabase(self)
 
         return jsonify(responseObject)
 
@@ -413,19 +414,15 @@ class LidaApp(object):
 
     def handle_login(self,id):
         """
-        GET - Gets the database collection
+        Check if user login is permitted
         """
-        print("received",id)
-
-        responseObject = {
-            "status" : "success",
-        }
+        responseObject = {}
 
         if request.method == "POST":
-            responseObject.update( self.loginClass.logIn(id) )
+            responseObject.update( LoginFuncs.logIn(self,id) )
 
         if request.method == "PUT":
-            responseObject.update( self.loginClass.signIn(id) )
+            responseObject.update( LoginFuncs.create(self,id) )
 
 
         return jsonify(responseObject)

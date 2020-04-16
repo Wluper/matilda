@@ -35,21 +35,41 @@ var mainApp = new Vue({
       allDialoguesEventBus.$on( "dialogue_selected", this.load_in_dialogue_to_annotate )
       allDialoguesEventBus.$on( "dialogue_deleted", this.remove_dialogue_from_visited_list )
       allDialoguesEventBus.$on( "loaded_text_file", this.handle_loaded_text_file )
+      allDialoguesEventBus.$on( "update_username", this.update_username )
 
       //Database View Event Bus
       databaseEventBus.$on( "database_selected", this.load_database_view )
 
-      //Check if someone already logged from this browser
+      //Check if already logged
       this.check_login_cookie()
 
   },
 
   methods: {
 
+    update_username: function(event) {
+      console.log("received")
+        let nuovoNome = event;
+        backend.put_name("USER_"+nuovoNome+".json")
+        .then( (response) => {
+          if (response) {
+            console.log("Name Changed");
+          } else {
+            alert('Server error, name not changed.');
+          }
+            this.setCookie(nuovoNome);
+            this.status = "list-all"
+        })
+    },    
+
+    setCookie: function(nuovoNome) {
+      console.log("Log in name set in cookies");
+      localStorage.setItem("remember", nuovoNome);
+    },
+
     check_login_cookie: function() {
         if (localStorage["remember"] != undefined) {
-          this.logged = localStorage["remember"];
-          this.status = "list-all";
+          this.update_username(localStorage["remember"])
         } else {
           return
         }
