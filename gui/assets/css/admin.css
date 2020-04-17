@@ -117,7 +117,7 @@
     left:-8px;
 }
 
-.user-id span {
+.user-id span, .user-password span {
     display:block;
     font-size:10px;
     font-weight: bold;

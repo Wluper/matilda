@@ -64,7 +64,7 @@ Vue.component("database-view", {
           });
         },
 
-        deleteEntry(event) {
+        delete_entry(event) {
             if (confirm("Are you sure you want to permanently delete this entry? This cannot be undone!")) {
                 console.log('-------- DELETING --------')
                 idToDelete = event.target.parentNode.parentNode.id;
@@ -116,7 +116,7 @@ Vue.component("database-view", {
 
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name._id">
                         <div class="entry-list-single-item-container">
-                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="deleteEntry($event)">
+                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="delete_entry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                             <div class="entry-info" v-on:click="clicked_entry(name._id)">
