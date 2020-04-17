@@ -44,9 +44,7 @@ class DatabaseManagement(object):
 
 	responseObject = []
 	
-	def readDatabase(coll,attribute,string):
-
-		print("Searching for '"+string+"' as field value of '"+attribute+"' in collection"+coll)
+	def readDatabase(coll,attribute,string=None):
 
 		entries = []
 		collection_selected = DatabaseManagement.collection
@@ -54,11 +52,31 @@ class DatabaseManagement(object):
 		if coll == "users":
 			collection_selected = DatabaseManagement.users
 
-		collection_selected.find({attribute:string})
+		if string is not None:
+			query = collection_selected.find({attribute:string})
+		else:
+			query = collection_selected.find()
 
-		print("Result:",entries)
+		for name in query:
+			entries.append(name)
 
 		return entries
+
+
+	def checkDatabase(coll,attribute,string=None):
+
+		entries = {}
+		collection_selected = DatabaseManagement.collection
+
+		if coll == "users":
+			collection_selected = DatabaseManagement.users
+
+		if string is not None:
+			query = collection_selected.find({attribute:string})
+		else:
+			query = collection_selected.find()
+
+		return query
 
 	def downloadDatabase(self):
 
@@ -76,6 +94,7 @@ class DatabaseManagement(object):
 		entries = []
 
 		collection_dict = DatabaseManagement.collection.find()
+		print(collection_dict)
 		for entry in collection_dict:
 			print("Database Entry *************** \n",entry)
 			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
@@ -83,9 +102,14 @@ class DatabaseManagement(object):
 
 		return entries
 
-	def deleteEntry(self,id):
+	def deleteEntry(self,id,collection):
 
-		DatabaseManagement.collection.delete_one({"_id":id})
+		if collection != "users":
+			DatabaseManagement.collection.delete_one({"_id":id})
+		else:
+			DatabaseManagement.users.delete_one({"_id":id})
+
+		DatabaseManagement.responseObject = { "status":"success" }
 		return DatabaseManagement.responseObject
 
 	def updateDatabase(self,username):
@@ -95,3 +119,4 @@ class DatabaseManagement(object):
 
 		DatabaseManagement.collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":str(annotations)})
 		return DatabaseManagement.responseObject
+

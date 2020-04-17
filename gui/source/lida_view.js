@@ -49,22 +49,22 @@ var mainApp = new Vue({
 
     update_username: function(event) {
       console.log("received")
-        let nuovoNome = event;
-        backend.put_name("USER_"+nuovoNome+".json")
+        let newName = event;
+        backend.put_name("USER_"+newName+".json")
         .then( (response) => {
           if (response) {
             console.log("Name Changed");
           } else {
             alert('Server error, name not changed.');
           }
-            this.setCookie(nuovoNome);
+            this.setCookie(newName);
             this.status = "list-all"
         })
     },    
 
-    setCookie: function(nuovoNome) {
+    setCookie: function(newName) {
       console.log("Log in name set in cookies");
-      localStorage.setItem("remember", nuovoNome);
+      localStorage.setItem("remember", newName);
     },
 
     check_login_cookie: function() {

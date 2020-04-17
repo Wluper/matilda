@@ -37,6 +37,14 @@ Vue.component("main-admin", {
 
   methods: {
 
+    clicked_users_button() {
+        allDialoguesEventBus.$emit("usersManagement_clicked");
+    },
+
+    clicked_database_button() {
+        allDialoguesEventBus.$emit("database_clicked");
+    },
+
     handleDragOver(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -183,7 +191,8 @@ Vue.component("main-admin", {
         <div class="help-button-container">
             <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
             <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
-
+            <button class="help-button btn btn-sm" @click="clicked_users_button()">{{ guiMessages.selected.admin.userButton }}</button>
+            <button class="help-button btn btn-sm" @click="clicked_database_button()">{{ guiMessages.selected.database.title}}</button>
         </div>
     </div>
     

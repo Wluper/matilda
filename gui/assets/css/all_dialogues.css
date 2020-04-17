@@ -291,3 +291,7 @@
                                   supported by Chrome and Opera */
     cursor: pointer
 }
+
+.entry-list-single-item-container {
+    grid-template: none !important;
+}

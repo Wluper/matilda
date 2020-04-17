@@ -421,15 +421,15 @@ async function get_all_entries_async() {
   }
 }
 
-async function login(loginName) {
+async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_LINK_BASE+`/login/${loginName}`;
+  const apiLink = API_LINK_BASE+`/login/${loginName}/${loginPass}`;
 
   try {
 
-    var response = await axios.post(apiLink, loginName);
+    var response = await axios.post(apiLink, loginName, loginPass);
 
     console.log(response);
 
@@ -467,6 +467,7 @@ backend =
     post_empty_dialogue                         : post_empty_dialogue,
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
+    
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     update_db                                   : update_db,
     del_db_entry_async                          : del_db_entry_async,

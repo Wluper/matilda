@@ -11,7 +11,7 @@
 
 .database-menu {
     display:grid;
-    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1.6fr;
+    grid-template:[row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 2fr 1fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;

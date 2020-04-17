@@ -7,14 +7,12 @@ Vue.component("database-view", {
             allEntryMetadata: [],
             db_address:"127.0.0.1",
             db_port:"27017",
+            role: ''
         }
     },
 
     mounted () {
-        this.init()
-    },
-    created (){
-        //
+        this.init();
     },
 
     beforeDestroyed() {
@@ -26,6 +24,7 @@ Vue.component("database-view", {
     methods:{
         init : function(){
             //Get DATABASE COLLECTION
+            this.detectMode();
             this.getAllEntriesFromServer();
         },
         go_back : function(){
@@ -33,6 +32,13 @@ Vue.component("database-view", {
             console.log("==================================");
             console.log("==================================");
             annotationAppEventBus.$emit("go_back", event);
+        },
+        detectMode: function() {
+            let title = document.getElementsByTagName("title")[0].textContent;
+            console.log(title);
+            if (title != " LIDA ") {
+                this.role = "admin"
+            }
         },
 
         getAllEntriesFromServer() {
@@ -100,7 +106,7 @@ Vue.component("database-view", {
                     </div>
                 </div>
                 <div class="help-button-container">
-                    <button v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
+                    <button v-if="role != 'admin'" v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
                     <button v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
@@ -110,7 +116,7 @@ Vue.component("database-view", {
 
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name._id">
                         <div class="entry-list-single-item-container">
-                            <div class=del-dialogue-button v-on:click="deleteEntry($event)">
+                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="deleteEntry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                             <div class="entry-info" v-on:click="clicked_entry(name._id)">

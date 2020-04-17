@@ -232,7 +232,7 @@ Vue.component("all-dialogues", {
     },
 
     clicked_database_button() {
-       databaseEventBus.$emit("database_selected")
+       databaseEventBus.$emit("database_selected");
     },
 
   },

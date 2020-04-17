@@ -2,18 +2,22 @@ class LoginFuncs(object):
 	"""
 	Here all the username accepted by the server
 	"""
-	response = {}
+	response = { "status":"fail" }
 
-	def logIn(self, userID):
+	def logIn(self, userID, userPass):
 
-		userList = self.databaseFuncs.readDatabase("users","userName",userID)
+		userDetails = self.databaseFuncs.checkDatabase("users","userName",userID)
 
-		if userID in userList:
-			LoginFuncs.response = { "status":"success" }
+		for line in userDetails:
+			if line["userName"] == userID:
+				if line["password"] == userPass:
+					LoginFuncs.response = { "status":"success" }
+
 		return LoginFuncs.response
 
-	def create(self, userID, password, email):
+	def create(self, userID, password, email=None):
 
-		self.databaseFuncs.collection.save({"_id":userID,"userName":userID,"password":password, "email":email})
-		
-		return { status: "success" }
+		self.databaseFuncs.users.save({"_id":userID,"userName":userID,"password":password, "email":email})
+		response = { "status": "success" }
+
+		return response

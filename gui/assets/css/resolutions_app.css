@@ -426,7 +426,7 @@
     border-left: 5px solid #259af7;
 }
 
-.dialouge-info:active {
+.dialogue-info:active {
     color: white;
     border-color:#259af7;
 }
@@ -563,6 +563,5 @@
                                   supported by Chrome and Opera */
     cursor: pointer;
 }
-
 
 /* EOF */

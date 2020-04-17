@@ -3,7 +3,8 @@ Vue.component("login-view", {
     data() {
         return {
             guiMessages,
-            insertedName: ''
+            insertedName: '',
+            insertedPass: ''
         }
     },
 
@@ -22,20 +23,24 @@ Vue.component("login-view", {
         },
         login() {
             this.insertedName = document.getElementById("login_input").value;
+            this.insertedPass = document.getElementById("password_input").value;
             if (this.insertedName.length < 1) {
                 console.log("EMPTY USERNAME FIELD")
                 alert('Insert a username')
                 return;
+            } else if ((this.insertedName == "user") && (this.insertedPass = "user")){
+                //accepted jolly combination
+                allDialoguesEventBus.$emit("update_username", "1");
             } else {
                 console.log('---- CHECKING USERNAME ----');
-                backend.login(this.insertedName)
+                backend.login(this.insertedName,this.insertedPass)
                     .then( (response) => {
                         if (response.data.status == "success") {
-                            console.log("Username is valid");
+                            console.log("Username and password is valid");
                             allDialoguesEventBus.$emit("update_username", this.insertedName);
                         } else {
                             (response.data.status == "fail")
-                            alert("User doesn't exist")
+                            alert("User password combination invalid")
                         }
                 });
             }
@@ -48,6 +53,7 @@ Vue.component("login-view", {
                 <h1>{{guiMessages.selected.login.welcome}}</h1>
                 <div class="login_form">
                     <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName">
+                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
                 </div>
             </div>

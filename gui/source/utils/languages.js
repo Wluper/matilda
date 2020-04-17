@@ -11,7 +11,9 @@ guiMessages = {
       button_interAgreement:"Inter-annotator Agreement", 
       annotators:"Annotators", 
       button_upload:"Upload File or Drag and Drop",
-      dropAnywhere: "Drop Files Anywhere to Upload!"
+      dropAnywhere: "Drop Files Anywhere to Upload!",
+      userButton: "Users Management",
+      createButton: "Create"
     },
     lida: {
       button_fileFormatInfo: "File Format Info",
@@ -100,7 +102,9 @@ guiMessages = {
       button_interAgreement:"Indice di concordanza", 
       annotators:"Annotatori", 
       button_upload:"Carica o trascina un file",
-      dropAnywhere: "Rilascia il file per caricarlo!"
+      dropAnywhere: "Rilascia il file per caricarlo!",
+      userButton: "Gestione Utenti",
+      createButton: "Crea",
   },
     lida: {
       button_fileFormatInfo: "Info sui formati",

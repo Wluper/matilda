@@ -20,6 +20,8 @@ from interannotator_config import agreementConfig, agreementScoreConfig
 
 from annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
+from login import LoginFuncs
+from database import DatabaseManagement
 
 
 ##############################################
@@ -53,6 +55,9 @@ class InterAnnotatorApp(object):
         self.annotationFiles = MultiAnnotator(self.path)
         self.annotatorErrors = {}
         self.annotatorErrorsMeta = {}
+
+        # Container for Database Function
+        self.databaseFuncs = DatabaseManagement
 
         # Setting the final endpoints
         self.setup_endpoints()
@@ -145,6 +150,84 @@ class InterAnnotatorApp(object):
                             endpoint_name="/agreements",
                             methods=["GET"],
                             handler= self.handle_agreements_resource  )
+
+        self.add_endpoint( \
+                            endpoint="/users",
+                            endpoint_name="/users",
+                            methods=["GET"],
+                            handler= self.handle_users  )
+        self.add_endpoint( \
+                            endpoint="/users/<user>/<userPass>/<email>",
+                            endpoint_name="/users/<user>/<userPass>/<email>",
+                            methods=["POST"],
+                            handler= self.handle_users  )
+
+        self.add_endpoint( \
+                            endpoint="/database",
+                            endpoint_name="/database",
+                            methods=["GET"],
+                            handler= self.handle_database_resource )
+        self.add_endpoint( \
+                            endpoint="/database/<id_doc>/<collection>",
+                            endpoint_name="/database/<id_doc>/<collection>",
+                            methods=["DELETE"],
+                            handler= self.handle_database_resource )
+        self.add_endpoint( \
+                            endpoint="/database/download",
+                            endpoint_name="/database/download",
+                            methods=["GET"],
+                            handler= self.handle_database_download )
+
+
+    def handle_database_resource(self,id_doc=None, collection=None):
+        """
+        GET - Gets the database collection
+
+        PUT - Updates the database collection
+
+        DELETE - Delete an entry in collection
+
+        """
+        responseObject = {}
+
+        if id_doc:
+
+            if request.method == "DELETE":
+                responseObject.update( DatabaseManagement.deleteEntry(self, id_doc, collection) )
+        else:
+
+            if request.method == "GET":
+                responseObject = DatabaseManagement.getDatabaseIds(self)
+
+        return jsonify(responseObject)
+
+
+    def handle_database_download(self,id=None):
+        """
+        GET - Gets the database collection
+        """
+        responseObject = {}
+
+        if request.method == "GET":
+            responseObject = DatabaseManagement.downloadDatabase(self)
+
+        return jsonify(responseObject)
+
+    def handle_users(self, user=None, userPass=None, email=None): 
+        """
+        GET - All users
+        """
+        print(self, user, userPass, email)
+
+        if request.method == "GET":
+
+            responseObject = DatabaseManagement.readDatabase("users","userName")
+
+        if request.method == "POST":
+
+            responseObject = LoginFuncs.create(self,user,userPass,email)
+
+        return jsonify( responseObject )
 
 
     def handle_dialogues_resource(self, id=None):

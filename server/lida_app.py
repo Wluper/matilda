@@ -146,8 +146,8 @@ class LidaApp(object):
                             methods=["GET"],
                             handler= self.handle_database_download )
         self.add_endpoint( \
-                            endpoint="/login/<id>",
-                            endpoint_name="login/<id>",
+                            endpoint="/login/<id>/<idPass>",
+                            endpoint_name="login/<id>/<idPass>",
                             methods=["POST","PUT"],
                             handler= self.handle_login )
 
@@ -412,14 +412,14 @@ class LidaApp(object):
         return newDialogue
 
 
-    def handle_login(self,id):
+    def handle_login(self, id, idPass=None):
         """
         Check if user login is permitted
         """
         responseObject = {}
 
         if request.method == "POST":
-            responseObject.update( LoginFuncs.logIn(self,id) )
+            responseObject.update( LoginFuncs.logIn(self, id, idPass) )
 
         if request.method == "PUT":
             responseObject.update( LoginFuncs.create(self,id) )
