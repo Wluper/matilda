@@ -121,7 +121,7 @@ Vue.component("database-view", {
                             </div>
                             <div class="entry-info" v-on:click="clicked_entry(name._id)">
                                 <div class="entry-id">
-                                    ID: {{name._id}}
+                                    <span>DOC:</span> {{name._id}}
                                 </div>
                                 <div class="entry-date">
                                     {{name.lastUpdate}}

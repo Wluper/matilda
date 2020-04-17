@@ -13,7 +13,7 @@ guiMessages = {
       button_upload:"Upload File or Drag and Drop",
       dropAnywhere: "Drop Files Anywhere to Upload!",
       userButton: "Users Management",
-      createButton: "Create"
+      createButton: "Add"
     },
     lida: {
       button_fileFormatInfo: "File Format Info",

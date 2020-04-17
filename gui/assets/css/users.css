@@ -20,6 +20,7 @@
 }
 
 .login_input {
+    color:grey;
     text-align:center;
     font-size:20px;
     line-height:1.7em;
@@ -31,6 +32,7 @@
 }
 
 .password_input {
+    color:grey;
     text-align:center;
     font-size:20px;
     line-height:1.7em;

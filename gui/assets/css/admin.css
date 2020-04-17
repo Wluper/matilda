@@ -85,7 +85,11 @@
 .user-password {
     grid-area: password;
 }
+.user-password input {
+    color:#888;
+}
 .user-id, .user-password {
+    color:#888;
     padding-top:5px;
     padding-bottom:5px;
 }
@@ -118,6 +122,7 @@
 }
 
 .user-id span, .user-password span {
+    color:black;
     display:block;
     font-size:10px;
     font-weight: bold;
@@ -126,3 +131,9 @@
     letter-spacing:0.5px;
 }
 
+.is-saved {
+    color: green;
+    display: block;
+    text-align: right;
+    width: 100%;
+}

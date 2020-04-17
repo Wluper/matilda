@@ -56,6 +56,7 @@ Vue.component("users-view", {
                 .then( (response) => {
                     console.log();
                     this.get_all_users();
+                    this.changesSaved = 'true';
                 })
         },
 
@@ -77,6 +78,7 @@ Vue.component("users-view", {
                     console.log(response);
                     if (response.data.status == "success") {
                         this.init();
+                        this.changesSaved = 'true';
                     } else {
                         return
                     }
@@ -123,10 +125,10 @@ Vue.component("users-view", {
 
                                 <div class="user-password">
                                     <span>Password</span>
-                                    <input v-on:click="show_password($event)" id="user_password" type="password" :value="name.password">
+                                    <input v-on:click="show_password($event)" type="password" :value="name.password">
                                 </div>
 
-                                <div class="user-email">
+                                <div class="user-email" v-if="name.email != 'email not provided'">
                                     {{name.email}}
                                 </div>
                             </div>
@@ -138,6 +140,9 @@ Vue.component("users-view", {
                         </div>
                     </li>
                 </ul>
+                <div>
+                    <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
+                </div>
             </div>
         </div>
     `

@@ -3,8 +3,8 @@ Vue.component("login-view", {
     data() {
         return {
             guiMessages,
-            insertedName: '',
-            insertedPass: ''
+            insertedName: 'username',
+            insertedPass: 'password'
         }
     },
 
@@ -52,8 +52,8 @@ Vue.component("login-view", {
             <div class="login_block">
                 <h1>{{guiMessages.selected.login.welcome}}</h1>
                 <div class="login_form">
-                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName">
-                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass">
+                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
+                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
                 </div>
             </div>
