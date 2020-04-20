@@ -44,6 +44,17 @@ class DatabaseManagement(object):
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 
 	responseObject = []
+	
+	def readDatabase(coll,attribute,string=None):
+
+		query = DatabaseManagement.checkDatabase(coll,attribute,string=None)
+
+		entries = []
+
+		for name in query:
+			entries.append(name)
+
+		return entries
 
 
 	def checkDatabase(coll,attribute,string=None):

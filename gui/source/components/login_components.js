@@ -41,10 +41,9 @@ Vue.component("login-view", {
                     .then( (response) => {
                         if (response.data.status == "success") {
                             console.log("Username and password is valid");
-                            allDialoguesEventBus.$emit("update_username", this.insertedName);
+                            allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
                         } else {
-                            (response.data.status == "fail")
-                            alert("User password combination invalid")
+                            alert("User-password combination invalid")
                         }
                 }
             );

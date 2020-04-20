@@ -48,24 +48,26 @@ var mainApp = new Vue({
 
   methods: {
 
-    update_username: function(event) {
+    update_username: function(event,accessory) {
         let newName = event;
+        let pass = accessory;
         backend.put_name("USER_"+newName+".json")
         .then( (response) => {
             if (response) {
                 console.log("File name updated");
                 this.restore_session_from_database(newName);
-                this.set_cookie(newName);
+                this.set_cookie(newName,pass);
             } else {
                 alert('Server error, name not changed.');
             }
         })
     },    
 
-    set_cookie: function(name) {
+    set_cookie: function(name,pass) {
         if (name != "1") {
             console.log("Log in name set in cookies");
             localStorage.setItem("remember", name);
+            localStorage.setItem("password", pass);
         }
     },
 
@@ -73,15 +75,15 @@ var mainApp = new Vue({
         if (this.executed == "true")
             return;
         if (localStorage["remember"] != undefined) {
-            let memorizedName = localStorage["remember"]
-            backend.login(memorizedName)
+            let memorizedName = localStorage["remember"];
+            let memorizedPass = localStorage["password"];
+            backend.login(memorizedName,memorizedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username still valid");
                         this.update_username(memorizedName);
                     } else {
                         (response.data.status == "fail")
-                        alert("Username invalid");
                         this.status = "logging";
                     }
                 }
@@ -96,7 +98,6 @@ var mainApp = new Vue({
             .then( (response) => {
                 console.log(response);
                 this.status = "list-all";
-                console.log("please refresh");
                 allDialoguesEventBus.$emit( "refresh_dialogue_list");
         });
     },
