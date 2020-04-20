@@ -215,10 +215,8 @@ class InterAnnotatorApp(object):
 
     def handle_users(self, user=None, userPass=None, email=None): 
         """
-        GET - All users
+        GET - all users, POST create a new user
         """
-        print(self, user, userPass, email)
-
         if request.method == "GET":
 
             responseObject = DatabaseManagement.readDatabase("users","userName")

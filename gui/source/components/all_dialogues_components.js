@@ -28,7 +28,9 @@ Vue.component("all-dialogues", {
   //         return userName
   //     }
   // },
-
+  created() {
+      allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer )
+  },
   mounted () {
       this.init();
   },
@@ -102,7 +104,7 @@ Vue.component("all-dialogues", {
             .then( (newDialogueId) => {
 
                 this.allDialogueMetadata.push({id: newDialogueId, num_turns: 0});
-
+                backend.update_db();
             });
     },
 
@@ -117,6 +119,7 @@ Vue.component("all-dialogues", {
             backend.del_single_dialogue_async(nameToDelete)
                 .then( () => {
                     this.getAllDialogueIdsFromServer();
+                    backend.update_db();
                 });
 
             allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);

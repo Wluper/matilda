@@ -138,7 +138,7 @@ class LidaApp(object):
         self.add_endpoint( \
                             endpoint="/database/<id>",
                             endpoint_name="/database/<id>",
-                            methods=["DELETE"],
+                            methods=["GET","DELETE"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/download",
@@ -165,6 +165,9 @@ class LidaApp(object):
 
         if id:
 
+            if request.method == "GET":
+                responseObject.update( DatabaseManagement.getUserEntry(self,id=id) )
+
             if request.method == "DELETE":
                 responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
         else:
@@ -173,7 +176,7 @@ class LidaApp(object):
                 responseObject = DatabaseManagement.getDatabaseIds(self)
 
             if request.method == "PUT":
-                responseObject.update( DatabaseManagement.updateDatabase(self,self.dialogueFile.get_file_name()) )
+                responseObject.update( DatabaseManagement.updateDatabase( self, self.dialogueFile.get_file_name() ))
 
         return jsonify(responseObject)
 
@@ -205,7 +208,7 @@ class LidaApp(object):
             newName = request.get_json()["name"]
             self.dialogueFile.change_file_name(newName=newName)
 
-        return jsonify(responseObject)
+        return jsonify(responseObject);
 
 
 

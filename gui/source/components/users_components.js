@@ -60,18 +60,12 @@ Vue.component("users-view", {
                 })
         },
 
-        clicked_entry(clickedEntry) {
-            console.log(event.target.id)
-            let name = clickedEntry;
-            console.log(name) 
-        },
-
         show_password(event) {
             event.target.setAttribute("type","text");
             event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
         },
 
-        delete_entry(event) {
+        delete_user(event) {
             let name = event.target.parentNode.parentNode.id;
             backend.del_db_entry_async(name,"users")
                 .then( (response) => {
@@ -133,7 +127,7 @@ Vue.component("users-view", {
                                 </div>
                             </div>
 
-                            <div class=del-dialogue-button v-on:click="delete_entry($event)">
+                            <div class=del-dialogue-button v-on:click="delete_user($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                                 

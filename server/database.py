@@ -11,6 +11,7 @@ import json
 import datetime
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 import functools
+import ast
 
 # == Flask ==
 from flask import Flask
@@ -43,24 +44,6 @@ class DatabaseManagement(object):
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 
 	responseObject = []
-	
-	def readDatabase(coll,attribute,string=None):
-
-		entries = []
-		collection_selected = DatabaseManagement.collection
-
-		if coll == "users":
-			collection_selected = DatabaseManagement.users
-
-		if string is not None:
-			query = collection_selected.find({attribute:string})
-		else:
-			query = collection_selected.find()
-
-		for name in query:
-			entries.append(name)
-
-		return entries
 
 
 	def checkDatabase(coll,attribute,string=None):
@@ -115,8 +98,19 @@ class DatabaseManagement(object):
 	def updateDatabase(self,username):
 
 		with open(DatabaseManagement.__DEFAULT_PATH+"/"+username["name"]) as file:
-			annotations = json.load(file)
+			annotations = json.load(file)		
 
-		DatabaseManagement.collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":str(annotations)})
+		DatabaseManagement.collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		return DatabaseManagement.responseObject
 
+	def getUserEntry(self, id):
+
+		query = DatabaseManagement.checkDatabase("database","_id","USER_"+id+".json")
+
+		for line in query:
+			for name in line:
+				if name == "annotations":
+					print(line[name])
+					DatabaseManagement.responseObject = line[name]
+
+		return DatabaseManagement.responseObject

@@ -367,7 +367,7 @@ async function update_db() {
     console.log(response)
 
     entriesList = response.data
-    console.log("=========== UPDATING ===========")
+    console.log("======== UPDATING DATABASE ========")
     console.log(entriesList)
     return entriesList
 
@@ -395,7 +395,48 @@ async function del_db_entry_async(entryId) {
 
         console.log(error);
     }
-};
+}
+
+async function get_db_entry_async(entryId) {
+
+    console.log("GETTING",entryId);
+
+    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+
+    try {
+
+        var response = await axios.get( apiLink, entryId );
+        console.log('---- DATABASE SESSION DIALOGUES ----', response.data);
+
+        // update from database only if sessions are not equal
+        let database_session = response.data;
+        let actual_session = await get_all_dialogues_async()
+            .then((response) => {
+                //conversion needed to confront responses in different formats
+                if (JSON.stringify(response) == JSON.stringify(database_session)) {
+
+                    console.log("Session is up to date")
+                
+                } else {
+
+                    console.log("Updating from Database");
+
+                    //adds dialogues from database
+                    post_new_dialogues_from_string_lists_async(database_session)
+                        .then((response) => {
+                            allDialoguesEventBus.$emit( "refresh_dialogue_list")
+                        })
+
+                }
+            });
+
+
+
+    } catch(error) {
+
+        console.log(error);
+    }
+}
 
 async function get_all_entries_async() {
 
@@ -470,6 +511,7 @@ backend =
 
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     update_db                                   : update_db,
+    get_db_entry_async                          : get_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
     login                                       : login

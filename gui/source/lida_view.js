@@ -19,6 +19,7 @@ var mainApp = new Vue({
       alreadyVisited: [],
       splittingFile: '',
       splittingTextSourceFile: '',
+      executed:'false'
     }
   },
 
@@ -40,7 +41,7 @@ var mainApp = new Vue({
       //Database View Event Bus
       databaseEventBus.$on( "database_selected", this.load_database_view )
 
-      //Check if already logged
+      //Check if already logged, restore session
       this.check_login_cookie()
 
   },
@@ -48,31 +49,56 @@ var mainApp = new Vue({
   methods: {
 
     update_username: function(event) {
-      console.log("received")
         let newName = event;
         backend.put_name("USER_"+newName+".json")
         .then( (response) => {
-          if (response) {
-            console.log("Name Changed");
-          } else {
-            alert('Server error, name not changed.');
-          }
-            this.setCookie(newName);
-            this.status = "list-all"
+            if (response) {
+                console.log("File name updated");
+                this.restore_session_from_database(newName);
+                this.set_cookie(newName);
+            } else {
+                alert('Server error, name not changed.');
+            }
         })
     },    
 
-    setCookie: function(newName) {
-      console.log("Log in name set in cookies");
-      localStorage.setItem("remember", newName);
+    set_cookie: function(name) {
+        if (name != "1") {
+            console.log("Log in name set in cookies");
+            localStorage.setItem("remember", name);
+        }
     },
 
     check_login_cookie: function() {
+        if (this.executed == "true")
+            return;
         if (localStorage["remember"] != undefined) {
-          this.update_username(localStorage["remember"])
-        } else {
-          return
+            let memorizedName = localStorage["remember"]
+            backend.login(memorizedName)
+                .then( (response) => {
+                    if (response.data.status == "success") {
+                        console.log("Username still valid");
+                        this.update_username(memorizedName);
+                    } else {
+                        (response.data.status == "fail")
+                        alert("Username invalid");
+                        this.status = "logging";
+                    }
+                }
+            );          
         }
+        this.executed = "true";
+    },
+
+    restore_session_from_database: function (fileName) {
+        console.log("Ready to restore from database");
+        backend.get_db_entry_async(fileName)
+            .then( (response) => {
+                console.log(response);
+                this.status = "list-all";
+                console.log("please refresh");
+                allDialoguesEventBus.$emit( "refresh_dialogue_list");
+        });
     },
 
     load_in_dialogue_to_annotate: function (event) {

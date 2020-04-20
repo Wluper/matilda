@@ -27,12 +27,16 @@ Vue.component("login-view", {
             if (this.insertedName.length < 1) {
                 console.log("EMPTY USERNAME FIELD")
                 alert('Insert a username')
-                return;
+                return
             } else if ((this.insertedName == "user") && (this.insertedPass = "user")){
                 //accepted jolly combination
                 allDialoguesEventBus.$emit("update_username", "1");
             } else {
-                console.log('---- CHECKING USERNAME ----');
+                this.check_credentials()
+            }
+        },
+        check_credentials() {
+            console.log('---- CHECKING USERNAME ----');
                 backend.login(this.insertedName,this.insertedPass)
                     .then( (response) => {
                         if (response.data.status == "success") {
@@ -42,9 +46,9 @@ Vue.component("login-view", {
                             (response.data.status == "fail")
                             alert("User password combination invalid")
                         }
-                });
-            }
-        },
+                }
+            );
+        }
     },
     template:
     `
