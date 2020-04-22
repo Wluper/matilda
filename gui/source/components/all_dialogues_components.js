@@ -40,15 +40,7 @@ Vue.component("all-dialogues", {
         init : function(){
 
             // Step ONE: Get FILE NAME
-            backend.get_name()
-                .then( (response) => {
-                    console.log();
-                    var restOfName = response.split(".json")[0]
-                    var userName = restOfName.split("USER_")[1]
-                    this.userName = userName;
-
-                });
-
+            this.userName = localStorage["remember"];
             this.getAllDialogueIdsFromServer();
 
         },

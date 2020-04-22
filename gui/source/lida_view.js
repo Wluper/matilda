@@ -48,18 +48,19 @@ var mainApp = new Vue({
 
   methods: {
 
-    update_username: function(event,accessory) {
+    update_username: function(event,event2) {
         let newName = event;
-        let pass = accessory;
-        backend.put_name("USER_"+newName+".json")
-        .then( (response) => {
-            if (response) {
-                console.log("File name updated");
-                this.restore_session_from_database(newName);
-                this.set_cookie(newName,pass);
-            } else {
-                alert('Server error, name not changed.');
-            }
+        let pass = event2;
+        backend.put_name(newName)
+            .then( (response) => {
+                if (response) {
+                    console.log("File name updated");
+                    //this.restore_session_from_database(newName);
+                    this.set_cookie(newName,pass);
+                    this.status = "list-all";
+                } else {
+                    alert('Server error, name not changed.');
+                }
         })
     },    
 

@@ -2,17 +2,26 @@
 * CONSTANTS
 ********************************/
 
-API_LINK_BASE = "http://127.0.0.1:5000"
+API_LINK_BASE = "http://127.0.0.1:5000";
 
 /********************************
 * FILE NAME FUNCTIONS
 ********************************/
 
+function session_name() {
+    username = "user_1";
+    if (localStorage["remember"] != undefined) {
+        username =  localStorage["remember"]
+    }
+    return username
+}
+
+/* not needed anymore
 async function get_name(){
 
    var dialogues = {}
 
-    const apiLink = API_LINK_BASE+'/name'
+    const apiLink = API_LINK_BASE+"/"+session_name()+'/name'
     try {
         var response = await axios.get( apiLink );
 
@@ -29,12 +38,15 @@ async function get_name(){
 
 
 };
+*/
 
 async function put_name(name){
 
+    console.log("Set userspace",name);
+
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+'/name'
+    const apiLink = API_LINK_BASE+"/"+name+'/name'
     try {
         var response = await axios.put( apiLink, {name : name} )
         return true;
@@ -87,7 +99,7 @@ async function get_annotation_style_async(){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+'/dialogue_annotationstyle'
+    const apiLink = API_LINK_BASE+"/dialogue_annotationstyle"
 
     try {
         var response = await axios.get(apiLink)
@@ -115,7 +127,7 @@ async function get_all_dialogue_ids_async() {
 
   var dialogues = {}
 
-  const apiLink = API_LINK_BASE+'/dialogues_metadata'
+  const apiLink = API_LINK_BASE+"/"+session_name()+'/dialogues_metadata'
 
   try {
 
@@ -140,7 +152,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = API_LINK_BASE+`/dialogues_metadata/${oldName}`
+    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -298,13 +310,14 @@ async function del_single_dialogue_async(dialogueId) {
 
 async function RESTdialogues(method, id, params){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
+    console.log("REQUESTED FROM: "+session_name())
     console.log("ID: "+id)
     console.log("METHOD "+method)
     console.log("PARAMS "+params)
 
     //
-    if (id==null) {var apiLink = API_LINK_BASE+`/dialogues`;}
-    else {var apiLink = API_LINK_BASE+`/dialogues/${id}`;}
+    if (id==null) {var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues`;}
+    else {var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/${id}`;}
 
     //
     if (method=="DELETE") {
@@ -332,7 +345,7 @@ async function get_all_db_entries_ids() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+'/database'
+  const apiLink = API_LINK_BASE+"/"+session_name()+'/database'
 
   try {
 
@@ -358,7 +371,7 @@ async function update_db() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+'/database'
+  const apiLink = API_LINK_BASE+"/"+session_name()+'/database'
 
   try {
 
@@ -412,15 +425,12 @@ async function get_db_entry_async(entryId) {
         let database_session = response.data;
         let actual_session = await get_all_dialogues_async()
             .then((response) => {
-                //conversion needed to confront responses in different formats
+                //conversion needed to confront responses coming from different formats
                 if (JSON.stringify(response) == JSON.stringify(database_session)) {
-
                     console.log("Session is up to date")
                 
                 } else {
-
                     console.log("Updating from Database");
-
                     //adds dialogues from database
                     post_new_dialogues_from_string_lists_async(database_session)
                         .then((response) => {
@@ -429,8 +439,6 @@ async function get_db_entry_async(entryId) {
 
                 }
             });
-
-
 
     } catch(error) {
 

@@ -37,14 +37,14 @@ Vue.component("login-view", {
         },
         check_credentials() {
             console.log('---- CHECKING USERNAME ----');
-                backend.login(this.insertedName,this.insertedPass)
-                    .then( (response) => {
-                        if (response.data.status == "success") {
-                            console.log("Username and password is valid");
-                            allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
-                        } else {
-                            alert("User-password combination invalid")
-                        }
+            backend.login(this.insertedName,this.insertedPass)
+                .then( (response) => {
+                    if (response.data.status == "success") {
+                        console.log("Username and password is valid");
+                        allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
+                    } else {
+                         alert("User-password combination invalid")
+                    }
                 }
             );
         }

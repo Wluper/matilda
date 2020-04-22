@@ -173,33 +173,59 @@ class DialogueAnnotator(object):
     """
     __DEFAULT_FILENAME="USER_1.json"
 
+    __SESSION_USER = "USER_1"
+
+
+    class dialogues(object):
+
+        def __getitem__(self,key):
+            return getattr(self,key)
+    
+    __dialogues = dialogues()
+
     def __init__( self, filePath, fileName=None, dialogues=None ):
         """
         """
-        self.set_dialogues( dialogues )
+        self.set_dialogues( self.__SESSION_USER, dialogues )
         self.set_file( filePath, fileName )
         self.addedDialogues = 0
 
-    def get_file_name(self):
+    #def get_file_name(self):
         """
         """
-        return {"name": self.__fileName}
+    #    return {"name": self.__fileName}
 
     def change_file_name(self, newName, remove=False):
         """
+        check if the new user has a workspace otherwise it's created
         """
-        oldFileName = self.__fileName
-        self.__fileName = newName
+        DialogueAnnotator.__SESSION_USER = newName
 
-        self.save()
+        try: 
+            self.__dialogues[DialogueAnnotator.__SESSION_USER]
+        except:
+            self.set_dialogues(newName)
 
-        if remove:
-            os.remove( os.path.join( self.__filePath, oldFileName ) )
+        #oldFileName = self.__fileName
+        #self.__fileName = newName
 
-    def set_dialogues( self, dialogues=None ):
+        #self.save(newName)
+
+        #if remove:
+        #    os.remove( os.path.join( self.__filePath, oldFileName ) )
+
+    def set_dialogues( self, newName, dialogues=None ):
         """
         """
-        self.__dialogues = dialogues if dialogues else {}
+        #DialogueAnnotator.__SESSION_USER = newName
+
+        print("updated",newName)
+
+        self.toBeInserted = dialogues if dialogues else {}
+
+        setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
+
+        print(self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
     def set_file( self, filePath, fileName=None ):
         """
@@ -210,98 +236,115 @@ class DialogueAnnotator(object):
         if fileName:
             self.__fileName = fileName
             try:
-                self.__dialogues = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
+                self.__dialogues[DialogueAnnotator.__SESSION_USER] = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
             except FileNotFoundError:
-                save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName ) )
+                save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, self.__fileName ) )
 
         else:
             self.__fileName = DialogueAnnotator.__DEFAULT_FILENAME
 
-    def get_dialogue(self, id: Hashable) -> Dict[str, Any]:
+    def get_dialogue(self, user, id: Hashable) -> Dict[str, Any]:
         """Gets a single dialogue"""
-        return {"dialogue": self.__dialogues.get(id)}
+        DialogueAnnotator.__SESSION_USER = user
+
+        return {"dialogue": self.__dialogues[DialogueAnnotator.__SESSION_USER].get(id)}
 
     def get_dialogues(self, id=None):
         """
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
-        return self.__dialogues
+        DialogueAnnotator.__SESSION_USER = user
 
-    def get_dialogues_metadata(self):
+        return self.__dialogues[DialogueAnnotator.__SESSION_USER]
+
+    def get_dialogues_metadata(self, user):
         """
         Gets the name of dialogues, returns a list
         """
+        DialogueAnnotator.__SESSION_USER = user
 
         metadata = []
 
-        for dialogueID, dialogueTurnList in self.__dialogues.items():
+        for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
 
             metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList)})
 
         return metadata
 
 
-    def update_dialogue(self, id, newDialogue ):
+    def update_dialogue(self, user, id, newDialogue ):
         """
         updates the dialogue
         """
-        self.__dialogues[ id ] = newDialogue
+        DialogueAnnotator.__SESSION_USER = user
+
+        self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = newDialogue
 
         return {"status" : "success"}
 
 
-    def update_dialogues(self, newDialogues):
+    def update_dialogues(self, user, newDialogues):
         """
         updates all the dialogues with a new dictionary
         """
+        DialogueAnnotator.__SESSION_USER = user
+
         for dId, newDialogue in newDialogues.items():
 
-            temp = self.__dialogues.get( dId )
+            temp = self.__dialogues[DialogueAnnotator.__SESSION_USER].get( dId )
             if temp:
                 newDialogue = newDialogue if len(newDialogue)>len(temp) else temp
 
 
-            self.__dialogues[ dId ] = newDialogue
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ dId ] = newDialogue
 
         return True
 
 
-    def update_dialogue_name(self, id, newName):
+    def update_dialogue_name(self, user, id, newName):
         """
         updates the dialogue name
         """
-        self.__dialogues[newName] = copy.deepcopy( self.__dialogues[id] )
+        DialogueAnnotator.__SESSION_USER = user
 
-        del self.__dialogues[id]
+        self.__dialogues[DialogueAnnotator.__SESSION_USER][newName] = copy.deepcopy( self.__dialogues[DialogueAnnotator.__SESSION_USER][id] )
+
+        del self.__dialogues[DialogueAnnotator.__SESSION_USER][id]
 
 
-    def add_new_dialogue(self, dialogue=None, id=None):
+    def add_new_dialogue(self, user, dialogue=None, id=None):
         """
         creates a new dialogue with an optional name
         """
+        DialogueAnnotator.__SESSION_USER = user
+
         self.addedDialogues += 1
 
         if not id:
             id = self.__get_new_dialogue_id()
 
 
-        self.__dialogues[ id ] = dialogue if dialogue else []
+        self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
         return {"id":id}
 
 
-    def delete_dialogue(self, id):
+    def delete_dialogue(self, user, id):
         """
         Deletes a dialogue
         """
-        del self.__dialogues[ id ]
+        DialogueAnnotator.__SESSION_USER = user
+
+        del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
 
 
-    def save(self):
+    def save(self, user):
         """
         Save the dialogues dictionary
         """
-        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName ) )
+        DialogueAnnotator.__SESSION_USER = user
+
+        save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, self.__fileName+".json" ) )
 
 
 

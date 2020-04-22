@@ -87,28 +87,28 @@ class LidaApp(object):
         sets all the endpoints, that this app has.
         """
         self.add_endpoint( \
-                            endpoint="/dialogues_metadata",
-                            endpoint_name="/dialogues_metadata",
+                            endpoint="/<user>/dialogues_metadata",
+                            endpoint_name="/<user>/dialogues_metadata",
                             methods=["GET"],
                             handler= self.handle_dialogues_metadata_resource  )
 
 
         self.add_endpoint( \
-                            endpoint="/dialogues_metadata/<id>",
-                            endpoint_name="/dialogues_metadata/<id>",
+                            endpoint="/<user>/dialogues_metadata/<id>",
+                            endpoint_name="/<user>/dialogues_metadata/<id>",
                             methods=["PUT"],
                             handler= self.handle_dialogues_metadata_resource  )
 
 
         self.add_endpoint( \
-                            endpoint="/dialogues",
-                            endpoint_name="/dialogues",
+                            endpoint="/<user>/dialogues",
+                            endpoint_name="/<user>/dialogues",
                             methods=["GET","POST","DELETE"],
                             handler= self.handle_dialogues_resource )
 
         self.add_endpoint( \
-                            endpoint="/dialogues/<id>",
-                            endpoint_name="/dialogues/<id>",
+                            endpoint="/<user>/dialogues/<id>",
+                            endpoint_name="/<user>/dialogues/<id>",
                             methods=["GET", "POST", "PUT", "DELETE"],
                             handler= self.handle_dialogues_resource )
 
@@ -126,14 +126,14 @@ class LidaApp(object):
                             handler= self.handle_turns_resource  )
 
         self.add_endpoint( \
-                            endpoint="/name",
-                            endpoint_name="/name",
+                            endpoint="/<user>/name",
+                            endpoint_name="/<user>/name",
                             methods=["GET", "PUT"],
                             handler= self.handle_name_resource  )
         self.add_endpoint( \
-                            endpoint="/database",
-                            endpoint_name="/database",
-                            methods=["GET", "POST", "PUT"],
+                            endpoint="/<user>/database",
+                            endpoint_name="/<user>/database",
+                            methods=["GET", "PUT"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/<id>",
@@ -152,7 +152,7 @@ class LidaApp(object):
                             handler= self.handle_login )
 
 
-    def handle_database_resource(self,id=None):
+    def handle_database_resource(self,id=None,user=None):
         """
         GET - Gets the database collection
 
@@ -163,6 +163,13 @@ class LidaApp(object):
         """
         responseObject = {}
 
+        if user:
+            if request.method == "PUT":
+                responseObject.update( DatabaseManagement.updateDatabase( self, user ))
+
+            if request.method == "GET":
+                responseObject = DatabaseManagement.getDatabaseIds(self)
+
         if id:
 
             if request.method == "GET":
@@ -170,13 +177,8 @@ class LidaApp(object):
 
             if request.method == "DELETE":
                 responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
-        else:
 
-            if request.method == "GET":
-                responseObject = DatabaseManagement.getDatabaseIds(self)
 
-            if request.method == "PUT":
-                responseObject.update( DatabaseManagement.updateDatabase( self, self.dialogueFile.get_file_name() ))
 
         return jsonify(responseObject)
 
@@ -192,7 +194,7 @@ class LidaApp(object):
 
         return jsonify(responseObject)
 
-    def handle_name_resource(self):
+    def handle_name_resource(self,user):
         """
         GET - Gets the fileName
 
@@ -201,18 +203,17 @@ class LidaApp(object):
         responseObject = {
             "status" : "success",
         }
-        if request.method == "GET":
-            responseObject.update( self.dialogueFile.get_file_name() )
+        #if request.method == "GET":
+        #    responseObject.update( user )
 
         if request.method == "PUT":
-            newName = request.get_json()["name"]
-            self.dialogueFile.change_file_name(newName=newName)
+            self.dialogueFile.change_file_name(user)
 
         return jsonify(responseObject);
 
 
 
-    def handle_dialogues_resource(self, id=None):
+    def handle_dialogues_resource(self, user, id=None):
         """
         GET - All dialogues
 
@@ -223,45 +224,45 @@ class LidaApp(object):
         if id:
 
             if request.method == "GET":
-                responseObject = self.dialogueFile.get_dialogue(id = id)
+                responseObject = self.dialogueFile.get_dialogue(user, id = id)
 
             if request.method == "PUT":
                 data = request.get_json()
                 Configuration.validate_dialogue( data )
-                responseObject = self.dialogueFile.update_dialogue( id=id, newDialogue=data )
+                responseObject = self.dialogueFile.update_dialogue(user, id=id, newDialogue=data )
 
             if request.method == "DELETE":
-                responseObject = self.dialogueFile.delete_dialogue(id=id)
+                responseObject = self.dialogueFile.delete_dialogue(user, id=id)
 
         else:
 
             if request.method == "GET":
-                responseObject = self.dialogueFile.get_dialogues()
+                responseObject = self.dialogueFile.get_dialogues(user)
 
             if request.method == "POST":
-                responseObject = self.__handle_post_of_new_dialogues()
+                responseObject = self.__handle_post_of_new_dialogues(user)
 
-        self.dialogueFile.save()
+        self.dialogueFile.save(user)
         return jsonify( responseObject )
 
 
-    def handle_dialogues_metadata_resource(self,id=None):
+    def handle_dialogues_metadata_resource(self,user,id=None):
         """
         GET - All dialogues metadata
 
         PUT - Handle
         """
         if request.method == "GET":
-            responseObject = self.dialogueFile.get_dialogues_metadata()
+            responseObject = self.dialogueFile.get_dialogues_metadata(user)
 
 
         if request.method == "PUT":
             error = None
             data  = request.get_json()
 
-            responseObject = self.dialogueFile.update_dialogue_name( id, data["id"])
+            responseObject = self.dialogueFile.update_dialogue_name( user, id, data["id"])
 
-        self.dialogueFile.save()
+        self.dialogueFile.save(user)
         return jsonify( responseObject )
 
 
@@ -297,7 +298,7 @@ class LidaApp(object):
         return jsonify( responseObject )
 
 
-    def __handle_post_of_new_dialogues(self):
+    def __handle_post_of_new_dialogues(self, user):
         """
         takes care of posting new dialogues
         """
@@ -310,20 +311,20 @@ class LidaApp(object):
             responseObject["status"] = "error"
 
         elif not stringListOrJsonDict:
-            responseObject = self.dialogueFile.add_new_dialogue()
+            responseObject = self.dialogueFile.add_new_dialogue(user)
 
         elif isinstance(stringListOrJsonDict, list):
-            responseObject = self.__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
+            responseObject = self.__add_new_dialogues_from_string_lists(user, responseObject, dialogueList=stringListOrJsonDict)
 
         elif isinstance(stringListOrJsonDict, dict):
-            responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict)
+            responseObject = self.__add_new_dialogues_from_json_dict(user, responseObject, dialogueDict=stringListOrJsonDict)
 
         return responseObject
 
 
 
 
-    def __add_new_dialogues_from_json_dict(self, currentResponseObject, dialogueDict):
+    def __add_new_dialogues_from_json_dict(self, user, currentResponseObject, dialogueDict):
         """
         Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
         """
@@ -339,7 +340,7 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            self.dialogueFile.add_new_dialogue(dialogue)
+            self.dialogueFile.add_new_dialogue(user, dialogue)
 
         if "error" not in currentResponseObject:
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
@@ -350,7 +351,7 @@ class LidaApp(object):
 
 
 
-    def __add_new_dialogues_from_string_lists(self, currentResponseObject, dialogueList):
+    def __add_new_dialogues_from_string_lists(self, user, currentResponseObject, dialogueList):
         """
         Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
         through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
@@ -362,7 +363,7 @@ class LidaApp(object):
         for string_list in dialogueList:
 
             string_list      = [x for x in string_list.split("\n") if x.strip()]
-            newId = self.dialogueFile.add_new_dialogue( LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ) )
+            newId = self.dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ) )
 
             currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
             currentResponseObject["new_dialogue_id"].append(newId["id"])

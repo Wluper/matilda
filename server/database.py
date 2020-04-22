@@ -79,7 +79,7 @@ class DatabaseManagement(object):
 		collection_dict = DatabaseManagement.collection.find()
 		for index,entry in enumerate(collection_dict,1):
 			entries.append({"File "+str(index):entry})
-		print("Download \n",entries)
+		print("Download \n",entries,"\n")
 
 		return entries
 
@@ -92,7 +92,7 @@ class DatabaseManagement(object):
 		for entry in collection_dict:
 			print("Database Entry *************** \n",entry)
 			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
-		print("Response ***********\n",entries)
+		print("Response ***********\n",entries,"\n ********************")
 
 		return entries
 
@@ -108,10 +108,10 @@ class DatabaseManagement(object):
 
 	def updateDatabase(self,username):
 
-		with open(DatabaseManagement.__DEFAULT_PATH+"/"+username["name"]) as file:
+		with open(DatabaseManagement.__DEFAULT_PATH+"/"+username+".json") as file:
 			annotations = json.load(file)		
 
-		DatabaseManagement.collection.save({"_id":username["name"],"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
+		DatabaseManagement.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		return DatabaseManagement.responseObject
 
 	def getUserEntry(self, id):
