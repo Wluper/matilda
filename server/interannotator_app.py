@@ -18,7 +18,7 @@ from flask_cors import CORS
 from annotator_config import Configuration
 from interannotator_config import agreementConfig, agreementScoreConfig
 
-from annotator import DialogueAnnotator, MultiAnnotator
+from admin_annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
 from login import LoginFuncs
 from database import DatabaseManagement

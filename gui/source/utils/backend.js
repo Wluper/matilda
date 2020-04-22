@@ -17,6 +17,7 @@ function session_name() {
 }
 
 /* not needed anymore
+
 async function get_name(){
 
    var dialogues = {}
@@ -500,7 +501,7 @@ async function login(loginName,loginPass) {
 
 backend =
 {
-    get_name                                    : get_name,
+    //get_name                                    : get_name,
     put_name                                    : put_name,
     annotate_query                              : annotate_query,
 

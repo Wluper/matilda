@@ -38,7 +38,7 @@ async function get_errors_async(dialogueId){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/errors/${dialogueId}"
+    const apiLink = API_LINK_BASE+`/errors/${dialogueId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -171,7 +171,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = API_LINK_BASE+"/dialogues_metadata/${oldName}"
+    const apiLink = API_LINK_BASE+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -443,13 +443,14 @@ async function get_all_entries_async() {
 
 async function RESTdialogues(method, id, params){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
+    console.log("REQUESTED FROM: "+session_name())
     console.log("ID: "+id)
     console.log("METHOD "+method)
     console.log("PARAMS "+params)
 
     //
     if (id==null) {var apiLink = API_LINK_BASE+"/dialogues";}
-    else {var apiLink = API_LINK_BASE+"/dialogues/${id}";}
+    else {var apiLink = API_LINK_BASE+`/dialogues/${id}`;}
 
     //
     if (method=="DELETE") {
