@@ -11,7 +11,7 @@
             "description" : "Whether the query was request / inform / farewell",
             "label_type"  : "multilabel_classification",
             "required"    : false,
-            "model"       : TypeDummyModel(),
+            "model"       : "TypeDummyModel()",
             "labels"      : [
 
                 "request",
@@ -27,7 +27,7 @@
             "description" : "Slot-value pairs",
             "label_type"  : "multilabel_classification_string",
             "required"    : false,
-            "model"       : BeliefStateDummyModel(),
+            "model"       : "BeliefStateDummyModel()",
             "labels"      : [
 
                 "hotel-book people",
@@ -44,7 +44,7 @@
             "description" : "Policy functions called for this query",
             "label_type"  : "multilabel_classification",
             "required"    : false,
-            "model"       : PolicyDummyModel(),
+            "model"       : "PolicyDummyModel()",
             "labels"      : [
 
                 "Say Goodbye",
@@ -60,7 +60,7 @@
         "sys": {
             "description" : "The system's response",
             "label_type"  : "string",
-            "model"       : SysDummyModel(),
+            "model"       : "SysDummyModel()",
             "required"    : true
         }
 

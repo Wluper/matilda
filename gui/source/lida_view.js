@@ -19,7 +19,8 @@ var mainApp = new Vue({
       alreadyVisited: [],
       splittingFile: '',
       splittingTextSourceFile: '',
-      once:'false'
+      logged:'false',
+      restored:'false'
     }
   },
 
@@ -72,7 +73,7 @@ var mainApp = new Vue({
     },
 
     check_login_cookie: function() {
-        if (this.once == "true")
+        if (this.logged == "true")
             return;
         if (localStorage["remember"] != undefined) {
             let memorizedName = localStorage["remember"];
@@ -89,7 +90,7 @@ var mainApp = new Vue({
                 }
             );          
         }
-        this.once = "true";
+        this.logged = "true";
     },
 
     load_in_dialogue_to_annotate: function (event) {

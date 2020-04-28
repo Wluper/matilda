@@ -16,7 +16,6 @@ Vue.component("all-dialogues", {
           dragging: false,
           showModal: false,
           userName : '',
-          once: "false",
           // Reference to the language item
           guiMessages
       }
@@ -73,16 +72,16 @@ Vue.component("all-dialogues", {
     },
 
     getAllDialogueIdsFromServer() {
-
+      
       backend.get_all_dialogue_ids_async()
           .then( (response) => {
 
               this.allDialogueMetadata = response;
-              if ((this.once == "false") && (response.length == 0)) {
+              if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database(this.userName);
               }
-              this.once = "true";
+              mainApp.restored = "true";
           });
 
     },
