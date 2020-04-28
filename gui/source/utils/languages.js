@@ -87,7 +87,10 @@ guiMessages = {
         location:"Database Location",
         port:"Port",
         saved: "Database updated",
-        update: "Upload your data"
+        update: "Update database",
+        importDb: "Import from Database",
+        confirmImport:"This will import the dialogues in your database doc to your current list.",
+        confirmWipe:"Do you wish to wipe your current list before importing?",
     },
       login: {
         welcome: "Welcome",
@@ -178,7 +181,10 @@ guiMessages = {
       location: "Indirizzo",
       port: "Porta",
       saved: "Database aggiornato",
-      update: "Carica i tuoi dati",
+      update: "Aggiorna il database",
+      importDb: "Importa dal database",
+      confirmImport:"L'operazione importerà i dialoghi nel database nella lista dei dialoghi.",
+      confirmWipe:"Vuoi azzerrare la lista prima di importare dal database?",
     },
     login: {
       welcome:"Benvenuto",

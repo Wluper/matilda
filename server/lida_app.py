@@ -112,6 +112,11 @@ class LidaApp(object):
                             methods=["GET", "POST", "PUT", "DELETE"],
                             handler= self.handle_dialogues_resource )
 
+        self.add_endpoint( \
+                            endpoint="/<user>/dialogues_wipe",
+                            endpoint_name="/<user>/dialogues_wipe",
+                            methods=["DELETE"],
+                            handler= self.handle_wipe_request )
 
         self.add_endpoint( \
                             endpoint="/dialogue_annotationstyle",
@@ -244,6 +249,17 @@ class LidaApp(object):
 
         self.dialogueFile.save(user)
         return jsonify( responseObject )
+
+
+    def handle_wipe_request(self, user):
+
+        responseObject = {}
+
+        if request.method == "DELETE":
+            responseObject = self.dialogueFile.clean_workspace(user)
+
+        return responseObject
+
 
 
     def handle_dialogues_metadata_resource(self,user,id=None):

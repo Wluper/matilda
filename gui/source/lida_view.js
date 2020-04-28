@@ -19,7 +19,7 @@ var mainApp = new Vue({
       alreadyVisited: [],
       splittingFile: '',
       splittingTextSourceFile: '',
-      executed:'false'
+      once:'false'
     }
   },
 
@@ -55,7 +55,6 @@ var mainApp = new Vue({
             .then( (response) => {
                 if (response) {
                     console.log("File name updated");
-                    //this.restore_session_from_database(newName);
                     this.set_cookie(newName,pass);
                     this.status = "list-all";
                 } else {
@@ -73,7 +72,7 @@ var mainApp = new Vue({
     },
 
     check_login_cookie: function() {
-        if (this.executed == "true")
+        if (this.once == "true")
             return;
         if (localStorage["remember"] != undefined) {
             let memorizedName = localStorage["remember"];
@@ -90,17 +89,7 @@ var mainApp = new Vue({
                 }
             );          
         }
-        this.executed = "true";
-    },
-
-    restore_session_from_database: function (fileName) {
-        console.log("Ready to restore from database");
-        backend.get_db_entry_async(fileName)
-            .then( (response) => {
-                console.log(response);
-                this.status = "list-all";
-                allDialoguesEventBus.$emit( "refresh_dialogue_list");
-        });
+        this.once = "true";
     },
 
     load_in_dialogue_to_annotate: function (event) {

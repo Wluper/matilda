@@ -7,7 +7,8 @@ Vue.component("database-view", {
             allEntryMetadata: [],
             db_address:"127.0.0.1",
             db_port:"27017",
-            role: ''
+            role: '',
+            userName: ''
         }
     },
 
@@ -24,7 +25,7 @@ Vue.component("database-view", {
     methods:{
         init : function(){
             //Get DATABASE COLLECTION
-            this.detectMode();
+            this.detectRole();
             this.getAllEntriesFromServer();
         },
         go_back : function(){
@@ -33,7 +34,7 @@ Vue.component("database-view", {
             console.log("==================================");
             annotationAppEventBus.$emit("go_back", event);
         },
-        detectMode: function() {
+        detectRole: function() {
             let title = document.getElementsByTagName("title")[0].textContent;
             console.log(title);
             if (title != " LIDA ") {
@@ -92,8 +93,34 @@ Vue.component("database-view", {
                     document.body.appendChild(link);
                     link.click();
                 });
+        },
+
+        import_from_database() {
+            //manually synchronize from database, ask if clean start is required
+            this.userName = localStorage["remember"];
+            let add = confirm(guiMessages.selected.database.confirmImport);
+            if (add == true) {
+                let del = confirm(guiMessages.selected.database.confirmWipe);
+                if (del == true) {
+                    backend.del_all_dialogues_async(this.userName)
+                        .then( (response) => {
+                            console.log(response);
+                            this.restore_session_from_database(this.userName)
+                    });
+                } else {
+                    this.restore_session_from_database(this.userName)
+                }
             }
         },
+
+        restore_session_from_database(fileName) {
+            console.log("Ready to restore from database");
+            backend.get_db_entry_async(fileName)
+                .then( (response) => {
+                    console.log(response);
+            });
+        }
+    },
     template:
     `
         <div id="database-view">
@@ -129,8 +156,8 @@ Vue.component("database-view", {
                             </div>
                         </div>
                     </li>
-
                 </ul>
+                <button v-on:click="import_from_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.importDb}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>

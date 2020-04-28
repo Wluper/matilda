@@ -1,0 +1,92 @@
+{
+
+        "usr": {
+            "description" : "The user's query",
+            "label_type"  : "string",
+            "required"    : true
+        },
+
+        "usr_intent": {
+
+            "description" : "Aim (intent) of user's utterance",
+            "label_type"  : "multilabel_classification",
+            "required"    : false,
+            "labels"      : [
+
+        
+        "Ask job info",
+                "Ask company info",
+        "Ask for help",
+        "Confirm_usr",
+        "Deny_usr",
+        "Greetings_usr",
+                "Provide user info"
+
+            ]
+
+        },
+
+        "slot": {
+
+            "description" : "Intent's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "skill",
+                "job-description",
+                "location",
+                "duties",
+        "company-name",
+        "company-size",
+        "company-contact",
+        "past-experiences",
+        "degree",
+        "contract",
+        "languages",
+        "emoj"
+            ]
+
+        },
+
+        "sys_intent": {
+
+            "description" : "Aim(intent) of sys's utterance",
+            "label_type"  : "multilabel_classification",
+            "required"    : false,
+            "labels"      : [
+
+                "Ask job requested",
+        "Ask user info",
+        "Confirm_sys",
+        "Deny_sys",
+        "Greetings_sys",
+                "Provide job info",
+        "Provide company info"
+
+            ]
+
+        },
+
+        "general_intent": {
+
+            "description" : "General info related to the dialogue",
+            "label_type"  : "multilabel_classification",
+            "required"    : false,
+            "labels"      : [
+
+                "Positive dialogue",
+                "Negative dialogue"
+
+            ]
+
+        },
+
+
+        "sys": {
+            "description" : "The system's response",
+            "label_type"  : "string",
+            "required"    : true
+        }
+
+    }

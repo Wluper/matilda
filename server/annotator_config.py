@@ -3,8 +3,16 @@
 ##############################################
 
 # >>>> Native <<<<
+import os
+import sys
+import json
+from json import loads
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
+
+# == Flask ==
+from flask import Flask
+from flask_cors import CORS
 
 # >>>> Local <<<<
 from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel, SysDummyModel
@@ -35,75 +43,12 @@ class Configuration(object):
     """
     class responsible for configuration and valid annotation structure
     """
+    __DEFAULT_PATH = "annotation_styles"
 
+    annotation_style = "unipi_model.json"
 
-    configDict = {
-
-        "usr": {
-            "description" : "The user's query",
-            "label_type"  : "data",  # This type, "data", acts the same as "string" but will always be displayed first in UI
-            "required"    : True
-        },
-
-        "query_type": {
-
-            "description" : "Whether the query was request / inform / farewell",
-            "label_type"  : "multilabel_classification",
-            "required"    : False,
-            "model"       : TypeDummyModel(),
-            "labels"      : [
-
-                "request",
-                "inform",
-                "farewell"
-
-            ]
-
-        },
-
-        "hotel_belief_state": {
-
-            "description" : "Slot-value pairs",
-            "label_type"  : "multilabel_classification_string",
-            "required"    : False,
-            "model"       : BeliefStateDummyModel(),
-            "labels"      : [
-
-                "hotel-book people",
-                "hotel-book stay",
-                "hotel-book day",
-                "hotel-name"
-
-            ]
-
-        },
-
-        "policy_funcs": {
-
-            "description" : "Policy functions called for this query",
-            "label_type"  : "multilabel_classification",
-            "required"    : False,
-            "model"       : PolicyDummyModel(),
-            "labels"      : [
-
-                "Say Goodbye",
-                "Find And Offer Booking",
-                "Ask For Missing Slots",
-                'Provide Info',
-                'Try Book'
-
-            ]
-
-        },
-
-        "sys": {
-            "description" : "The system's response",
-            "label_type"  : "string",
-            "model"       : SysDummyModel(),
-            "required"    : True
-        }
-
-    }
+    with open(__DEFAULT_PATH+"/"+annotation_style) as style_file:
+        configDict = json.load(style_file)
 
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:

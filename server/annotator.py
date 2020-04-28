@@ -206,7 +206,7 @@ class DialogueAnnotator(object):
         except:
             self.set_dialogues(newName)
 
-        #oldFileName = self.__fileName
+        oldFileName = self.__fileName
         self.__fileName = newName
 
         self.save(newName)
@@ -217,15 +217,13 @@ class DialogueAnnotator(object):
     def set_dialogues( self, newName, dialogues=None ):
         """
         """
-        #DialogueAnnotator.__SESSION_USER = newName
-
-        print("updated",newName)
+        DialogueAnnotator.__SESSION_USER = newName
 
         self.toBeInserted = dialogues if dialogues else {}
 
         setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
 
-        print(self.__dialogues[DialogueAnnotator.__SESSION_USER])
+        print(" * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
     def set_file( self, filePath, fileName=None ):
         """
@@ -280,6 +278,8 @@ class DialogueAnnotator(object):
 
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = newDialogue
 
+        self.save(user)
+
         return {"status" : "success"}
 
 
@@ -326,6 +326,8 @@ class DialogueAnnotator(object):
 
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
+        self.save(user)
+
         return {"id":id}
 
 
@@ -337,6 +339,8 @@ class DialogueAnnotator(object):
 
         del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
 
+        self.save(user)
+
 
     def save(self, user):
         """
@@ -344,7 +348,7 @@ class DialogueAnnotator(object):
         """
         DialogueAnnotator.__SESSION_USER = user
 
-        save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, self.__fileName+".json" ) )
+        save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, user+".json" ) )
 
 
 
@@ -361,7 +365,15 @@ class DialogueAnnotator(object):
 
         # save_json_file( obj=self.__dialogues, path=self.__filePath )
 
+    def clean_workspace(self, user):
 
+        DialogueAnnotator.__SESSION_USER = user
+
+        self.toBeInserted = {}
+
+        setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
+
+        return { "status": "wiped" }
 
 
 ################################################################################

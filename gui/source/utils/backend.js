@@ -308,6 +308,26 @@ async function del_single_dialogue_async(dialogueId) {
 
 };
 
+async function del_all_dialogues_async() {
+
+    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`
+
+    try {
+
+        var response = await axios.delete(apiLink)
+
+        console.log("=========== WIPE DONE ===========")
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
 
 async function RESTdialogues(method, id, params){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
@@ -413,6 +433,8 @@ async function del_db_entry_async(entryId) {
 
 async function get_db_entry_async(entryId) {
 
+    //GET user's dialogues saved in database from previous session
+
     console.log("GETTING",entryId);
 
     var apiLink = API_LINK_BASE+`/database/${entryId}`;
@@ -422,24 +444,12 @@ async function get_db_entry_async(entryId) {
         var response = await axios.get( apiLink, entryId );
         console.log('---- DATABASE SESSION DIALOGUES ----', response.data);
 
-        // update from database only if sessions are not equal
-        let database_session = response.data;
-        let actual_session = await get_all_dialogues_async()
+        //adds dialogues from database
+        
+        post_new_dialogues_from_string_lists_async(response.data)
             .then((response) => {
-                //conversion needed to confront responses coming from different formats
-                if (JSON.stringify(response) == JSON.stringify(database_session)) {
-                    console.log("Session is up to date")
-                
-                } else {
-                    console.log("Updating from Database");
-                    //adds dialogues from database
-                    post_new_dialogues_from_string_lists_async(database_session)
-                        .then((response) => {
-                            allDialoguesEventBus.$emit( "refresh_dialogue_list")
-                        })
-
-                }
-            });
+                allDialoguesEventBus.$emit( "refresh_dialogue_list")   
+        })
 
     } catch(error) {
 
@@ -512,6 +522,7 @@ backend =
     get_all_dialogue_ids_async                  : get_all_dialogue_ids_async,
     get_single_dialogue_async                   : get_single_dialogue_async,
     del_single_dialogue_async                   : del_single_dialogue_async,
+    del_all_dialogues_async                     : del_all_dialogues_async,
     change_dialogue_name_async                  : change_dialogue_name_async,
 
     post_empty_dialogue                         : post_empty_dialogue,
