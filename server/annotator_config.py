@@ -102,10 +102,11 @@ class Configuration(object):
 
         # if previous annotation model didn't work tries next
         except:
-            if Configuration.annotation_style[Configuration.selected+1]:
+            if Configuration.selected < len(Configuration.annotation_style):
                 Configuration.selected = Configuration.selected+1
                 Configuration.validate_dialogue(dialogue)
 
+        Configuration.selected = 0
         return dialogue
 
 
