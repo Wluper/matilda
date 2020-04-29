@@ -110,7 +110,7 @@ Vue.component("annotation-app", {
               })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async()
+          backend.get_annotation_style_async(this.dialogueId)
               .then( (response) => {
                   this.annotationFormat = response;
               });

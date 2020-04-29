@@ -119,8 +119,8 @@ class LidaApp(object):
                             handler= self.handle_wipe_request )
 
         self.add_endpoint( \
-                            endpoint="/dialogue_annotationstyle",
-                            endpoint_name="/dialogue_annotationstyle",
+                            endpoint="/<user>/dialogue_annotationstyle/<id>",
+                            endpoint_name="/<user>/dialogue_annotationstyle/<id>",
                             methods=["GET"],
                             handler= self.handle_annotations_resource )
 
@@ -282,10 +282,14 @@ class LidaApp(object):
         return jsonify( responseObject )
 
 
-    def handle_annotations_resource(self):
+    def handle_annotations_resource(self,user,id):
         """
         GET - Returns the annotation style
         """
+        dialogue = self.dialogueFile.get_dialogue(user, id = id)
+
+        Configuration.validate_dialogue(dialogue["dialogue"])
+
         return jsonify( Configuration.create_annotation_dict() )
 
 

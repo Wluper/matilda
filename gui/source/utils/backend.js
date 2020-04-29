@@ -96,11 +96,11 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
-async function get_annotation_style_async(){
+async function get_annotation_style_async(id){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/dialogue_annotationstyle"
+    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue_annotationstyle/${id}`
 
     try {
         var response = await axios.get(apiLink)
