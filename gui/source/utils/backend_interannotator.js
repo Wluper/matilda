@@ -443,7 +443,6 @@ async function get_all_entries_async() {
 
 async function RESTdialogues(method, id, params){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
-    console.log("REQUESTED FROM: "+session_name())
     console.log("ID: "+id)
     console.log("METHOD "+method)
     console.log("PARAMS "+params)

@@ -10,10 +10,6 @@ from json import loads
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
 
-# == Flask ==
-from flask import Flask
-from flask_cors import CORS
-
 # >>>> Local <<<<
 from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel, SysDummyModel
 
@@ -43,12 +39,14 @@ class Configuration(object):
     """
     class responsible for configuration and valid annotation structure
     """
+
+    # Folder where annotation models are stored
     __DEFAULT_PATH = "annotation_styles"
 
-    annotation_style = "unipi_model.json"
+    # Here are all the used annotation models, preferred first
+    annotation_style = ["unipi_model.json","lida_model.json"]
+    selected = 0
 
-    with open(__DEFAULT_PATH+"/"+annotation_style) as style_file:
-        configDict = json.load(style_file)
 
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
@@ -56,30 +54,57 @@ class Configuration(object):
         validates the dialogue and makes sure it conforms to the configDict
         """
 
-        for i, turn in enumerate(dialogue):
+        #load selected annotation file
+        with open(Configuration.__DEFAULT_PATH+"/"+Configuration.annotation_style[Configuration.selected]) as style_file:
+            Configuration.configDict = json.load(style_file)
 
-            for labelName, info in Configuration.configDict.items():
+        #convert back functions and classes from string 
+        for key,value in Configuration.configDict.items():
+            for sub_key,sub_value in value.items():
+                if "()" in str(sub_value):
+                    Configuration.configDict[key][sub_key] = eval(sub_value)
 
-                try:
-                    turn[labelName]
-                except KeyError:
-                    if info["required"]:
-                        return "ERROR1: Label \'{}\' is listed as \"required\" in the " \
-                               "config.py file, but is missing from the provided " \
-                               "dialogue in turn {}.".format(labelName, i)
+        #verify imported data types
+        """
+        for key,value in configDict.items():
+            print(key,":")
+            for sub_key,sub_value in value.items():
+                print("  sub_key,":",sub_value, "type",type(sub_value))
+        """
 
-                if info["required"] and not turn[labelName]:
-                    return "ERROR2: Required label, \'{}\', does not have a value " \
-                           "provided in the dialogue in turn {}".format(labelName, i)
+        #validation, if first model doesnt work tries next
+        try:
 
-                if "multilabel_classification" == info["label_type"]:
+            for i, turn in enumerate(dialogue):
 
-                    providedLabels = turn[labelName]
+                for labelName, info in Configuration.configDict.items():
 
-                    if not all(x in info["labels"] for x in providedLabels):
-                        return "ERROR3: One of the provided labels in the list: " \
-                               "\'{}\' is not in allowed list according to " \
-                               "config.py in turn {}".format(providedLabels, i)
+                    try:
+                        turn[labelName]
+                    except KeyError:
+                        if info["required"]:
+                            return "ERROR1: Label \'{}\' is listed as \"required\" in the " \
+                                   "config.py file, but is missing from the provided " \
+                                    "dialogue in turn {}.".format(labelName, i)
+
+                    if info["required"] and not turn[labelName]:
+                        return "ERROR2: Required label, \'{}\', does not have a value " \
+                               "provided in the dialogue in turn {}".format(labelName, i)
+
+                    if "multilabel_classification" == info["label_type"]:
+
+                        providedLabels = turn[labelName]
+
+                        if not all(x in info["labels"] for x in providedLabels):
+                            return "ERROR3: One of the provided labels in the list: " \
+                                   "\'{}\' is not in allowed list according to " \
+                                    "config.py in turn {}".format(providedLabels, i)
+
+        # if previous annotation model didn't work tries next
+        except:
+            if Configuration.annotation_style[Configuration.selected+1]:
+                Configuration.selected = Configuration.selected+1
+                Configuration.validate_dialogue(dialogue)
 
         return dialogue
 
