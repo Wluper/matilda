@@ -288,6 +288,8 @@ class LidaApp(object):
         """
         dialogue = self.dialogueFile.get_dialogue(user, id = id)
 
+        #test for correct annotation style
+
         Configuration.validate_dialogue(dialogue["dialogue"])
 
         return jsonify( Configuration.create_annotation_dict() )

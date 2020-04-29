@@ -15,7 +15,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # == Local ==
-from annotator_config import Configuration
+from interannotator_config import Configuration
 from interannotator_config import agreementConfig, agreementScoreConfig
 
 from admin_annotator import DialogueAnnotator, MultiAnnotator
@@ -625,6 +625,8 @@ class InterAnnotatorApp(object):
 
 
                 if annotationName=="turn_idx":
+                    continue
+                if annotationName=="turn_id":
                     continue
 
                 annotationType = Configuration.configDict[annotationName]["label_type"]

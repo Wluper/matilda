@@ -164,9 +164,6 @@ class MultiAnnotator(object):
 
 
 
-
-
-
 class DialogueAnnotator(object):
     """
     class that handles everything which relates to managing a single dialogues file

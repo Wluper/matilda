@@ -47,7 +47,6 @@ class Configuration(object):
     annotation_style = ["unipi_model.json","lida_model.json"]
     selected = 0
 
-
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
         """
