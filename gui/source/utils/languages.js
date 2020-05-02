@@ -108,7 +108,7 @@ guiMessages = {
   it: {
     admin: {
       dataItems: "Dialoghi",
-      visited: "Visitati",
+      visited: "Visitato",
       button_downloadAll:"Scarica i dati",
       button_interAgreement:"Indice di concordanza", 
       annotators:"Annotatori", 

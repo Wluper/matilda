@@ -410,10 +410,11 @@ WluperDark: 0e181e
 }
 
 .meta-tags {
-    background-color: #3d6582 !important; */
+    background-color: #3d6582 !important;
     color: #aaaaaa;
     display: grid !important;
     grid-template: [row1-start] "type string" [row1-end] /1fr 4fr;
+    margin-bottom:2px;
 }
 
 .meta-type {

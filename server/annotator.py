@@ -333,7 +333,7 @@ class DialogueAnnotator(object):
         #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
-        #self.insert_meta_tags(user, dialogue, id)
+        self.insert_meta_tags(user, dialogue, id)
 
         self.save(user)
 
@@ -341,11 +341,20 @@ class DialogueAnnotator(object):
 
     def insert_meta_tags(self, user, dialogue, id):
         #adds meta-tags
+        try:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]
+        except:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
+                "annotation_style": Configuration.annotation_style[Configuration.selected],
+                "title":"",
+                "description":"" 
+                })
+        """    
         if "annotation_style" in self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]:
             print(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["annotation_style"])
         else:
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0,{ "annotation_style": Configuration.annotation_style[Configuration.selected] })
-
+        """
 
     def delete_dialogue(self, user, id):
         """

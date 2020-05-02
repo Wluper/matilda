@@ -183,7 +183,7 @@ Vue.component("annotation-app", {
         turn_update: function(event){
             console.log("-----> Updating turn", event)
             this.allDataSaved = false;
-            utils.update_turn( this.dTurns[this.dCurrentId - 1], event);
+            utils.update_turn( this.dTurns[this.dCurrentId], event);
             console.log("-----> Turn Updated", this.dCurrentTurn)
         },
 
@@ -346,10 +346,7 @@ Vue.component('dialogue-turns',{
     <div id="dialogue-turns">
         <div class="overflow-hide">
             <dialogue-meta v-for="(turn, index) in turns" v-if="(index == 0)"
-                       v-bind:primaryElementClass="primaryElementClass"
-                       v-bind:turn="turn.string"
-                       v-bind:currentId="currentId"
-                       v-bind:myId="index">
+                       v-bind:primaryElementClass="primaryElementClass">
             </dialogue-meta>
 
             <dialogue-turn v-for="(turn, index) in turns" v-if="(index > 0)"
@@ -431,7 +428,7 @@ Vue.component('dialogue-meta',{
             </div>
 
             <div class="meta-value">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
             </div>
 
         </div>
