@@ -170,7 +170,7 @@ class InterAnnotatorApp(object):
         self.add_endpoint( \
                             endpoint="/database/<id_doc>/<collection>",
                             endpoint_name="/database/<id_doc>/<collection>",
-                            methods=["DELETE"],
+                            methods=["GET","DELETE"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/download",
@@ -192,8 +192,11 @@ class InterAnnotatorApp(object):
 
         if id_doc:
 
+            if request.method == "GET":
+                responseObject = DatabaseManagement.readDatabase(collection,"_id",id_doc)
+
             if request.method == "DELETE":
-                responseObject.update( DatabaseManagement.deleteEntry(self, id_doc, collection) )
+                responseObject = DatabaseManagement.deleteEntry(self, id_doc, collection)
         else:
 
             if request.method == "GET":
@@ -410,7 +413,7 @@ class InterAnnotatorApp(object):
 
                         if annotationName=="turn_idx":
                             continue
-
+ 
                         annotationType = Configuration.configDict[annotationName]["label_type"]
 
                         agreementScoreFunc = agreementScoreConfig[ annotationType ]
@@ -628,7 +631,9 @@ class InterAnnotatorApp(object):
                     continue
                 if annotationName=="turn_id":
                     continue
-
+                if annotationName == "annotation_style":
+                    continue
+                    
                 annotationType = Configuration.configDict[annotationName]["label_type"]
 
                 agreementFunc = agreementConfig[ annotationType ]

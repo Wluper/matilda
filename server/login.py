@@ -6,7 +6,7 @@ class LoginFuncs(object):
 
 	def logIn(self, userID, userPass):
 
-		userDetails = self.databaseFuncs.checkDatabase("users","userName",userID)
+		userDetails = self.databaseFuncs.readDatabase("users","userName",userID)
 
 		for line in userDetails:
 			if line["userName"] == userID:

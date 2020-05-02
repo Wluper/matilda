@@ -18,6 +18,7 @@ from flask_cors import CORS
 
 # >>>> Local <<<<
 from utils import load_json_file, save_json_file
+from annotator_config import Configuration
 
 
 
@@ -185,7 +186,7 @@ class DialogueAnnotator(object):
         """
         self.set_dialogues( self.__SESSION_USER, dialogues )
         self.set_file( filePath, fileName )
-        self.addedDialogues = 0
+        self.addedDialogues = { self.__SESSION_USER: 0 }
 
     #def get_file_name(self):
         """
@@ -219,6 +220,8 @@ class DialogueAnnotator(object):
         self.toBeInserted = dialogues if dialogues else {}
 
         setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
+
+        self.addedDialogues = { self.__SESSION_USER: 0 }
 
         print(" * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
@@ -262,7 +265,12 @@ class DialogueAnnotator(object):
 
         for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList)})
+            try: 
+                annotationStyle = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["annotation_style"]
+            except:
+                annotationStyle = ""
+
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "annotation_style":annotationStyle})
 
         return metadata
 
@@ -315,17 +323,28 @@ class DialogueAnnotator(object):
         """
         DialogueAnnotator.__SESSION_USER = user
 
-        self.addedDialogues += 1
+        #update dialogue user's count
+        number = int(self.addedDialogues[DialogueAnnotator.__SESSION_USER])+1
+        self.addedDialogues[DialogueAnnotator.__SESSION_USER] = number
 
         if not id:
-            id = self.__get_new_dialogue_id()
+            id = self.__get_new_dialogue_id(user)
 
-
+        #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
+
+        #self.insert_meta_tags(user, dialogue, id)
 
         self.save(user)
 
         return {"id":id}
+
+    def insert_meta_tags(self, user, dialogue, id):
+        #adds meta-tags
+        if "annotation_style" in self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]:
+            print(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["annotation_style"])
+        else:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0,{ "annotation_style": Configuration.annotation_style[Configuration.selected] })
 
 
     def delete_dialogue(self, user, id):
@@ -350,10 +369,10 @@ class DialogueAnnotator(object):
 
 
 
-    def __get_new_dialogue_id(self):
+    def __get_new_dialogue_id(self,user):
         """
         """
-        newId = "Dialogue" + str(self.addedDialogues)
+        newId = "Dialogue" + str(self.addedDialogues[user])
 
         return newId
 
@@ -366,9 +385,7 @@ class DialogueAnnotator(object):
 
         DialogueAnnotator.__SESSION_USER = user
 
-        self.toBeInserted = {}
-
-        setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
+        self.set_dialogues( user )
 
         return { "status": "wiped" }
 

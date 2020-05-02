@@ -136,3 +136,80 @@ Vue.component('agreement-modal', {
   </transition>
   `
 })
+
+/*************************************
+* MODAL COMPONENT
+*************************************/
+Vue.component('database-entry-modal', {
+   data () {
+         return {
+            entry : {},
+            guiMessages,
+         }
+   },
+
+   mounted () {
+      this.init();
+   },
+
+   methods: {
+
+         init : function(){
+
+            backend.get_db_entry_async(mainApp.displayingDocument)
+                  .then( (response) => {
+                     console.log();
+                     this.entry = response[0];
+            });
+
+      },
+  },
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              {{guiMessages.selected.modal_document[0]}}
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+              <slot name="body">
+                  <strong>ID:</strong> {{entry._id}}
+                  <br><br>
+                  <strong>{{guiMessages.selected.modal_document[1]}}</strong>
+                  <br>
+                  {{guiMessages.selected.modal_document[3]}}: {{entry.lastUpdate}}
+                  <br><br>
+                  <strong>
+                    {{guiMessages.selected.modal_document[2]}}
+                  </strong>
+                  <br>
+                  <pre>
+                  {{entry.annotations}}
+                  </pre>
+              </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})

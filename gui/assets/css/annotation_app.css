@@ -408,3 +408,46 @@ WluperDark: 0e181e
     height: 10%;
     margin: 1em;
 }
+
+.meta-tags {
+    background-color: #3d6582 !important; */
+    color: #aaaaaa;
+    display: grid !important;
+    grid-template: [row1-start] "type string" [row1-end] /1fr 4fr;
+}
+
+.meta-type {
+    background-color: #ececee !important;
+    width: 100%;
+    height: 100%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    text-align: center;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: type;
+}
+
+.meta-value {
+    background-color: #ffffff!important;
+    height: 100%;
+    margin: 0;
+    grid-column-start: 2;
+    grid-column-end: -1;
+    grid-area: string;
+}
+
+.meta-value input {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin: 0;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
+    border-left: none
+}

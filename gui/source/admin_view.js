@@ -43,6 +43,10 @@ var mainApp = new Vue({
         this.status = 'database-view';
       },
 
+      load_document_view: function (event) {
+        this.displayingDocument = event;
+      },
+
   },
 
   created (){
@@ -50,6 +54,7 @@ var mainApp = new Vue({
        allDialoguesEventBus.$on("dialogue_clicked", this.switchStatusToResolving);
        allDialoguesEventBus.$on("usersManagement_clicked", this.switchStatusToUsersManagement);
        allDialoguesEventBus.$on("database_clicked", this.switchStatusToDatabase);
+       databaseEventBus.$on( "document_selected", this.load_document_view )
   },
 
   template:

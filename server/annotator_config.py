@@ -46,16 +46,34 @@ class Configuration(object):
     # Here are all the used annotation models, preferred first
     annotation_style = ["unipi_model.json","lida_model.json"]
     selected = 0
+    found = "False"
 
-    @staticmethod
-    def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
-        """
-        validates the dialogue and makes sure it conforms to the configDict
-        """
+    def check_for_meta_tag(dialogue):
+    #check dialogue's annotation-style meta-tag
+        for element in dialogue:
+            for name in element:
+                if name == "annotation_style":
+                    for i,model in enumerate(Configuration.annotation_style,0):
+                        if model == element["annotation_style"]:
+                            Configuration.found = i
 
-        #load selected annotation file
-        with open(Configuration.__DEFAULT_PATH+"/"+Configuration.annotation_style[Configuration.selected]) as style_file:
-            Configuration.configDict = json.load(style_file)
+    def write_meta_tag(dialogue, model):
+    #write successful annotation-style
+        if dialogue != []:
+            if "annotation_style" not in dialogue[0]:
+                dialogue.insert(0,{ "annotation_style": model })
+            else:
+                dialogue[0]["annotation_style"] = model
+
+
+    def import_model():
+    #load selected annotation file
+        if Configuration.found == "False":
+            with open(Configuration.__DEFAULT_PATH+"/"+Configuration.annotation_style[Configuration.selected]) as style_file:
+                Configuration.configDict = json.load(style_file)
+        else: 
+             with open(Configuration.__DEFAULT_PATH+"/"+Configuration.annotation_style[Configuration.found]) as style_file:
+                Configuration.configDict = json.load(style_file)
 
         #convert back functions and classes from string 
         for key,value in Configuration.configDict.items():
@@ -63,15 +81,35 @@ class Configuration(object):
                 if "()" in str(sub_value):
                     Configuration.configDict[key][sub_key] = eval(sub_value)
 
-        #verify imported data types
-        """
+        #verify_imported_model()
+
+
+    def verify_imported_model():
+        #verify imported data types in model
         for key,value in configDict.items():
             print(key,":")
             for sub_key,sub_value in value.items():
-                print("  sub_key,":",sub_value, "type",type(sub_value))
-        """
+                print("  ",sub_key,":",sub_value, "type",type(sub_value))
 
         #validation, if first model doesnt work tries next
+
+    @staticmethod
+    def validate_dialogue(dialogue: List[Dict[str, Any]], tagChecked=None) -> Union[str, List[Dict]]:
+        """
+        validates the dialogue and makes sure it conforms to the configDict
+        """
+        Configuration.found = "False"
+
+        if tagChecked == None:
+            print("\nChecking for meta-tags")
+            Configuration.check_for_meta_tag(dialogue)
+            print("Found? Number",Configuration.found)
+
+        #if meta-tag present no need to validate again
+        Configuration.import_model()
+        if Configuration.found != "False":
+            return dialogue
+
         try:
 
             for i, turn in enumerate(dialogue):
@@ -81,30 +119,61 @@ class Configuration(object):
                     try:
                         turn[labelName]
                     except KeyError:
+
+                        # turn 0 stores meta-tags
+                        if i is 0:
+                            continue
+
                         if info["required"]:
-                            return "ERROR1: Label \'{}\' is listed as \"required\" in the " \
+                            message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                    "config.py file, but is missing from the provided " \
-                                    "dialogue in turn {}.".format(labelName, i)
+                                    "dialogue in turn {}.".format(labelName, i))
+                            print(message)
+                            return message
 
-                    if info["required"] and not turn[labelName]:
-                        return "ERROR2: Required label, \'{}\', does not have a value " \
-                               "provided in the dialogue in turn {}".format(labelName, i)
+                        if info["required"] and not turn[labelName]:
+                            message = ("ERROR2: Required label, \'{}\', does not have a value " \
+                               "provided in the dialogue in turn {}".format(labelName, i))
+                            print(message)
+                            return message
 
-                    if "multilabel_classification" == info["label_type"]:
+                        if "multilabel_classification" == info["label_type"]:
 
-                        providedLabels = turn[labelName]
+                            providedLabels = turn[labelName]
 
-                        if not all(x in info["labels"] for x in providedLabels):
-                            return "ERROR3: One of the provided labels in the list: " \
+                            if not all(x in info["labels"] for x in providedLabels):
+                                message = "ERROR3: One of the provided labels in the list: " \
                                    "\'{}\' is not in allowed list according to " \
                                     "config.py in turn {}".format(providedLabels, i)
+                                print(message)
+                                return message
+
+            print("Validation success")
+            if Configuration.found != "False":
+                print("Model result",Configuration.annotation_style[Configuration.found])
+                model = Configuration.annotation_style[Configuration.found]
+            else:
+                print("Model result",Configuration.annotation_style[Configuration.selected])
+                model = Configuration.annotation_style[Configuration.selected]
+
+            Configuration.write_meta_tag(dialogue,model)
 
         # if previous annotation model didn't work tries next
         except:
-            if Configuration.selected < len(Configuration.annotation_style):
-                Configuration.selected = Configuration.selected+1
-                Configuration.validate_dialogue(dialogue)
+            print("\tCan't validate with that model")
 
+            if Configuration.found != "False":
+                Configuration.selected = 0
+                Configuration.validate_dialogue(dialogue,True)
+            
+            elif Configuration.selected < len(Configuration.annotation_style)-1:
+                    Configuration.selected = Configuration.selected + 1
+                    print("\tTrying model number",Configuration.selected)
+                    Configuration.validate_dialogue(dialogue,True)
+            else:
+                return
+
+        #re-initialize value and return dialogue
         Configuration.selected = 0
         return dialogue
 

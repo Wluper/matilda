@@ -147,7 +147,7 @@
 .dialouge-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 6fr 2fr 2fr 2fr;
+    grid-template: [row1-start] "id . annotStyle visited numTurns" [row1-end] / 3fr 0fr 4fr 2fr 2fr;
     cursor: pointer;
     background-color: white;
     color: #222;
@@ -202,6 +202,21 @@
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
+}
+
+.dialogue-annot_style {
+    grid-area: annotStyle;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color:#aeaeb3;
 }
 
 .add-button-container {

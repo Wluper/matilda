@@ -143,7 +143,7 @@ class LidaApp(object):
         self.add_endpoint( \
                             endpoint="/database/<id>",
                             endpoint_name="/database/<id>",
-                            methods=["GET","DELETE"],
+                            methods=["GET","POST","DELETE"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/download",
@@ -159,7 +159,10 @@ class LidaApp(object):
 
     def handle_database_resource(self,id=None,user=None):
         """
-        GET - Gets the database collection
+        GET - Gets the dialogues id in the database collection for the user
+            or Gets an entire database document 
+
+        POST - Gets the entire dialogues in the database and import them
 
         PUT - Updates the database collection
 
@@ -170,20 +173,20 @@ class LidaApp(object):
 
         if user:
             if request.method == "PUT":
-                responseObject.update( DatabaseManagement.updateDatabase( self, user ))
+                responseObject = DatabaseManagement.updateDatabase( self, user )
 
             if request.method == "GET":
                 responseObject = DatabaseManagement.getDatabaseIds(self)
 
         if id:
-
             if request.method == "GET":
-                responseObject.update( DatabaseManagement.getUserEntry(self,id=id) )
+                responseObject = DatabaseManagement.readDatabase("database","_id",id)
+
+            if request.method == "POST":
+                responseObject = DatabaseManagement.getUserEntry(self,id)
 
             if request.method == "DELETE":
                 responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
-
-
 
         return jsonify(responseObject)
 
@@ -445,10 +448,10 @@ class LidaApp(object):
         responseObject = {}
 
         if request.method == "POST":
-            responseObject.update( LoginFuncs.logIn(self, id, idPass) )
+            responseObject = LoginFuncs.logIn(self, id, idPass)
 
         if request.method == "PUT":
-            responseObject.update( LoginFuncs.create(self,id) )
+            responseObject = LoginFuncs.create(self,id)
 
 
         return jsonify(responseObject)

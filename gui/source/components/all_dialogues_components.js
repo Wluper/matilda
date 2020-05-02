@@ -15,19 +15,17 @@ Vue.component("all-dialogues", {
           allDialogueMetadata: [],
           dragging: false,
           showModal: false,
-          userName : '',
           // Reference to the language item
           guiMessages
       }
   },
-  // computed : {
-  //     userName : function(){
-  //         console.log("computing un");
-  //         var restOfName = this.name.split(".json")[0]
-  //         var userName = restOfName.split("USER_")[1]
-  //         return userName
-  //     }
-  // },
+   computed : {
+        userName : function(){
+            console.log("computing user name");
+            userName = localStorage["remember"];
+            return userName
+        }
+   },
   created() {
       allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer )
   },
@@ -40,7 +38,7 @@ Vue.component("all-dialogues", {
         init : function(){
 
             // Step ONE: Get FILE NAME
-            this.userName = localStorage["remember"];
+            mainApp.userName = localStorage["remember"];
             this.getAllDialogueIdsFromServer();
 
         },
@@ -72,14 +70,14 @@ Vue.component("all-dialogues", {
     },
 
     getAllDialogueIdsFromServer() {
-      
+
       backend.get_all_dialogue_ids_async()
           .then( (response) => {
 
               this.allDialogueMetadata = response;
               if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
-                  this.restore_session_from_database(this.userName);
+                  this.restore_session_from_database(mainApp.userName);
               }
               mainApp.restored = "true";
           });
@@ -99,7 +97,7 @@ Vue.component("all-dialogues", {
         backend.post_empty_dialogue()
             .then( (newDialogueId) => {
 
-                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 0});
+                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotation_style:""});
                 backend.update_db();
             });
     },
@@ -114,7 +112,7 @@ Vue.component("all-dialogues", {
             nameToDelete = this.allDialogueMetadata[idToDelete].id
             backend.del_single_dialogue_async(nameToDelete)
                 .then( () => {
-                    this.getAllDialogueIdsFromServer();
+                    allDialoguesEventBus.$emit("refresh_dialogue_list");
                     backend.update_db();
                 });
 
@@ -155,7 +153,7 @@ Vue.component("all-dialogues", {
                         if ('error' in response.data) {
                             alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
                         } else {
-                            this.getAllDialogueIdsFromServer();
+                            allDialoguesEventBus.$emit("refresh_dialogue_list");
                         }
 
                     });
@@ -183,7 +181,7 @@ Vue.component("all-dialogues", {
         console.log(event);
 
         // for some reason needs manual updating...
-        this.userName = event.target.value;
+        mainApp.userName = event.target.value;
 
         backend.put_name("USER_"+event.target.value+".json")
             .then( (response) => {
@@ -199,7 +197,7 @@ Vue.component("all-dialogues", {
 
     restore_session_from_database: function (fileName) {
           console.log("Ready to restore from database");
-          backend.get_db_entry_async(fileName)
+          backend.get_user_db_entry_async(fileName)
                 .then( (response) => {
                       console.log(response);
                       allDialoguesEventBus.$emit("refresh_dialogue_list");
@@ -232,11 +230,23 @@ Vue.component("all-dialogues", {
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
-                fileName = "USER_" + this.userName + ".json"
+                fileName = "USER_" + mainApp.userName + ".json"
                 link.setAttribute('download', fileName )
                 document.body.appendChild(link)
                 link.click();
             });
+    },
+
+    clean_dialogues() {
+        let del = confirm(guiMessages.selected.database.confirmImport);
+        if (del == true) {
+            backend.del_all_dialogues_async(mainApp.userName)
+                .then( (response) => {
+                    console.log(response);
+                    console.log("All user's dialogues deleted.");
+                    allDialoguesEventBus.$emit("refresh_dialogue_list");
+            });
+        }
     },
 
     clicked_database_button() {
@@ -269,10 +279,11 @@ Vue.component("all-dialogues", {
 
           <div class="file-name-container">
             <div class="inner">
-              <span> USER_ </span>
+              <span> USER </span>
               <input readonly id="fileNameInput"
-                      type="text"
-                     v-bind:value="userName" @click="log_out()">
+                    type="text"
+                    v-bind:value="userName" 
+                    @click="log_out()">
               </input>
               <span> .json </span>
             </div>
@@ -316,6 +327,7 @@ Vue.component("all-dialogues", {
                   </div>
 
                   <div class="dialogue-num-turns" >{{dat.num_turns}} {{ guiMessages.selected.lida.turns }}</div>
+                  <div class="dialogue-annot_style" >{{dat.annotation_style}}</div>
               </div>
 
             </div>
@@ -326,6 +338,7 @@ Vue.component("all-dialogues", {
       
       <ul class="btn-set">
         <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">{{ guiMessages.selected.lida.button_newDialogue }}</button></li>
+        <li><button class="add-dialogue-button btn btn-sm" v-on:click="clean_dialogues()">{{ guiMessages.selected.lida.button_wipeDialogues }}</button></li>
         <li>
           
               <input type="file"

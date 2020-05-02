@@ -20,6 +20,7 @@ guiMessages = {
       button_delete: "Delete",
       turns: "Turns",
       button_newDialogue: "Add a New Dialogue",
+      button_wipeDialogues: "Delete all dialogues",
       interfaceLanguage: "Interface Language:"
     },
     annotation_app: {
@@ -82,6 +83,13 @@ guiMessages = {
       "Available Annotations:",
       "Overall"
     ],
+    modal_document:
+    [ 
+        "Document",
+        "Tags",
+        "JSON",
+        "lastUpdate"
+    ],
       database: {
         title: "Database Management",
         location:"Database Location",
@@ -114,6 +122,7 @@ guiMessages = {
       button_delete: "Elimina",
       turns: "Turni",
       button_newDialogue: "Aggiungi un nuovo Dialogo",
+      button_wipeDialogues: "Elimina tutti i dialoghi",
       interfaceLanguage: "Lingua Interfaccia:"  
 
     },
@@ -175,6 +184,13 @@ guiMessages = {
       "Questo è un rapporto suoi tuoi dati.",
       "Annotazioni disponibili:",
       "Riepilogo"
+    ],
+      modal_document:
+    [ 
+        "Documento",
+        "Tags",
+        "JSON",
+        "lastUpdate"
     ],
     database: {
       title: "Gestione Database",

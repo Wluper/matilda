@@ -5,6 +5,7 @@ Vue.component("database-view", {
             changesSaved: "",
             guiMessages,
             allEntryMetadata: [],
+            showModal: false,
             db_address:"127.0.0.1",
             db_port:"27017",
             role: '',
@@ -53,7 +54,8 @@ Vue.component("database-view", {
         },
 
         clicked_entry(clickedEntry) {
-            databaseEventBus.$emit("entry_selected", this.allEntryMetadata[clickedEntry])
+            this.showModal = 'true';
+            databaseEventBus.$emit("document_selected",clickedEntry);
         },
 
         update_database() {
@@ -115,7 +117,7 @@ Vue.component("database-view", {
 
         restore_session_from_database(fileName) {
             console.log("Ready to restore from database");
-            backend.get_db_entry_async(fileName)
+            backend.get_user_db_entry_async(fileName)
                 .then( (response) => {
                     console.log(response);
             });
@@ -161,6 +163,7 @@ Vue.component("database-view", {
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
+                <database-entry-modal v-if="showModal" @close="showModal = false"></database-entry-modal>
             </div>
         </div>
     `

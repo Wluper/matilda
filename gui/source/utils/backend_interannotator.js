@@ -440,6 +440,27 @@ async function get_all_entries_async() {
   }
 }
 
+async function get_db_entry_async(entryId) {
+
+    console.log("GETTING ID:",entryId, "database document");
+
+    collection = "database";
+
+    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
+
+    try {
+
+        var response = await axios.get( apiLink, entryId );
+        console.log('---- DATABASE DOCUMENT ----', response.data);
+
+    } catch(error) {
+
+        console.log(error);
+    }
+
+    return response.data
+}
+
 
 async function RESTdialogues(method, id, params){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
@@ -504,6 +525,7 @@ backend =
     create_user                                 : create_user,
 
     get_all_db_entries_ids                      : get_all_db_entries_ids,
+    get_db_entry_async                          : get_db_entry_async,
     update_db                                   : update_db,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,

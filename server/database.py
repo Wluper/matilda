@@ -47,17 +47,9 @@ class DatabaseManagement(object):
 	
 	def readDatabase(coll,attribute,string=None):
 
-		query = DatabaseManagement.checkDatabase(coll,attribute,string=None)
+		DatabaseManagement.responseObject = []
 
-		entries = []
-
-		for name in query:
-			entries.append(name)
-
-		return entries
-
-
-	def checkDatabase(coll,attribute,string=None):
+		print(" * Searching in:",coll,"for key-value",attribute,string)
 
 		entries = {}
 		collection_selected = DatabaseManagement.collection
@@ -70,7 +62,10 @@ class DatabaseManagement(object):
 		else:
 			query = collection_selected.find()
 
-		return query
+		for line in query:
+			DatabaseManagement.responseObject.append(line)
+
+		return DatabaseManagement.responseObject
 
 	def downloadDatabase(self):
 
@@ -89,13 +84,15 @@ class DatabaseManagement(object):
 		collection_dict = DatabaseManagement.collection.find()
 		print(collection_dict)
 		for entry in collection_dict:
-			#print("* Database Entry *************** \n",entry)
+			print("* Database Entry *************** \n",entry)
 			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
 		print("* Response ***********\n",entries,"\n ********************")
 
 		return entries
 
 	def deleteEntry(self,id,collection):
+
+		#delete a database document by id
 
 		if collection != "users":
 			DatabaseManagement.collection.delete_one({"_id":id})
@@ -107,20 +104,31 @@ class DatabaseManagement(object):
 
 	def updateDatabase(self,username):
 
-		with open(DatabaseManagement.__DEFAULT_PATH+"/"+username+".json") as file:
-			annotations = json.load(file)
+		#update the database user's document
+
+		DatabaseManagement.responseObject = []
+
+		try:
+			with open(DatabaseManagement.__DEFAULT_PATH+"/"+username+".json") as file:
+				annotations = json.load(file)
+		except:
+			annotations = {}
 
 		DatabaseManagement.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		return DatabaseManagement.responseObject
 
 	def getUserEntry(self, id):
 
-		query = DatabaseManagement.checkDatabase("database","_id",id)
+		#check the database and format the response
 
-		for line in query:
+		DatabaseManagement.responseObject = []
+
+		elaboration = DatabaseManagement.readDatabase("database","_id",id)
+
+		for line in elaboration:
 			for name in line:
 				if name == "annotations":
-					print(line[name])
+					#print(line[name])
 					DatabaseManagement.responseObject = line[name]
 
 		return DatabaseManagement.responseObject

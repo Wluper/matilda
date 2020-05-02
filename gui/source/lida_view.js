@@ -16,11 +16,13 @@ var mainApp = new Vue({
     return {
       status: 'logging',
       displayingDialogue: '',
+      displayingDocument: '',
       alreadyVisited: [],
       splittingFile: '',
       splittingTextSourceFile: '',
       logged:'false',
-      restored:'false'
+      restored:'false',
+      userName:'',
     }
   },
 
@@ -41,6 +43,7 @@ var mainApp = new Vue({
 
       //Database View Event Bus
       databaseEventBus.$on( "database_selected", this.load_database_view )
+      databaseEventBus.$on( "document_selected", this.load_document_view )
 
       //Check if already logged, restore session
       this.check_login_cookie()
@@ -90,6 +93,7 @@ var mainApp = new Vue({
                 }
             );          
         }
+        this.userName = localStorage["remember"];
         this.logged = "true";
     },
 
@@ -153,6 +157,10 @@ var mainApp = new Vue({
         console.log(event);
         console.log(databaseEventBus);
         this.status = 'database-view';
+    },
+
+    load_document_view: function (event) {
+        this.displayingDocument = event;
     },
 
   },

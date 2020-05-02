@@ -431,30 +431,50 @@ async function del_db_entry_async(entryId) {
     }
 }
 
-async function get_db_entry_async(entryId) {
+async function get_user_db_entry_async(entryId) {
 
-    //GET user's dialogues saved in database from previous session
+    //get user's dialogues saved in database from previous session
 
-    console.log("GETTING",entryId);
+    console.log("GETTING USER",entryId, "database document");
 
     var apiLink = API_LINK_BASE+`/database/${entryId}`;
 
     try {
 
-        var response = await axios.get( apiLink, entryId );
+        var response = await axios.post( apiLink, entryId );
         console.log('---- DATABASE SESSION DIALOGUES ----', response.data);
 
         //adds dialogues from database
-        
-        post_new_dialogues_from_string_lists_async(response.data)
+        dialogues_to_add = response.data
+        console.log(response)
+        post_new_dialogues_from_string_lists_async(dialogues_to_add)
             .then((response) => {
-                allDialoguesEventBus.$emit( "refresh_dialogue_list")   
+                allDialoguesEventBus.$emit("refresh_dialogue_list");   
         })
 
     } catch(error) {
 
         console.log(error);
     }
+}
+
+async function get_db_entry_async(entryId) {
+
+    console.log("GETTING ID:",entryId, "database document");
+
+    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+
+    try {
+
+        var response = await axios.get( apiLink, entryId );
+        console.log('---- DATABASE DOCUMENT ----', response.data);
+
+    } catch(error) {
+
+        console.log(error);
+    }
+
+    return response.data
 }
 
 async function get_all_entries_async() {
@@ -532,6 +552,7 @@ backend =
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     update_db                                   : update_db,
     get_db_entry_async                          : get_db_entry_async,
+    get_user_db_entry_async                     : get_user_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
     login                                       : login

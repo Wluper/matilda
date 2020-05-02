@@ -12,6 +12,7 @@ Vue.component("annotation-app", {
         return {
             dCurrentId: data.currentTurnId,
             dTurns: [],
+            metaTags: [],
             validAnnotations: data.validAnnotations,
             annotationFormat: {},
             allDataSaved: true,
@@ -104,7 +105,8 @@ Vue.component("annotation-app", {
          backend.get_single_dialogue_async(this.dialogueId)
               .then( (response) => {
                   console.log('---- RECEIVED DATA FROM THE SERVER ----')
-                  console.log(response)
+                  console.log(response);
+                  this.metaTags = response[0];
                   console.log('---- END ----')
                   this.dTurns = response;
               })
@@ -131,10 +133,10 @@ Vue.component("annotation-app", {
             console.log(" ************ DTURNS ************ ")
             console.log(this.dCurrentId)
             console.log(event)
-            if (event.key=="ArrowLeft" || event.key=="ArrowUp"){
+            if (/*event.key=="ArrowLeft" ||*/ event.key=="ArrowUp"){
                 temp=-1;
             }
-            else if (event.key=="ArrowRight" || event.key=="ArrowDown" || event.key=="Enter"){
+            else if (/*event.key=="ArrowRight" ||*/ event.key=="ArrowDown" || event.key=="Enter"){
                 temp=1;
             } else {
               return;
@@ -256,7 +258,7 @@ Vue.component("annotation-app", {
 ********************************/
 
 Vue.component('dialogue-menu',{
-    props : ["turn","currentId", "changesSaved", "dialogueTitle"],
+    props : ["turn","currentId", "changesSaved", "dialogueTitle","metaTags"],
 
     data () {
       return {
@@ -307,7 +309,7 @@ Vue.component('dialogue-menu',{
                    class="dialogue-name-edit"
                    v-bind:id="dialogueTitle + '-name-input'"
                    v-bind:value="dialogueTitle"
-                   v-on:input="handle_dialogue_id_change($event)"
+                   v-on:keyup.enter="handle_dialogue_id_change($event)"
                    v-on:focusout="toggleTitleEdit()">
 
             <span v-bind:id="dialogueTitle + '-dialogue-title-span'"
@@ -343,18 +345,116 @@ Vue.component('dialogue-turns',{
     `
     <div id="dialogue-turns">
         <div class="overflow-hide">
-            <dialogue-turn v-for="(turn, index) in turns"
+            <dialogue-meta v-for="(turn, index) in turns" v-if="(index == 0)"
                        v-bind:primaryElementClass="primaryElementClass"
                        v-bind:turn="turn.string"
                        v-bind:currentId="currentId"
-                       v-bind:myId="index + 1">
+                       v-bind:myId="index">
+            </dialogue-meta>
+
+            <dialogue-turn v-for="(turn, index) in turns" v-if="(index > 0)"
+                       v-bind:primaryElementClass="primaryElementClass"
+                       v-bind:turn="turn.string"
+                       v-bind:currentId="currentId"
+                       v-bind:myId="index">
             </dialogue-turn>
         </div>
     </div>
     `
 })
 
+Vue.component('dialogue-meta',{
+    // primaryElementClass is the class used to select the correct input field
+    // to correctly set the focus when turns are changed with arrow keys or enter
+    props : ["turn","currentId","myId", "primaryElementClass"],
+    data: function (){
+        return {
+            guiMessages,
+            metaTags: []
+        }
+    },
+    methods :{
+        turn_updated_string : function(event){
+            annotationAppEventBus.$emit("turn_updated_string", event )
+        },
+        check_if_selected(){
+            return this.currentId==this.myId;
+        },
+        update_id(){
+            annotationAppEventBus.$emit("update_turn_id", this.myId)
+        },
+    },
+    mounted(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+        let dialogueID = document.getElementsByClassName("dialogue-name-edit")[0];
+        dialogueID = dialogueID.id.slice(0,-11);
+        backend.get_single_dialogue_async(dialogueID)
+                .then( (response) => {
+                    console.log('---- RECEIVED DATA FROM THE SERVER ----');
+                    console.log(response);
+                    this.metaTags = response[0];
+        });
+    },
+    updated(){
+        if (this.currentId==this.myId){
+            var elem = this.$el
+            elem.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+    },
 
+    directives: {
+
+        blur: {
+            componentUpdated: function(el) {
+                el.blur();
+            }
+        }
+
+    },
+
+    template:
+    `
+    <div v-if="check_if_selected()" class="dialogue-turn-selected">
+
+        <div class="turn-header">
+            <div class="active-turn-id">
+                Meta Tags: {{myId}}
+            </div>
+        </div>
+
+        <div v-for="content,tag in metaTags" class="meta-tags">
+            <div class="meta-type">
+                {{tag}}
+            </div>
+
+            <div class="meta-value">
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+            </div>
+
+        </div>
+    </div>
+
+    <div v-else v-on:click="update_id()" class="dialogue-turn">
+        <div class="sticky">
+           Meta Tags: {{myId}}
+        </div>
+
+        <div v-for="content,tag in metaTags" class="meta-tags">
+            <div class="meta-type">
+                {{tag}}
+            </div>
+            <div class="meta-value">
+                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    `
+})
 
 
 

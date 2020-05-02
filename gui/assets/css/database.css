@@ -115,3 +115,16 @@
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
+}
+
+pre {
+    height:23vw;
+    width:53vw;
+    overflow:scroll;
+    font-size:13px;
+}
+
+.modal-body {
+    margin: 20px 0;
+    overflow:hidden;
+}

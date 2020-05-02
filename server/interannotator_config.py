@@ -57,10 +57,10 @@ class Configuration(object):
             if "()" in str(sub_value):
                 configDict[key][sub_key] = eval(sub_value)
 
-    for key,value in configDict.items():
-        print(key,":")
-        for sub_key,sub_value in value.items():
-            print("  ",sub_key,":",sub_value, "type",type(sub_value))
+    #for key,value in configDict.items():
+    #    print(key,":")
+    #    for sub_key,sub_value in value.items():
+    #        print("  ",sub_key,":",sub_value, "type",type(sub_value))
 
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
@@ -96,18 +96,22 @@ class Configuration(object):
                     try:
                         turn[labelName]
                     except KeyError:
+
+                        if i is 0:
+                            continue
+
                         if info["required"]:
                             return "ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                    "config.py file, but is missing from the provided " \
                                     "dialogue in turn {}.".format(labelName, i)
 
-                    if info["required"] and not turn[labelName]:
-                        return "ERROR2: Required label, \'{}\', does not have a value " \
+                        if info["required"] and not turn[labelName]:
+                            return "ERROR2: Required label, \'{}\', does not have a value " \
                                "provided in the dialogue in turn {}".format(labelName, i)
 
-                    if "multilabel_classification" == info["label_type"]:
+                        if "multilabel_classification" == info["label_type"]:
 
-                        providedLabels = turn[labelName]
+                            providedLabels = turn[labelName]
 
                         if not all(x in info["labels"] for x in providedLabels):
                             return "ERROR3: One of the provided labels in the list: " \
@@ -116,7 +120,7 @@ class Configuration(object):
 
         # if previous annotation model didn't work tries next
         except:
-            if Configuration.selected < len(Configuration.annotation_style):
+            if Configuration.selected < len(Configuration.annotation_style)-1:
                 Configuration.selected = Configuration.selected+1
                 Configuration.validate_dialogue(dialogue)
 
