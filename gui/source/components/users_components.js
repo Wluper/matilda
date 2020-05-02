@@ -47,7 +47,7 @@ Vue.component("users-view", {
             let newPassword = document.getElementById("create_password").value;
             let newMail = document.getElementById("create_email").value;
             if ((newPassword == '') || (newUser == '')) {
-                alert("A username and a password are required")
+                alert(guiMessages.selected.login.warning)
                 return;
             }
             if (newMail == '')
@@ -66,17 +66,19 @@ Vue.component("users-view", {
         },
 
         delete_user(event) {
-            let name = event.target.parentNode.parentNode.id;
-            backend.del_db_entry_async(name,"users")
-                .then( (response) => {
-                    console.log(response);
-                    if (response.data.status == "success") {
-                        this.init();
-                        this.changesSaved = 'true';
-                    } else {
-                        return
-                    }
-            });
+            if (confirm(guiMessages.selected.admin.deleteConfirm)) {
+                let name = event.target.parentNode.parentNode.id;
+                backend.del_db_entry_async(name,"users")
+                    .then( (response) => {
+                        console.log(response);
+                        if (response.data.status == "success") {
+                            this.init();
+                            this.changesSaved = 'true';
+                        } else {
+                            return
+                        }
+                });
+            }
         }
     },
     template:

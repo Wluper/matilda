@@ -101,9 +101,9 @@ class Configuration(object):
         Configuration.found = "False"
 
         if tagChecked == None:
-            print("\nChecking for meta-tags")
+            #print("\nChecking for meta-tags")
             Configuration.check_for_meta_tag(dialogue)
-            print("Found? Number",Configuration.found)
+            #print("Found? Number",Configuration.found)
 
         #if meta-tag present no need to validate again
         Configuration.import_model()
@@ -150,10 +150,10 @@ class Configuration(object):
 
             print("Validation success")
             if Configuration.found != "False":
-                print("Model result",Configuration.annotation_style[Configuration.found])
+                #print("Model result",Configuration.annotation_style[Configuration.found])
                 model = Configuration.annotation_style[Configuration.found]
             else:
-                print("Model result",Configuration.annotation_style[Configuration.selected])
+                #print("Model result",Configuration.annotation_style[Configuration.selected])
                 model = Configuration.annotation_style[Configuration.selected]
 
             Configuration.write_meta_tag(dialogue,model)
@@ -168,7 +168,7 @@ class Configuration(object):
             
             elif Configuration.selected < len(Configuration.annotation_style)-1:
                     Configuration.selected = Configuration.selected + 1
-                    print("\tTrying model number",Configuration.selected)
+                    #print("\tTrying model number",Configuration.selected)
                     Configuration.validate_dialogue(dialogue,True)
             else:
                 return

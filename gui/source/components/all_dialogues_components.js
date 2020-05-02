@@ -326,7 +326,7 @@ Vue.component("all-dialogues", {
                        {{ guiMessages.selected.admin.visited }}
                   </div>
 
-                  <div class="dialogue-num-turns" >{{dat.num_turns}} {{ guiMessages.selected.lida.turns }}</div>
+                  <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
                   <div class="dialogue-annot_style" >{{dat.annotation_style}}</div>
               </div>
 

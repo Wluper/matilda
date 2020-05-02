@@ -68,7 +68,7 @@ Vue.component("database-view", {
         },
 
         delete_entry(event) {
-            if (confirm("Are you sure you want to permanently delete this entry? This cannot be undone!")) {
+            if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
                 idToDelete = event.target.parentNode.parentNode.id;
                 backend.del_db_entry_async(idToDelete)

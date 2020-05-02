@@ -43,7 +43,7 @@ Vue.component("login-view", {
                         console.log("Username and password is valid");
                         allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
                     } else {
-                         alert("User-password combination invalid")
+                        alert(guiMessages.selected.login.fail)
                     }
                 }
             );

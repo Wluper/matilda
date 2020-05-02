@@ -13,7 +13,8 @@ guiMessages = {
       button_upload:"Upload File or Drag and Drop",
       dropAnywhere: "Drop Files Anywhere to Upload!",
       userButton: "Users Management",
-      createButton: "Add"
+      createButton: "Add",
+      deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
     },
     lida: {
       button_fileFormatInfo: "File Format Info",
@@ -21,7 +22,7 @@ guiMessages = {
       turns: "Turns",
       button_newDialogue: "Add a New Dialogue",
       button_wipeDialogues: "Delete all dialogues",
-      interfaceLanguage: "Interface Language:"
+      interfaceLanguage: "Interface Language:",
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -103,6 +104,8 @@ guiMessages = {
       login: {
         welcome: "Welcome",
         send: "Log in",
+        warning:"A username and a password are required!",
+        fail:"Username and password combinatio invalid"
       }
   },
   it: {
@@ -116,6 +119,7 @@ guiMessages = {
       dropAnywhere: "Rilascia il file per caricarlo!",
       userButton: "Gestione Utenti",
       createButton: "Crea",
+      deleteConfirm:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
   },
     lida: {
       button_fileFormatInfo: "Info sui formati",
@@ -205,6 +209,8 @@ guiMessages = {
     login: {
       welcome:"Benvenuto",
       send: "Accedi",
+      warning:"Sono richiesti sia un username sia una password!",
+      fail:"Combinazione di nome utente e password non valida",
     }
   },
 }
