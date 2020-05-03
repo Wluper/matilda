@@ -19,7 +19,7 @@ Vue.component("resolution-menu", {
     template:
     `
     <div id="resolution-menu">
-        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">Back to All Dialgoues</button>
+        <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
     </div>
     `
 })
@@ -150,6 +150,12 @@ Vue.component("error-element", {
 
 Vue.component("error-element-body", {
 
+    data() { 
+        return {
+            guiMessages
+        }
+    },
+
     props: [
       "accepted",
       "turn",
@@ -163,23 +169,23 @@ Vue.component("error-element-body", {
     <div class="error-element-body">
 
         <div class="error-element-id">
-            Error Id: {{id}}
+            {{guiMessages.selected.annotation_app.errorId}} {{id}}
         </div>
 
         <div class="error-element-turn">
-            Turn {{turn}}
+            {{guiMessages.selected.annotation_app.turnId}} {{turn}}
         </div>
 
         <div class="error-element-annotation">
-            Name:  {{name}}
+             {{guiMessages.selected.resolution_app.name}}  {{name}}
         </div>
 
         <div v-if="accepted" class="accepted-indicator">
-            Accepted
+            {{guiMessages.selected.resolution_app.accepted}}
         </div>
 
         <div v-if="!(accepted)" class="not-accepted-indicator">
-            Review
+            {{guiMessages.selected.resolution_app.review}}
         </div>
 
     </div>
@@ -317,7 +323,7 @@ Vue.component("annotation-component", {
         </classification-string-annotation>
 
         <div v-else >
-            FAIL!
+            {{guiMessages.selected.resolution_app.fail}}
         </div>
     </div>
     `
@@ -381,6 +387,13 @@ Vue.component("accept", {
     props :[
         "metaData"
     ],
+
+    data() { 
+        return {
+            guiMessages
+        }
+    },
+
     // METHODS
     methods:{
 
@@ -393,7 +406,7 @@ Vue.component("accept", {
     template:
     `
     <div id="accept">
-        <button v-on:click="accept()" class="accept-button btn btn-sm- btn-primary"> Accept </button>
+        <button v-on:click="accept()" class="accept-button btn btn-sm- btn-primary"> {{guiMessages.selected.resolution_app.accept}}</button>
     </div>
     `
 });

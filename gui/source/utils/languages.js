@@ -28,6 +28,14 @@ guiMessages = {
       unsaved: "Unsaved Changes",
       backToAll: "Back to All Dialogues",
     },
+    resolution_app: {
+      errorId: "Error Id:",
+      name: "Name:",
+      accepted: "Accepted",
+      review: "Review",
+      fail: "FAIL!",
+      accept:"Accept"
+    },
     modal_formatInfo:
     [ 
       `
@@ -105,6 +113,14 @@ guiMessages = {
         allSaved: "Modifiche salvate",
         unsaved: "Cambiamenti non salvati",
         backToAll: "Indietro"
+    },
+      resolution_app: {
+        errorId: "Id Conflitto:",
+        name: "Nome:",
+        accepted: "Accettato",
+        review: "Revisiona",
+        fail: "ERRORE!",
+        accept:"Accetta"
     },
     modal_formatInfo:
     [ 
