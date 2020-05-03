@@ -186,7 +186,8 @@ class DialogueAnnotator(object):
         """
         self.set_dialogues( self.__SESSION_USER, dialogues )
         self.set_file( filePath, fileName )
-        self.addedDialogues = { self.__SESSION_USER: 0 }
+        self.addedDialogues = {}
+        self.addedDialogues[self.__SESSION_USER] = 0
 
     #def get_file_name(self):
         """
@@ -221,7 +222,11 @@ class DialogueAnnotator(object):
 
         setattr(DialogueAnnotator.__dialogues, DialogueAnnotator.__SESSION_USER, self.toBeInserted )
 
-        self.addedDialogues = { self.__SESSION_USER: 0 }
+        try:
+            self.addedDialogues[newName] = 0
+        except:
+            self.addedDialogues = {}
+            self.addedDialogues[newName] = 0
 
         print(" * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
@@ -324,8 +329,8 @@ class DialogueAnnotator(object):
         DialogueAnnotator.__SESSION_USER = user
 
         #update dialogue user's count
-        number = int(self.addedDialogues[DialogueAnnotator.__SESSION_USER])+1
-        self.addedDialogues[DialogueAnnotator.__SESSION_USER] = number
+        number = self.addedDialogues[user]
+        self.addedDialogues[user] = int(number)+1
 
         if not id:
             id = self.__get_new_dialogue_id(user)

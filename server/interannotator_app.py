@@ -629,11 +629,9 @@ class InterAnnotatorApp(object):
 
                 if annotationName=="turn_idx":
                     continue
-                if annotationName=="turn_id":
-                    continue
-                if annotationName == "annotation_style":
-                    continue
-                    
+                #if annotationName == "annotation_style" or "description" or "title":
+                #   continue
+
                 annotationType = Configuration.configDict[annotationName]["label_type"]
 
                 agreementFunc = agreementConfig[ annotationType ]
