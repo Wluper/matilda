@@ -28,7 +28,7 @@ Vue.component("annotation-app", {
         },
 
         dCurrentTurn: function() {
-            temp = utils.get_turn_data(this.dTurns[ this.dCurrentId - 1 ], this.validAnnotations, this.annotationFormat);
+            temp = utils.get_turn_data(this.dTurns[ this.dCurrentId], this.validAnnotations, this.annotationFormat);
             return temp;
         },
 

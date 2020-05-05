@@ -118,13 +118,18 @@
 }
 
 pre {
-    height:23vw;
-    width:53vw;
+    height:35vh;
+    width:63vw;
     overflow:scroll;
     font-size:13px;
+    background-color:rgba(0,0,0,0.03);
 }
 
 .modal-body {
     margin: 20px 0;
     overflow:hidden;
+}
+
+#database-view .inner-wrap .modal-mask .modal-wrapper .modal-container {
+    width:70%;
 }
