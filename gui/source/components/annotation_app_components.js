@@ -65,6 +65,7 @@ Vue.component("annotation-app", {
         // ANNOTATION EVENTS
         annotationAppEventBus.$on( "update_classification", this.turn_update );
         annotationAppEventBus.$on( "classification_string_updated", this.turn_update );
+        annotationAppEventBus.$on( "resume_annotation_tools", this.resume_annotation_tools );
 
         // INPUT BOX EVENTS
         annotationAppEventBus.$on( "new_turn", this.append_new_turn );
@@ -120,6 +121,7 @@ Vue.component("annotation-app", {
         },
 
         remove_turn: function(event) {
+            this.resume_annotation_tools();
             console.log('Removing turn', event)
             this.dTurns.splice(event - 1, 1)
             this.allDataSaved = false;
@@ -178,6 +180,7 @@ Vue.component("annotation-app", {
             console.log("-----> Updating TurnId:")
             console.log(event);
             this.dCurrentId = event;
+            this.resume_annotation_tools();
         },
 
         turn_update: function(event){
@@ -221,7 +224,20 @@ Vue.component("annotation-app", {
                     }
 
                 });
-        }
+        },
+
+        resume_annotation_tools: function(event) {
+            console.log("Resuming annotation tools");
+            if (document.getElementById("active_label") != undefined) {
+                let activeLabel = document.getElementById("active_label");
+                let labelName = activeLabel.parentNode.getElementsByTagName("input")[0].id;
+                activeLabel.id = null;
+            }
+            let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
+            activeTurn.style = null;
+            let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
+            Array.from(activeInputs).forEach(element => element.onselect = null);
+        },
 
     },
 
@@ -414,10 +430,10 @@ Vue.component('dialogue-meta',{
 
     template:
     `
-    <div v-if="check_if_selected()" class="dialogue-turn-selected">
+    <div class="meta-turn-container">
 
         <div class="turn-header">
-            <div class="active-turn-id">
+            <div class="meta-turn">
                 Meta Tags: {{myId}}
             </div>
         </div>
@@ -430,23 +446,6 @@ Vue.component('dialogue-meta',{
             <div class="meta-value">
                 <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
             </div>
-
-        </div>
-    </div>
-
-    <div v-else v-on:click="update_id()" class="dialogue-turn">
-        <div class="sticky">
-           Meta Tags: {{myId}}
-        </div>
-
-        <div v-for="content,tag in metaTags" class="meta-tags">
-            <div class="meta-type">
-                {{tag}}
-            </div>
-            <div class="meta-value">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
-            </div>
-        </div>
 
         </div>
     </div>

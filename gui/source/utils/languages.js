@@ -32,6 +32,8 @@ guiMessages = {
       allSaved: "All Changes Saved",
       unsaved: "Unsaved Changes",
       backToAll: "Back to All Dialogues",
+      close: "Close",
+      select: "Select or write text from turn"
     },
     resolution_app: {
       errorId: "Error Id:",
@@ -105,9 +107,10 @@ guiMessages = {
         port:"Port",
         saved: "Database updated",
         update: "Update database",
-        importDb: "Import from Database",
-        confirmImport:"This will import the dialogues in your database doc to your current list.",
+        importDb: "Reload from Database",
+        confirmImport:"This will import the dialogues in your database doc directly to your current list.",
         confirmWipe:"Do you wish to wipe your current list before importing?",
+        importDoc: "Import this document",
     },
       login: {
         welcome: "Welcome",
@@ -145,7 +148,9 @@ guiMessages = {
         enterQuery: "Nuova richiesta",
         allSaved: "Modifiche salvate",
         unsaved: "Cambiamenti non salvati",
-        backToAll: "Indietro"
+        backToAll: "Indietro",
+        close: "Chiudi",
+        select: "Seleziona o scrivi dal turno"
     },
     resolution_app: {
       errorId: "Id Conflitto:",
@@ -218,9 +223,10 @@ guiMessages = {
       port: "Porta",
       saved: "Database aggiornato",
       update: "Aggiorna il database",
-      importDb: "Importa dal database",
-      confirmImport:"L'operazione importerà i dialoghi nel database nella lista dei dialoghi.",
+      importDb: "Ricarica dal database",
+      confirmImport:"L'operazione importerà i dialoghi dal database verso la lista dei dialoghi.",
       confirmWipe:"Vuoi azzerrare la lista prima di importare dal database?",
+      importDoc: "Importa questo documento",
     },
     login: {
       welcome:"Benvenuto",

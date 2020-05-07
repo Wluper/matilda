@@ -162,7 +162,17 @@ Vue.component('database-entry-modal', {
                      this.entry = response[0];
             });
 
-      },
+         },
+
+         import_doc(annotations) {
+            if (confirm(guiMessages.selected.database.confirmImport)) {
+               backend.post_new_dialogues_from_string_lists_async(annotations)
+                  .then( (response) => {
+                     console.log();
+                     console.log("Import Success");
+               });
+            }
+         }
   },
   template:
   `
@@ -201,7 +211,9 @@ Vue.component('database-entry-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              <button class="modal-import-button" @click="import_doc(entry.annotations)">
+                {{guiMessages.selected.database.importDoc}}
+              </button>
               <button class="modal-default-button" @click="$emit('close')">
                 OK
               </button>

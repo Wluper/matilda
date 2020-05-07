@@ -409,6 +409,32 @@ WluperDark: 0e181e
     margin: 1em;
 }
 
+.meta-turn-container {
+    max-width: 75%;
+    margin: 0 auto 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff !important;
+    color: #666;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 1px;
+    transition: 0.3s;
+    overflow: hidden;
+    height: auto;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: #d1d1d3;
+    cursor:pointer;
+    border-left-color:grey;
+}
+
+.meta-turn {
+    grid-area: turn-id;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight:600;
+    color:#222;
+}
+
 .meta-tags {
     background-color: #3d6582 !important;
     color: #aaaaaa;

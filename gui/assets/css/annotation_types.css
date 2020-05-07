@@ -44,6 +44,7 @@
                    [row2-start] ". inputZone" 1fr [row2-end]
                    / 1fr 9fr;
     padding: 10px;
+    padding-bottom:0;
 }
 
 .multilabel-string-checkbox-container {
@@ -56,10 +57,14 @@
 
 .multilabel-string-label {
     grid-area: labelZone;
+    font-size:15px;
 }
 
 .multilabel-string-input {
     grid-area: inputZone;
+    border:1px solid rgba(0,0,0,0.1);
+    padding-bottom:0;
+    font-size:14px;
 }
 
 .checkbox-wrapper {
@@ -111,6 +116,10 @@
 
 .checkbox:checked + label:after {
     transform:translateY(-50%) scale(1);
+}
+
+#active_label {
+    background-color: rgb(255, 255, 182);
 }
 
 .annotation-header {

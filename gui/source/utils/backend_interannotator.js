@@ -251,6 +251,26 @@ async function post_empty_dialogue() {
 }
 
 
+async function post_new_dialogues_from_string_lists_async(stringLists) {
+
+    const apiLink = API_LINK_BASE+`/dialogues_import`
+
+    try {
+
+        var response = await axios.post( apiLink, stringLists )
+        console.log('---- RESPONSE TO POST DATA ----', response);
+        return true;
+
+    } catch(error) {
+
+        console.log(error);
+
+    }
+    return false;
+
+}
+
+
 async function post_new_dialogue_from_json_string_async(jsonString, fileName=null) {
 
     try {
@@ -519,6 +539,7 @@ backend =
     change_dialogue_name_async                  : change_dialogue_name_async,
 
     post_empty_dialogue                         : post_empty_dialogue,
+    post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
 
     get_all_users                               : get_all_users,

@@ -212,6 +212,7 @@ Vue.component('classification-string-annotation', {
 
             collapsed: false,
             showInfo: false,
+            guiMessages,
         }
 
     },
@@ -291,14 +292,17 @@ Vue.component('classification-string-annotation', {
           console.log('---- UPDATING SLOT-VALUE ----')
           present = false;
 
+          if (event.target) { slotValue = event.target.value }
+            else { slotValue = event.value }
+
           for (idx in this.classification_strings) {
 
-              if (this.classification_strings[idx][0] == labelName && event.target.value !== '') {
+              if (this.classification_strings[idx][0] == labelName && slotValue !== '') {
 
                   present = true;
-                  this.classification_strings[idx][1] = event.target.value
+                  this.classification_strings[idx][1] = slotValue
 
-              } else if (this.classification_strings[idx][0] == labelName && event.target.value == '') {
+              } else if (this.classification_strings[idx][0] == labelName && slotValue == '') {
 
                   present = true;
                   this.classification_strings.splice(idx, 1)
@@ -312,7 +316,7 @@ Vue.component('classification-string-annotation', {
           }
 
           if (!present) {
-              this.classification_strings.push([labelName, event.target.value])
+              this.classification_strings.push([labelName, slotValue])
           }
 
           /* TODO
@@ -338,6 +342,33 @@ Vue.component('classification-string-annotation', {
           annotationAppEventBus.$emit('classification_string_updated', outEvent)
 
       },
+
+      select_word: function(labelName) {
+         annotationAppEventBus.$emit( "resume_annotation_tools");
+         console.log("Selecting text for",labelName);
+
+         let activeLabel = document.getElementById(labelName);
+         let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
+         let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
+
+         activeLabel.parentNode.parentNode.getElementsByTagName("input")[1].id = "active_label";
+         activeTurn.style.border = "3px solid #fafa69";
+         Array.from(activeInputs).forEach(element => element.onselect = this.update_slot);
+
+      },
+
+      update_slot: function(event) {
+         console.log("Gathering text");
+         let activeLabel = document.getElementById("active_label"); 
+         let text = (window.getSelection().toString());
+         let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
+         let labelName = activeLabel.parentNode.getElementsByTagName("input")[0].id;
+         //updating
+         activeLabel.value += context.trim()+"["+text+"], ";
+         this.updateClassAndString(activeLabel, labelName);
+         //put all back to place
+         annotationAppEventBus.$emit( "resume_annotation_tools");
+      }, 
 
     },
 
@@ -368,7 +399,7 @@ Vue.component('classification-string-annotation', {
                 <div class="info-button-container">
 
                     <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
-                        Close
+                        {{guiMessages.selected.annotation_app.close}}
                     </button>
 
                     <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
@@ -409,6 +440,7 @@ Vue.component('classification-string-annotation', {
                 </label>
 
                 <input class="multilabel-string-input"
+                       v-on:click="select_word(labelName)"
                        v-bind:value="getStringPart(labelName)"
                        v-on:input="updateClassAndString($event, labelName)">
                 </input>

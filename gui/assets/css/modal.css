@@ -70,6 +70,30 @@
     box-shadow: 0px 0px 10px #a1c45c;
 }
 
+.modal-import-button {
+    float: left;
+    color:white;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    background-color: #259af7;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.modal-import-button:hover {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.modal-import-button:active {
+    transition: 0s;
+    color:white;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled

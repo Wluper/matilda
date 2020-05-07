@@ -128,6 +128,12 @@ class InterAnnotatorApp(object):
                             methods=["GET"],
                             handler= self.handle_annotations_resource )
 
+        self.add_endpoint( \
+                            endpoint="/dialogues_import",
+                            endpoint_name="/dialogues_import",
+                            methods=["POST"],
+                            handler= self.handle_dialogues_import )
+
         # self.add_endpoint( \
         #                     endpoint="/turns",
         #                     endpoint_name="/turns",
@@ -177,6 +183,16 @@ class InterAnnotatorApp(object):
                             endpoint_name="/database/download",
                             methods=["GET"],
                             handler= self.handle_database_download )
+
+    def handle_dialogues_import(self):
+
+        responseObject = {}
+
+        dialogues = request.get_json()
+
+        responseObject = self.__add_new_dialogues_from_json_dict(responseObject, dialogueDict=dialogues )
+
+        return jsonify( responseObject )
 
 
     def handle_database_resource(self,id_doc=None, collection=None):
@@ -629,12 +645,26 @@ class InterAnnotatorApp(object):
 
                 if annotationName=="turn_idx":
                     continue
-                #if annotationName == "annotation_style" or "description" or "title":
-                #   continue
 
-                annotationType = Configuration.configDict[annotationName]["label_type"]
-
-                agreementFunc = agreementConfig[ annotationType ]
+                #metatags can be ignored
+                if annotationName != "annotation_style" or "description" or "title":
+                    try:
+                        #confront
+                        annotationType = Configuration.configDict[annotationName]["label_type"]
+                        agreementFunc = agreementConfig[ annotationType ]
+                    except:
+                        #in case of mismatched number in turn_id
+                        if annotationName == "turn_id":
+                            continue
+                        for index,model in enumerate(Configuration.annotation_style,0):
+                            Configuration.import_model(index)
+                            print(index)
+                            try:
+                                annotationType = Configuration.configDict[annotationName]["label_type"]
+                                agreementFunc = agreementConfig[ annotationType ]
+                                break
+                            except:
+                                pass
 
                 if agreementFunc:
 
