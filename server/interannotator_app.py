@@ -641,6 +641,7 @@ class InterAnnotatorApp(object):
                 meta["accepted"] = False
 
                 predictions = None
+                agreementFunc = None
 
 
                 if annotationName=="turn_idx":
