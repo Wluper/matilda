@@ -508,8 +508,7 @@ Vue.component('dialogue-turn',{
             <div class="active-turn-id">
                 {{guiMessages.selected.annotation_app.turnId}}: {{myId}}
             </div>
-
-            <button class="turn-deleter" v-on:click="delete_this_turn($event)">{{guiMessages.selected.lida.button_delete}}</button>
+            <button class="turn-deleter" v-on:click="delete_this_turn($event)" hidden>{{guiMessages.selected.lida.button_delete}}</button>
         </div>
 
         <div v-for="stringType in turn" class="user-string-type">

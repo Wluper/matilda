@@ -359,12 +359,14 @@ Vue.component('classification-string-annotation', {
 
       update_slot: function(event) {
          console.log("Gathering text");
+         console.log(event);
+         console.log(event.target.selectionStart,event.target.selectionEnd);
          let activeLabel = document.getElementById("active_label"); 
          let text = (window.getSelection().toString());
          let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
          let labelName = activeLabel.parentNode.getElementsByTagName("input")[0].id;
          //updating
-         activeLabel.value += context.trim()+"["+text+"], ";
+         activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"], ";
          this.updateClassAndString(activeLabel, labelName);
          //put all back to place
          annotationAppEventBus.$emit( "resume_annotation_tools");

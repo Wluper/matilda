@@ -347,12 +347,12 @@ class DialogueAnnotator(object):
     def insert_meta_tags(self, user, dialogue, id):
         #adds meta-tags
         try:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["annotation_style"]
         except:
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
-                "annotation_style": Configuration.annotation_style[Configuration.selected],
+                "annotation_style": Configuration.annotation_style,
                 "title":"",
-                "description":"" 
+                "collection":"" 
                 })
         """    
         if "annotation_style" in self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]:

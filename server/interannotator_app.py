@@ -657,15 +657,6 @@ class InterAnnotatorApp(object):
                         #in case of mismatched number in turn_id
                         if annotationName == "turn_id":
                             continue
-                        for index,model in enumerate(Configuration.annotation_style,0):
-                            Configuration.import_model(index)
-                            print(index)
-                            try:
-                                annotationType = Configuration.configDict[annotationName]["label_type"]
-                                agreementFunc = agreementConfig[ annotationType ]
-                                break
-                            except:
-                                pass
 
                 if agreementFunc:
 
