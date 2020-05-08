@@ -125,9 +125,9 @@ Vue.component("annotation-app", {
             console.log('Removing turn', event)
             this.dTurns.splice(event - 1, 1)
             this.allDataSaved = false;
-            if (this.dCurrentId > 1) {
-                this.dCurrentId -= 1
-            }
+            //if (this.dCurrentId > 1) {
+            //    this.dCurrentId -= 1
+            //}
         },
 
         change_turn: function(event) {

@@ -238,7 +238,7 @@ Vue.component("all-dialogues", {
     },
 
     clean_dialogues() {
-        let del = confirm(guiMessages.selected.database.confirmImport);
+        let del = confirm(guiMessages.selected.lida.confirmWipe);
         if (del == true) {
             backend.del_all_dialogues_async(mainApp.userName)
                 .then( (response) => {

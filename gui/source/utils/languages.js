@@ -23,6 +23,7 @@ guiMessages = {
       button_newDialogue: "Add a New Dialogue",
       button_wipeDialogues: "Delete all dialogues",
       interfaceLanguage: "Interface Language:",
+      confirmWipe:"Do you wish to wipe your current list?",
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -138,7 +139,8 @@ guiMessages = {
       turns: "Turni",
       button_newDialogue: "Aggiungi un nuovo Dialogo",
       button_wipeDialogues: "Elimina tutti i dialoghi",
-      interfaceLanguage: "Lingua Interfaccia:"  
+      interfaceLanguage: "Lingua Interfaccia:",
+      confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista?",
 
     },
       annotation_app: {
