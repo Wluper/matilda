@@ -15,6 +15,8 @@ guiMessages = {
       userButton: "Users Management",
       createButton: "Add",
       deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
+      wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
+      button_wipeView:"Clean dialogues view"
     },
     lida: {
       button_fileFormatInfo: "File Format Info",
@@ -24,6 +26,10 @@ guiMessages = {
       button_wipeDialogues: "Delete all dialogues",
       interfaceLanguage: "Interface Language:",
       confirmWipe:"Do you wish to wipe your current list?",
+    },
+    collection: {
+        title: "Collections Management",
+        create: "Create collection"
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -132,6 +138,8 @@ guiMessages = {
       userButton: "Gestione Utenti",
       createButton: "Crea",
       deleteConfirm:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
+      wipeConfirm:"Si è sicuri di voler azzerare la lista dei dialoghi? I dialoghi non saranno eliminati dai loro file",
+      button_wipeView:"Pulisci la lista"
   },
     lida: {
       button_fileFormatInfo: "Info sui formati",
@@ -141,8 +149,11 @@ guiMessages = {
       button_wipeDialogues: "Elimina tutti i dialoghi",
       interfaceLanguage: "Lingua Interfaccia:",
       confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista?",
-
-    },
+   },
+      collection: {
+        title: "Gestione Collezioni",
+        create: "Crea collezione"
+   },
       annotation_app: {
         turnId: "Id Turno",
         enter: "Invia",

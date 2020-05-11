@@ -444,13 +444,18 @@ async function get_user_db_entry_async(entryId) {
         var response = await axios.post( apiLink, entryId );
         console.log('---- DATABASE SESSION DIALOGUES ----', response.data);
 
-        //adds dialogues from database
-        dialogues_to_add = response.data
-        console.log(response)
-        post_new_dialogues_from_string_lists_async(dialogues_to_add)
-            .then((response) => {
-                allDialoguesEventBus.$emit("refresh_dialogue_list");   
-        })
+        //adds dialogues from database if response not empty
+        let dialogues = JSON.stringify(response.data)
+        if (( dialogues != "{}" ) || ( dialogues != "[]")) {
+            dialogues_to_add = response.data
+            console.log(response)
+            post_new_dialogues_from_string_lists_async(dialogues_to_add)
+                .then((response) => {
+                    allDialoguesEventBus.$emit("refresh_dialogue_list");   
+            })
+        } else {
+            return "Server Response: Database Backup empty"
+        }
 
     } catch(error) {
 

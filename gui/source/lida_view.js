@@ -155,7 +155,6 @@ var mainApp = new Vue({
     load_database_view: function (event) {
         console.log('---- DATABASE VIEW ----');
         console.log(event);
-        console.log(databaseEventBus);
         this.status = 'database-view';
     },
 

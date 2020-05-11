@@ -44,6 +44,9 @@ Vue.component("main-admin", {
     clicked_database_button() {
         allDialoguesEventBus.$emit("database_clicked");
     },
+    clicked_collection_button() {
+        allDialoguesEventBus.$emit("collection_clicked");
+    },
 
     handleDragOver(event) {
         event.stopPropagation();
@@ -168,6 +171,18 @@ Vue.component("main-admin", {
             });
     },
 
+    clean_view() {
+        if (confirm(guiMessages.selected.admin.wipeConfirm)) {
+            backend.del_all_dialogues_async()
+                .then( (response) => {
+                    console.log(response);
+                    this.getAllDialogueIdsFromServer();
+                }
+
+            )
+        }
+    }
+
   },
   template:
   `
@@ -193,10 +208,27 @@ Vue.component("main-admin", {
             <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
             <button class="help-button btn btn-sm" @click="clicked_users_button()">{{ guiMessages.selected.admin.userButton }}</button>
             <button class="help-button btn btn-sm" @click="clicked_database_button()">{{ guiMessages.selected.database.title}}</button>
+            <button class="help-button btn btn-sm" @click="clicked_collection_button()">{{ guiMessages.selected.collection.title}}</button>
         </div>
     </div>
     
     <div class="inner-wrap">
+        <ul class="btn-set">
+            <li><input type="file"
+                   id="fileInput"
+                   name="fileInput"
+                   accept=".txt, .json"
+                   v-on:change="open_file($event)">
+
+            <label for="fileInput"
+                   id="fileInputLabel"
+                   class="btn btn-sm">
+                   {{ guiMessages.selected.admin.button_upload }}
+            </label></li>
+            <li>
+                <button class="help-button btn btn-sm" @click="clean_view()">{{ guiMessages.selected.admin.button_wipeView}}</button>
+            </li>
+        </ul>
     <ul class="dialogue-list">
 
       <li class="listed-dialogue"
@@ -238,19 +270,6 @@ Vue.component("main-admin", {
 
       </li>
 
-    </ul>
-     <ul class="btn-set">
-      <li><input type="file"
-                   id="fileInput"
-                   name="fileInput"
-                   accept=".txt, .json"
-                   v-on:change="open_file($event)">
-
-            <label for="fileInput"
-                   id="fileInputLabel"
-                   class="btn btn-sm">
-                   {{ guiMessages.selected.admin.button_upload }}
-            </label></li>
     </ul>
     </div>
 

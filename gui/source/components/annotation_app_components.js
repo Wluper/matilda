@@ -234,9 +234,11 @@ Vue.component("annotation-app", {
                 activeLabel.id = null;
             }
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-            activeTurn.style = null;
-            let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
-            Array.from(activeInputs).forEach(element => element.onselect = null);
+            if (activeTurn != undefined) {
+                activeTurn.style = null;
+                let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
+                Array.from(activeInputs).forEach(element => element.onselect = null);
+            }
         },
 
     },
@@ -607,7 +609,8 @@ Vue.component('input-box',{
         new_turn : function(event){
             console.log('NEW TURN EMISSION', event)
             this.input="";
-            if ( !(event.target.value=="") )
+            console.log(event.target.value);
+            if ( (event.target.value != undefined) && !(event.target.value=="") )
                 annotationAppEventBus.$emit("new_turn",event.target.value)
         },
 

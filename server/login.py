@@ -1,3 +1,5 @@
+from database_config import DatabaseConfiguration
+
 class LoginFuncs(object):
 	"""
 	Here all the username accepted by the server
@@ -17,7 +19,7 @@ class LoginFuncs(object):
 
 	def create(self, userID, password, email=None):
 
-		self.databaseFuncs.users.save({"_id":userID,"userName":userID,"password":password, "email":email})
+		DatabaseConfiguration.users.save({"_id":userID,"userName":userID,"password":password, "email":email})
 		response = { "status": "success" }
 
 		return response

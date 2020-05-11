@@ -460,11 +460,9 @@ async function get_all_entries_async() {
   }
 }
 
-async function get_db_entry_async(entryId) {
+async function get_db_entry_async(entryId,collection) {
 
-    console.log("GETTING ID:",entryId, "database document");
-
-    collection = "database";
+    console.log("GETTING ID:",entryId, collection,"document");
 
     var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
 
@@ -479,6 +477,50 @@ async function get_db_entry_async(entryId) {
     }
 
     return response.data
+}
+
+async function del_all_dialogues_async() {
+
+    const apiLink = API_LINK_BASE+"/dialogues_wipe"
+
+    try {
+
+        var response = await axios.delete(apiLink)
+
+        console.log("=========== WIPE DONE ===========")
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Couldn't connect to server, check that it's running.")
+
+    }
+
+}
+
+async function get_collection_ids_async() {
+
+  entriesList = []
+
+  const apiLink = API_LINK_BASE+`/collections/*`
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
 }
 
 
@@ -540,8 +582,8 @@ backend =
 
     post_empty_dialogue                         : post_empty_dialogue,
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
-    post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
-
+    post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async, 
+    
     get_all_users                               : get_all_users,
     create_user                                 : create_user,
 
@@ -549,7 +591,10 @@ backend =
     get_db_entry_async                          : get_db_entry_async,
     update_db                                   : update_db,
     del_db_entry_async                          : del_db_entry_async,
+    del_all_dialogues_async                     : del_all_dialogues_async,
     get_all_entries_async                       : get_all_entries_async,
+
+    get_collection_ids_async                    : get_collection_ids_async,
 }
 
 

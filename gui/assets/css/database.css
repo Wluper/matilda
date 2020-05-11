@@ -124,6 +124,9 @@ pre {
     font-size:13px;
     background-color:rgba(0,0,0,0.02);
 }
+pre:first-line {
+    text-align:left;
+}
 
 .modal-body {
     margin: 20px 0;

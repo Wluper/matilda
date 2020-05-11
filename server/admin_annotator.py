@@ -33,12 +33,13 @@ class MultiAnnotator(object):
     __GOLD_FILE_NAME = "GOLD_" + str( time.strftime("%Y%m%d-%H%M%S") )
     __DEFAULT_NAME = "FILE_"
 
-    def __init__(self, path):
+    def __init__(self, path, cleaning=None):
         self.path = path
         self.allFiles = { MultiAnnotator.__GOLD_FILE_NAME : DialogueAnnotator(self.path, MultiAnnotator.__GOLD_FILE_NAME) }
         self.filesAdded = 0
 
-        self.__load_all_jsons(self.path)
+        #if cleaning is None:
+        #    self.__load_all_jsons(self.path)
 
     def get_all_files(self, dialogueId):
         """
@@ -161,6 +162,15 @@ class MultiAnnotator(object):
         return self.__DEFAULT_NAME + str( self.filesAdded ) + ".json"
 
 
+    def wipe_view(self):
+        """
+        Clean dialogue list and reinitialize app
+        """
+        self.allFiles = {}
+        self.fileAdded = 0
+        self.__init__(self.path, cleaning=True)
+
+        return "status:success"
 
 
 

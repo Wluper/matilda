@@ -75,6 +75,7 @@ Vue.component("all-dialogues", {
           .then( (response) => {
 
               this.allDialogueMetadata = response;
+              console.log(response);
               if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database(mainApp.userName);
@@ -97,7 +98,7 @@ Vue.component("all-dialogues", {
         backend.post_empty_dialogue()
             .then( (newDialogueId) => {
 
-                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotation_style:""});
+                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:"", description:"" });
                 backend.update_db();
             });
     },
@@ -242,7 +243,6 @@ Vue.component("all-dialogues", {
         if (del == true) {
             backend.del_all_dialogues_async(mainApp.userName)
                 .then( (response) => {
-                    console.log(response);
                     console.log("All user's dialogues deleted.");
                     allDialoguesEventBus.$emit("refresh_dialogue_list");
             });
@@ -327,7 +327,8 @@ Vue.component("all-dialogues", {
                   </div>
 
                   <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
-                  <div class="dialogue-annot_style" >{{dat.annotation_style}}</div>
+                  <div class="dialogue-annot_style" v-if="(dat.collection != '')">{{dat.collection}}</div>
+                  <div class="dialogue-annot_style" v-if="(dat.collection == '')">No collection</div>
               </div>
 
             </div>

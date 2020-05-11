@@ -134,6 +134,12 @@ class InterAnnotatorApp(object):
                             methods=["POST"],
                             handler= self.handle_dialogues_import )
 
+        self.add_endpoint( \
+                            endpoint="/dialogues_wipe",
+                            endpoint_name="/dialogues_wipe",
+                            methods=["DELETE"],
+                            handler= self.handle_wipe_request )
+
         # self.add_endpoint( \
         #                     endpoint="/turns",
         #                     endpoint_name="/turns",
@@ -184,6 +190,23 @@ class InterAnnotatorApp(object):
                             methods=["GET"],
                             handler= self.handle_database_download )
 
+        self.add_endpoint( \
+                            endpoint="/collections/<id>",
+                            endpoint_name="/collections/<id>",
+                            methods=["GET"],
+                            handler= self.handle_collections )
+
+    def handle_collections(self, id=None):
+
+        if request.method == "GET":
+
+            collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
+
+            print(collectionNames)
+
+            return jsonify ( collectionNames )
+
+
     def handle_dialogues_import(self):
 
         responseObject = {}
@@ -219,6 +242,16 @@ class InterAnnotatorApp(object):
                 responseObject = DatabaseManagement.getDatabaseIds(self)
 
         return jsonify(responseObject)
+
+
+    def handle_wipe_request(self):
+
+        responseObject = {}
+
+        if request.method == "DELETE":
+            responseObject = self.annotationFiles.wipe_view()
+
+        return responseObject
 
 
     def handle_database_download(self,id=None):

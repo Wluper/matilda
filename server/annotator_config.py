@@ -42,7 +42,6 @@ class Configuration(object):
 
     # Folder where annotation models are stored
     __DEFAULT_PATH = "annotation_styles"
-    #__DEFAULT_PATH = "/var/www/html/LIDADEV/lida/server/annotation_styles"
 
     # Here the annotation model file name
     annotation_style = "unipi_model.json"
@@ -97,7 +96,7 @@ class Configuration(object):
                         print(message)
                         return message
 
-                    if "multilabel_classification" == info["label_type"]:
+                    if info["required"] and ("multilabel_classification" == info["label_type"]):
 
                         providedLabels = turn[labelName]
 
@@ -107,6 +106,7 @@ class Configuration(object):
                                "config.py in turn {}".format(providedLabels, i)
                             print(message)
                             return message
+                            
         return dialogue
 
 

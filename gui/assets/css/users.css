@@ -11,6 +11,7 @@
     font-family:CoreSansNR35Light;
     color:#888;
     border: 1px solid #e6e6e6;
+    box-shadow: 0px 9px 20px 1px rgba(0,0,0,0.2);
 }
 
 .login_form {

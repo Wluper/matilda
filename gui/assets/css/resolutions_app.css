@@ -343,7 +343,7 @@
 .dialogue-list-title-container {
     display: grid;
     grid-template: [row1-start] "title-zone help-button-zone" [row1-end]
-                   / 1fr 1fr;
+                   / 1fr 2fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;

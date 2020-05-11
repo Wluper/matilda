@@ -43,6 +43,11 @@ var mainApp = new Vue({
         this.status = 'database-view';
       },
 
+      switchStatusToCollection() {
+        console.log('--- COLLECTION VIEW ----');
+        this.status = 'collection-view';
+      },
+
       load_document_view: function (event) {
         this.displayingDocument = event;
       },
@@ -54,6 +59,7 @@ var mainApp = new Vue({
        allDialoguesEventBus.$on("dialogue_clicked", this.switchStatusToResolving);
        allDialoguesEventBus.$on("usersManagement_clicked", this.switchStatusToUsersManagement);
        allDialoguesEventBus.$on("database_clicked", this.switchStatusToDatabase);
+       allDialoguesEventBus.$on("collection_clicked", this.switchStatusToCollection);
        databaseEventBus.$on( "document_selected", this.load_document_view )
   },
 
@@ -67,6 +73,9 @@ var mainApp = new Vue({
 
       <database-view v-else-if="status === 'database-view'">
       </database-view>
+
+      <collection-view v-else-if="status === 'collection-view'">
+      </collection-view>
 
       <resolution-app v-else-if="status === 'resolving'"
       v-bind:dialogueId="displayingDialogue">

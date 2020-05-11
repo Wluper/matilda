@@ -37,6 +37,7 @@
     transition: ease 175ms all;
     background: white;
     color: #222;
+    padding-top:2px;
 }
 
 .user-list-single-item-container:hover {

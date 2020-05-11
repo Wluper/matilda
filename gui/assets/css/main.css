@@ -45,6 +45,7 @@ input:focus {
     margin:0;
     list-style:none;
     font-size:0;
+    padding-bottom:5px;
 }
 
 .btn-set li {
@@ -190,7 +191,7 @@ input:focus {
 .copyright {
     font-size: .6875em;
     line-height: 4.7272727273em;
-    color: #4a4f54;
+    color: #636b74;
     margin-left: 20px;
 }
 .foot-bar {
@@ -198,16 +199,15 @@ input:focus {
 }
 
 .language-list-title-container {
+    float:right;
     text-align:center;
-    background: rgba(0,0,0,0.02);
-    border-top: 1px solid #e6e6e6;
-    padding: 10px 24px;
+    padding: 16px 24px;
     vertical-align:bottom;
+    color:#636b74;
+    font-size:13px;
 }
 
 .droplist_language_selector {
-    font-family:CoreSansNR35Light;
-    font-size:14px;
     border:0;
     outline:none;
 }

@@ -145,6 +145,7 @@ Vue.component('database-entry-modal', {
          return {
             entry : {},
             guiMessages,
+            view: ''
          }
    },
 
@@ -155,8 +156,13 @@ Vue.component('database-entry-modal', {
    methods: {
 
          init : function(){
-
-            backend.get_db_entry_async(mainApp.displayingDocument)
+            this.view = mainApp.status;
+            if (this.view.substr(0,8) == "database") {
+               collection = "database";
+            } else {
+               collection = "dialogues";
+            }
+            backend.get_db_entry_async(mainApp.displayingDocument,collection)
                   .then( (response) => {
                      console.log();
                      this.entry = response[0];
@@ -179,16 +185,13 @@ Vue.component('database-entry-modal', {
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
-
+        <div v-if="view == 'database-view'" class="modal-container">
           <div class="modal-header">
             <slot name="header">
-              {{guiMessages.selected.modal_document[0]}}
+               {{guiMessages.selected.modal_document[0]}} Database
             </slot>
           </div>
-
           <hr>
-
           <div class="modal-body">
               <slot name="body">
                   <strong>ID:</strong> {{entry._id}}
@@ -206,9 +209,7 @@ Vue.component('database-entry-modal', {
                   </pre>
               </slot>
           </div>
-
           <hr>
-
           <div class="modal-footer">
             <slot name="footer">
               <button class="modal-import-button" @click="import_doc(entry.annotations)">
@@ -219,7 +220,59 @@ Vue.component('database-entry-modal', {
               </button>
             </slot>
           </div>
+
+         </div>
+
+
+         <div v-else-if="view == 'collection-view'" class="modal-container">
+            <div class="modal-header">
+               <slot name="header">
+                  {{guiMessages.selected.modal_document[0]}} Database
+               </slot>
+            </div>
+            <hr>
+            <div class="modal-body">
+              <slot name="body">
+                  <strong>ID:</strong> {{entry._id}}
+                  <br>
+                  <strong>Title:</strong> {{entry.title}}
+                  <br>
+                  <strong>Description:</strong> {{entry.description}}
+                  <br><br>
+                  <strong>Annotation style:</strong> {{entry.annotationStyle}}
+                  <br>
+                  <strong>Assigned to:</strong> {{entry.assignedTo}}
+                  <br>
+                  <strong>Last Update:</strong> {{entry.lastUpdate}}
+                  <br>
+                  <strong>Status:</strong> {{entry.status}}
+
+                  <br><br>
+                  <strong>
+                  Document
+                  </strong>
+                  <br>
+                  <pre>
+                  {{entry.document}}
+                  </pre>
+              </slot>
+          </div>
+          <hr>
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="modal-import-button" @click="import_doc(entry.document)">
+                {{guiMessages.selected.database.importDoc}}
+              </button>
+              <button class="modal-save-button" @click="save()">
+                {{guiMessages.selected.annotation_app.save}}
+              </button>
+              <button class="modal-default-button" @click="$emit('close')">
+                {{guiMessages.selected.annotation_app.close}}
+              </button>
+            </slot>
+          </div>
         </div>
+
       </div>
     </div>
   </transition>

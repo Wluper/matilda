@@ -161,7 +161,11 @@ class MultiAnnotator(object):
         """
         return self.__DEFAULT_NAME + str( self.filesAdded ) + ".json"
 
+    def wipe_view(self):
 
+        self.allFiles[self.__GOLD_FILE_NAME] = {}
+
+        return "status:success"
 
 
 
@@ -252,7 +256,7 @@ class DialogueAnnotator(object):
 
         return {"dialogue": self.__dialogues[DialogueAnnotator.__SESSION_USER].get(id)}
 
-    def get_dialogues(self, id=None):
+    def get_dialogues(self, user, id=None):
         """
         Returns all dialogues or specific dialogue (as dict {id: dialogue} )
         """
@@ -269,13 +273,17 @@ class DialogueAnnotator(object):
         metadata = []
 
         for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
-
+            
             try: 
-                annotationStyle = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["annotation_style"]
+                description = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["description"]
             except:
-                annotationStyle = ""
+                description = ""
+            try:
+                collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["collection"]
+            except:
+                collection = ""
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "annotation_style":annotationStyle})
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "description":description, "collection":collection})
 
         return metadata
 
@@ -340,25 +348,44 @@ class DialogueAnnotator(object):
 
         self.insert_meta_tags(user, dialogue, id)
 
-        self.save(user)
+        self.save( user )
 
         return {"id":id}
 
     def insert_meta_tags(self, user, dialogue, id):
-        #adds meta-tags
+        """
+        Checks if meta-tags exist, if not create and format them
+        """
         try:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["annotation_style"]
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"]
+            if self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"] != "":
+                self.update_dialogue_name(user, id, str(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"]))
+            return
         except:
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
-                "annotation_style": Configuration.annotation_style,
-                "title":"",
-                "collection":"" 
-                })
-        """    
-        if "annotation_style" in self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]:
-            print(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["annotation_style"])
-        else:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0,{ "annotation_style": Configuration.annotation_style[Configuration.selected] })
+                "collection":"", 
+                "description":""
+            })
+
+        #search for existent id descriptor, hideous, needs to be changed soon
+        for index,name in enumerate(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]):
+            for sub_name in name:
+                if sub_name == "ID":
+                    value = name[sub_name][0][1]
+                    self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"] = str(value)
+                    del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][index]["ID"]
+                    self.update_dialogue_name(user, id, str(value))
+                    return
+
+        """
+        #easy way
+        try:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][1]["ID"]
+            value = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][1]["ID"][0][1]
+            self.update_dialogue_name(user, id, str(value))
+            del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][index]["ID"]
+        except:
+            pass
         """
 
     def delete_dialogue(self, user, id):
@@ -400,6 +427,8 @@ class DialogueAnnotator(object):
         DialogueAnnotator.__SESSION_USER = user
 
         self.set_dialogues( user )
+
+        self.save( user )
 
         return { "status": "wiped" }
 

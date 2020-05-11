@@ -23,19 +23,10 @@ from bson.objectid import ObjectId
 
 # == Local ==
 from utils import load_json_file, save_json_file
+from database_config import DatabaseConfiguration
+from interannotator_config import Configuration
 
 class DatabaseManagement(object):
-
-	"""
-	CONSTANTS
-	"""
-	databaseLocation = "localhost" 
-	databasePort = 27017
-
-	client = MongoClient(databaseLocation,databasePort)
-	db = client.mymongodb
-	collection = db.lida_database
-	users = db.lida_users
 
 	"""
 	MAIN PART
@@ -52,10 +43,12 @@ class DatabaseManagement(object):
 		print(" * Searching in:",coll,"for key-value",attribute,string)
 
 		entries = {}
-		collection_selected = DatabaseManagement.collection
+		collection_selected = DatabaseConfiguration.collection
 
 		if coll == "users":
-			collection_selected = DatabaseManagement.users
+			collection_selected = DatabaseConfiguration.users
+		elif coll == "dialogues":
+			collection_selected = DatabaseConfiguration.dialogues
 
 		if string is not None:
 			query = collection_selected.find({attribute:string})
@@ -71,7 +64,7 @@ class DatabaseManagement(object):
 
 		entries = []
 
-		collection_dict = DatabaseManagement.collection.find()
+		collection_dict = DatabaseConfiguration.collection.find()
 		for index,entry in enumerate(collection_dict,1):
 			entries.append({"File "+str(index):entry})
 
@@ -81,8 +74,7 @@ class DatabaseManagement(object):
 
 		entries = []
 
-		collection_dict = DatabaseManagement.collection.find()
-		print(collection_dict)
+		collection_dict = DatabaseConfiguration.collection.find()
 		for entry in collection_dict:
 			#print("* Database Entry *************** \n",entry)
 			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
@@ -95,9 +87,9 @@ class DatabaseManagement(object):
 		#delete a database document by id
 
 		if collection != "users":
-			DatabaseManagement.collection.delete_one({"_id":id})
+			DatabaseConfiguration.collection.delete_one({"_id":id})
 		else:
-			DatabaseManagement.users.delete_one({"_id":id})
+			DatabaseConfiguration.users.delete_one({"_id":id})
 
 		DatabaseManagement.responseObject = { "status":"success" }
 		return DatabaseManagement.responseObject
@@ -114,7 +106,7 @@ class DatabaseManagement(object):
 		except:
 			annotations = {}
 
-		DatabaseManagement.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
+		DatabaseConfiguration.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		return DatabaseManagement.responseObject
 
 	def getUserEntry(self, id):
@@ -123,12 +115,29 @@ class DatabaseManagement(object):
 
 		DatabaseManagement.responseObject = []
 
-		elaboration = DatabaseManagement.readDatabase("database","_id",id)
+		elaborate = DatabaseManagement.readDatabase("database","_id",id)
 
-		for line in elaboration:
+		for line in elaborate:
 			for name in line:
 				if name == "annotations":
 					#print(line[name])
 					DatabaseManagement.responseObject = line[name]
 
 		return DatabaseManagement.responseObject
+
+	"""
+	DIALOGUES COLLECTIONS OPERATIONS
+	"""
+
+	def createCollection(collection_id, document, description=None, assignedTo=None, annotationStyle=None, completed=None):
+
+		DatabaseConfiguration.dialogues.save(
+			{
+			"_id":collection_id,
+			"description":description if description else "", 
+			"assignedTo":assignedTo if assignedTo else "", 
+			"annotationStyle":annotationStyle if annotationStyle else Configuration.annotation_style,
+			"lastUpdate":datetime.datetime.utcnow(),
+			"status":completed if completed else "", 
+			"document":document 
+			})

@@ -42,11 +42,9 @@ class Configuration(object):
 
     # Folder where annotation models are stored
     __DEFAULT_PATH = "annotation_styles"
-    #__DEFAULT_PATH = "/var/www/html/LIDADEV/lida/server/annotation_styles"
 
     # Here are all the used annotation models, preferred first
     annotation_style = "unipi_model.json"
-    configDict = {}
 
     with open(annotation_style) as style_file:
         configDict = json.load(style_file)
@@ -66,7 +64,7 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
-                        # turn 0 stores meta-tags
+                        # turn 0 may store meta-tags
                         if i is 0:
                             continue
 
@@ -83,7 +81,7 @@ class Configuration(object):
                             print(message)
                             return message
 
-                        if "multilabel_classification" == info["label_type"]:
+                        if info["required"] and "multilabel_classification" == info["label_type"]:
 
                             providedLabels = turn[labelName]
 
@@ -94,9 +92,9 @@ class Configuration(object):
                                 print(message)
                                 return message
 
-        # if previous annotation model didn't work tries next
+        # if previous annotation model doesn't work returns an error
         except:
-            print("\tCan't validate with that model")
+            print(" * A dialogue couldn't validate with the current annotation style model")
             return
 
         return dialogue
