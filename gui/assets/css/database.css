@@ -17,6 +17,7 @@
     border-bottom: 1px solid #e6e6e6;
     color: #222;
     padding:10px 24px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 }
 
 .database-title {
@@ -131,6 +132,11 @@ pre:first-line {
 .modal-body {
     margin: 20px 0;
     overflow:hidden;
+}
+
+.modal-body input {
+    border:1px solid rgba(0,0,0,0.2);
+    margin-bottom:2px;
 }
 
 #database-view .inner-wrap .modal-mask .modal-wrapper .modal-container {

@@ -233,20 +233,26 @@ Vue.component('database-entry-modal', {
             <hr>
             <div class="modal-body">
               <slot name="body">
-                  <strong>ID:</strong> {{entry._id}}
+                  <strong>ID:</strong>
+                  <input type="text" v-bind:value="entry._id">
                   <br>
-                  <strong>Title:</strong> {{entry.title}}
+                  <strong>Title:</strong>
+                  <input type="text" v-bind:value="entry.title">
                   <br>
-                  <strong>Description:</strong> {{entry.description}}
+                  <strong>Description:</strong>
+                  <input type="text" v-bind:value="entry.description">
                   <br><br>
-                  <strong>Annotation style:</strong> {{entry.annotationStyle}}
+                  <strong>Annotation style:</strong>
+                  <input type="text" v-bind:value="entry.annotationStyle">
                   <br>
-                  <strong>Assigned to:</strong> {{entry.assignedTo}}
+                  <strong>Assigned to:</strong>
+                  <input type="text" v-bind:value="entry.assignedTo">
                   <br>
-                  <strong>Last Update:</strong> {{entry.lastUpdate}}
+                  <strong>Last Update:</strong>
+                  <input type="text" v-bind:value="entry.lastUpdate">
                   <br>
-                  <strong>Status:</strong> {{entry.status}}
-
+                  <strong>Status:</strong>
+                  <input type="text" v-bind:value="entry.status">
                   <br><br>
                   <strong>
                   Document

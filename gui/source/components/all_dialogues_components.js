@@ -98,7 +98,7 @@ Vue.component("all-dialogues", {
         backend.post_empty_dialogue()
             .then( (newDialogueId) => {
 
-                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:"", description:"" });
+                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
                 backend.update_db();
             });
     },

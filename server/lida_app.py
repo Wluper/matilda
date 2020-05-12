@@ -122,7 +122,7 @@ class LidaApp(object):
                             endpoint="/<user>/dialogue_annotationstyle/<id>",
                             endpoint_name="/<user>/dialogue_annotationstyle/<id>",
                             methods=["GET"],
-                            handler= self.handle_annotations_resource )
+                            handler = self.handle_annotations_resource )
 
         self.add_endpoint( \
                             endpoint="/turns",
@@ -356,7 +356,7 @@ class LidaApp(object):
 
         added_dialogues = []
 
-        for dialouge_name, dialogue in dialogueDict.items():
+        for dialogue_name, dialogue in dialogueDict.items():
 
             dialogue = Configuration.validate_dialogue(dialogue)
 
@@ -365,7 +365,7 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            self.dialogueFile.add_new_dialogue(user, dialogue)
+            self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name)
 
         if "error" not in currentResponseObject:
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)

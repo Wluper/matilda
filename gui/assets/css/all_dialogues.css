@@ -29,6 +29,7 @@
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
     padding: 10px 24px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 }
 
 .all-dialogues-list-title {
@@ -107,7 +108,7 @@
     /* background-color: green; */
     /* padding: 10px; */
     border-left: 5px solid #d1d1d3;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 1px 5px 3px rgba(0,0,0,0.05);
     transition: ease 175ms all;
     background: white;
 }

@@ -353,23 +353,22 @@ Vue.component('classification-string-annotation', {
 
          activeLabel.parentNode.parentNode.getElementsByTagName("input")[1].id = "active_label";
          activeTurn.style.border = "3px solid #fafa69";
-         Array.from(activeInputs).forEach(element => element.onselect = this.update_slot);
+         Array.from(activeInputs).forEach(element => element.onmouseup = this.update_slot);
 
       },
 
       update_slot: function(event) {
          console.log("Gathering text");
-         console.log(event);
          console.log(event.target.selectionStart,event.target.selectionEnd);
          let activeLabel = document.getElementById("active_label"); 
-         let text = (window.getSelection().toString());
+         let labelName = activeLabel.parentNode.getElementsByTagName("input")[0];
          let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
-         let labelName = activeLabel.parentNode.getElementsByTagName("input")[0].id;
+         let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
          //updating
          activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"], ";
-         this.updateClassAndString(activeLabel, labelName);
+         this.updateClassAndString(activeLabel, labelName.id);
          //put all back to place
-         annotationAppEventBus.$emit( "resume_annotation_tools");
+         annotationAppEventBus.$emit("resume_annotation_tools");
       }, 
 
     },

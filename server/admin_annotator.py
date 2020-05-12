@@ -170,7 +170,7 @@ class MultiAnnotator(object):
         self.fileAdded = 0
         self.__init__(self.path, cleaning=True)
 
-        return "status:success"
+        return {"status":"success"}
 
 
 

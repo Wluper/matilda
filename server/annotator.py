@@ -163,9 +163,11 @@ class MultiAnnotator(object):
 
     def wipe_view(self):
 
-        self.allFiles[self.__GOLD_FILE_NAME] = {}
+        self.allFiles = {}
+        self.fileAdded = 0
+        self.__init__(self.path, cleaning=True)
 
-        return "status:success"
+        return {"status":"success"}
 
 
 
@@ -357,36 +359,12 @@ class DialogueAnnotator(object):
         Checks if meta-tags exist, if not create and format them
         """
         try:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"]
-            if self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"] != "":
-                self.update_dialogue_name(user, id, str(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"]))
-            return
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
         except:
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
                 "collection":"", 
-                "description":""
             })
 
-        #search for existent id descriptor, hideous, needs to be changed soon
-        for index,name in enumerate(self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]):
-            for sub_name in name:
-                if sub_name == "ID":
-                    value = name[sub_name][0][1]
-                    self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["description"] = str(value)
-                    del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][index]["ID"]
-                    self.update_dialogue_name(user, id, str(value))
-                    return
-
-        """
-        #easy way
-        try:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][1]["ID"]
-            value = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][1]["ID"][0][1]
-            self.update_dialogue_name(user, id, str(value))
-            del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][index]["ID"]
-        except:
-            pass
-        """
 
     def delete_dialogue(self, user, id):
         """

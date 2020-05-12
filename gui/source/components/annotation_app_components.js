@@ -237,7 +237,7 @@ Vue.component("annotation-app", {
             if (activeTurn != undefined) {
                 activeTurn.style = null;
                 let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
-                Array.from(activeInputs).forEach(element => element.onselect = null);
+                Array.from(activeInputs).forEach(element => element.onmouseup = null);
             }
         },
 
