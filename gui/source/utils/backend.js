@@ -124,6 +124,27 @@ async function get_annotation_style_async(id){
 /***************************************
 * DIALOGUES METADATA RESOURCE
 ***************************************/
+
+async function write_tag(id,type,tag,value) {
+
+  const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue/${id}/${type}/${tag}/${value}`
+
+  try {
+
+    var response = await axios.post(apiLink)
+
+    console.log("=========== TAG WRITING SUCCESS ===========")
+    return response
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
 async function get_all_dialogue_ids_async() {
 
   var dialogues = {}
@@ -254,11 +275,13 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
 }
 
 
-async function post_new_dialogue_from_json_string_async(jsonString) {
+async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
+
+    fileName = fileName.split(".")[0]
 
     try {
 
-        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString) )
+        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString), fileName )
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)
@@ -329,7 +352,7 @@ async function del_all_dialogues_async() {
 }
 
 
-async function RESTdialogues(method, id, params){
+async function RESTdialogues(method, id, params, fileName){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
     console.log("REQUESTED FROM: "+session_name())
     console.log("ID: "+id)
@@ -337,8 +360,9 @@ async function RESTdialogues(method, id, params){
     console.log("PARAMS "+params)
 
     //
-    if (id==null) {var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues`;}
-    else {var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/${id}`;}
+    if (fileName != undefined) { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/collection/${fileName}` }
+    else if (id==null) { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues` }
+    else { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/${id}` }
 
     //
     if (method=="DELETE") {
@@ -536,10 +560,10 @@ async function login(loginName,loginPass) {
 
 backend =
 {
-    //get_name                                    : get_name,
+    //get_name                                  : get_name,
     put_name                                    : put_name,
     annotate_query                              : annotate_query,
-
+    write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,
 
     get_all_dialogues_async                     : get_all_dialogues_async,

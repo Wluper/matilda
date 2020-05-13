@@ -26,6 +26,8 @@ from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel
 #     => "multilabel_classification_string" :: displays as a checkbox and text input for string value. Used for
 #                                              slot-value pairs.
 #
+#     => "multilabel_global_string"         :: same as multilabel_classification_string but global for the dialogue
+#
 #     => "string" :: displays underneath the user utterance (indicated by label_type of "data")
 #
 #############################################
@@ -106,7 +108,7 @@ class Configuration(object):
                                "config.py in turn {}".format(providedLabels, i)
                             print(message)
                             return message
-                            
+
         return dialogue
 
 

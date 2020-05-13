@@ -140,6 +140,21 @@
   color: #222;
 }
 
+.global-input-wrapper {
+    font-size: 14px;
+    margin: 0 0 14px;
+    line-height: 1;
+}
+
+.global-input {
+    border:1px solid rgba(0,0,0,0.1);
+    margin-top:5px;
+}
+
+.global-label {
+    cursor: pointer;
+}
+
 
 
 /********************************

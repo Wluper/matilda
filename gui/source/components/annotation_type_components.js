@@ -13,6 +13,7 @@ Vue.component('classification-annotation',{
 
             collapsed: false,
             showInfo: false,
+            guiMessages
 
         }
 
@@ -21,7 +22,6 @@ Vue.component('classification-annotation',{
     computed: {
         correctClassification : function(){
             console.log("Classification Computed");
-            console.log(this.classification);
             return this.classification
         }
     },
@@ -118,7 +118,7 @@ Vue.component('classification-annotation',{
                 {{uniqueName}}
                 <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
 
-                <span class="soft-text">[Click to Expand]</span>
+                <span class="soft-text">{{guiMessages.selected.annotation_app.expand}}</span>
             </div>
 
         </div>
@@ -132,7 +132,7 @@ Vue.component('classification-annotation',{
 
                 <div class="info-button-container">
                     <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
-                        Close
+                       {{guiMessages.selected.annotation_app.close}}
                     </button>
 
                     <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
@@ -451,4 +451,144 @@ Vue.component('classification-string-annotation', {
         </div>
     </div>
     `
+})
+
+Vue.component('classification-global-annotation',{
+
+    props: ["globals", "info", "turn", "dTurns", "dialogueId"],
+
+
+    data () {
+
+        return {
+
+            collapsed: false,
+            showInfo: false,
+            guiMessages
+
+        }
+
+    },
+
+    methods: {
+
+        toggleCollapse: function () {
+
+            if (this.collapsed) {
+              this.collapsed = false;
+            } else {
+              this.collapsed = true;
+            }
+
+        },
+
+        turnSeparatorWhite: function() {
+            const element = document.getElementById("Global Slot")
+            element.style.borderColor = 'white';
+
+        },
+
+        turnSeparatorGrey: function() {
+            const element = document.getElementById("Global Slot")
+            element.style.borderColor = '#aaa';
+
+        },
+
+        stopAnnotation: function() {
+            //set turn to 0, prevent other types of annotation
+            annotationAppEventBus.$emit( "update_turn_id", 0 );
+            let annotations = document.getElementById("annotations").querySelectorAll("div.classification-annotation");
+            for (i=1;i < annotations.length; i++) {
+                annotations[i].style.pointerEvents = "none";
+                annotations[i].style.color = "rgba(0,0,0,0.2)";
+            }
+        },
+
+        getActualValue: function(labelName) {
+            console.log("Computing globals");
+            console.log(this.dTurns);
+            console.log(labelName)
+            if (this.dTurns.length > 1) {
+                try { 
+                    var value = this.dTurns[0]["global_slot"][labelName];
+                    return value;
+                } catch { 
+                    return ""; 
+                }
+            }
+        },
+
+        updateValue: function(event) {
+            event.stopPropagation();
+            backend.write_tag(this.dialogueId,"global_slot",event.target.id, event.target.value)
+                .then( (response) => {
+                    console.log(response);
+                    backend.update_db();
+                })
+            }
+        
+        },
+
+    template:
+`
+    <div>
+
+        <div v-if="collapsed"
+             class="classification-annotation">
+
+            <div class="sticky space collapsor"
+                 v-on:click="toggleCollapse()"
+                 v-on:mouseover="turnSeparatorWhite()"
+                 v-on:mouseout="turnSeparatorGrey()">
+
+                Global Slot
+                <br><hr id="Global Slot">
+
+                <span class="soft-text">{{guiMessages.selected.annotation_app.expand}}</span>
+            </div>
+
+        </div>
+
+        <div v-else class="classification-annotation">
+
+            <div class="single-annotation-header">
+                <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    Global Slot
+                </div>
+
+                <div class="info-button-container">
+                    <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                       {{guiMessages.selected.annotation_app.close}}
+                    </button>
+
+                    <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                        Info
+                    </button>
+                </div>
+
+            </div>
+
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ globals.info }}
+                </div>
+
+                <hr>
+
+            </div>
+
+            <div v-for="labelName in globals.labels" class="global-input-wrapper">
+
+                <label v-bind:for="labelName" class="global-label">{{labelName}}</label>
+                <input class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)">
+
+            </div>
+
+        </div>
+
+    </div>
+`
 })

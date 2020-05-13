@@ -41,6 +41,10 @@ function get_default_data_for_type(type) {
           dataToAppend = []
           break;
 
+      case 'multilabel_global_string':
+          dataToAppend = []
+          break;
+
       default:
           console.log('******** TYPE NOT FOUND ********')
           dataToAppend = null;

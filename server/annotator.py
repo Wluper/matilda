@@ -276,16 +276,12 @@ class DialogueAnnotator(object):
 
         for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
             
-            try: 
-                description = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["description"]
-            except:
-                description = ""
             try:
                 collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["collection"]
             except:
                 collection = ""
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "description":description, "collection":collection})
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection})
 
         return metadata
 
@@ -332,7 +328,7 @@ class DialogueAnnotator(object):
         del self.__dialogues[DialogueAnnotator.__SESSION_USER][id]
 
 
-    def add_new_dialogue(self, user, dialogue=None, id=None):
+    def add_new_dialogue(self, user, dialogue=None, id=None, collection=None):
         """
         creates a new dialogue with an optional name
         """
@@ -348,22 +344,42 @@ class DialogueAnnotator(object):
         #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
-        self.insert_meta_tags(user, dialogue, id)
+        if collection == "" or None:
+            try:
+                collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+            except:
+                collection = ""
+
+        self.insert_meta_tags(user, id, "meta", "collection", collection)
 
         self.save( user )
 
         return {"id":id}
 
-    def insert_meta_tags(self, user, dialogue, id):
+    def insert_meta_tags(self, user, id, type, tag, value):
         """
-        Checks if meta-tags exist, if not create and format them
+        Checks if meta-tags exist, if not create and format them, then inserts the value
         """
-        try:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
-        except:
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
-                "collection":"", 
+        #print("* User:", user, id, "writing:", type, tag, value)
+
+        DialogueAnnotator.__SESSION_USER = user
+
+        if type == "meta":
+            try:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag] = value
+            except:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
+                    tag:value, 
             })
+        
+        if type == "global_slot":
+            try:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"]
+            except:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"] = {}
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"][tag] = value
+            self.save ( user )
 
 
     def delete_dialogue(self, user, id):

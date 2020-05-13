@@ -40,7 +40,9 @@ guiMessages = {
       unsaved: "Unsaved Changes",
       backToAll: "Back to All Dialogues",
       close: "Close",
-      select: "Select or write text from turn"
+      select: "Select or write text from turn",
+      expand: "Click to Expand",
+      noTurn: "No turn selected. Please select one to annotate"
     },
     resolution_app: {
       errorId: "Error Id:",
@@ -163,7 +165,9 @@ guiMessages = {
         unsaved: "Cambiamenti non salvati",
         backToAll: "Indietro",
         close: "Chiudi",
-        select: "Seleziona o scrivi dal turno"
+        select: "Seleziona o scrivi dal turno",
+        expand: "Clicca per espandere",
+        noTurn: "Nessun turno selezionato, nessuna modifica effettuata."
     },
     resolution_app: {
       errorId: "Id Conflitto:",

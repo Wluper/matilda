@@ -68,18 +68,14 @@
 
         },
 
-        "general_intent": {
+        "global_slot": {
 
             "description" : "General info related to the dialogue",
-            "label_type"  : "multilabel_classification",
+            "label_type"  : "multilabel_global_string",
             "required"    : false,
             "labels"      : [
-
-                "Positive dialogue",
-                "Negative dialogue"
-
+                "general_intent"
             ]
-
         },
 
 
