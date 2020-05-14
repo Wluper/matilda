@@ -6,63 +6,61 @@
             "required"    : true
         },
 
-        "usr_intent": {
+        "Dialogue_act": {
 
-            "description" : "Aim (intent) of user's utterance",
+            "description" : "Type of dialogue act",
             "label_type"  : "multilabel_classification",
             "required"    : false,
-            "labels"      : [
-
-        
-        "Ask job info",
-                "Ask company info",
-        "Ask for help",
-        "Confirm_usr",
-        "Deny_usr",
-        "Greetings_usr",
-                "Provide user info"
+            "labels"      :[ 
+		"sys_greet",
+                "sys_inform_basic",
+		"sys_inform_proactive",
+		"sys_request",
+		"sys_select",
+		"sys_deny",
+		"usr_greet",
+                "usr_inform_basic",
+                "usr_inform_proactive",
+                "usr_request",
+                "usr_select",
+                "usr_deny"
 
             ]
 
         },
 
-        "slot": {
+        "Slot": {
 
-            "description" : "Intent's value",
+            "description" : "Entity's value",
             "label_type"  : "multilabel_classification_string",
             "required"    : false,
             "labels"      : [
 
-                "skill",
-                "job-description",
-                "location",
-                "duties",
-        "company-name",
-        "company-size",
-        "company-contact",
-        "past-experiences",
-        "degree",
-        "contract",
-        "languages",
-        "emoj"
+                "job_description",
+		"contract",
+		"duties",
+		"skill",
+		"past_experience",
+		"degree",
+		"age",
+		"languages",
+		"area",
+		"company_name",
+		"company_size",
+		"location",
+		"contact",
+		"other"
             ]
 
         },
 
-        "sys_intent": {
+        "Async": {
 
-            "description" : "Aim(intent) of sys's utterance",
-            "label_type"  : "multilabel_classification",
+            "description": "To annotate async messages",
+            "label_type"  : "multilabel_classification_string",
             "required"    : false,
             "labels"      : [
-
-                "Ask job requested",
-        "Ask user info",
-        "Confirm_sys",
-        "Deny_sys",
-        "Greetings_sys",
-                "Provide job info",
-        "Provide company info"
+		"turn_ref"
 
             ]
 
@@ -74,8 +72,9 @@
             "label_type"  : "multilabel_global_string",
             "required"    : false,
             "labels"      : [
-                "general_intent"
+                "result"
             ]
+
         },
 
 

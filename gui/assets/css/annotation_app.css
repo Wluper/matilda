@@ -126,8 +126,9 @@ textarea {
     margin: 0;
     outline: none;
     border: 1px solid #e1e1e3;
-    padding: 5px 15px;
+    padding: 1px 15px;
     border-left:none;
+    background-color:#f9f9a291
 }
 
 #input-box {

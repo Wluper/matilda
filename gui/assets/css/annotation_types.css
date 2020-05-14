@@ -149,6 +149,7 @@
 .global-input {
     border:1px solid rgba(0,0,0,0.1);
     margin-top:5px;
+    display:block;
 }
 
 .global-label {

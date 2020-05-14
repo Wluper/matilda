@@ -262,7 +262,7 @@ Vue.component("annotation-app", {
 
     template:
     `
-    <div v-on:keyup.left="change_turn(-1)" v-on:keyup.right="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div v-on:keyup.up="change_turn(-1)" v-on:keyup.down="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
         <dialogue-menu v-bind:changesSaved="allDataSaved"
                        v-bind:dialogueTitle="dialogueId">
