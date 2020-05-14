@@ -533,8 +533,10 @@ Vue.component('dialogue-turn',{
             </div>
 
         <div class="user-string-type-text">
-            <comm-textarea v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
+            <comm-textarea v-if="stringType.data.length > 80" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
             </comm-textarea>  
+            <comm-input v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
+            </comm-input>  
         </div>   
 
         </div>

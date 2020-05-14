@@ -70,7 +70,6 @@ Vue.component("all-dialogues", {
     },
 
     getAllDialogueIdsFromServer() {
-
       backend.get_all_dialogue_ids_async()
           .then( (response) => {
 
@@ -82,7 +81,6 @@ Vue.component("all-dialogues", {
               }
               mainApp.restored = "true";
           });
-
     },
 
     dialogue_already_visited(id) {
@@ -198,10 +196,13 @@ Vue.component("all-dialogues", {
 
     restore_session_from_database: function (fileName) {
           console.log("Ready to restore from database");
+          const mainContainer = document.getElementById("mainContainer");
+          mainContainer.style.cursor = "progress";
           backend.get_user_db_entry_async(fileName)
                 .then( (response) => {
                       console.log(response);
                       allDialoguesEventBus.$emit("refresh_dialogue_list");
+                      mainContainer.style.cursor = null;
           });
     },
 
