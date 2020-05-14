@@ -343,15 +343,14 @@ Vue.component('classification-string-annotation', {
 
       },
 
-      select_word: function(labelName) {
+      select_word: function(event,labelName) {
          annotationAppEventBus.$emit( "resume_annotation_tools");
-         console.log("Selecting text for",labelName);
 
-         let activeLabel = document.getElementById(labelName);
          let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
          let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
+         event.target.title = labelName;
+         event.target.id = "active_label";
 
-         activeLabel.parentNode.parentNode.getElementsByTagName("input")[1].id = "active_label";
          activeTurn.style.border = "3px solid #fafa69";
          Array.from(activeInputs).forEach(element => element.onmouseup = this.update_slot);
 
@@ -359,14 +358,13 @@ Vue.component('classification-string-annotation', {
 
       update_slot: function(event) {
          console.log("Gathering text");
-         console.log(event.target.selectionStart,event.target.selectionEnd);
          let activeLabel = document.getElementById("active_label"); 
-         let labelName = activeLabel.parentNode.getElementsByTagName("input")[0];
+         let labelName = activeLabel.title;
          let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
          //updating
          activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"], ";
-         this.updateClassAndString(activeLabel, labelName.id);
+         this.updateClassAndString(activeLabel, labelName);
          //put all back to place
          annotationAppEventBus.$emit("resume_annotation_tools");
       }, 
@@ -441,7 +439,7 @@ Vue.component('classification-string-annotation', {
                 </label>
 
                 <input class="multilabel-string-input"
-                       v-on:click="select_word(labelName)"
+                       v-on:click="select_word($event,labelName)"
                        v-bind:value="getStringPart(labelName)"
                        v-on:input="updateClassAndString($event, labelName)">
                 </input>

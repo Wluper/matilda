@@ -7,7 +7,7 @@
 /*****************************************
 * DEFINES THE CURRENTLY VALID ANNOTATIONS
 *****************************************/
-var validAnnotations = ["data","string","multilabel_classification", "multilabel_classification_string"]
+var validAnnotations = ["data","string","multilabel_classification", "multilabel_classification_string", "multilabel_global_string"]
 
 var currentTurnId = 1;
 

@@ -239,8 +239,9 @@ Vue.component("annotation-app", {
             //resuming label
             if (document.getElementById("active_label") != undefined) {
                 let activeLabel = document.getElementById("active_label");
-                let labelName = activeLabel.parentNode.getElementsByTagName("input")[0].id;
+                let labelName = activeLabel.title;
                 activeLabel.id = null;
+                activeLabel.title = null;
             }
             //resuming turn
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
@@ -531,9 +532,10 @@ Vue.component('dialogue-turn',{
                 {{stringType.name}}
             </div>
 
-            <div class="user-string-type-text">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
-            </div>
+        <div class="user-string-type-text">
+            <comm-textarea v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
+            </comm-textarea>  
+        </div>   
 
         </div>
     </div>
