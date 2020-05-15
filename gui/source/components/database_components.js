@@ -70,7 +70,7 @@ Vue.component("database-view", {
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
                 idToDelete = event.target.parentNode.parentNode.id;
-                backend.del_db_entry_async(idToDelete)
+                backend.del_db_entry_async(idToDelete, "database")
                     .then( () => {
                         this.getAllEntriesFromServer();
                     });
@@ -183,6 +183,10 @@ Vue.component("collection-view", {
         }
     },
 
+    created() {
+        databaseEventBus.$on( "collections changed", this.init )
+    },
+
     mounted () {
         this.init();
     },
@@ -220,26 +224,25 @@ Vue.component("collection-view", {
             databaseEventBus.$emit("document_selected",clickedEntry);
         },
 
-        create_collection() {
-
+        create_collection(collection_id, doc, description, assigned, annotationStyle, completed) {
+            
         },
 
         delete_entry(event) {
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
                 idToDelete = event.target.parentNode.parentNode.id;
-                backend.del_db_entry_async(idToDelete)
+                backend.del_db_entry_async(idToDelete, "dialogues")
                     .then( () => {
-                        this.getAllEntriesFromServer();
+                        databaseEventBus.$emit('collections changed');
                     });
-                databaseEventBus.$emit('entry_deleted', idToDelete);
             } else {
                 return
             }
         },
 
-        download_database(event) {
-            backend.get_all_entries_async()
+        download_collections(event) {
+            backend.get_collection_ids_async()
                 .then( (response) => {
                     console.log()
                     this.fileContent = response;
@@ -247,7 +250,7 @@ Vue.component("collection-view", {
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    fileName = "Database.json";
+                    fileName = "Collections.json";
                     link.setAttribute('download', fileName );
                     document.body.appendChild(link);
                     link.click();
@@ -266,7 +269,7 @@ Vue.component("collection-view", {
                     </div>
                 </div>
                 <div class="help-button-container">
-                    <button v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
+                    <button v-on:click="download_collections()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
             </div>

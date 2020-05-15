@@ -191,20 +191,36 @@ class InterAnnotatorApp(object):
                             handler= self.handle_database_download )
 
         self.add_endpoint( \
+                            endpoint="/collections",
+                            endpoint_name="/collections",
+                            methods=["GET"],
+                            handler= self.handle_collections )
+
+        self.add_endpoint( \
                             endpoint="/collections/<id>",
                             endpoint_name="/collections/<id>",
-                            methods=["GET"],
+                            methods=["POST"],
                             handler= self.handle_collections )
 
     def handle_collections(self, id=None):
 
-        if request.method == "GET":
+        if not id:
 
-            collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
+            if request.method == "GET":
 
-            print(collectionNames)
+                collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
 
-            return jsonify ( collectionNames )
+                response = collectionNames
+
+        if id:
+
+            if request.method == "POST":
+
+                values = request.get_json()
+
+                response = DatabaseManagement.createCollection(id, values["json"])
+
+        return jsonify ( response )
 
 
     def handle_dialogues_import(self):

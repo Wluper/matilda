@@ -139,6 +139,22 @@ pre:first-line {
     margin-bottom:2px;
 }
 
+.modal-body textarea {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+.modal-body textarea:focus {
+    background-color: #f9f9a291;
+}
+
+.collection-input {
+    border:1px solid rgba(0,0,0,0.2);
+    margin-bottom:2px;
+    width:100%;
+}
+
 #database-view .inner-wrap .modal-mask .modal-wrapper .modal-container {
     width:70%;
 }

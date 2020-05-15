@@ -145,7 +145,8 @@ Vue.component('database-entry-modal', {
          return {
             entry : {},
             guiMessages,
-            view: ''
+            view: '',
+            update: {}
          }
    },
 
@@ -170,14 +171,35 @@ Vue.component('database-entry-modal', {
 
          },
 
-         import_doc(annotations) {
+         import_doc(doc) {
             if (confirm(guiMessages.selected.database.confirmImport)) {
-               backend.post_new_dialogues_from_string_lists_async(annotations)
+               backend.post_new_dialogues_from_string_lists_async(doc)
                   .then( (response) => {
                      console.log();
                      console.log("Import Success");
                });
             }
+         },
+
+         save() {
+            params = {
+               title:this.entry.title, 
+               description:this.entry.description,
+               annotationStyle:this.entry.annotationStyle,
+               assignedTo:this.entry.assignedTo,
+               status:this.entry.status,
+               document:this.entry.document
+            }
+            for (element in params) {
+               if (params[element] == undefined)
+                  params[element] = ""
+            }
+            backend.update_collection_async(this.entry._id, JSON.stringify(params))
+               .then( (response) => {
+                  console.log();
+                  console.log("Database: Dialogue Collection updated");
+                  databaseEventBus.$emit('collections changed');
+            });
          }
   },
   template:
@@ -234,40 +256,39 @@ Vue.component('database-entry-modal', {
             <div class="modal-body">
               <slot name="body">
                   <strong>ID:</strong>
-                  <input type="text" v-bind:value="entry._id">
+                  <input class="collection-input" type="text" v-model="entry._id">
                   <br>
                   <strong>Title:</strong>
-                  <input type="text" v-bind:value="entry.title">
+                  <input class="collection-input" type="text" v-model="entry.title">
                   <br>
                   <strong>Description:</strong>
-                  <input type="text" v-bind:value="entry.description">
+                  <input class="collection-input" type="text" v-model="entry.description">
                   <br><br>
                   <strong>Annotation style:</strong>
-                  <input type="text" v-bind:value="entry.annotationStyle">
+                  <input class="collection-input" type="text" v-model="entry.annotationStyle">
                   <br>
                   <strong>Assigned to:</strong>
-                  <input type="text" v-bind:value="entry.assignedTo">
+                  <input class="collection-input" type="text" v-model="entry.assignedTo">
                   <br>
                   <strong>Last Update:</strong>
-                  <input type="text" v-bind:value="entry.lastUpdate">
+                  <input class="collection-input" type="text" v-model="entry.lastUpdate">
                   <br>
                   <strong>Status:</strong>
-                  <input type="text" v-bind:value="entry.status">
+                  <input class="collection-input" type="text" v-model="entry.status">
                   <br><br>
                   <strong>
                   Document
                   </strong>
                   <br>
-                  <pre>
-                  {{entry.document}}
-                  </pre>
+                  <textarea v-model="entry.document">
+                  </textarea>
               </slot>
           </div>
           <hr>
           <div class="modal-footer">
             <slot name="footer">
               <button class="modal-import-button" @click="import_doc(entry.document)">
-                {{guiMessages.selected.database.importDoc}}
+                {{guiMessages.selected.collection.importColl}}
               </button>
               <button class="modal-save-button" @click="save()">
                 {{guiMessages.selected.annotation_app.save}}

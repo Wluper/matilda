@@ -29,7 +29,8 @@ guiMessages = {
     },
     collection: {
         title: "Collections Management",
-        create: "Create collection"
+        create: "Create collection",
+        importColl: "Import this collection"
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -154,7 +155,8 @@ guiMessages = {
    },
       collection: {
         title: "Gestione Collezioni",
-        create: "Crea collezione"
+        create: "Crea collezione",
+        importColl: "Importa questa collezione",
    },
       annotation_app: {
         turnId: "Id Turno",

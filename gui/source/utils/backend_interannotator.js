@@ -499,11 +499,16 @@ async function del_all_dialogues_async() {
 
 }
 
+/***************************************
+* COLLECTIONS RESOURCE
+***************************************/
+
+
 async function get_collection_ids_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+`/collections/*`
+  const apiLink = API_LINK_BASE+`/collections`
 
   try {
 
@@ -521,6 +526,26 @@ async function get_collection_ids_async() {
     alert("Couldn't connect to server, check that it's running.")
 
   }
+}
+
+async function update_collection_async(id, params) {
+
+    const apiLink = API_LINK_BASE+`/collections/${id}`
+
+    console.log(params)
+
+    try {
+
+        response = await axios.post(apiLink, {json: JSON.parse(params)})
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Couldn't connect to server, check that it's running.")
+        response = error 
+    }
+
+    return response
 }
 
 
@@ -595,6 +620,7 @@ backend =
     get_all_entries_async                       : get_all_entries_async,
 
     get_collection_ids_async                    : get_collection_ids_async,
+    update_collection_async                     : update_collection_async
 }
 
 
