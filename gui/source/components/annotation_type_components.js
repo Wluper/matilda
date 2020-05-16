@@ -363,6 +363,10 @@ Vue.component('classification-string-annotation', {
          let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
          //updating
+         if ((text == undefined) || (text == "")) {
+            annotationAppEventBus.$emit("resume_annotation_tools");
+            return
+         }
          activeLabel.value += "<q cite='"+context.trim()+"_"+event.target.selectionStart+","+event.target.selectionEnd+"'>"+text+"</q>, ";
          //activeLabel.value += context.trim()+" "+event.target.selectionStart+","+event.target.selectionEnd+"' '"+text+"',";
          this.updateClassAndString(activeLabel, labelName);

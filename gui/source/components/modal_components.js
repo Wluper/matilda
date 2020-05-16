@@ -146,12 +146,14 @@ Vue.component('database-entry-modal', {
             entry : {},
             guiMessages,
             view: '',
-            update: {}
+            update: {},
+            role: ''
          }
    },
 
    mounted () {
       this.init();
+      this.role = mainApp.role;
    },
 
    methods: {
@@ -167,6 +169,7 @@ Vue.component('database-entry-modal', {
                   .then( (response) => {
                      console.log();
                      this.entry = response[0];
+                     mainContainer.style.cursor = null;
             });
 
          },
@@ -201,7 +204,7 @@ Vue.component('database-entry-modal', {
             backend.update_collection_async(this.entry._id, JSON.stringify(params))
                .then( (response) => {
                   console.log();
-                  console.log("Database: Dialogue Collection updated");
+                  console.log("============== Dialogues-Collection Updated ==============");
                   databaseEventBus.$emit('collections changed');
             });
          }
@@ -294,7 +297,7 @@ Vue.component('database-entry-modal', {
               <button class="modal-big-button" @click="import_doc(entry.document, true)">
                 {{guiMessages.selected.collection.importColl}}
               </button>
-              <button class="modal-big-button" @click="save()">
+              <button v-if="role == 'admin'" class="modal-big-button" @click="save()">
                 {{guiMessages.selected.annotation_app.save}}
               </button>
               <button class="modal-big-button modal-right-button" @click="$emit('close')">
@@ -327,11 +330,13 @@ Vue.component('collection-creation-modal', {
          userList: [],
          checkedUsers: [],
          showSelector: false,
+         role:''
       }
    },
 
    mounted () {
       this.init();
+      this.role = mainApp.role;
    },
 
    methods: {

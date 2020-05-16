@@ -8,13 +8,14 @@ Vue.component("database-view", {
             showModal: false,
             db_address:"127.0.0.1",
             db_port:"27017",
-            role: '',
-            userName: ''
+            userName: '',
+            role:''
         }
     },
 
     mounted () {
         this.init();
+        this.role = mainApp.role;
     },
 
     beforeDestroyed() {
@@ -26,7 +27,6 @@ Vue.component("database-view", {
     methods:{
         init : function(){
             //Get DATABASE COLLECTION
-            this.detectRole();
             this.getAllEntriesFromServer();
         },
         go_back : function(){
@@ -35,24 +35,21 @@ Vue.component("database-view", {
             console.log("==================================");
             annotationAppEventBus.$emit("go_back", event);
         },
-        detectRole: function() {
-            let title = document.getElementsByTagName("title")[0].textContent;
-            if (title != " LIDA ") {
-                this.role = "admin"
-            }
-        },
 
         getAllEntriesFromServer() {
+            mainContainer.style.cursor = "progress";
             backend.get_all_db_entries_ids()
                 .then( (response) => {
                     console.log();
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
+                    mainContainer.style.cursor = null;
            });
 
         },
 
         clicked_entry(clickedEntry) {
+            mainContainer.style.cursor = "progress";
             this.showModal = 'true';
             databaseEventBus.$emit("document_selected",clickedEntry);
         },
@@ -179,8 +176,8 @@ Vue.component("collection-view", {
             showCreateModal: false,
             db_address:"127.0.0.1",
             db_port:"27017",
-            role: '',
-            userName: ''
+            userName: '',
+            role:''
         }
     },
 
@@ -202,6 +199,7 @@ Vue.component("collection-view", {
         init : function(){
             //Get DATABASE COLLECTIONS
             this.getAllEntriesFromServer();
+            this.role = mainApp.role;
         },
         go_back : function(){
             console.log("==================================");
@@ -211,16 +209,19 @@ Vue.component("collection-view", {
         },
 
         getAllEntriesFromServer() {
+            mainContainer.style.cursor = "progress";
             backend.get_collection_ids_async()
                 .then( (response) => {
                     console.log();
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
+                    mainContainer.style.cursor = null;
             })
 
         },
 
         clicked_entry(clickedEntry) {
+            mainContainer.style.cursor = "progress";
             this.showModal = 'true';
             databaseEventBus.$emit("document_selected",clickedEntry);
         },
@@ -243,7 +244,7 @@ Vue.component("collection-view", {
                 .then( (response) => {
                     console.log()
                     this.fileContent = response;
-                    let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
+                    let blob = new Blob([JSON.serializePretty(response, null, 4)], {type: 'application/json'});
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
@@ -275,7 +276,7 @@ Vue.component("collection-view", {
 
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name._id">
                         <div class="entry-list-single-item-container">
-                            <div class="del-dialogue-button" v-on:click="delete_entry($event)">
+                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="delete_entry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                             <div class="entry-info" v-on:click="clicked_entry(name._id)">
@@ -289,7 +290,7 @@ Vue.component("collection-view", {
                         </div>
                     </li>
                 </ul>
-                <button v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
+                <button v-if="role == 'admin'" v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>

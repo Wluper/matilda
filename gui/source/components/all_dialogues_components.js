@@ -36,7 +36,6 @@ Vue.component("all-dialogues", {
   methods: {
 
         init : function(){
-
             // Step ONE: Get FILE NAME
             mainApp.userName = localStorage["remember"];
             this.getAllDialogueIdsFromServer();
@@ -253,6 +252,9 @@ Vue.component("all-dialogues", {
     clicked_database_button() {
        databaseEventBus.$emit("database_selected");
     },
+    clicked_collections_button() {
+       databaseEventBus.$emit("collections_selected");
+    },
 
   },
 
@@ -293,6 +295,7 @@ Vue.component("all-dialogues", {
           <div class="help-button-container">
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
               <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+              <button class="help-button btn btn-sm" @click="clicked_collections_button()">Collections</button>
               <button class="help-button btn btn-sm" @click="clicked_database_button()">Database</button>
               
           </div>

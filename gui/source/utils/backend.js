@@ -16,30 +16,6 @@ function session_name() {
     return username
 }
 
-/* not needed anymore
-
-async function get_name(){
-
-   var dialogues = {}
-
-    const apiLink = API_LINK_BASE+"/"+session_name()+'/name'
-    try {
-        var response = await axios.get( apiLink );
-
-        name = response.data.name
-        console.log("=============File Name==============")
-        console.log(name)
-        return name
-
-    } catch (error) {
-
-        console.log(error);
-
-    }
-
-
-};
-*/
 
 async function put_name(name){
 
@@ -487,11 +463,11 @@ async function get_user_db_entry_async(entryId) {
     }
 }
 
-async function get_db_entry_async(entryId) {
+async function get_db_entry_async(entryId,collection) {
 
-    console.log("GETTING ID:",entryId, "database document");
+    console.log("GETTING ID:",entryId, "in collection",collection);
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
 
     try {
 
@@ -554,13 +530,36 @@ async function login(loginName,loginPass) {
 
 }
 
+async function get_collection_ids_async() {
+
+  entriesList = []
+
+  const apiLink = API_LINK_BASE+`/collections`
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+}
+
 /********************************
 * Exporting
 ********************************/
 
 backend =
 {
-    //get_name                                  : get_name,
     put_name                                    : put_name,
     annotate_query                              : annotate_query,
     write_tag                                   : write_tag,
@@ -584,7 +583,9 @@ backend =
     get_user_db_entry_async                     : get_user_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
-    login                                       : login
+    login                                       : login,
+
+    get_collection_ids_async                    : get_collection_ids_async,
 }
 
 

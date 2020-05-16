@@ -153,9 +153,9 @@ class LidaApp(object):
                             methods=["GET", "PUT"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
-                            endpoint="/database/<id>",
-                            endpoint_name="/database/<id>",
-                            methods=["GET","POST","DELETE"],
+                            endpoint="/database/<id>/<collection>",
+                            endpoint_name="/database/<id>/<collection>",
+                            methods=["GET","DELETE"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/download",
@@ -168,8 +168,40 @@ class LidaApp(object):
                             methods=["POST","PUT"],
                             handler= self.handle_login )
 
+        self.add_endpoint( \
+                            endpoint="/collections",
+                            endpoint_name="/collections",
+                            methods=["GET"],
+                            handler= self.handle_collections )
 
-    def handle_database_resource(self,id=None,user=None):
+        self.add_endpoint( \
+                            endpoint="/collections/<id>",
+                            endpoint_name="/collections/<id>",
+                            methods=["POST"],
+                            handler= self.handle_collections )
+
+    def handle_collections(self, id=None):
+
+        if not id:
+
+            if request.method == "GET":
+
+                collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
+
+                response = collectionNames
+
+        if id:
+
+            if request.method == "POST":
+
+                values = request.get_json()
+
+                response = DatabaseManagement.createCollection(id, values["json"])
+
+        return jsonify ( response )
+
+
+    def handle_database_resource(self,id=None,user=None, collection=None):
         """
         GET - Gets the dialogues id in the database collection for the user
             or Gets an entire database document 
@@ -192,7 +224,7 @@ class LidaApp(object):
 
         if id:
             if request.method == "GET":
-                responseObject = DatabaseManagement.readDatabase("database","_id",id)
+                responseObject = DatabaseManagement.readDatabase(collection,"_id",id)
 
             if request.method == "POST":
                 responseObject = DatabaseManagement.getUserEntry(self,id)

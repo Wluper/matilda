@@ -564,15 +564,4 @@
     cursor: pointer;
 }
 
-#fileInputLabel_modal {
-    background: #259af7;
-    border: none;
-    border-radius: 1px;
-    color: white;
-    box-shadow: 0 2px #1675c1;
-    border-radius: 1px;
-    cursor: pointer;
-    font-style:normal;
-}
-
 /* EOF */

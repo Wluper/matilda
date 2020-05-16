@@ -23,6 +23,7 @@ var mainApp = new Vue({
       logged:'false',
       restored:'false',
       userName:'',
+      role: 'user',
     }
   },
 
@@ -44,9 +45,10 @@ var mainApp = new Vue({
       //Database View Event Bus
       databaseEventBus.$on( "database_selected", this.load_database_view )
       databaseEventBus.$on( "document_selected", this.load_document_view )
+      databaseEventBus.$on( "collections_selected", this.load_collections_view )
 
       //Check if already logged, restore session
-      this.check_login_cookie()
+      this.check_login_cookie();
 
   },
 
@@ -162,6 +164,10 @@ var mainApp = new Vue({
         this.displayingDocument = event;
     },
 
+    load_collections_view: function (event) {
+        this.status = 'collection-view';
+    },
+
   },
 
   template:
@@ -181,6 +187,9 @@ var mainApp = new Vue({
 
     <database-view v-else-if="status === 'database-view'">
     </database-view>
+
+    <collection-view v-else-if="status === 'collection-view'">
+    </collection-view>
 
     <all-dialogues v-else
                    v-bind:alreadyVisited="alreadyVisited">
