@@ -200,7 +200,7 @@ Vue.component("main-admin", {
         </h2>
 
         <h2 v-else class="all-dialogues-list-title">
-            Drop Files Anywhere to Upload!
+            {{guiMessages.selected.lida.drop}}
         </h2>
 
         <div class="help-button-container">

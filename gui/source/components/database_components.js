@@ -48,7 +48,7 @@ Vue.component("database-view", {
                     console.log();
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-          });
+           });
 
         },
 
@@ -176,6 +176,7 @@ Vue.component("collection-view", {
             guiMessages,
             allEntryMetadata: [],
             showModal: false,
+            showCreateModal: false,
             db_address:"127.0.0.1",
             db_port:"27017",
             role: '',
@@ -222,10 +223,6 @@ Vue.component("collection-view", {
         clicked_entry(clickedEntry) {
             this.showModal = 'true';
             databaseEventBus.$emit("document_selected",clickedEntry);
-        },
-
-        create_collection(collection_id, doc, description, assigned, annotationStyle, completed) {
-            
         },
 
         delete_entry(event) {
@@ -292,11 +289,12 @@ Vue.component("collection-view", {
                         </div>
                     </li>
                 </ul>
-                <button v-on:click="create_collection()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
+                <button v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
                 <database-entry-modal v-if="showModal" @close="showModal = false"></database-entry-modal>
+                <collection-creation-modal v-if="showCreateModal" @close="showCreateModal = false"></collection-creation-modal>
             </div>
         </div>
     `

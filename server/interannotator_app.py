@@ -175,6 +175,12 @@ class InterAnnotatorApp(object):
                             handler= self.handle_users  )
 
         self.add_endpoint( \
+                            endpoint="/login/<id>/<idPass>",
+                            endpoint_name="login/<id>/<idPass>",
+                            methods=["POST"],
+                            handler= self.handle_login )
+
+        self.add_endpoint( \
                             endpoint="/database",
                             endpoint_name="/database",
                             methods=["GET"],
@@ -294,6 +300,17 @@ class InterAnnotatorApp(object):
             responseObject = LoginFuncs.create(self,user,userPass,email)
 
         return jsonify( responseObject )
+
+    def handle_login(self, id, idPass=None):
+        """
+        Check if user login is permitted
+        """
+        responseObject = {}
+
+        if request.method == "POST":
+            responseObject = LoginFuncs.logIn(self, id, idPass)
+
+        return jsonify(responseObject)
 
 
     def handle_dialogues_resource(self, id=None):
@@ -558,26 +575,30 @@ class InterAnnotatorApp(object):
         """
         Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
         """
+        if not fileName:
+            fileName = ""
 
         addedDialogues = []
 
-        for dialougeName, dialogue in dialogueDict.items():
+        if dialogueDict:
 
-            dialogue = Configuration.validate_dialogue(dialogue)
+            for dialogueName, dialogue in dialogueDict.items():
 
-            if isinstance(dialogue, str):
-                currentResponseObject["error"] = dialogue
-                currentResponseObject["status"] = "error"
-                break
+                dialogue = Configuration.validate_dialogue(dialogue)
 
-            addedDialogues.append(dialougeName)
+                if isinstance(dialogue, str):
+                    currentResponseObject["error"] = dialogue
+                    currentResponseObject["status"] = "error"
+                    break
+
+                addedDialogues.append(dialogueName)
 
 
-        if "error" not in currentResponseObject:
-            self.annotationFiles.add_dialogue_file(dialogueDict, fileName=fileName)
-            currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
+            if "error" not in currentResponseObject:
+                self.annotationFiles.add_dialogue_file(dialogueDict, fileName=fileName)
+                currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
 
-        return currentResponseObject
+            return currentResponseObject
 
 
 

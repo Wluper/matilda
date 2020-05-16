@@ -532,8 +532,6 @@ async function update_collection_async(id, params) {
 
     const apiLink = API_LINK_BASE+`/collections/${id}`
 
-    console.log(params)
-
     try {
 
         response = await axios.post(apiLink, {json: JSON.parse(params)})
@@ -581,7 +579,29 @@ async function RESTdialogues(method, id, params){
 
 }
 
+async function login(loginName,loginPass) {
 
+  console.log("Username inserted",loginName);
+
+  const apiLink = API_LINK_BASE+`/login/${loginName}/${loginPass}`;
+
+  try {
+
+    var response = await axios.post(apiLink, loginName, loginPass);
+
+    console.log(response);
+
+    console.log("=========== LOGGIN IN ===========")
+    return response
+
+  } catch(error) {
+
+    console.log(error);
+    alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
 
 
 /********************************
@@ -620,7 +640,9 @@ backend =
     get_all_entries_async                       : get_all_entries_async,
 
     get_collection_ids_async                    : get_collection_ids_async,
-    update_collection_async                     : update_collection_async
+    update_collection_async                     : update_collection_async,
+
+    login                                       : login
 }
 
 

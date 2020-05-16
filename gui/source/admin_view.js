@@ -16,7 +16,7 @@ var mainApp = new Vue({
       return {
             // displayingDialogue: 'Dialogue1',
             displayingDialogue: '',
-            status : 'listview',
+            status : 'logging',
             alreadyVisited: [],
             //reference to the language file
             guiMessages
@@ -67,6 +67,9 @@ var mainApp = new Vue({
   `
       <main-admin v-if="status === 'listview'" v-bind:alreadyVisited="alreadyVisited">
       </main-admin>
+
+      <login-view v-else-if="status === 'logging'">
+      </login-view>
 
       <users-view v-else-if="status === 'users_admin'">
       </users-view>

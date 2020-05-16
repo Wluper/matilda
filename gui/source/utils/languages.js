@@ -26,11 +26,23 @@ guiMessages = {
       button_wipeDialogues: "Delete all dialogues",
       interfaceLanguage: "Interface Language:",
       confirmWipe:"Do you wish to wipe your current list?",
+      drop:"Drop Files Anywhere to Upload!",
     },
     collection: {
         title: "Collections Management",
         create: "Create collection",
-        importColl: "Import this collection"
+        add: "Add from those users",
+        addToColl: "Add to your collection one or more document",
+        importColl: "Import this collection",
+        importCollfromView: "Add from dialogues list",
+        importCollfromFile: "Add from file",
+        importCollfromUser: "Add from users' list",
+        collTitle: "Title",
+        collDesc: "Description",
+        collAnnot: "Annotation Style",
+        collAssi: "Assigned to",
+        collUpda: "Last update",
+        collStatus: "Status"
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -152,11 +164,24 @@ guiMessages = {
       button_wipeDialogues: "Elimina tutti i dialoghi",
       interfaceLanguage: "Lingua Interfaccia:",
       confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista?",
+      drop:"Rilascia i file per caricarli!"
    },
       collection: {
         title: "Gestione Collezioni",
         create: "Crea collezione",
+        add: "Aggiungi da questi utenti",
+        addToColl: "Aggiungi uno o più documenti alla collezione",
         importColl: "Importa questa collezione",
+        importCollfromView: "Aggiungi dalla lista dialoghi",
+        importCollfromFile: "Aggiungi da file",
+        importCollfromUser: "Aggiungi da un utente",
+        collTitle: "Titolo",
+        collDesc: "Descrizione",
+        collAnnot: "Modello di annotazione (annotation_style)",
+        collAssi: "Assegnata a",
+        collUpda: "Ultimo aggiornamento",
+        collStatus: "Stato di avanzamento",
+
    },
       annotation_app: {
         turnId: "Id Turno",

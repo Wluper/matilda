@@ -459,7 +459,7 @@
 
 .dialogue-num-turns {
     grid-area: numTurns;
-    overflow-x: hidden;
+    overflow-x: visible;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -562,6 +562,17 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
     cursor: pointer;
+}
+
+#fileInputLabel_modal {
+    background: #259af7;
+    border: none;
+    border-radius: 1px;
+    color: white;
+    box-shadow: 0 2px #1675c1;
+    border-radius: 1px;
+    cursor: pointer;
+    font-style:normal;
 }
 
 /* EOF */
