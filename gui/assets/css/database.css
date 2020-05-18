@@ -213,7 +213,8 @@ pre:first-line {
     font-family: Helvetica, Arial, sans-serif;
     width:70%;
     height:55em;
-    overflow:scroll;
+    overflow-y:scroll;
+    border:2px solid #259af7;
 }
 
 #ask-selector label {
@@ -252,7 +253,7 @@ pre:first-line {
 #ask-selector span {
     font-family:"montserrat";
     text-transform:uppercase;
-    font-size:16px;
+    font-size:12px;
     font-weight: bold;
 }
 

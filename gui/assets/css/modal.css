@@ -46,6 +46,7 @@
 .modal-footer {
     font-style: italic;
     color: #777;
+    clear:both;
 }
 
 .modal-default-button {

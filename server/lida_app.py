@@ -121,13 +121,15 @@ class LidaApp(object):
         self.add_endpoint( \
                             endpoint="/<user>/dialogues_wipe",
                             endpoint_name="/<user>/dialogues_wipe",
-                            methods=["POST"],
-                            handler= self.handle_wipe_request )
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues_wipe/<dialogues>",
-                            endpoint_name="/<user>/dialogues_wipe/<dialogues>",
                             methods=["DELETE"],
                             handler= self.handle_wipe_request )
+
+        self.add_endpoint( \
+                            endpoint="/<user>/dialogues_recover",
+                            endpoint_name="/<user>/dialogues_recover",
+                            methods=["POST"],
+                            handler= self.handle_recover_request )
+
 
         self.add_endpoint( \
                             endpoint="/<user>/dialogue_annotationstyle/<id>",
@@ -321,20 +323,23 @@ class LidaApp(object):
         return jsonify( responseObject )
 
 
-    def handle_wipe_request(self, user, dialogues=None):
+    def handle_wipe_request(self, user):
 
         responseObject = {}
 
-        if dialogues:
-            responseObject = self.dialogueFile.clean_workspace(user)
-
-        else:
-            dialogues = request.get_json()
-            responseObject = self.dialogueFile.delete_copies(user, dialogues["json"])
-
+        responseObject = self.dialogueFile.clean_workspace(user)
 
         return responseObject
 
+    def handle_recover_request(self, user):
+
+        responseObject = {}
+
+        dialogueDict = request.get_json()
+
+        responseObject = self.dialogueFile.recover_copies( user, dialogueDict)
+
+        return responseObject
 
 
     def handle_dialogues_metadata_resource(self,user,id=None):
@@ -432,6 +437,7 @@ class LidaApp(object):
             collection = ""
 
         added_dialogues = []
+        overwritten = []
 
         for dialogue_name, dialogue in dialogueDict.items():
 
@@ -442,11 +448,14 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            added_dialogues.append(self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collection)["id"])
+            result = self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collection)
+            added_dialogues.append(result["id"])
+            if result["overwritten"] != "": 
+                overwritten.append(result["overwritten"])
 
         if "error" not in currentResponseObject:
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
-            currentResponseObject["added"] = added_dialogues
+            currentResponseObject["overwritten"] = overwritten
 
         return currentResponseObject
 

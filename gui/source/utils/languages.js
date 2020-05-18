@@ -32,6 +32,7 @@ guiMessages = {
         title: "Collections Management",
         create: "Create collection",
         add: "Add from those users",
+        nothing: "Default action: overwrite",
         keep: "Dialogue ID Conflit in your workspace. Please choose which dialogues to keep",
         addToColl: "Add to your collection one or more document",
         importColl: "Import this collection",
@@ -45,7 +46,7 @@ guiMessages = {
         collUpda: "Last update",
         collStatus: "Status",
         new: "Imported",
-        old: "Actual"
+        old: "Previous"
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -175,6 +176,7 @@ guiMessages = {
         add: "Aggiungi da questi utenti",
         addToColl: "Aggiungi uno o più documenti alla collezione",
         keep: "Conflitto di ID nel tuo workspace. Quale dialogo vuoi tenere?",
+        nothing: "Azione predefinita: sovrascrittura",
         importColl: "Importa questa collezione",
         importCollfromView: "Aggiungi dalla lista dialoghi",
         importCollfromFile: "Aggiungi da file",
@@ -186,7 +188,7 @@ guiMessages = {
         collUpda: "Ultimo aggiornamento",
         collStatus: "Stato di avanzamento",
         new: "Importato",
-        old: "Attuale"
+        old: "Precedente"
 
    },
       annotation_app: {

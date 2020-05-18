@@ -241,7 +241,7 @@ Vue.component("all-dialogues", {
     clean_dialogues() {
         let del = confirm(guiMessages.selected.lida.confirmWipe);
         if (del == true) {
-            backend.del_all_dialogues_async("all")
+            backend.del_all_dialogues_async()
                 .then( (response) => {
                     console.log("All user's dialogues deleted.");
                     allDialoguesEventBus.$emit("refresh_dialogue_list");

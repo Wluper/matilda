@@ -194,6 +194,8 @@ class DialogueAnnotator(object):
         self.set_file( filePath, fileName )
         self.addedDialogues = {}
         self.addedDialogues[self.__SESSION_USER] = 0
+        self.trashcan = {}
+        self.trashcan[self.__SESSION_USER] = {}
 
     #def get_file_name(self):
         """
@@ -338,14 +340,21 @@ class DialogueAnnotator(object):
         number = self.addedDialogues[user]
         self.addedDialogues[user] = int(number)+1
 
+        overwritten = ""
+
         if not id:
             id = self.__get_new_dialogue_id(user)
 
         if id:
             try:
                 self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
-                print("Dialogue",id,"already exists! Changing id...")
-                id = id+"*"
+                print("Dialogue",id,"already exists!")
+                try: 
+                    self.trashcan[user][id] = copy.deepcopy(self.__dialogues[DialogueAnnotator.__SESSION_USER][id])
+                except:
+                    self.trashcan[user] = {}
+                    self.trashcan[user][id] = copy.deepcopy(self.__dialogues[DialogueAnnotator.__SESSION_USER][id])
+                overwritten = id
             except:
                 pass
 
@@ -363,7 +372,7 @@ class DialogueAnnotator(object):
 
         self.save( user )
 
-        return {"id":id}
+        return {"id":id, "overwritten":overwritten}
 
     def insert_meta_tags(self, user, id, tag, value):
         """
@@ -412,23 +421,21 @@ class DialogueAnnotator(object):
 
         return newId
 
-    def delete_copies(self, user, dialogueList):
+    def recover_copies(self, user, dialogueList):
 
         DialogueAnnotator.__SESSION_USER = user
 
         result = []
 
         for dialogue in dialogueList:
-            self.delete_dialogue(user,dialogueList[dialogue])
-            #normalize names if deleted copies
-            if dialogueList[dialogue][-1] != "*":
-                oldName = dialogueList[dialogue]+"*"
-                newName = dialogueList[dialogue]
-                self.update_dialogue_name(user, oldName, newName)
+            id = str(dialogue)
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = copy.deepcopy(self.trashcan[user][id])
+            collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+            self.insert_meta_tags(user, id, "collection", collection)
+            self.save( user )
+            result.append(dialogue)
 
-            result.append(dialogueList[dialogue])
-
-        return { "Deleted": result }
+        return { "recovered": result }
 
 
     def clean_workspace(self, user):

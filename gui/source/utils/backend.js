@@ -307,20 +307,33 @@ async function del_single_dialogue_async(dialogueId) {
 
 };
 
-async function del_all_dialogues_async(group) {
+async function del_all_dialogues_async() {
+
+    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`
 
     try {
 
-        if (group == "all") {
+        var response = await axios.delete(apiLink)
 
-            const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe/${group}`;
-            var response = await axios.delete(apiLink, "all");
-        
-        } else {
+        console.log("=========== WIPE DONE ===========")
+        return response
 
-            const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`;
-            var response = await axios.post(apiLink, {json: JSON.parse(group)});
-        }
+    } catch(error) {
+
+        console.log(error);
+        alert("Couldn't connect to server, check that it's running.")
+
+  }
+
+}
+
+async function recover_dialogues(jsonString) {
+
+const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_recover`
+
+    try {
+
+        var response = await axios.post(apiLink, JSON.parse(jsonString))
 
         console.log("=========== WIPE DONE ===========")
         return response
@@ -591,6 +604,7 @@ backend =
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
     login                                       : login,
+    recover_dialogues                           : recover_dialogues,
 
     get_collection_ids_async                    : get_collection_ids_async,
 }

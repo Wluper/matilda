@@ -100,7 +100,7 @@ Vue.component("database-view", {
             if (add == true) {
                 let del = confirm(guiMessages.selected.database.confirmWipe);
                 if (del == true) {
-                    backend.del_all_dialogues_async(this.userName)
+                    backend.del_all_dialogues_async()
                         .then( (response) => {
                             console.log(response);
                             this.restore_session_from_database(this.userName)

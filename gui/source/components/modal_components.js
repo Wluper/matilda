@@ -186,7 +186,7 @@ Vue.component('database-entry-modal', {
                         console.log("==== IMPORT SUCCESS ====");
                         console.log();
                         if (this.role != "admin") {
-                           this.check_for_duplicates(response.data.added);
+                           this.check_for_duplicates(response.data.overwritten);
                         }
                   });
                } else {
@@ -195,7 +195,7 @@ Vue.component('database-entry-modal', {
                         console.log("==== IMPORT SUCCESS ====");
                         console.log();
                         if (this.role != "admin") {
-                           this.check_for_duplicates(response.data.added);
+                           this.check_for_duplicates(response.data.overwritten);
                         }
                   });
                }
@@ -205,20 +205,25 @@ Vue.component('database-entry-modal', {
          check_for_duplicates(dialogues) {
             console.log("==== CHECK FOR DUPLICATES ====");
             for (dialogue in dialogues) {
-               if (dialogues[dialogue].charAt(dialogues[dialogue].length-1) == "*") {
                   this.duplicates.push(dialogues[dialogue]);
                }
-            }
             if (this.duplicates.length > 0) { 
                this.showSelectorDialogues = true; 
             } 
+            console.log(this.duplicates);
             return this.duplicates
          },
 
          confirm_selection() {
-            backend.del_all_dialogues_async(JSON.stringify(this.checkedDialogue))
+            requestRecovery = []
+            for (name in this.checkedDialogue) {
+               if (this.checkedDialogue[name] == true) {
+                  requestRecovery.push(name)
+               }
+            }
+            backend.recover_dialogues(JSON.stringify(requestRecovery))
                .then( (response) => {
-                  console.log(response.data.Deleted);
+                  console.log(response.data.recovered)
                   this.showSelectorDialogues = false;
                   this.duplicates = [];
                   this.checkedDialogue = {};
@@ -264,18 +269,19 @@ Vue.component('database-entry-modal', {
                <slot name="body">
                   <br>
                   <h2>{{guiMessages.selected.collection.keep}}</h2>
+                  <h2>{{guiMessages.selected.collection.nothing}}</h2>
                   <br>
                   <div class="database-selection">
                      <template v-for="dialogue in duplicates">
                      <li class="listed-entry no-margin">
                         <div class="entry-list-single-user-container">
                         <input type="radio" class="user-checkbox" 
-                           v-bind:id="dialogue.substr(0,dialogue.length-1)" 
-                           :value="dialogue" 
+                           v-bind:id="dialogue" 
+                           :value="true" 
                            v-model="checkedDialogue[dialogue]">
                            <div class="entry-info in-selector with-top-border">
-                              <label class="label-selection" :for="dialogue.substr(0,dialogue.length-1)"> 
-                                 {{dialogue.substr(0,dialogue.length-1)}} <span>{{guiMessages.selected.collection.old}}</span>
+                              <label class="label-selection" :for="dialogue"> 
+                                 {{dialogue}} <span>{{guiMessages.selected.collection.old}}</span>
                                  <br>
                               </label>
                            </div>
@@ -284,11 +290,11 @@ Vue.component('database-entry-modal', {
                      <li class="listed-entry no-margin">
                         <div class="entry-list-single-user-container">
                         <input type="radio" class="user-checkbox" 
-                           v-bind:id="dialogue" 
-                           :value="dialogue.substr(0,dialogue.length-1)" 
+                           v-bind:id="dialogue+'_false'" 
+                           :value="false"
                            v-model="checkedDialogue[dialogue]">
                            <div class="entry-info in-selector with-top-border">
-                              <label class="label-selection" :for="dialogue"> 
+                              <label class="label-selection" :for="dialogue+'_false'"> 
                                  {{dialogue}} <span>{{guiMessages.selected.collection.new}}</span>
                                  <br>
                               </label>
@@ -299,14 +305,15 @@ Vue.component('database-entry-modal', {
                   </div>
                </slot>
             <br>
-          <div class="modal-footer">
+         </div>
+         <div class="modal-footer">
             <slot name="footer">
+              <hr>
               <button class="modal-big-button modal-right-button" @click="confirm_selection()">
                 OK
               </button>
             </slot>
           </div>
-         </div>
       </div>
 
         <div v-else-if="view == 'database-view'" class="modal-container">
