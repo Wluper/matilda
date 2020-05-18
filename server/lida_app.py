@@ -121,6 +121,11 @@ class LidaApp(object):
         self.add_endpoint( \
                             endpoint="/<user>/dialogues_wipe",
                             endpoint_name="/<user>/dialogues_wipe",
+                            methods=["POST"],
+                            handler= self.handle_wipe_request )
+        self.add_endpoint( \
+                            endpoint="/<user>/dialogues_wipe/<dialogues>",
+                            endpoint_name="/<user>/dialogues_wipe/<dialogues>",
                             methods=["DELETE"],
                             handler= self.handle_wipe_request )
 
@@ -153,9 +158,9 @@ class LidaApp(object):
                             methods=["GET", "PUT"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
-                            endpoint="/database/<id>/<collection>",
-                            endpoint_name="/database/<id>/<collection>",
-                            methods=["GET","DELETE"],
+                            endpoint="/database/<id>/<DBcollection>",
+                            endpoint_name="/database/<id>/<DBcollection>",
+                            methods=["GET","POST","DELETE"],
                             handler= self.handle_database_resource )
         self.add_endpoint( \
                             endpoint="/database/download",
@@ -201,7 +206,7 @@ class LidaApp(object):
         return jsonify ( response )
 
 
-    def handle_database_resource(self,id=None,user=None, collection=None):
+    def handle_database_resource(self,id=None,user=None, DBcollection=None):
         """
         GET - Gets the dialogues id in the database collection for the user
             or Gets an entire database document 
@@ -213,6 +218,9 @@ class LidaApp(object):
         DELETE - Delete an entry in collection
 
         """
+        if not DBcollection:
+            DBcollection = "database"
+
         responseObject = {}
 
         if user:
@@ -224,7 +232,7 @@ class LidaApp(object):
 
         if id:
             if request.method == "GET":
-                responseObject = DatabaseManagement.readDatabase(collection,"_id",id)
+                responseObject = DatabaseManagement.readDatabase(DBcollection,"_id",id)
 
             if request.method == "POST":
                 responseObject = DatabaseManagement.getUserEntry(self,id)
@@ -313,12 +321,17 @@ class LidaApp(object):
         return jsonify( responseObject )
 
 
-    def handle_wipe_request(self, user):
+    def handle_wipe_request(self, user, dialogues=None):
 
         responseObject = {}
 
-        if request.method == "DELETE":
+        if dialogues:
             responseObject = self.dialogueFile.clean_workspace(user)
+
+        else:
+            dialogues = request.get_json()
+            responseObject = self.dialogueFile.delete_copies(user, dialogues["json"])
+
 
         return responseObject
 
@@ -429,10 +442,11 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collection)
+            added_dialogues.append(self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collection)["id"])
 
         if "error" not in currentResponseObject:
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
+            currentResponseObject["added"] = added_dialogues
 
         return currentResponseObject
 

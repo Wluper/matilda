@@ -18,6 +18,7 @@ var mainApp = new Vue({
             displayingDialogue: '',
             status : 'logging',
             alreadyVisited: [],
+            role: 'admin',
             //reference to the language file
             guiMessages
       }

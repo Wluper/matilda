@@ -197,7 +197,7 @@ Vue.component("all-dialogues", {
           console.log("Ready to restore from database");
           const mainContainer = document.getElementById("mainContainer");
           mainContainer.style.cursor = "progress";
-          backend.get_user_db_entry_async(fileName)
+          backend.get_user_db_entry_async(fileName, "database")
                 .then( (response) => {
                       console.log(response);
                       allDialoguesEventBus.$emit("refresh_dialogue_list");
@@ -231,7 +231,7 @@ Vue.component("all-dialogues", {
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
-                fileName = "USER_" + mainApp.userName + ".json"
+                fileName = "USER_" + mainApp.userName + "_"+utils.create_date()+".json"
                 link.setAttribute('download', fileName )
                 document.body.appendChild(link)
                 link.click();
@@ -241,7 +241,7 @@ Vue.component("all-dialogues", {
     clean_dialogues() {
         let del = confirm(guiMessages.selected.lida.confirmWipe);
         if (del == true) {
-            backend.del_all_dialogues_async(mainApp.userName)
+            backend.del_all_dialogues_async("all")
                 .then( (response) => {
                     console.log("All user's dialogues deleted.");
                     allDialoguesEventBus.$emit("refresh_dialogue_list");
@@ -331,8 +331,9 @@ Vue.component("all-dialogues", {
                   </div>
 
                   <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
-                  <div class="dialogue-annot_style" v-if="(dat.collection != '')">{{dat.collection}}</div>
                   <div class="dialogue-annot_style" v-if="(dat.collection == '')">No collection</div>
+                  <div class="dialogue-annot_style" v-else-if="(dat.collection == null)">No collection</div>
+                  <div class="dialogue-annot_style" v-else>{{dat.collection}}</div>
               </div>
 
             </div>

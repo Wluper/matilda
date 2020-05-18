@@ -341,6 +341,14 @@ class DialogueAnnotator(object):
         if not id:
             id = self.__get_new_dialogue_id(user)
 
+        if id:
+            try:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
+                print("Dialogue",id,"already exists! Changing id...")
+                id = id+"*"
+            except:
+                pass
+
         #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
@@ -350,36 +358,27 @@ class DialogueAnnotator(object):
             except:
                 collection = ""
 
-        self.insert_meta_tags(user, id, "meta", "collection", collection)
+        #initialise meta-tags
+        self.insert_meta_tags(user, id, "collection", collection)
 
         self.save( user )
 
         return {"id":id}
 
-    def insert_meta_tags(self, user, id, type, tag, value):
+    def insert_meta_tags(self, user, id, tag, value):
         """
         Checks if meta-tags exist, if not create and format them, then inserts the value
         """
-        #print("* User:", user, id, "writing:", type, tag, value)
+        #print("* User:"+user, id, "writing", tag,":",value)
 
         DialogueAnnotator.__SESSION_USER = user
 
-        if type == "meta":
-            try:
-                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
-                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag] = value
-            except:
-                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { 
-                    tag:value, 
-            })
+        try:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag] = value
+        except:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { tag:value })
         
-        if type == "global_slot":
-            try:
-                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"]
-            except:
-                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"] = {}
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["global_slot"][tag] = value
-            self.save ( user )
 
 
     def delete_dialogue(self, user, id):
@@ -409,12 +408,28 @@ class DialogueAnnotator(object):
         """
         newId = "Dialogue" + str(self.addedDialogues[user])
 
+        # save_json_file( obj=self.__dialogues, path=self.__filePath )
+
         return newId
 
+    def delete_copies(self, user, dialogueList):
 
+        DialogueAnnotator.__SESSION_USER = user
 
+        result = []
 
-        # save_json_file( obj=self.__dialogues, path=self.__filePath )
+        for dialogue in dialogueList:
+            self.delete_dialogue(user,dialogueList[dialogue])
+            #normalize names if deleted copies
+            if dialogueList[dialogue][-1] != "*":
+                oldName = dialogueList[dialogue]+"*"
+                newName = dialogueList[dialogue]
+                self.update_dialogue_name(user, oldName, newName)
+
+            result.append(dialogueList[dialogue])
+
+        return { "Deleted": result }
+
 
     def clean_workspace(self, user):
 

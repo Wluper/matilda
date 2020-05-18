@@ -307,13 +307,20 @@ async function del_single_dialogue_async(dialogueId) {
 
 };
 
-async function del_all_dialogues_async() {
-
-    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`
+async function del_all_dialogues_async(group) {
 
     try {
 
-        var response = await axios.delete(apiLink)
+        if (group == "all") {
+
+            const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe/${group}`;
+            var response = await axios.delete(apiLink, "all");
+        
+        } else {
+
+            const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`;
+            var response = await axios.post(apiLink, {json: JSON.parse(group)});
+        }
 
         console.log("=========== WIPE DONE ===========")
         return response
@@ -431,13 +438,13 @@ async function del_db_entry_async(entryId) {
     }
 }
 
-async function get_user_db_entry_async(entryId) {
+async function get_user_db_entry_async(entryId, collection) {
 
     //get user's dialogues saved in database from previous session
 
     console.log("GETTING USER",entryId, "database document");
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
 
     try {
 

@@ -8,6 +8,13 @@
 * LOCAL DATA MANIPULATROS
 ********************************/
 
+function create_date(){
+    let now = new Date();
+    let print = String(now.getHours()+"_"+now.getMinutes()+"_");
+    print += String(now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear());
+    return print
+}
+
 function create_empty_turn(validAnnotations){
 
     var out = {};
@@ -179,5 +186,6 @@ utils =
     range       : range,
     update_turn : update_turn,
     get_turn_data : get_turn_data,
-    get_all_turns_data : get_all_turns_data
+    get_all_turns_data : get_all_turns_data,
+    create_date  : create_date
 }

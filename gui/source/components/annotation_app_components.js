@@ -112,6 +112,9 @@ Vue.component("annotation-app", {
                   this.metaTags = response[0];
                   console.log('---- END ----')
                   this.dTurns = response;
+                  //format collection meta-tag
+                  if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined))
+                    this.metaTags["collection"] = "";
               })
 
           // Step Two :: Get the Annotation Styles
@@ -187,7 +190,7 @@ Vue.component("annotation-app", {
         },
 
         turn_update: function(event){
-            //turn 0 is meta-tags reserved
+            //turn 0 is meta-tags and global_slot reserved so it's skipped
             if (this.dCurrentId != 0) {
                 console.log("-----> Updating turn", event)
                 this.allDataSaved = false;

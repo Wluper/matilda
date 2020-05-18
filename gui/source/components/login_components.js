@@ -67,7 +67,7 @@ Vue.component("login-view", {
                 <img src="assets/images/lida_favicon.png" class="login_logo">
                 <div class="login_form">
                     <input v-if="role != 'admin'" id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
-                    <input v-if="role == 'admin'" id="login_input" class="login_input" type="text" name="login_username" v-model="role" hidden>
+                    <input v-if="role == 'admin'" id="login_input" class="admin_input" type="text" name="login_username" v-bind:value="insertedName" placeholder="admin" value="admin" readonly>
                     <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null" v-on:keyup.enter="login()">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
                 </div>

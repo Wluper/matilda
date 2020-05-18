@@ -71,8 +71,24 @@
     background: white;
 }
 
+#collection-view .entry-list-single-item-container {
+    border-left:5px solid #3a9dd6
+}
+#collection-view .entry-date {
+    position:relative;
+    top:4px;
+}
+
+#database-view .entry-id {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+#database-view .entry-date {
+    padding-top: initial;
+}
+
 .listed-entry:hover .entry-list-single-item-container {
-    border-left:5px solid red
+    border-left:5px solid red !important
 }
 
 .entry-info {
@@ -93,6 +109,8 @@
     padding: 10px;
     /* background: #3a9dd6; */
     border-radius: 3px 0 0 3px;
+    padding-bottom: 3px;
+    padding-top:5px;
 }
 
 .entry-id span {
@@ -116,6 +134,19 @@
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
+    padding-top:8px;
+}
+
+.entry-assigned {
+    justify-content: start;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding-left:10px;
+    padding-bottom:8px;
+}
+.entry-assigned span {
+    font-weight: bold; 
 }
 
 pre {
@@ -144,6 +175,7 @@ pre:first-line {
     height: 150px;
     resize: none;
     border: 1px solid rgba(0,0,0,0.2);
+    padding: 5px;
 }
 .modal-body textarea:focus {
     background-color: #f9f9a291;
@@ -171,13 +203,71 @@ pre:first-line {
     width:70%;
 }
 
+.modal-container-selection {
+    margin: 0px auto;
+    padding: 50px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+    width:70%;
+    height:55em;
+    overflow:scroll;
+}
+
 #ask-selector label {
     display:inline-block;
-    margin-bottom:7px;
+    padding:3px 0px 7px 7px;
+    cursor:pointer;
+    width:100%;
 }
 
 #ask-selector button {
     margin-top:15px;
+}
+
+.label-selection {
+    display:grid !important;
+    grid-template:[row1-start] "text span" [row1-end] /1fr 1fr;
+    padding:0 !important;
+}
+.label-selection span {
+    text-align:right;
+}
+
+.no-margin { margin:0; }
+
+.clear {
+    clear:both;
+}
+
+#ask-selector h2 {
+    font-family:"montserrat";
+    font-size:16px;
+    text-transform:uppercase;
+    margin-bottom:0;
+}
+
+#ask-selector span {
+    font-family:"montserrat";
+    text-transform:uppercase;
+    font-size:16px;
+    font-weight: bold;
+}
+
+input:checked + div { 
+    border-left:5px solid #3a9dd6 !important;
+}
+
+.in-selector {
+    grid-area:none;
+    display:block;
+    border-left:5px solid #d1d1d3;
+}
+
+.user-checkbox {
+    display:none;
 }
 
 #fileInputLabel_modal {
@@ -189,4 +279,12 @@ pre:first-line {
     border-radius: 1px;
     cursor: pointer;
     font-style:normal;
+}
+
+.entry-list-single-user-container {
+    grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+    border-top:1px solid rgba(0,0,0,0.04);
 }

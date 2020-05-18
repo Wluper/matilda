@@ -367,8 +367,7 @@ Vue.component('classification-string-annotation', {
             annotationAppEventBus.$emit("resume_annotation_tools");
             return
          }
-         activeLabel.value += "<q cite='"+context.trim()+"_"+event.target.selectionStart+","+event.target.selectionEnd+"'>"+text+"</q>, ";
-         //activeLabel.value += context.trim()+" "+event.target.selectionStart+","+event.target.selectionEnd+"' '"+text+"',";
+         activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
          this.updateClassAndString(activeLabel, labelName);
          //put all back to place
          annotationAppEventBus.$emit("resume_annotation_tools");
@@ -508,28 +507,29 @@ Vue.component('classification-global-annotation',{
         },
 
         getActualValue: function(labelName) {
-            console.log("Computing globals");
-            console.log(this.dTurns);
-            console.log(labelName)
-            if (this.dTurns.length > 1) {
+            console.log("Computing global slots:");
+            if (this.dTurns.length > 0) {
                 try { 
                     var value = this.dTurns[0]["global_slot"][labelName];
+                    console.log(labelName,":",value);
                     return value;
                 } catch { 
                     return ""; 
                 }
             }
+            console.log("----------")
         },
 
         updateValue: function(event) {
             event.stopPropagation();
-            backend.write_tag(this.dialogueId,"global_slot",event.target.id, event.target.value)
-                .then( (response) => {
-                    console.log(response);
-                    backend.update_db();
-                })
+            //update dTurns
+            if (this.dTurns[0]["global_slot"] == undefined) {
+                this.dTurns[0]["global_slot"] = {};
+            } 
+            this.dTurns[0]["global_slot"][event.target.id] = event.target.value;
+            console.log("Dialogue updated:",this.dTurns);
+            annotationAppEventBus.$emit( "save_dialogue");
             }
-        
         },
 
     template:
@@ -586,7 +586,7 @@ Vue.component('classification-global-annotation',{
             <div v-for="labelName in globals.labels" class="global-input-wrapper">
 
                 <label v-bind:for="labelName" class="global-label">{{labelName}}</label>
-                <input class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)">
+                <input class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)" v-on:blur="updateValue($event)">
 
             </div>
 

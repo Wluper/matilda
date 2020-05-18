@@ -137,9 +137,9 @@ Vue.component('agreement-modal', {
   `
 })
 
-/*************************************
-* MODAL COMPONENT
-*************************************/
+/*******************************************
+* DATABASE AND COLLECTIONS SHOW DOCUMENT
+********************************************/
 Vue.component('database-entry-modal', {
    data () {
          return {
@@ -147,7 +147,10 @@ Vue.component('database-entry-modal', {
             guiMessages,
             view: '',
             update: {},
-            role: ''
+            role: '',
+            showSelectorDialogues:false,
+            duplicates: [],
+            checkedDialogue: {}
          }
    },
 
@@ -175,17 +178,51 @@ Vue.component('database-entry-modal', {
          },
 
          import_doc(doc, conversion) {
-            if (conversion != undefined) {
-               doc = JSON.stringify(JSON.parse(doc));
-               backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
-            }
             if (confirm(guiMessages.selected.database.confirmImport)) {
-               backend.post_new_dialogues_from_string_lists_async(doc)
-                  .then( (response) => {
-                     console.log();
-                     console.log("Import Success");
-               });
+               if (conversion != undefined) {
+                  doc = JSON.stringify(JSON.parse(doc));
+                  backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                     .then( (response) => {
+                        console.log("==== IMPORT SUCCESS ====");
+                        console.log();
+                        if (this.role != "admin") {
+                           this.check_for_duplicates(response.data.added);
+                        }
+                  });
+               } else {
+                  backend.post_new_dialogues_from_string_lists_async(doc)
+                     .then( (response) => {
+                        console.log("==== IMPORT SUCCESS ====");
+                        console.log();
+                        if (this.role != "admin") {
+                           this.check_for_duplicates(response.data.added);
+                        }
+                  });
+               }
             }
+         },
+
+         check_for_duplicates(dialogues) {
+            console.log("==== CHECK FOR DUPLICATES ====");
+            for (dialogue in dialogues) {
+               if (dialogues[dialogue].charAt(dialogues[dialogue].length-1) == "*") {
+                  this.duplicates.push(dialogues[dialogue]);
+               }
+            }
+            if (this.duplicates.length > 0) { 
+               this.showSelectorDialogues = true; 
+            } 
+            return this.duplicates
+         },
+
+         confirm_selection() {
+            backend.del_all_dialogues_async(JSON.stringify(this.checkedDialogue))
+               .then( (response) => {
+                  console.log(response.data.Deleted);
+                  this.showSelectorDialogues = false;
+                  this.duplicates = [];
+                  this.checkedDialogue = {};
+            });
          },
 
          save() {
@@ -214,7 +251,65 @@ Vue.component('database-entry-modal', {
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div v-if="view == 'database-view'" class="modal-container">
+
+
+         <div class="modal-container-selection" v-if="showSelectorDialogues">
+            <div class="modal-header">
+               <slot name="header">
+                  {{guiMessages.selected.collection.create}}
+               </slot>
+            </div>
+            <hr>
+            <div id="ask-selector">
+               <slot name="body">
+                  <br>
+                  <h2>{{guiMessages.selected.collection.keep}}</h2>
+                  <br>
+                  <div class="database-selection">
+                     <template v-for="dialogue in duplicates">
+                     <li class="listed-entry no-margin">
+                        <div class="entry-list-single-user-container">
+                        <input type="radio" class="user-checkbox" 
+                           v-bind:id="dialogue.substr(0,dialogue.length-1)" 
+                           :value="dialogue" 
+                           v-model="checkedDialogue[dialogue]">
+                           <div class="entry-info in-selector with-top-border">
+                              <label class="label-selection" :for="dialogue.substr(0,dialogue.length-1)"> 
+                                 {{dialogue.substr(0,dialogue.length-1)}} <span>{{guiMessages.selected.collection.old}}</span>
+                                 <br>
+                              </label>
+                           </div>
+                        </div>
+                     </li>
+                     <li class="listed-entry no-margin">
+                        <div class="entry-list-single-user-container">
+                        <input type="radio" class="user-checkbox" 
+                           v-bind:id="dialogue" 
+                           :value="dialogue.substr(0,dialogue.length-1)" 
+                           v-model="checkedDialogue[dialogue]">
+                           <div class="entry-info in-selector with-top-border">
+                              <label class="label-selection" :for="dialogue"> 
+                                 {{dialogue}} <span>{{guiMessages.selected.collection.new}}</span>
+                                 <br>
+                              </label>
+                           </div>
+                        </div>
+                     </li>
+                     </template>
+                  </div>
+               </slot>
+            <br>
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="modal-big-button modal-right-button" @click="confirm_selection()">
+                OK
+              </button>
+            </slot>
+          </div>
+         </div>
+      </div>
+
+        <div v-else-if="view == 'database-view'" class="modal-container">
           <div class="modal-header">
             <slot name="header">
                Database {{guiMessages.selected.modal_document[0]}} 
@@ -249,7 +344,6 @@ Vue.component('database-entry-modal', {
               </button>
             </slot>
           </div>
-
          </div>
 
 
@@ -446,19 +540,32 @@ Vue.component('collection-creation-modal', {
             <div id="ask-selector">
                <slot name="body">
                   <br>
-                  <strong>{{guiMessages.selected.collection.addToColl}}</strong>
-                  <br><br>
-                  <template v-for="name in userList">
-                     <input type="checkbox" v-bind:id="name._id" :value="name._id" v-model="checkedUsers">
-                     <label :for="name._id"> <strong>ID:</strong> {{name._id}} <strong>Last updated:</strong> {{name.lastUpdate}} </label>
-                     <br>
-                  </template>
-                  <button class="modal-big-button" @click="add_from_user(true)">{{guiMessages.selected.collection.add}}</button>
+                  <h2>{{guiMessages.selected.collection.addToColl}}</h2>
+                  <br>
+                  <div class="database-selection">
+
+                     <li class="listed-entry" v-for="name in userList">
+                        <div class="entry-list-single-user-container">
+                        <input type="checkbox" class="user-checkbox" v-bind:id="name._id" :value="name._id" v-model="checkedUsers">
+                           <div class="entry-info in-selector with-top-border">
+                              <label :for="name._id"> 
+                                 <strong>ID:</strong> {{name._id}} 
+                                 <br>
+                                 <strong>Last updated:</strong> {{name.lastUpdate}} 
+                              </label>
+                           </div>
+                        </div>
+                     </li>
+
+                  </div>
                </slot>
             </div>
-            <hr>
+            <hr class="clear">
           <div class="modal-footer">
             <slot name="footer">
+              <button class="modal-big-button" @click="add_from_user(true)">
+              {{guiMessages.selected.collection.add}}
+              </button>
               <button class="modal-big-button modal-right-button" @click="$emit('close')">
                 {{guiMessages.selected.annotation_app.close}}
               </button>

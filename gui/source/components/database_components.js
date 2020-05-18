@@ -86,11 +86,11 @@ Vue.component("database-view", {
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    fileName = "Database.json";
+                    fileName = "Database_"+utils.create_date()+".json";
                     link.setAttribute('download', fileName );
                     document.body.appendChild(link);
                     link.click();
-                });
+            });
         },
 
         import_from_database() {
@@ -244,11 +244,12 @@ Vue.component("collection-view", {
                 .then( (response) => {
                     console.log()
                     this.fileContent = response;
-                    let blob = new Blob([JSON.serializePretty(response, null, 4)], {type: 'application/json'});
+                    let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    fileName = "Collections.json";
+                    
+                    fileName = "Collections_"+utils.create_date()+".json";
                     link.setAttribute('download', fileName );
                     document.body.appendChild(link);
                     link.click();
@@ -281,10 +282,13 @@ Vue.component("collection-view", {
                             </div>
                             <div class="entry-info" v-on:click="clicked_entry(name._id)">
                                 <div class="entry-id">
-                                    <span>COLLECTION:</span> {{name._id}}
+                                    <span>Collection:</span> {{name._id}}
                                 </div>
                                 <div class="entry-date">
                                     {{name.lastUpdate}}
+                                </div>
+                                <div class="entry-assigned">
+                                    <span>Assigned to:</span> {{name.assignedTo}}
                                 </div>
                             </div>
                         </div>

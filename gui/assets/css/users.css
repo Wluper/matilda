@@ -32,6 +32,25 @@
     margin-right:auto;
 }
 
+.admin_input {
+    color:grey;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 3px;
+    line-height: 1.7em;
+    margin-bottom: 2%;
+    border: none;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase;
+    font-family: montserrat;
+    background-color:white;
+}
+.admin_input:hover, .admin_input:focus {
+    background-color:white !important;
+}
+
 .password_input {
     color:grey;
     text-align:center;
