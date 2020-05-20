@@ -1,10 +1,4 @@
 /********************************
-* AGREEMENT SCORES
-********************************/
-
-API_LINK_BASE = "http://127.0.0.1:5001";
-
-/********************************
 * FILE NAME FUNCTIONS
 ********************************/
 
@@ -12,7 +6,7 @@ async function get_scores_async(){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/agreements"
+    const apiLink = API_LINK_INTER+"/agreements"
     try {
         var response = await axios.get( apiLink );
 
@@ -38,7 +32,7 @@ async function get_errors_async(dialogueId){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+`/errors/${dialogueId}`
+    const apiLink = API_LINK_INTER+`/errors/${dialogueId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -64,7 +58,7 @@ async function put_error_async(error, meta, errorId, dialogueId){
         errorId : errorId,
         dialogueId : dialogueId
     }
-    const apiLink = API_LINK_BASE+"/errors"
+    const apiLink = API_LINK_INTER+"/errors"
     try {
         var response = await axios.put( apiLink, params );
 
@@ -90,7 +84,7 @@ async function annotate_query(query){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/turns"
+    const apiLink = API_LINK_INTER+"/turns"
     try {
         var response = await axios.post( apiLink, { query: query}  );
         console.log(response.data)
@@ -118,7 +112,7 @@ async function get_annotation_style_async(){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/dialogue_annotationstyle"
+    const apiLink = API_LINK_INTER+"/dialogue_annotationstyle"
 
     try {
         var response = await axios.get(apiLink)
@@ -146,7 +140,7 @@ async function get_all_dialogue_ids_async() {
 
   var dialogues = {}
 
-  const apiLink = API_LINK_BASE+"/dialogues_metadata"
+  const apiLink = API_LINK_INTER+"/dialogues_metadata"
 
   try {
 
@@ -171,7 +165,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = API_LINK_BASE+`/dialogues_metadata/${oldName}`
+    const apiLink = API_LINK_INTER+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -253,7 +247,7 @@ async function post_empty_dialogue() {
 
 async function post_new_dialogues_from_string_lists_async(stringLists) {
 
-    const apiLink = API_LINK_BASE+`/dialogues_import`
+    const apiLink = API_LINK_INTER+`/dialogues_import`
 
     try {
 
@@ -327,7 +321,7 @@ async function del_single_dialogue_async(dialogueId) {
 
 async function get_all_users(){
     
-    const apiLink = API_LINK_BASE+"/users"
+    const apiLink = API_LINK_INTER+"/users"
 
     var users = {}
 
@@ -347,7 +341,7 @@ async function get_all_users(){
 
 async function create_user(user,pass,email){
     
-    const apiLink = API_LINK_BASE+`/users/${user}/${pass}/${email}`;
+    const apiLink = API_LINK_INTER+`/users/${user}/${pass}/${email}`;
 
     var response = {}
 
@@ -370,7 +364,7 @@ async function get_all_db_entries_ids() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+'/database'
+  const apiLink = API_LINK_INTER+'/database'
 
   try {
 
@@ -396,7 +390,7 @@ async function update_db() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+'/database'
+  const apiLink = API_LINK_INTER+'/database'
 
   try {
 
@@ -422,7 +416,7 @@ async function del_db_entry_async(entryId,collection) {
 
     console.log("DELETING",entryId);
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
+    var apiLink = API_LINK_INTER+`/database/${entryId}/${collection}`;
 
     try {
 
@@ -440,7 +434,7 @@ async function get_all_entries_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+'/database/download'
+  const apiLink = API_LINK_INTER+'/database/download'
 
   try {
 
@@ -464,7 +458,7 @@ async function get_db_entry_async(entryId,collection) {
 
     console.log("GETTING ID:",entryId, collection,"document");
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
+    var apiLink = API_LINK_INTER+`/database/${entryId}/${collection}`;
 
     try {
 
@@ -481,7 +475,7 @@ async function get_db_entry_async(entryId,collection) {
 
 async function del_all_dialogues_async() {
 
-    const apiLink = API_LINK_BASE+"/dialogues_wipe"
+    const apiLink = API_LINK_INTER+"/dialogues_wipe"
 
     try {
 
@@ -508,7 +502,7 @@ async function get_collection_ids_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+`/collections`
+  const apiLink = API_LINK_INTER+`/collections`
 
   try {
 
@@ -530,7 +524,7 @@ async function get_collection_ids_async() {
 
 async function update_collection_async(id, params) {
 
-    const apiLink = API_LINK_BASE+`/collections/${id}`
+    const apiLink = API_LINK_INTER+`/collections/${id}`
 
     try {
 
@@ -554,8 +548,8 @@ async function RESTdialogues(method, id, params){
     console.log("PARAMS "+params)
 
     //
-    if (id==null) {var apiLink = API_LINK_BASE+"/dialogues";}
-    else {var apiLink = API_LINK_BASE+`/dialogues/${id}`;}
+    if (id==null) {var apiLink = API_LINK_INTER+"/dialogues";}
+    else {var apiLink = API_LINK_INTER+`/dialogues/${id}`;}
 
     //
     if (method=="DELETE") {
@@ -583,7 +577,7 @@ async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_LINK_BASE+`/login/${loginName}/${loginPass}`;
+  const apiLink = API_LINK_INTER+`/login/${loginName}/${loginPass}`;
 
   try {
 

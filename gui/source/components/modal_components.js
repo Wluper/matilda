@@ -267,7 +267,6 @@ Vue.component('database-entry-modal', {
             <hr>
             <div id="ask-selector">
                <slot name="body">
-                  <br>
                   <h2>{{guiMessages.selected.collection.keep}}</h2>
                   <h2>{{guiMessages.selected.collection.nothing}}</h2>
                   <br>

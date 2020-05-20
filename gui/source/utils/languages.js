@@ -27,6 +27,8 @@ guiMessages = {
       interfaceLanguage: "Interface Language:",
       confirmWipe:"Do you wish to wipe your current list?",
       drop:"Drop Files Anywhere to Upload!",
+      buttonCollections:"Collections",
+      connectionError: "Couldn't connect to server, check that it's running or the address in backend_config"
     },
     collection: {
         title: "Collections Management",
@@ -168,7 +170,9 @@ guiMessages = {
       button_wipeDialogues: "Elimina tutti i dialoghi",
       interfaceLanguage: "Lingua Interfaccia:",
       confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista?",
-      drop:"Rilascia i file per caricarli!"
+      drop:"Rilascia i file per caricarli!",
+      buttonCollections: "Collezioni",
+      connectionError:"Impossibile connettersi al server, controlla che sia in funzione o l'indirizzo in backend_config"
    },
       collection: {
         title: "Gestione Collezioni",

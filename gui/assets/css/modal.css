@@ -23,11 +23,13 @@
   width: 60%;
   margin: 0px auto;
   padding:50px;
+  max-height:90vh;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  overflow: scroll;
 }
 
 .modal-header h3 {
@@ -111,7 +113,13 @@
     padding: 0 17px;
 }
 
-
+.modal-body textarea {
+    width: 100%;
+    resize: none;
+    min-height:150px;
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 5px;
+}
 
 /*
  * The following styles are auto-applied to elements with

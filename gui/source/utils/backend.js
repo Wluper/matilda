@@ -1,10 +1,4 @@
 /********************************
-* CONSTANTS
-********************************/
-
-API_LINK_BASE = "http://127.0.0.1:5000";
-
-/********************************
 * FILE NAME FUNCTIONS
 ********************************/
 
@@ -115,7 +109,7 @@ async function write_tag(id,type,tag,value) {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -141,7 +135,7 @@ async function get_all_dialogue_ids_async() {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -321,7 +315,7 @@ async function del_all_dialogues_async() {
     } catch(error) {
 
         console.log(error);
-        alert("Couldn't connect to server, check that it's running.")
+        alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -335,13 +329,13 @@ const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_recover`
 
         var response = await axios.post(apiLink, JSON.parse(jsonString))
 
-        console.log("=========== WIPE DONE ===========")
+        console.log("=========== RECOVERY DONE ===========")
         return response
 
     } catch(error) {
 
         console.log(error);
-        alert("Couldn't connect to server, check that it's running.")
+        alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -402,7 +396,7 @@ async function get_all_db_entries_ids() {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -428,7 +422,7 @@ async function update_db() {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -483,11 +477,11 @@ async function get_user_db_entry_async(entryId, collection) {
     }
 }
 
-async function get_db_entry_async(entryId,collection) {
+async function get_db_entry_async(entryId,DBcollection) {
 
-    console.log("GETTING ID:",entryId, "in collection",collection);
+    console.log("GETTING ID:",entryId, "in collection",DBcollection);
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
+    var apiLink = API_LINK_BASE+`/database/${entryId}/${DBcollection}`;
 
     try {
 
@@ -521,7 +515,7 @@ async function get_all_entries_async() {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 }
@@ -544,7 +538,7 @@ async function login(loginName,loginPass) {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 
@@ -569,7 +563,7 @@ async function get_collection_ids_async() {
   } catch(error) {
 
     console.log(error);
-    alert("Couldn't connect to server, check that it's running.")
+    alert(guiMessages.selected.lida.connectionError)
 
   }
 }

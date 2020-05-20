@@ -141,10 +141,7 @@ Vue.component("annotation-app", {
             console.log(" ************ DTURNS ************ ")
             console.log(this.dCurrentId)
             console.log(event)
-            if (event.key=="ArrowUp"){
-                temp=-1;
-            }
-            else if (event.key=="ArrowDown" || event.key=="Enter"){
+            if (event.key=="Enter"){
                 temp=1;
             } else {
               return;
@@ -265,7 +262,7 @@ Vue.component("annotation-app", {
 
     template:
     `
-    <div v-on:keyup.up="change_turn(-1)" v-on:keyup.down="change_turn(1)" v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
         <dialogue-menu v-bind:changesSaved="allDataSaved"
                        v-bind:dialogueTitle="dialogueId">

@@ -40,6 +40,15 @@ Vue.component("login-view", {
         },
         check_credentials() {
             console.log('---- CHECKING USERNAME ----');
+            if (this.check_if_first_start(this.insertedName, this.insertedPass)) {
+                console.log("Default combination")
+                if (this.role != "admin") {
+                    allDialoguesEventBus.$emit("update_username", "admin", this.insertedPass);
+                } else { 
+                    annotationAppEventBus.$emit("go_back");
+                }
+                return;
+            }
             backend.login(this.insertedName,this.insertedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
@@ -54,10 +63,18 @@ Vue.component("login-view", {
                 }
             );
         },
-        check_if_first_start() {
-            //check if admin in users exists
-            //if not create it with admin-admin 
-            //if cant create database not functioning, ask to check
+        check_if_first_start(name,pass) {
+            if ((this.role == "admin") && (DEFAULT_ADMIN_PASSWORD != undefined)) {
+                if (DEFAULT_ADMIN_PASSWORD == pass)
+                    return true;
+
+            } else if (DEFAULT_USER_COMBINATION.active == true) {
+                if ((name == DEFAULT_USER_COMBINATION.username) && (pass == DEFAULT_USER_COMBINATION.password))
+                    return true
+                
+            } else {
+                return false
+            }
         }
     },
     template:

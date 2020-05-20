@@ -57,17 +57,6 @@ class Configuration(object):
             if "()" in str(sub_value):
                 configDict[key][sub_key] = eval(sub_value)
 
-        #verify_imported_model()
-
-    def verify_imported_model():
-        #verify imported data types in model
-        for key,value in configDict.items():
-            print(key,":")
-            for sub_key,sub_value in value.items():
-                print("  ",sub_key,":",sub_value, "type",type(sub_value))
-
-        #validation, if first model doesnt work tries next
-
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
         """

@@ -432,9 +432,9 @@ class LidaApp(object):
         """
 
         if fileName:
-            collection = fileName
+            collectionTag = fileName
         else:
-            collection = ""
+            collectionTag = ""
 
         added_dialogues = []
         overwritten = []
@@ -448,7 +448,7 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            result = self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collection)
+            result = self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collectionTag)
             added_dialogues.append(result["id"])
             if result["overwritten"] != "": 
                 overwritten.append(result["overwritten"])

@@ -203,6 +203,15 @@ pre:first-line {
     width:70%;
 }
 
+.database-selection {
+    width:100%;
+    height:100%;
+    overflow-y:scroll;
+    padding:5px;
+    background-color: rgba(0,0,0,0.02);
+    max-height:450px;
+}
+
 .modal-container-selection {
     margin: 0px auto;
     padding: 50px;
@@ -212,7 +221,6 @@ pre:first-line {
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
     width:70%;
-    height:55em;
     overflow-y:scroll;
     border:2px solid #259af7;
 }
@@ -246,8 +254,9 @@ pre:first-line {
 #ask-selector h2 {
     font-family:"montserrat";
     font-size:16px;
-    text-transform:uppercase;
     margin-bottom:0;
+    font-weight: 700;
+
 }
 
 #ask-selector span {
@@ -265,6 +274,10 @@ input:checked + div {
     grid-area:none;
     display:block;
     border-left:5px solid #d1d1d3;
+}
+
+.in-selector:hover {
+    border-left: 5px solid #3a9dd6;
 }
 
 .user-checkbox {

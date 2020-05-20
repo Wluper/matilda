@@ -175,9 +175,9 @@ class DialogueAnnotator(object):
     """
     class that handles everything which relates to managing a single dialogues file
     """
-    __DEFAULT_FILENAME="USER_1.json"
+    __DEFAULT_FILENAME="admin.json"
 
-    __SESSION_USER = "USER_1"
+    __SESSION_USER = "admin"
 
 
     class dialogues(object):
@@ -236,7 +236,7 @@ class DialogueAnnotator(object):
             self.addedDialogues = {}
             self.addedDialogues[newName] = 0
 
-        print(" * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
+        print("\n * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
     def set_file( self, filePath, fileName=None ):
         """
@@ -330,7 +330,7 @@ class DialogueAnnotator(object):
         del self.__dialogues[DialogueAnnotator.__SESSION_USER][id]
 
 
-    def add_new_dialogue(self, user, dialogue=None, id=None, collection=None):
+    def add_new_dialogue(self, user, dialogue=None, id=None, collectionTag=None):
         """
         creates a new dialogue with an optional name
         """
@@ -348,7 +348,7 @@ class DialogueAnnotator(object):
         if id:
             try:
                 self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
-                print("Dialogue",id,"already exists!")
+                #print("Dialogue",id,"already exists!")
                 try: 
                     self.trashcan[user][id] = copy.deepcopy(self.__dialogues[DialogueAnnotator.__SESSION_USER][id])
                 except:
@@ -361,14 +361,13 @@ class DialogueAnnotator(object):
         #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
-        if collection == "" or None:
-            try:
-                collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
-            except:
-                collection = ""
-
         #initialise meta-tags
-        self.insert_meta_tags(user, id, "collection", collection)
+        try:
+            collectionTag = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+        except:
+            pass
+
+        self.insert_meta_tags(user, id, "collection", collectionTag)
 
         self.save( user )
 
