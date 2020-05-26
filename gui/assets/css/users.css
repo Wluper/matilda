@@ -46,6 +46,7 @@
     text-transform: uppercase;
     font-family: montserrat;
     background-color:white;
+    cursor: default;
 }
 .admin_input:hover, .admin_input:focus {
     background-color:white !important;

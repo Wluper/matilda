@@ -544,7 +544,31 @@ async function login(loginName,loginPass) {
 
 }
 
-async function get_collection_ids_async() {
+async function get_collections_ids_async() {
+
+  entriesList = []
+
+  const apiLink = API_LINK_BASE+`/collections/ids`
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert(guiMessages.selected.lida.connectionError)
+
+  }
+}
+
+async function get_collections_async() {
 
   entriesList = []
 
@@ -600,7 +624,8 @@ backend =
     login                                       : login,
     recover_dialogues                           : recover_dialogues,
 
-    get_collection_ids_async                    : get_collection_ids_async,
+    get_collections_ids_async                   : get_collections_ids_async,
+    get_collections_async                       : get_collections_async,
 }
 
 

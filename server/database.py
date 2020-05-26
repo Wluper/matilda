@@ -34,7 +34,10 @@ class DatabaseManagement(object):
 
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 	
-	def readDatabase(coll,attribute,string=None):
+	def readDatabase(coll,attribute,string=None, field=None):
+		# if field parameter is provided the search will be a projection of the id
+		# and the requested field only.
+		# if string is provided the search will be restricted to the req string
 
 		responseObject = []
 
@@ -50,6 +53,8 @@ class DatabaseManagement(object):
 
 		if string is not None:
 			query = collection_selected.find({attribute:string})
+		elif field is not None:
+			query = collection_selected.find({},{field:1})
 		else:
 			query = collection_selected.find()
 

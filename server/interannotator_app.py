@@ -220,6 +220,13 @@ class InterAnnotatorApp(object):
 
         if id:
 
+            if id == "ids":
+                if request.method == "GET":
+
+                    collectionNames = DatabaseManagement.readDatabase("dialogues","_id",None,"assignedTo")
+
+                    response = collectionNames
+
             if request.method == "POST":
 
                 values = request.get_json()

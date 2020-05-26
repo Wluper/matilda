@@ -362,10 +362,11 @@ class DialogueAnnotator(object):
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
         #initialise meta-tags
-        try:
-            collectionTag = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
-        except:
-            pass
+        if not collectionTag:
+            try:
+                collectionTag = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+            except:
+                collectionTag = ""
 
         self.insert_meta_tags(user, id, "collection", collectionTag)
 

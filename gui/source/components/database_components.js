@@ -81,7 +81,6 @@ Vue.component("database-view", {
             backend.get_all_entries_async()
                 .then( (response) => {
                     console.log()
-                    this.fileContent = response;
                     let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
@@ -94,20 +93,15 @@ Vue.component("database-view", {
         },
 
         import_from_database() {
-            //manually synchronize from database, ask if clean start is required
+            //manually synchronize from database, it will delete flask memory
             this.userName = localStorage["remember"];
             let add = confirm(guiMessages.selected.database.confirmImport);
             if (add == true) {
-                let del = confirm(guiMessages.selected.database.confirmWipe);
-                if (del == true) {
-                    backend.del_all_dialogues_async()
-                        .then( (response) => {
-                            console.log(response);
-                            this.restore_session_from_database(this.userName)
-                    });
-                } else {
-                    this.restore_session_from_database(this.userName)
-                }
+                backend.del_all_dialogues_async()
+                    .then( (response) => {
+                        console.log(response);
+                        this.restore_session_from_database(this.userName)
+                });
             }
         },
 
@@ -131,7 +125,6 @@ Vue.component("database-view", {
                     </div>
                 </div>
                 <div class="help-button-container">
-                    <button v-if="role != 'admin'" v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
                     <button v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
@@ -156,6 +149,7 @@ Vue.component("database-view", {
                     </li>
                 </ul>
                 <button v-if="role != 'admin'" v-on:click="import_from_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.importDb}}</button>
+                <button v-if="role != 'admin'" v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
@@ -210,7 +204,7 @@ Vue.component("collection-view", {
 
         getAllEntriesFromServer() {
             mainContainer.style.cursor = "progress";
-            backend.get_collection_ids_async()
+            backend.get_collections_ids_async()
                 .then( (response) => {
                     console.log();
                     this.allEntryMetadata = response;
@@ -240,20 +234,31 @@ Vue.component("collection-view", {
         },
 
         download_collections(event) {
-            backend.get_collection_ids_async()
+            backend.get_collections_async()
                 .then( (response) => {
-                    console.log()
-                    this.fileContent = response;
-                    let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
+                    console.log();
+                    //file requires JSON parsing in order to avoid encoding errors
+                    let fileContent = response;
+                    for (doc in fileContent) {
+                        fileContent[doc]["document"] = JSON.parse(fileContent[doc]["document"])
+                    }
+                    let blob = new Blob([JSON.stringify(fileContent, null, 4)], {type: 'application/json'});
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    
+                    console.log("----- File ready for download ----")
                     fileName = "Collections_"+utils.create_date()+".json";
                     link.setAttribute('download', fileName );
                     document.body.appendChild(link);
                     link.click();
                 });
+        },
+
+        update_collection() {
+            //if collection tag in dialogues is the same of
+            //send a confirm message with the name of the collection updated
+            //update
+            this.changesSaved = "true";
         },
     },
     template:
@@ -295,6 +300,7 @@ Vue.component("collection-view", {
                     </li>
                 </ul>
                 <button v-if="role == 'admin'" v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
+                <button v-if="role != 'admin'" v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>

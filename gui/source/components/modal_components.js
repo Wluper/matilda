@@ -177,57 +177,47 @@ Vue.component('database-entry-modal', {
 
          },
 
+         load_collection(doc) {
+            let del = confirm(guiMessages.selected.collection.confirmImport);
+            if (del == true) {
+               backend.del_all_dialogues_async()
+                  .then( (response) => {
+                     console.log(response);
+                     backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                        .then( (response) => {
+                           console.log("==== IMPORT SUCCESS ====");
+                           console.log();
+                           //set global variable with the collection name
+                           //send event in all dialogues
+                           this.showSelectorDialogues = true;
+                        });
+                  });
+               }
+         },
+
          import_doc(doc, conversion) {
             if (confirm(guiMessages.selected.database.confirmImport)) {
-               if (conversion != undefined) {
-                  doc = JSON.stringify(JSON.parse(doc));
-                  backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
-                     .then( (response) => {
-                        console.log("==== IMPORT SUCCESS ====");
-                        console.log();
-                        if (this.role != "admin") {
-                           this.check_for_duplicates(response.data.overwritten);
-                        }
-                  });
-               } else {
-                  backend.post_new_dialogues_from_string_lists_async(doc)
-                     .then( (response) => {
-                        console.log("==== IMPORT SUCCESS ====");
-                        console.log();
-                        if (this.role != "admin") {
-                           this.check_for_duplicates(response.data.overwritten);
-                        }
-                  });
-               }
+               backend.del_all_dialogues_async()
+                  .then( (response) => {
+                     console.log(response);
+                     if (conversion != undefined) {
+                        doc = JSON.stringify(JSON.parse(doc));
+                        backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                           .then( (response) => {
+                              console.log("==== IMPORT FROM JSON SUCCESS ====");
+                              console.log();
+                              this.showSelectorDialogues = true;
+                        });
+                     } else {
+                        backend.post_new_dialogues_from_string_lists_async(doc)
+                           .then( (response) => {
+                              console.log("==== IMPORT FROM STRING SUCCESS ====");
+                              console.log();
+                              this.showSelectorDialogues = true;
+                        });
+                     }
+               });
             }
-         },
-
-         check_for_duplicates(dialogues) {
-            console.log("==== CHECK FOR DUPLICATES ====");
-            for (dialogue in dialogues) {
-                  this.duplicates.push(dialogues[dialogue]);
-               }
-            if (this.duplicates.length > 0) { 
-               this.showSelectorDialogues = true; 
-            } 
-            console.log(this.duplicates);
-            return this.duplicates
-         },
-
-         confirm_selection() {
-            requestRecovery = []
-            for (name in this.checkedDialogue) {
-               if (this.checkedDialogue[name] == true) {
-                  requestRecovery.push(name)
-               }
-            }
-            backend.recover_dialogues(JSON.stringify(requestRecovery))
-               .then( (response) => {
-                  console.log(response.data.recovered)
-                  this.showSelectorDialogues = false;
-                  this.duplicates = [];
-                  this.checkedDialogue = {};
-            });
          },
 
          save() {
@@ -243,7 +233,8 @@ Vue.component('database-entry-modal', {
                if (params[element] == undefined)
                   params[element] = ""
             }
-            backend.update_collection_async(this.entry._id, JSON.stringify(params))
+            let preparedDocument = params;
+            backend.update_collection_async(this.entry._id, preparedDocument)
                .then( (response) => {
                   console.log();
                   console.log("============== Dialogues-Collection Updated ==============");
@@ -261,54 +252,20 @@ Vue.component('database-entry-modal', {
          <div class="modal-container-selection" v-if="showSelectorDialogues">
             <div class="modal-header">
                <slot name="header">
-                  {{guiMessages.selected.collection.create}}
+                  {{guiMessages.selected.collection.importResult}}
                </slot>
             </div>
             <hr>
             <div id="ask-selector">
                <slot name="body">
-                  <h2>{{guiMessages.selected.collection.keep}}</h2>
-                  <h2>{{guiMessages.selected.collection.nothing}}</h2>
-                  <br>
-                  <div class="database-selection">
-                     <template v-for="dialogue in duplicates">
-                     <li class="listed-entry no-margin">
-                        <div class="entry-list-single-user-container">
-                        <input type="radio" class="user-checkbox" 
-                           v-bind:id="dialogue" 
-                           :value="true" 
-                           v-model="checkedDialogue[dialogue]">
-                           <div class="entry-info in-selector with-top-border">
-                              <label class="label-selection" :for="dialogue"> 
-                                 {{dialogue}} <span>{{guiMessages.selected.collection.old}}</span>
-                                 <br>
-                              </label>
-                           </div>
-                        </div>
-                     </li>
-                     <li class="listed-entry no-margin">
-                        <div class="entry-list-single-user-container">
-                        <input type="radio" class="user-checkbox" 
-                           v-bind:id="dialogue+'_false'" 
-                           :value="false"
-                           v-model="checkedDialogue[dialogue]">
-                           <div class="entry-info in-selector with-top-border">
-                              <label class="label-selection" :for="dialogue+'_false'"> 
-                                 {{dialogue}} <span>{{guiMessages.selected.collection.new}}</span>
-                                 <br>
-                              </label>
-                           </div>
-                        </div>
-                     </li>
-                     </template>
-                  </div>
+                  <h2>{{guiMessages.selected.collection.importSuccess}}</h2>
                </slot>
             <br>
          </div>
          <div class="modal-footer">
             <slot name="footer">
               <hr>
-              <button class="modal-big-button modal-right-button" @click="confirm_selection()">
+              <button class="modal-big-button modal-right-button" @click="$emit('close')">
                 OK
               </button>
             </slot>
@@ -394,7 +351,7 @@ Vue.component('database-entry-modal', {
           <hr>
           <div class="modal-footer">
             <slot name="footer">
-              <button class="modal-big-button" @click="import_doc(entry.document, true)">
+              <button class="modal-big-button" @click="load_collection(entry.document)">
                 {{guiMessages.selected.collection.importColl}}
               </button>
               <button v-if="role == 'admin'" class="modal-big-button" @click="save()">
@@ -461,7 +418,7 @@ Vue.component('collection-creation-modal', {
             reader.onload = (event) => {
                 console.log('THE READER VALUE', reader);
                 //removing starting and ending {}
-                this.formatJSON(reader.result, true);
+                //this.formatJSON(reader.result, true);
                }
             reader.readAsText(file);
          } else {

@@ -6,25 +6,25 @@
 
 Vue.component("all-dialogues", {
 
-  props: [
+   props: [
       "alreadyVisited"
-  ],
+   ],
 
-  data () {
+   data () {
       return {
-          allDialogueMetadata: [],
-          dragging: false,
-          showModal: false,
-          // Reference to the language item
-          guiMessages
+         allDialogueMetadata: [],
+         dragging: false,
+         showModal: false,
+         // Reference to the language item
+         guiMessages
       }
-  },
+   },
    computed : {
-        userName : function(){
+      userName : function(){
             console.log("computing user name");
             userName = localStorage["remember"];
             return userName
-        }
+      }
    },
   created() {
       allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer )
@@ -35,84 +35,83 @@ Vue.component("all-dialogues", {
 
   methods: {
 
-        init : function(){
-            // Step ONE: Get FILE NAME
-            mainApp.userName = localStorage["remember"];
-            this.getAllDialogueIdsFromServer();
+      init : function(){
+         // Step ONE: Get FILE NAME
+         mainApp.userName = localStorage["remember"];
+         this.getAllDialogueIdsFromServer();
+      },
+      handleDragOver(event) {
+         event.stopPropagation();
+         event.preventDefault();
+         let elem = document.getElementById('listedDialoguesContainer');
+         elem.style.transition = '0.3s'
+         elem.style.backgroundColor = '#c2c6c4';
+         event.dataTransfer.effectAllowed = 'copyMove';
+         event.dataTransfer.dropEffect = 'copy';
+         this.dragging = true;
+      },
 
-        },
-    handleDragOver(event) {
-        event.stopPropagation();
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.transition = '0.3s'
-        elem.style.backgroundColor = '#c2c6c4';
-        event.dataTransfer.effectAllowed = 'copyMove';
-        event.dataTransfer.dropEffect = 'copy';
-        this.dragging = true;
-    },
+      handleDragOut(event) {
+         event.preventDefault();
+         let elem = document.getElementById('listedDialoguesContainer');
+         elem.style.backgroundColor = 'inherit';
+         this.dragging = false;
+      },
 
-    handleDragOut(event) {
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.backgroundColor = 'inherit';
-        this.dragging = false;
-    },
+      handleDrop(event) {
+         event.preventDefault();
+         let elem = document.getElementById('listedDialoguesContainer');
+         elem.style.backgroundColor = 'inherit';
+         this.dragging = false;
+         let file     = event.dataTransfer.files[0]
+         this.handle_file(file);
+      },
 
-    handleDrop(event) {
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.backgroundColor = 'inherit';
-        this.dragging = false;
-        let file     = event.dataTransfer.files[0]
-        this.handle_file(file);
-    },
+      getAllDialogueIdsFromServer() {
+         backend.get_all_dialogue_ids_async()
+            .then( (response) => {
 
-    getAllDialogueIdsFromServer() {
-      backend.get_all_dialogue_ids_async()
-          .then( (response) => {
-
-              this.allDialogueMetadata = response;
-              console.log(response);
-              if ((mainApp.restored == "false") && (response.length == 0)) {
+               this.allDialogueMetadata = response;
+               console.log(response);
+               if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database(mainApp.userName);
-              }
-              mainApp.restored = "true";
-          });
-    },
+               }
+               mainApp.restored = "true";
+         });
+      },
 
-    dialogue_already_visited(id) {
-        return this.alreadyVisited.includes(id)
-    },
+      dialogue_already_visited(id) {
+         return this.alreadyVisited.includes(id)
+      },
 
-    clicked_dialogue(clickedDialogue) {
-        allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
-    },
+      clicked_dialogue(clickedDialogue) {
+         allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
+      },
 
-    create_new_dialogue(event) {
+      create_new_dialogue(event) {
 
-        backend.post_empty_dialogue()
+         backend.post_empty_dialogue()
             .then( (newDialogueId) => {
 
-                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
-                backend.update_db();
-            });
-    },
+               this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
+               backend.update_db();
+         });
+      },
 
-    delete_dialogue(event) {
+      delete_dialogue(event) {
 
-        if (confirm("Are you sure you want to permanently delete this dialogue? This cannot be undone!")) {
+         if (confirm("Are you sure you want to permanently delete this dialogue? This cannot be undone!")) {
 
             console.log('-------- DELETING --------')
             console.log()
             idToDelete = event.target.parentNode.parentNode.id;
             nameToDelete = this.allDialogueMetadata[idToDelete].id
             backend.del_single_dialogue_async(nameToDelete)
-                .then( () => {
+               .then( () => {
                     allDialoguesEventBus.$emit("refresh_dialogue_list");
                     backend.update_db();
-                });
+               });
 
             allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
 
@@ -124,37 +123,37 @@ Vue.component("all-dialogues", {
 
     },
 
-    open_file(event){
-        let file = event.target.files[0];
-        this.handle_file(file);
+      open_file(event){
+         let file = event.target.files[0];
+         this.handle_file(file);
     },
 
     handle_file(file) {
-        let textType = /text.plain/;
-        let jsonType = /application.json/;
+         let textType = /text.plain/;
+         let jsonType = /application.json/;
 
-        if (file.type.match(textType)) {
+           if (file.type.match(textType)) {
 
             allDialoguesEventBus.$emit('loaded_text_file', file);
 
-        } else if (file.type.match(jsonType)) {
+         } else if (file.type.match(jsonType)) {
 
             console.log('---- HANDLING LOADED JSON FILE ----');
             let reader = new FileReader();
             reader.onload = (event) => {
-                console.log('THE READER VALUE', reader)
-                console.log('THE EVENT VALUE', event)
-                text = reader.result
-                backend.post_new_dialogue_from_json_string_async(text, file.name)
-                    .then( (response) => {
+               console.log('THE READER VALUE', reader)
+               console.log('THE EVENT VALUE', event)
+               text = reader.result
+               backend.post_new_dialogue_from_json_string_async(text, file.name)
+                  .then( (response) => {
 
                         if ('error' in response.data) {
-                            alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
+                           alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
                         } else {
-                            allDialoguesEventBus.$emit("refresh_dialogue_list");
+                           allDialoguesEventBus.$emit("refresh_dialogue_list");
                         }
 
-                    });
+                  });
             };
 
             reader.readAsText(file);
@@ -166,44 +165,44 @@ Vue.component("all-dialogues", {
         }
     },
 
-    log_out() {
-        let ask = confirm("Do you want to log out?");
-        if (ask == true) {
+      log_out() {
+         let ask = confirm("Do you want to log out?");
+         if (ask == true) {
             localStorage.removeItem("remember");
             location.reload();
-        }
-    },
+         }
+      },
 
-    handle_file_name_change : function(event){
-        console.log('---- CHANGING FILE NAME ----');
-        console.log(event);
+      handle_file_name_change : function(event){
+         console.log('---- CHANGING FILE NAME ----');
+         console.log(event);
 
-        // for some reason needs manual updating...
-        mainApp.userName = event.target.value;
+         // for some reason needs manual updating...
+         mainApp.userName = event.target.value;
 
-        backend.put_name("USER_"+event.target.value+".json")
+         backend.put_name("USER_"+event.target.value+".json")
             .then( (response) => {
 
-                if (response) {
+               if (response) {
                     console.log("Name Changed");
-                } else {
+               } else {
                     alert('Server error, name not changed.')
-                }
+               }
 
-            })
+         })
     },
 
-    restore_session_from_database: function (fileName) {
-          console.log("Ready to restore from database");
-          const mainContainer = document.getElementById("mainContainer");
-          mainContainer.style.cursor = "progress";
-          backend.get_user_db_entry_async(fileName, "database")
-                .then( (response) => {
-                      console.log(response);
-                      allDialoguesEventBus.$emit("refresh_dialogue_list");
-                      mainContainer.style.cursor = null;
-          });
-    },
+      restore_session_from_database: function (fileName) {
+         console.log("Ready to restore from database");
+         const mainContainer = document.getElementById("mainContainer");
+         mainContainer.style.cursor = "progress";
+         backend.get_user_db_entry_async(fileName, "database")
+            .then( (response) => {
+               console.log(response);
+               allDialoguesEventBus.$emit("refresh_dialogue_list");
+               mainContainer.style.cursor = null;
+         });
+      },
 
     //
     // toggleFileEdit: function() {
@@ -224,38 +223,37 @@ Vue.component("all-dialogues", {
     //
     // },
 
-    download_all_dialogues_from_server(event) {
-        backend.get_all_dialogues_async()
+      download_all_dialogues_from_server(event) {
+         backend.get_all_dialogues_async()
             .then( (response) => {
-                let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
-                const url = window.URL.createObjectURL(blob)
-                const link = document.createElement('a')
-                link.href = url
-                fileName = "USER_" + mainApp.userName + "_"+utils.create_date()+".json"
-                link.setAttribute('download', fileName )
-                document.body.appendChild(link)
-                link.click();
-            });
-    },
+               let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
+               const url = window.URL.createObjectURL(blob)
+               const link = document.createElement('a')
+               link.href = url
+               fileName = "USER_" + mainApp.userName + "_"+utils.create_date()+".json"
+               link.setAttribute('download', fileName )
+               document.body.appendChild(link)
+               link.click();
+         });
+      },
 
-    clean_dialogues() {
-        let del = confirm(guiMessages.selected.lida.confirmWipe);
-        if (del == true) {
+      clean_dialogues() {
+         let del = confirm(guiMessages.selected.lida.confirmWipe);
+         if (del == true) {
             backend.del_all_dialogues_async()
-                .then( (response) => {
-                    console.log("All user's dialogues deleted.");
-                    allDialoguesEventBus.$emit("refresh_dialogue_list");
+               .then( (response) => {
+                  console.log("All user's dialogues deleted.");
+                  allDialoguesEventBus.$emit("refresh_dialogue_list");
             });
-        }
-    },
+         }
+      },
 
-    clicked_database_button() {
-       databaseEventBus.$emit("database_selected");
-    },
-    clicked_collections_button() {
-       databaseEventBus.$emit("collections_selected");
-    },
-
+      clicked_database_button() {
+         databaseEventBus.$emit("database_selected");
+      },
+      clicked_collections_button() {
+         databaseEventBus.$emit("collections_selected");
+      },
   },
 
   template:

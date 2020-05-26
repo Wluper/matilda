@@ -184,7 +184,7 @@ class LidaApp(object):
         self.add_endpoint( \
                             endpoint="/collections/<id>",
                             endpoint_name="/collections/<id>",
-                            methods=["POST"],
+                            methods=["GET","POST"],
                             handler= self.handle_collections )
 
     def handle_collections(self, id=None):
@@ -198,6 +198,13 @@ class LidaApp(object):
                 response = collectionNames
 
         if id:
+
+            if id == "ids":
+                if request.method == "GET":
+
+                    collectionNames = DatabaseManagement.readDatabase("dialogues","_id",None,"assignedTo")
+
+                    response = collectionNames
 
             if request.method == "POST":
 
@@ -416,7 +423,7 @@ class LidaApp(object):
             responseObject = self.dialogueFile.add_new_dialogue(user)
 
         elif isinstance(stringListOrJsonDict, list):
-            responseObject = self.__add_new_dialogues_from_string_lists(user, responseObject, dialogueList=stringListOrJsonDict)
+            responseObject = self.__add_new_dialogues_from_string_lists(user, fileName, responseObject, dialogueList=stringListOrJsonDict)
 
         elif isinstance(stringListOrJsonDict, dict):
             responseObject = self.__add_new_dialogues_from_json_dict(user, fileName, responseObject, dialogueDict=stringListOrJsonDict)
@@ -463,11 +470,15 @@ class LidaApp(object):
 
 
 
-    def __add_new_dialogues_from_string_lists(self, user, currentResponseObject, dialogueList):
+    def __add_new_dialogues_from_string_lists(self, user, fileName, currentResponseObject, dialogueList):
         """
         Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
         through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
         """
+        if fileName:
+            collectionTag = fileName
+        else:
+            collectionTag = ""
 
         currentResponseObject["message"] = []
         currentResponseObject["new_dialogue_id"] = []
@@ -475,7 +486,7 @@ class LidaApp(object):
         for string_list in dialogueList:
 
             string_list      = [x for x in string_list.split("\n") if x.strip()]
-            newId = self.dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ) )
+            newId = self.dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
 
             currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
             currentResponseObject["new_dialogue_id"].append(newId["id"])

@@ -497,8 +497,31 @@ async function del_all_dialogues_async() {
 * COLLECTIONS RESOURCE
 ***************************************/
 
+async function get_collections_ids_async() {
 
-async function get_collection_ids_async() {
+  entriesList = []
+
+  const apiLink = API_LINK_BASE+`/collections/ids`
+
+  try {
+
+    var response = await axios.get(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
+
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert(guiMessages.selected.lida.connectionError)
+
+  }
+}
+
+async function get_collections_async() {
 
   entriesList = []
 
@@ -633,7 +656,8 @@ backend =
     del_all_dialogues_async                     : del_all_dialogues_async,
     get_all_entries_async                       : get_all_entries_async,
 
-    get_collection_ids_async                    : get_collection_ids_async,
+    get_collections_ids_async                   : get_collections_ids_async,
+    get_collections_async                       : get_collections_async,
     update_collection_async                     : update_collection_async,
 
     login                                       : login

@@ -24,6 +24,7 @@ var mainApp = new Vue({
       restored:'false',
       userName:'',
       role: 'user',
+      collection:''
     }
   },
 

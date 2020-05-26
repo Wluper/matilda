@@ -33,6 +33,7 @@ guiMessages = {
     collection: {
         title: "Collections Management",
         create: "Create collection",
+        update: "Send annotations",
         add: "Add from those users",
         nothing: "Default action: overwrite",
         keep: "Dialogue ID Conflit in your workspace. Please choose which dialogues to keep",
@@ -41,6 +42,8 @@ guiMessages = {
         importCollfromView: "Add from dialogues list",
         importCollfromFile: "Add from file",
         importCollfromUser: "Add from users' list",
+        importResult: "Import",
+        importSuccess: "Success! Dialogues correctly loaded in your list.",
         collTitle: "Title",
         collDesc: "Description",
         collAnnot: "Annotation Style",
@@ -48,7 +51,8 @@ guiMessages = {
         collUpda: "Last update",
         collStatus: "Status",
         new: "Imported",
-        old: "Previous"
+        old: "Previous",
+        save: "Save and Update Collection"
     },
     annotation_app: {
       turnId: "Turn Id",
@@ -135,9 +139,8 @@ guiMessages = {
         port:"Port",
         saved: "Database updated",
         update: "Update database",
-        importDb: "Reload from Database",
-        confirmImport:"This will import the dialogues in your database doc directly to your current list.",
-        confirmWipe:"Do you wish to wipe your current list before importing?",
+        importDb: "Synchronize from Database",
+        confirmImport:"This will wipe your dialogue list and load the dialogues that are in your database document.",
         importDoc: "Import this document",
     },
       login: {
@@ -177,6 +180,7 @@ guiMessages = {
       collection: {
         title: "Gestione Collezioni",
         create: "Crea collezione",
+        update: "Invia annotazioni",
         add: "Aggiungi da questi utenti",
         addToColl: "Aggiungi uno o più documenti alla collezione",
         keep: "Conflitto di ID nel tuo workspace. Quale dialogo vuoi tenere?",
@@ -185,6 +189,8 @@ guiMessages = {
         importCollfromView: "Aggiungi dalla lista dialoghi",
         importCollfromFile: "Aggiungi da file",
         importCollfromUser: "Aggiungi da un utente",
+        importResult: "Importazione",
+        importSuccess: "Successo! I dialoghi sono stati importati correttamente.",
         collTitle: "Titolo",
         collDesc: "Descrizione",
         collAnnot: "Modello di annotazione (annotation_style)",
@@ -192,7 +198,9 @@ guiMessages = {
         collUpda: "Ultimo aggiornamento",
         collStatus: "Stato di avanzamento",
         new: "Importato",
-        old: "Precedente"
+        old: "Precedente",
+        confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi nella tua lista.",
+        save: "Save and Update Collection"
 
    },
       annotation_app: {
@@ -279,9 +287,8 @@ guiMessages = {
       port: "Porta",
       saved: "Database aggiornato",
       update: "Aggiorna il database",
-      importDb: "Ricarica dal database",
-      confirmImport:"L'operazione importerà i dialoghi dal database verso la lista dei dialoghi.",
-      confirmWipe:"Vuoi azzerrare la lista prima di importare dal database?",
+      importDb: "Sincronizza dal database",
+      confirmImport:"L'operazione cancellerà la tua lista dialoghi e importerà i dialoghi dal tuo documento nel database.",
       importDoc: "Importa questo documento",
     },
     login: {
