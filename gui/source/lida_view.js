@@ -24,7 +24,6 @@ var mainApp = new Vue({
       restored:'false',
       userName:'',
       role: 'user',
-      collection:''
     }
   },
 
@@ -47,6 +46,7 @@ var mainApp = new Vue({
       databaseEventBus.$on( "database_selected", this.load_database_view )
       databaseEventBus.$on( "document_selected", this.load_document_view )
       databaseEventBus.$on( "collections_selected", this.load_collections_view )
+      databaseEventBus.$on( "collection_active", this.set_active_collection )
 
       //Check if already logged, restore session
       this.check_login_cookie();
@@ -108,6 +108,11 @@ var mainApp = new Vue({
         }
     },
 
+    set_active_collection: function (event) {
+        console.log(event);
+        localStorage["collection"] = event;
+    },
+
     clear_annotation: function (event) {
         this.displayingDialogue = '';
         this.status = 'list-all';
@@ -157,7 +162,6 @@ var mainApp = new Vue({
 
     load_database_view: function (event) {
         console.log('---- DATABASE VIEW ----');
-        console.log(event);
         this.status = 'database-view';
     },
 

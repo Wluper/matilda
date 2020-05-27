@@ -148,7 +148,7 @@ Vue.component('database-entry-modal', {
             view: '',
             update: {},
             role: '',
-            showSelectorDialogues:false,
+            showResult:false,
             duplicates: [],
             checkedDialogue: {}
          }
@@ -189,7 +189,8 @@ Vue.component('database-entry-modal', {
                            console.log();
                            //set global variable with the collection name
                            //send event in all dialogues
-                           this.showSelectorDialogues = true;
+                           this.showResult = true;
+                           databaseEventBus.$emit( "collection_active", this.entry._id);
                         });
                   });
                }
@@ -206,14 +207,14 @@ Vue.component('database-entry-modal', {
                            .then( (response) => {
                               console.log("==== IMPORT FROM JSON SUCCESS ====");
                               console.log();
-                              this.showSelectorDialogues = true;
+                              this.showResult = true;
                         });
                      } else {
                         backend.post_new_dialogues_from_string_lists_async(doc)
                            .then( (response) => {
                               console.log("==== IMPORT FROM STRING SUCCESS ====");
                               console.log();
-                              this.showSelectorDialogues = true;
+                              this.showResult = true;
                         });
                      }
                });
@@ -248,29 +249,28 @@ Vue.component('database-entry-modal', {
     <div class="modal-mask">
       <div class="modal-wrapper">
 
-
-         <div class="modal-container-selection" v-if="showSelectorDialogues">
-            <div class="modal-header">
-               <slot name="header">
+            <div class="modal-container-selection" v-if="showResult">
+               <div class="modal-header">
+                  <slot name="header">
                   {{guiMessages.selected.collection.importResult}}
-               </slot>
-            </div>
+                  </slot>
+               </div>
             <hr>
-            <div id="ask-selector">
-               <slot name="body">
-                  <h2>{{guiMessages.selected.collection.importSuccess}}</h2>
-               </slot>
-            <br>
-         </div>
-         <div class="modal-footer">
-            <slot name="footer">
-              <hr>
-              <button class="modal-big-button modal-right-button" @click="$emit('close')">
-                OK
-              </button>
-            </slot>
-          </div>
-      </div>
+               <div id="ask-selector">
+                  <slot name="body">
+                     <h2>{{guiMessages.selected.collection.importSuccess}}</h2>
+                  </slot>
+                  <br>
+               </div>
+               <div class="modal-footer">
+                  <slot name="footer">
+                     <hr>
+                     <button class="modal-big-button modal-right-button" @click="$emit('close')">
+                        OK
+                     </button>
+                  </slot>
+               </div>
+            </div>    
 
         <div v-else-if="view == 'database-view'" class="modal-container">
           <div class="modal-header">
@@ -299,7 +299,7 @@ Vue.component('database-entry-modal', {
           <hr>
           <div class="modal-footer">
             <slot name="footer">
-              <button class="modal-big-button" @click="import_doc(entry.annotations)">
+              <button v-if="role=='admin'" class="modal-big-button" @click="import_doc(entry.annotations)">
                 {{guiMessages.selected.database.importDoc}}
               </button>
               <button class="modal-big-button modal-right-button" @click="$emit('close')">
@@ -418,7 +418,7 @@ Vue.component('collection-creation-modal', {
             reader.onload = (event) => {
                 console.log('THE READER VALUE', reader);
                 //removing starting and ending {}
-                //this.formatJSON(reader.result, true);
+                this.formatJSON(reader.result, true);
                }
             reader.readAsText(file);
          } else {
@@ -452,6 +452,7 @@ Vue.component('collection-creation-modal', {
          } else {
             prepare = jsonFile;
          }
+         //correctly chains more than one json
          prepare = prepare.trim();
          prepare = prepare.slice(1,-1);
          if (this.entry.document.length > 0) {
@@ -546,22 +547,22 @@ Vue.component('collection-creation-modal', {
             <div class="modal-body">
               <slot name="body">
                   <strong>ID:</strong>
-                  <input class="collection-input" type="text" v-model="entry._id" placeholder="Insert an unique id for the collection or LIDA will generate one">
+                  <input class="collection-input" type="text" v-model="entry._id" :placeholder="guiMessages.selected.coll_creation[0]">
                   <br>
                   <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.title" placeholder="Insert a title">
+                  <input class="collection-input" type="text" v-model="entry.title" :placeholder="guiMessages.selected.coll_creation[1]">
                   <br>
                   <strong>{{guiMessages.selected.collection.collDesc}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.description" placeholder="Insert a short description of the content">
+                  <input class="collection-input" type="text" v-model="entry.description" :placeholder="guiMessages.selected.coll_creation[2]">
                   <br><br>
                   <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.annotationStyle" placeholder="You can save the used annotation model">
+                  <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
                   <br>
                   <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.assignedTo" placeholder="You can assign this dialogues to an user, they will be loaded at their next login">
+                  <input class="collection-input" type="text" v-model="entry.assignedTo" :placeholder="guiMessages.selected.coll_creation[4]">
                   <br>
                   <strong>Status:</strong>
-                  <input class="collection-input" type="text" v-model="entry.status" placeholder="You can note down here the progress of the annotation work">
+                  <input class="collection-input" type="text" v-model="entry.status" :placeholder="guiMessages.selected.coll_creation[5]">
                   <br><br>
                   <strong>
                   {{guiMessages.selected.modal_document[0]}}
@@ -604,4 +605,4 @@ Vue.component('collection-creation-modal', {
     </div>
   </transition>
   `
-})
+});

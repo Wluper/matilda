@@ -345,6 +345,7 @@ class DialogueAnnotator(object):
         if not id:
             id = self.__get_new_dialogue_id(user)
 
+        """ #verify if id exists before overwriting
         if id:
             try:
                 self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
@@ -357,6 +358,7 @@ class DialogueAnnotator(object):
                 overwritten = id
             except:
                 pass
+        """
 
         #inserts in proper user workspace
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []

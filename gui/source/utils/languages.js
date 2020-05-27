@@ -23,9 +23,9 @@ guiMessages = {
       button_delete: "Delete",
       turns: "Turns",
       button_newDialogue: "Add a New Dialogue",
-      button_wipeDialogues: "Delete all dialogues",
+      button_wipeDialogues: "Delete dialogues and release collection",
       interfaceLanguage: "Interface Language:",
-      confirmWipe:"Do you wish to wipe your current list?",
+      confirmWipe:"Do you wish to wipe your current list? The active collection will be deactivated but it stays available in the database",
       drop:"Drop Files Anywhere to Upload!",
       buttonCollections:"Collections",
       connectionError: "Couldn't connect to server, check that it's running or the address in backend_config"
@@ -34,6 +34,10 @@ guiMessages = {
         title: "Collections Management",
         create: "Create collection",
         update: "Send annotations",
+        updateConfirm1: "You are updating Collection",
+        updateConfirm2: "with your annotations. This will edit the database document.",
+        noCollection: "You have no active collection now. Your editings are only saved in your workspace",
+        noAssignement: "You can't update this collection. It's not assigned to you",
         add: "Add from those users",
         nothing: "Default action: overwrite",
         keep: "Dialogue ID Conflit in your workspace. Please choose which dialogues to keep",
@@ -133,8 +137,17 @@ guiMessages = {
         "JSON",
         "lastUpdate"
     ],
+    coll_creation:
+    [
+      "Insert an unique id for the collection or LIDA will generate one",
+      "Insert a title",
+      "Insert a short description of the content",
+      "Annotation style name. It must corrispond to a file in the server folder",
+      "You can assign this dialogues to an user, only them will be able to update it",
+      "You can note down here the progress of the annotation work",
+    ],
       database: {
-        title: "Database Management",
+        title: "Workspaces Management",
         location:"Database Location",
         port:"Port",
         saved: "Database updated",
@@ -170,9 +183,9 @@ guiMessages = {
       button_delete: "Elimina",
       turns: "Turni",
       button_newDialogue: "Aggiungi un nuovo Dialogo",
-      button_wipeDialogues: "Elimina tutti i dialoghi",
+      button_wipeDialogues: "Elimina tutto e cambia collezione",
       interfaceLanguage: "Lingua Interfaccia:",
-      confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista?",
+      confirmWipe:"Si è sicuri di voler eliminare tutti i dialoghi nella lista? La collezione verrà disattivata ma rimarrà disponibile all'interno del database.",
       drop:"Rilascia i file per caricarli!",
       buttonCollections: "Collezioni",
       connectionError:"Impossibile connettersi al server, controlla che sia in funzione o l'indirizzo in backend_config"
@@ -181,6 +194,10 @@ guiMessages = {
         title: "Gestione Collezioni",
         create: "Crea collezione",
         update: "Invia annotazioni",
+        updateConfirm1: "Stai per aggiornare la Collezione",
+        updateConfirm2: "con le tue annotazioni. Questo modificherà il documento nel database.",
+        noCollection: "Al momento non hai una collezione attiva, le tue modifiche vengono salvate solo nel tuo workspace.",
+        noAssignement: "Non puoi aggiornare questa collezione, non è assegnata a te",
         add: "Aggiungi da questi utenti",
         addToColl: "Aggiungi uno o più documenti alla collezione",
         keep: "Conflitto di ID nel tuo workspace. Quale dialogo vuoi tenere?",
@@ -281,8 +298,17 @@ guiMessages = {
         "JSON",
         "lastUpdate"
     ],
+      coll_creation:
+    [
+      "Inserisci un ID univoco per la Collezione o LIDA ne genererà uno automaticamente",
+      "Inserisci un titolo",
+      "Inserisci una breve descrizione",
+      "Nome dell'annotation style utilizzato. Deve essere presente nella cartella server",
+      "Puoi assegnare la collezione ad un utente, solo lui potrà modificarla e annotarla",
+      "Puoi scrivere qui i progressi nel lavoro di annotazione",
+    ],
     database: {
-      title: "Gestione Database",
+      title: "Gestione Workspaces",
       location: "Indirizzo",
       port: "Porta",
       saved: "Database aggiornato",

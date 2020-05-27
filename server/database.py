@@ -14,7 +14,7 @@ import functools
 import ast
 
 # == Flask ==
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 # == Pymongo ==
@@ -148,3 +148,11 @@ class DatabaseManagement(object):
 
 		response = {"staus":"success"}
 		return response 
+
+	def updateCollection(collection_id, fields):
+
+		for field in fields:
+			DatabaseConfiguration.dialogues.update(
+				{"_id":collection_id}, 
+				{ "$set": { field : json.dumps(fields[field]) } }
+			)

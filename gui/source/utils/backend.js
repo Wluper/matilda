@@ -95,9 +95,9 @@ async function get_annotation_style_async(id){
 * DIALOGUES METADATA RESOURCE
 ***************************************/
 
-async function write_tag(id,type,tag,value) {
+async function write_tag(id,tag,value) {
 
-  const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue/${id}/${type}/${tag}/${value}`
+  const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
 
   try {
 
@@ -206,13 +206,18 @@ async function get_single_dialogue_async(id) {
 
 
 
-async function post_empty_dialogue() {
+async function post_empty_dialogue(collection) {
 
     try {
 
-        const response = await RESTdialogues("POST", null, null);
+        if (collection == undefined) {
+            var response = await RESTdialogues("POST", null, null);
+        } else {
+            var response = await RESTdialogues("POST", null, null, collection);
+        }
 
         console.log(response)
+
         return response.data.id
 
     } catch(error) {
@@ -348,6 +353,7 @@ async function RESTdialogues(method, id, params, fileName){
     console.log("ID: "+id)
     console.log("METHOD "+method)
     console.log("PARAMS "+params)
+    console.log("COLLECTION "+fileName)
 
     //
     if (fileName != undefined) { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/collection/${fileName}` }
@@ -544,6 +550,25 @@ async function login(loginName,loginPass) {
 
 }
 
+async function update_collection_from_workspace_async(collection_ID) {
+
+    const apiLink = API_LINK_BASE+"/collections/"+collection_ID+"/"+session_name()
+
+  try {
+
+    var response = await axios.put(apiLink)
+
+    return response
+
+  } catch(error) {
+
+    console.log(error);
+    alert(guiMessages.selected.lida.connectionError)
+
+  }
+
+}
+
 async function get_collections_ids_async() {
 
   entriesList = []
@@ -624,6 +649,7 @@ backend =
     login                                       : login,
     recover_dialogues                           : recover_dialogues,
 
+    update_collection_from_workspace_async      : update_collection_from_workspace_async,
     get_collections_ids_async                   : get_collections_ids_async,
     get_collections_async                       : get_collections_async,
 }

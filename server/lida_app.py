@@ -114,7 +114,7 @@ class LidaApp(object):
 
         self.add_endpoint( \
                             endpoint="/<user>/dialogues/collection/<fileName>",
-                            endpoint_name="/<user>/dialogues/<fileName>",
+                            endpoint_name="/<user>/dialogues/collection/<fileName>",
                             methods=["POST"],
                             handler= self.handle_dialogues_resource )
 
@@ -138,8 +138,8 @@ class LidaApp(object):
                             handler = self.handle_annotations_resource )
 
         self.add_endpoint( \
-                            endpoint="/<user>/dialogue/<id>/<type>/<tag>/<value>",
-                            endpoint_name="/<user>/dialogue/<id>/<type>/<tag>/<value>",
+                            endpoint="/<user>/dialogue/<id>/<tag>/<value>",
+                            endpoint_name="/<user>/dialogue/<id>/<tag>/<value>",
                             methods=["POST"],
                             handler = self.handle_dialogues_tag )
 
@@ -187,7 +187,13 @@ class LidaApp(object):
                             methods=["GET","POST"],
                             handler= self.handle_collections )
 
-    def handle_collections(self, id=None):
+        self.add_endpoint( \
+                            endpoint="/collections/<id>/<user>",
+                            endpoint_name="/collections/<id>/<user>",
+                            methods=["PUT"],
+                            handler= self.handle_collections )
+
+    def handle_collections(self, id=None, user=None):
 
         if not id:
 
@@ -205,6 +211,10 @@ class LidaApp(object):
                     collectionNames = DatabaseManagement.readDatabase("dialogues","_id",None,"assignedTo")
 
                     response = collectionNames
+
+            if request.method == "PUT":
+
+                    response = self.__update_collection_from_workspace(user, id)
 
             if request.method == "POST":
 
@@ -280,14 +290,14 @@ class LidaApp(object):
 
         return jsonify(responseObject);
 
-    def handle_dialogues_tag(self, user, id, type, tag, value):
+    def handle_dialogues_tag(self, user, id, tag, value):
 
         responseObject = {
             "status" : "success"
         }
 
         if request.method == "POST":
-            self.dialogueFile.insert_meta_tags(user, id, type, tag, value)
+            self.dialogueFile.insert_meta_tags(user, id, tag, value)
 
         return responseObject
 
@@ -301,6 +311,7 @@ class LidaApp(object):
 
         PUT - change specific dialogue with a dialogue
         """
+
         if fileName:
             if request.method == "POST":
                 responseObject = self.__handle_post_of_new_dialogues(user, fileName)
@@ -344,10 +355,9 @@ class LidaApp(object):
 
         dialogueDict = request.get_json()
 
-        responseObject = self.dialogueFile.recover_copies( user, dialogueDict)
+        responseObject = self.dialogueFile.recover_copies(user, dialogueDict)
 
         return responseObject
-
 
     def handle_dialogues_metadata_resource(self,user,id=None):
         """
@@ -420,7 +430,10 @@ class LidaApp(object):
             responseObject["status"] = "error"
 
         elif not stringListOrJsonDict:
-            responseObject = self.dialogueFile.add_new_dialogue(user)
+            if fileName:
+                responseObject = self.dialogueFile.add_new_dialogue(user, None, None, fileName)
+            else:
+                responseObject = self.dialogueFile.add_new_dialogue(user)
 
         elif isinstance(stringListOrJsonDict, list):
             responseObject = self.__add_new_dialogues_from_string_lists(user, fileName, responseObject, dialogueList=stringListOrJsonDict)
@@ -553,6 +566,29 @@ class LidaApp(object):
 
 
         return jsonify(responseObject)
+
+    def __update_collection_from_workspace(self, user, collectionID):
+        """
+        Update a collection from user workspace
+        """
+
+        responseObject = {"error":"Dialogue List is empty"}
+
+        #get user's dialogues
+
+        userDocument = self.dialogueFile.get_dialogues(user)
+
+        responseObject = {"error":"No collection with that ID"}
+
+        #update collectionID document field in DB
+
+        field = {"document":userDocument}
+
+        self.databaseFuncs.updateCollection(collectionID, field)
+
+        responseObject = {"status":"success"}
+
+        return responseObject
 
 
 ##############################################

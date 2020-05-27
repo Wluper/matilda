@@ -21,7 +21,7 @@ Vue.component("all-dialogues", {
    },
    computed : {
       userName : function(){
-            console.log("computing user name");
+            //console.log("computing user name");
             userName = localStorage["remember"];
             return userName
       }
@@ -90,13 +90,20 @@ Vue.component("all-dialogues", {
       },
 
       create_new_dialogue(event) {
+        //if a collection is active then new dialogues are member of the active collection
+            if ((localStorage["collection"] != "null") && (localStorage["collection"] != "null")) {
+                let collectionValue = localStorage["collection"];
 
-         backend.post_empty_dialogue()
-            .then( (newDialogueId) => {
-
-               this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
-               backend.update_db();
-         });
+                backend.post_empty_dialogue(collectionValue)
+                    .then( (newDialogueId) => {
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:collectionValue});
+                });
+            } else {
+                backend.post_empty_dialogue()
+                    .then( (newDialogueId) => {
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
+                });
+            }
       },
 
       delete_dialogue(event) {
@@ -244,6 +251,7 @@ Vue.component("all-dialogues", {
                .then( (response) => {
                   console.log("All user's dialogues deleted.");
                   allDialoguesEventBus.$emit("refresh_dialogue_list");
+                  databaseEventBus.$emit( "collection_active", "null");
             });
          }
       },
@@ -280,7 +288,7 @@ Vue.component("all-dialogues", {
 
           <div class="file-name-container">
             <div class="inner">
-              <span> USER </span>
+              <span> LOGGED: </span>
               <input readonly id="fileNameInput"
                     type="text"
                     v-bind:value="userName" 
@@ -294,7 +302,7 @@ Vue.component("all-dialogues", {
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
               <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
               <button class="help-button btn btn-sm" @click="clicked_collections_button()">{{guiMessages.selected.lida.buttonCollections}}</button> 
-              <button class="help-button btn btn-sm" @click="clicked_database_button()">Database</button>
+              <button class="help-button btn btn-sm" @click="clicked_database_button()">Workspaces</button>
               
           </div>
       </div>
