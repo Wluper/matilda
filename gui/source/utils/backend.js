@@ -408,11 +408,15 @@ async function get_all_db_entries_ids() {
 
 }
 
-async function update_db() {
+async function update_db(user) {
+
+  if (user == undefined) {
+    user = session_name()
+  }
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+"/"+session_name()+'/database'
+  const apiLink = API_LINK_BASE+"/"+user+'/database'
 
   try {
 
@@ -422,6 +426,35 @@ async function update_db() {
 
     entriesList = response.data
     console.log("======== UPDATING DATABASE ========")
+    console.log(entriesList)
+    return entriesList
+
+  } catch(error) {
+
+    console.log(error);
+    alert(guiMessages.selected.lida.connectionError)
+
+  }
+
+}
+
+async function update_backup(user) {
+
+  if (user == undefined) {
+    user = session_name()
+  }
+
+  var entries_ids = {}
+
+  const apiLink = API_LINK_BASE+"/"+user+'/backup'
+
+  try {
+
+    var response = await axios.put(apiLink)
+
+    console.log(response)
+
+    entriesList = response.data
     console.log(entriesList)
     return entriesList
 
@@ -641,6 +674,7 @@ backend =
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
 
     get_all_db_entries_ids                      : get_all_db_entries_ids,
+    update_backup                               : update_backup,
     update_db                                   : update_db,
     get_db_entry_async                          : get_db_entry_async,
     get_user_db_entry_async                     : get_user_db_entry_async,

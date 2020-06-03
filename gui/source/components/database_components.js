@@ -58,6 +58,12 @@ Vue.component("database-view", {
           });
         },
 
+        confirm_and_update() {
+            if (confirm(guiMessages.selected.database.confirmUpdate)) {
+                this.update_database()
+            }
+        },
+
         delete_entry(event) {
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
@@ -73,7 +79,7 @@ Vue.component("database-view", {
         },
 
         import_from_database() {
-            //manually synchronize from database, it will delete server dialogue list for the user
+            //manually synchronize from database, it will delete server dialogue-source for the user
             this.userName = localStorage["remember"];
             let add = confirm(guiMessages.selected.database.confirmImport);
             if (add == true) {
@@ -120,7 +126,7 @@ Vue.component("database-view", {
                     </li>
                 </ul>
                 <button v-if="role != 'admin'" v-on:click="import_from_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.importDb}}</button>
-                <button v-if="role != 'admin'" v-on:click="update_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
+                <button v-if="role != 'admin'" v-on:click="confirm_and_update()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.database.update}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
@@ -285,7 +291,8 @@ Vue.component("database-header", {
 
     data() { 
         return {
-            guiMessages
+            guiMessages,
+            showDesc:"",
         }
     
     },
@@ -346,12 +353,14 @@ Vue.component("database-header", {
                     </div>
                 </div>
                 <div class="help-button-container">
+                    <button v-if="workspace" class="help-button btn btn-sm" @click="showDesc = true">{{ guiMessages.selected.database.showHelp }}</button>
 
                     <button v-if="workspace" v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-else v-on:click="download_collections()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
+                <help-database-modal v-if="showDesc" @close="showDesc = false"></help-database-modal>
             </div>
     `
 });

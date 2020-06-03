@@ -12,21 +12,19 @@
             "label_type"  : "multilabel_classification",
             "required"    : false,
             "labels"      :[ 
-		"sys_greet",
+		        "sys_greet",
                 "sys_inform_basic",
-		"sys_inform_proactive",
-		"sys_request",
-		"sys_select",
-		"sys_deny",
-		"usr_greet",
+		        "sys_inform_proactive",
+		        "sys_request",
+		        "sys_select",
+		        "sys_deny",
+		        "usr_greet",
                 "usr_inform_basic",
                 "usr_inform_proactive",
                 "usr_request",
                 "usr_select",
                 "usr_deny"
-
             ]
-
         },
 
         "Slot": {

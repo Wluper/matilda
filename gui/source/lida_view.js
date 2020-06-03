@@ -64,6 +64,8 @@ var mainApp = new Vue({
                     console.log("File name updated");
                     this.set_cookie(newName,pass);
                     this.status = "list-all";
+                    //wait for 10 seconds then start cyclic-backups
+                    setTimeout(this.cyclic_backup, 10000);
                 } else {
                     alert('Server error, name not changed.');
                 }
@@ -173,7 +175,29 @@ var mainApp = new Vue({
         this.status = 'collection-view';
     },
 
-  },
+    cyclic_backup: function() {
+        /*
+        user backup every two minutes
+        if windows is active and dialogue list not empty
+        */
+        console.log("======= CYCLIC BACKUP ======")
+        if (!document.hidden) {
+            backend.update_backup()
+            .then( (response) => {
+                if (response.status == "success") {
+                    console.log(utils.create_date(),guiMessages.selected.lida.backupDone);
+                } else if (response.status == "empty") {
+                    console.log(utils.create_date(),guiMessages.selected.lida.backupPost);
+                } else {
+                    console.log(utils.create_date(),guiMessages.selected.lida.backupFailed);
+                }
+                console.log(guiMessages.selected.lida.backupNext);
+            })
+        }
+        var nextBackup = setTimeout( this.cyclic_backup, 120000 )
+    }
+
+},
 
   template:
   `

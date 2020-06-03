@@ -53,9 +53,28 @@ web framework. The front end is written with HTML/CSS/Vue js and communicates
 with the back end via a RESTful API. To run LIDA, you will need to first run the
 Flask server on your local machine / wherever you want the back end to run.
 You will need to have Python 3.6 or above installed on your machine for the
-server to run.
+server to run. 
+On top of that LIDA2 is also relying on a mongoDB database, either online or local
+is fine. In case of a online database you will need to set the database address in
+server/database_config.py.
 
-### Downloading & Installing Requirements
+### Installing a MongoDB local database
+
+If you don't plan to use a local database but you prefer a online one, feel free to skip this step.
+
+mongoDB requires Homebrew to install on OSX.
+Update instructions are on its official website: https://brew.sh/#install
+
+Instructions for a working local mongoDB database are here:
+https://docs.mongodb.com/manual/administration/install-community/
+
+Testing:
+
+You can test it's running by:
+
+`ps aux | grep -v grep | grep mongod`
+
+### Downloading & Installing LIDA Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 

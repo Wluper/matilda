@@ -606,3 +606,61 @@ Vue.component('collection-creation-modal', {
   </transition>
   `
 });
+
+Vue.component('help-database-modal', {
+  data() { 
+    return {
+      guiMessages
+    }
+  },
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              {{guiMessages.selected.modal_databaseInfo[0]}}
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+            {{guiMessages.selected.modal_databaseInfo[1]}}
+            <br><br>
+            {{guiMessages.selected.modal_databaseInfo[2]}}
+            <br><br>
+            {{guiMessages.selected.modal_databaseInfo[3]}}
+            <br><br>
+            <strong>{{guiMessages.selected.modal_databaseInfo[4]}}</strong>
+              <ul>
+                <li> 
+                  {{guiMessages.selected.database.update}}:<br> {{guiMessages.selected.modal_databaseButtons[0]}}
+                </li>
+                <li> 
+                  {{guiMessages.selected.database.importDb}}:<br> {{guiMessages.selected.modal_databaseButtons[1]}}
+                </li>
+              </ul>
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})

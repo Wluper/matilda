@@ -154,11 +154,18 @@ class LidaApp(object):
                             endpoint_name="/<user>/name",
                             methods=["GET", "PUT"],
                             handler= self.handle_name_resource  )
+
         self.add_endpoint( \
                             endpoint="/<user>/database",
                             endpoint_name="/<user>/database",
                             methods=["GET", "PUT"],
                             handler= self.handle_database_resource )
+        self.add_endpoint( \
+                            endpoint="/<user>/backup",
+                            endpoint_name="/<user>/backup",
+                            methods=["GET", "PUT"],
+                            handler= self.handle_backup_resource )
+
         self.add_endpoint( \
                             endpoint="/database/<id>/<DBcollection>",
                             endpoint_name="/database/<id>/<DBcollection>",
@@ -258,6 +265,21 @@ class LidaApp(object):
 
             if request.method == "DELETE":
                 responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
+
+        return jsonify(responseObject)
+
+    def handle_backup_resource(self,user):
+        """
+        GET - Gets the database collection
+        """
+        responseObject = {}
+
+        if request.method == "GET":
+            backup = user+"_backup"
+            responseObject = DatabaseManagement.getUserEntry(self, backup)
+
+        if request.method == "PUT":
+            responseObject = DatabaseManagement.updateDatabase(self, user, True)
 
         return jsonify(responseObject)
 

@@ -99,7 +99,7 @@ class DatabaseManagement(object):
 		responseObject = { "status":"success" }
 		return responseObject
 
-	def updateDatabase(self,username):
+	def updateDatabase(self,username, backup=None):
 
 		#update the database user's document
 
@@ -109,6 +109,16 @@ class DatabaseManagement(object):
 		except:
 			annotations = {}
 
+		#if back up mode then saves with a different id and 
+		# checks if document will be empty before saving
+		if backup:
+			if annotations != {}:
+				username = username+"_backup"
+			else:
+				responseObject = {"status":"empty"}
+				return responseObject
+
+		#saving
 		DatabaseConfiguration.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		
 		responseObject = {"status":"success"}
