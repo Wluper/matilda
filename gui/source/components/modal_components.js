@@ -149,8 +149,6 @@ Vue.component('database-entry-modal', {
             update: {},
             role: '',
             showResult:false,
-            duplicates: [],
-            checkedDialogue: {}
          }
    },
 
@@ -240,6 +238,7 @@ Vue.component('database-entry-modal', {
                   console.log();
                   console.log("============== Dialogues-Collection Updated ==============");
                   databaseEventBus.$emit('collections changed');
+                  this.$emit("close");
             });
          }
   },
@@ -252,13 +251,16 @@ Vue.component('database-entry-modal', {
             <div class="modal-container-selection" v-if="showResult">
                <div class="modal-header">
                   <slot name="header">
-                  {{guiMessages.selected.collection.importResult}}
+                  <strong>{{guiMessages.selected.collection.importResult}}</strong>
                   </slot>
                </div>
             <hr>
                <div id="ask-selector">
                   <slot name="body">
                      <h2>{{guiMessages.selected.collection.importSuccess}}</h2>
+                     <br>
+                     {{guiMessages.selected.collection.importSuccessAddendum}}
+                     <br>
                   </slot>
                   <br>
                </div>
@@ -269,6 +271,7 @@ Vue.component('database-entry-modal', {
                         OK
                      </button>
                   </slot>
+                  LIDA
                </div>
             </div>    
 
@@ -480,7 +483,7 @@ Vue.component('collection-creation-modal', {
                params._id = "Collection"+Math.floor(Math.random() * 10001);
          }
          params.document = params.document.trim();
-         backend.update_collection_async(params._id, JSON.stringify(params))
+         backend.update_collection_async(params._id, params)
                .then( (response) => {
                   console.log();
                   console.log("Database: Dialogue Collection updated");
@@ -622,7 +625,7 @@ Vue.component('help-database-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              {{guiMessages.selected.modal_databaseInfo[0]}}
+              <strong>{{guiMessages.selected.modal_databaseInfo[0]}}</strong>
             </slot>
           </div>
 
@@ -635,14 +638,82 @@ Vue.component('help-database-modal', {
             {{guiMessages.selected.modal_databaseInfo[2]}}
             <br><br>
             {{guiMessages.selected.modal_databaseInfo[3]}}
-            <br><br>
-            <strong>{{guiMessages.selected.modal_databaseInfo[4]}}</strong>
+            <br>
               <ul>
                 <li> 
-                  {{guiMessages.selected.database.update}}:<br> {{guiMessages.selected.modal_databaseButtons[0]}}
+                  <strong>{{guiMessages.selected.database.update}}:</strong><br>{{guiMessages.selected.modal_databaseButtons[0]}}
                 </li>
                 <li> 
-                  {{guiMessages.selected.database.importDb}}:<br> {{guiMessages.selected.modal_databaseButtons[1]}}
+                  <strong>{{guiMessages.selected.database.importDb}}:</strong><br>{{guiMessages.selected.modal_databaseButtons[1]}}
+                </li>
+              </ul>
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
+
+Vue.component('help-collection-modal', {
+  
+  data() { 
+    return {
+      guiMessages,
+      role:''
+    }
+  },
+
+  mounted() {
+    this.role = mainApp.role;
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              <strong>{{guiMessages.selected.modal_collectionInfo[0]}}</strong>
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+            {{guiMessages.selected.modal_collectionInfo[1]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[2]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[3]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[4]}}
+            {{guiMessages.selected.modal_collectionInfo[5]}}
+              <ul>
+                <li v-if="role == 'admin'"> 
+                  <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
+                </li>
+                <li> 
+                  <strong>{{guiMessages.selected.collection.importColl}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[1]}}
+                </li>
+                <li> 
+                  <strong>{{guiMessages.selected.collection.update}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[2]}}
                 </li>
               </ul>
             </slot>

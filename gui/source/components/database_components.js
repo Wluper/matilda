@@ -292,7 +292,8 @@ Vue.component("database-header", {
     data() { 
         return {
             guiMessages,
-            showDesc:"",
+            showHelpWork:"",
+            showHelpColl:""
         }
     
     },
@@ -353,14 +354,16 @@ Vue.component("database-header", {
                     </div>
                 </div>
                 <div class="help-button-container">
-                    <button v-if="workspace" class="help-button btn btn-sm" @click="showDesc = true">{{ guiMessages.selected.database.showHelp }}</button>
+                    <button v-if="workspace" class="help-button btn btn-sm" @click="showHelpWork = true">{{ guiMessages.selected.database.showHelp }}</button>
+                    <button v-else="workspace" class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
 
                     <button v-if="workspace" v-on:click="download_database()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     <button v-else v-on:click="download_collections()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
                     
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
-                <help-database-modal v-if="showDesc" @close="showDesc = false"></help-database-modal>
+                <help-database-modal v-if="showHelpWork" @close="showHelpWork = false"></help-database-modal>
+                <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
     `
 });

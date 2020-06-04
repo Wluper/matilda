@@ -550,8 +550,11 @@ async function update_collection_async(id, params) {
     const apiLink = API_LINK_INTER+`/collections/${id}`
 
     try {
-
-        response = await axios.post(apiLink, {json: JSON.parse(params)})
+        if (typeof(params) != "object") {
+            response = await axios.post(apiLink, {json: JSON.parse(params)})
+        } else {
+            response = await axios.post(apiLink, {json: params})
+        }
 
     } catch(error) {
 

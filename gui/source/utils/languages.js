@@ -52,6 +52,7 @@ guiMessages = {
             importCollfromUser: "Add from users' list",
             importResult: "Import",
             importSuccess: "Success! Dialogues correctly loaded in your list.",
+            importSuccessAddendum: "They are available in your dialogue list.",
             collTitle: "Title",
             collDesc: "Description",
             collAnnot: "Annotation Style",
@@ -156,12 +157,26 @@ guiMessages = {
             "For each user LIDA creates a backup of all dialogues they work on.",
             "This backup is updated on every editing and this way stays synced with the server copy.",
             "In addition a recurring backup is automatically executed every two minutes and memorized in a second database document",
-            "Buttons",
         ],
         modal_databaseButtons:
         [
             "this button recovers the session stored in user's backup copy. Dialogues in user's current list will be overwritten with the ones inside the database backup copy.",
             "this button allows manual update of the backup document in the database. It's the opposite operation of the previous button.",
+        ],
+        modal_collectionInfo:
+        [
+            "Collections",
+            "Collections are group of dialogues linked for easy handling and assignment.",
+            "To preserve them and avoid mixtures you can work on one collection at a time",
+            "This is why loading or importing a collection will wipe your actual dialogue list.",
+            "When an annotator is satisfied with their work is able to send the annotations done and update the collection document.",
+            "memorized in the database. This way the job done will be available for gathering, revision and control.",
+        ],
+        modal_collectionButtons:
+        [
+            "This button is shown to administrators only and it allows to create a collection from a json file, the dialogues currently present in the inter-annotator dialogue list or the dialogues in the user's workspaces stored in database.",
+            "This button imports the selected collection in your LIDA interface to start annotating it",
+            "This button sends your local annotations performed on the collections to the collection document memorized in the database. A control check will verify the correct destination document in the database in order to avoid overwriting a collection with, for example, dialogues you imported from file while working on other projects.",
         ],
         database: {
             title: "Workspaces Management",
@@ -231,6 +246,7 @@ guiMessages = {
             importCollfromUser: "Aggiungi da un utente",
             importResult: "Importazione",
             importSuccess: "Successo! I dialoghi sono stati importati correttamente.",
+            importSuccessAddendum: "Sono disponibili nella tua lista dei dialoghi.",
             collTitle: "Titolo",
             collDesc: "Descrizione",
             collAnnot: "Modello di annotazione (annotation_style)",
@@ -335,12 +351,26 @@ guiMessages = {
             "Per ogni utente che utilizza LIDA viene creato un backup dei dialoghi su cui sta lavorando nel database.",
             "Questo backup viene aggiornato ad ogni modifica sui dialoghi, rimanendo quindi sincronizzato con il server.",
             "In aggiunta un backup periodico è effettuato ogni due minuti e memorizzato in un secondo documento.",
-            "Pulsanti",
         ],
         modal_databaseButtons:
         [
-            "questo pulsante ripristina la sessione dal backup del database. I dialoghi attualmente visualizzati nell'interfaccia di LIDA verranno sovrascritti con quelli all'interno del database.",
-            "questo pulsante permette l'aggiornamento manuale del backup nel database.",
+            "Questo pulsante ripristina la sessione dal backup del database. I dialoghi attualmente visualizzati nell'interfaccia di LIDA verranno sovrascritti con quelli all'interno del database.",
+            "Questo pulsante permette l'aggiornamento manuale del backup nel database.",
+        ],
+        modal_collectionInfo:
+        [
+            "Collezioni",
+            "Le collezioni sono gruppi di dialoghi uniti per essere facilmente gestiti e assegnati",
+            "Per evitare commistioni o sovrascritture è possibile lavorare su una sola collezione per volta.",
+            "Importare o caricare una collezione di dialoghi cancellerà quindi tutti i dialoghi presenti nella lista dell'utente.",
+            "Quando un annotatore è soddisfatto del proprio lavoro su una collezione può salvare le sue annotazioni direttamente",
+            "sulla collezione memorizzata nel database. In questo modo sarà anche disponibile per il controllo e la revisione da parte di altri.",
+        ],
+        modal_collectionButtons:
+        [
+            "Questo pulsante è visibile solo agli amministratori e permette di creare una collezione a partire da un file, da dialoghi presenti nell'interfaccia di LIDA o dai backup dei workspace nel database.",
+            "Questo pulsante permette di caricare la collezione selezionata per iniziare ad annotarla",
+            "Questo pulsante invia le annotazioni fatte localmente dall'utente al documento della collezione nel database. Un meccanismo di controllo identifica il corretto documento di destinazione: se stai lavorando su un'altra collezione o liberamente, ad esempio, da file caricati, non corri il pericolo di sovrascrivere una collezione nel database.",
         ],
         database: {
             title: "Gestione Workspaces",
