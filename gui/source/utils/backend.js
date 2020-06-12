@@ -17,7 +17,7 @@ async function put_name(name){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/"+name+'/name'
+    const apiLink = API_LINK+"/"+name+'/name'
     try {
         var response = await axios.put( apiLink, {name : name} )
         return true;
@@ -42,7 +42,7 @@ async function annotate_query(query){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+'/turns'
+    const apiLink = API_LINK+'/turns'
     try {
         var response = await axios.post( apiLink, { query: query}  );
         console.log(response.data)
@@ -70,7 +70,7 @@ async function get_annotation_style_async(id){
 
     var dialogues = {}
 
-    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue_annotationstyle/${id}`
+    const apiLink = API_LINK+"/"+session_name()+`/dialogue_annotationstyle/${id}`
 
     try {
         var response = await axios.get(apiLink)
@@ -97,7 +97,7 @@ async function get_annotation_style_async(id){
 
 async function write_tag(id,tag,value) {
 
-  const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
+  const apiLink = API_LINK+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
 
   try {
 
@@ -119,7 +119,7 @@ async function get_all_dialogue_ids_async() {
 
   var dialogues = {}
 
-  const apiLink = API_LINK_BASE+"/"+session_name()+'/dialogues_metadata'
+  const apiLink = API_LINK+"/"+session_name()+'/dialogues_metadata'
 
   try {
 
@@ -144,7 +144,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_metadata/${oldName}`
+    const apiLink = API_LINK+"/"+session_name()+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -308,7 +308,7 @@ async function del_single_dialogue_async(dialogueId) {
 
 async function del_all_dialogues_async() {
 
-    const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_wipe`
+    const apiLink = API_LINK+"/"+session_name()+`/dialogues_wipe`
 
     try {
 
@@ -328,7 +328,7 @@ async function del_all_dialogues_async() {
 
 async function recover_dialogues(jsonString) {
 
-const apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues_recover`
+const apiLink = API_LINK+"/"+session_name()+`/dialogues_recover`
 
     try {
 
@@ -356,9 +356,9 @@ async function RESTdialogues(method, id, params, fileName){
     console.log("COLLECTION "+fileName)
 
     //
-    if (fileName != undefined) { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/collection/${fileName}` }
-    else if (id==null) { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues` }
-    else { var apiLink = API_LINK_BASE+"/"+session_name()+`/dialogues/${id}` }
+    if (fileName != undefined) { var apiLink = API_LINK+"/"+session_name()+`/dialogues/collection/${fileName}` }
+    else if (id==null) { var apiLink = API_LINK+"/"+session_name()+`/dialogues` }
+    else { var apiLink = API_LINK+"/"+session_name()+`/dialogues/${id}` }
 
     //
     if (method=="DELETE") {
@@ -386,7 +386,7 @@ async function get_all_db_entries_ids() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+"/"+session_name()+'/database'
+  const apiLink = API_LINK+"/"+session_name()+'/database'
 
   try {
 
@@ -416,7 +416,7 @@ async function update_db(user) {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+"/"+user+'/database'
+  const apiLink = API_LINK+"/"+user+'/database'
 
   try {
 
@@ -446,7 +446,7 @@ async function update_backup(user) {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK_BASE+"/"+user+'/backup'
+  const apiLink = API_LINK+"/"+user+'/backup'
 
   try {
 
@@ -471,7 +471,7 @@ async function del_db_entry_async(entryId) {
 
     console.log("DELETING",entryId);
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}`;
+    var apiLink = API_LINK+`/database/${entryId}`;
 
     try {
 
@@ -490,7 +490,7 @@ async function get_user_db_entry_async(entryId, collection) {
 
     console.log("GETTING USER",entryId, "database document");
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}/${collection}`;
+    var apiLink = API_LINK+`/database/${entryId}/${collection}`;
 
     try {
 
@@ -520,7 +520,7 @@ async function get_db_entry_async(entryId,DBcollection) {
 
     console.log("GETTING ID:",entryId, "in collection",DBcollection);
 
-    var apiLink = API_LINK_BASE+`/database/${entryId}/${DBcollection}`;
+    var apiLink = API_LINK+`/database/${entryId}/${DBcollection}`;
 
     try {
 
@@ -539,7 +539,7 @@ async function get_all_entries_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+'/database/download'
+  const apiLink = API_LINK+'/database/download'
 
   try {
 
@@ -563,7 +563,7 @@ async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_LINK_BASE+`/login/${loginName}/${loginPass}`;
+  const apiLink = API_LINK+`/login/${loginName}/${loginPass}`;
 
   try {
 
@@ -585,7 +585,7 @@ async function login(loginName,loginPass) {
 
 async function update_collection_from_workspace_async(collection_ID) {
 
-    const apiLink = API_LINK_BASE+"/collections/"+collection_ID+"/"+session_name()
+    const apiLink = API_LINK+"/collections/"+collection_ID+"/"+session_name()
 
   try {
 
@@ -606,7 +606,7 @@ async function get_collections_ids_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+`/collections/ids`
+  const apiLink = API_LINK+`/collections/ids`
 
   try {
 
@@ -630,7 +630,7 @@ async function get_collections_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK_BASE+`/collections`
+  const apiLink = API_LINK+`/collections`
 
   try {
 

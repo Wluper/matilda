@@ -24,7 +24,7 @@ from bson.objectid import ObjectId
 # == Local ==
 from utils import load_json_file, save_json_file
 from database_config import DatabaseConfiguration
-from interannotator_config import Configuration
+from annotator_config import Configuration
 
 class DatabaseManagement(object):
 
@@ -63,7 +63,7 @@ class DatabaseManagement(object):
 
 		return responseObject
 
-	def downloadDatabase(self):
+	def downloadDatabase():
 
 		entries = []
 
@@ -73,7 +73,7 @@ class DatabaseManagement(object):
 
 		return entries
 
-	def getDatabaseIds(self):
+	def getDatabaseIds():
 
 		entries = []
 
@@ -85,7 +85,7 @@ class DatabaseManagement(object):
 
 		return entries
 
-	def deleteEntry(self,id,collection):
+	def deleteEntry(id,collection):
 
 		#delete a database document by id
 
@@ -99,7 +99,7 @@ class DatabaseManagement(object):
 		responseObject = { "status":"success" }
 		return responseObject
 
-	def updateDatabase(self,username, backup=None):
+	def updateDatabase(username, backup=None):
 
 		#update the database user's document
 
@@ -124,7 +124,7 @@ class DatabaseManagement(object):
 		responseObject = {"status":"success"}
 		return responseObject
 
-	def getUserEntry(self, id):
+	def getUserEntry(id):
 
 		#check the database and format the response
 

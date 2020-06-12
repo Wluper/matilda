@@ -789,9 +789,6 @@ class InterAnnotatorApp(object):
             defaultDict[key].append(value)
 
 
-
-
-
     def mock_handle_errors_resource(self, id=None):
         with self.app.app_context():
 
@@ -824,19 +821,3 @@ class InterAnnotatorApp(object):
 
             report["totalCount"] = totalCount
             return report
-
-
-
-
-##############################################
-# MAIN
-##############################################
-
-if __name__ == '__main__':
-
-    app = InterAnnotatorApp()
-
-    app.run()
-
-
-# EOF

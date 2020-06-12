@@ -19,6 +19,7 @@ from flask_cors import CORS
 # >>>> Local <<<<
 from utils import load_json_file, save_json_file
 from annotator_config import Configuration
+from admin_annotator import AdminAnnotator
 
 
 
@@ -36,10 +37,10 @@ class MultiAnnotator(object):
 
     def __init__(self, path):
         self.path = path
-        self.allFiles = { MultiAnnotator.__GOLD_FILE_NAME : DialogueAnnotator(self.path, MultiAnnotator.__GOLD_FILE_NAME) }
+        self.allFiles = { MultiAnnotator.__GOLD_FILE_NAME : AdminAnnotator(self.path, MultiAnnotator.__GOLD_FILE_NAME) }
         self.filesAdded = 0
 
-        self.__load_all_jsons(self.path)
+        #self.__load_all_jsons(self.path)
 
     def get_all_files(self, dialogueId):
         """
@@ -67,7 +68,7 @@ class MultiAnnotator(object):
         save_json_file( obj=jsonObject, path= os.path.join( self.path, fileName ) )
         self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObject)
 
-        self.allFiles[ fileName ] = DialogueAnnotator( self.path, fileName )
+        self.allFiles[ fileName ] = AdminAnnotator( self.path, fileName )
         self.save()
 
     def get_metadata(self):
@@ -165,7 +166,7 @@ class MultiAnnotator(object):
 
         self.allFiles = {}
         self.fileAdded = 0
-        self.__init__(self.path, cleaning=True)
+        self.__init__(self.path)
 
         return {"status":"success"}
 

@@ -1,15 +1,16 @@
 from database_config import DatabaseConfiguration
+from database import DatabaseManagement
 
 class LoginFuncs(object):
 	"""
 	Here all the username accepted by the server
 	"""
 
-	def logIn(self, userID, userPass):
+	def logIn(userID, userPass):
 
 		response = { "status":"fail" }
 
-		userDetails = self.databaseFuncs.readDatabase("users","userName",userID)
+		userDetails = DatabaseManagement.readDatabase("users","userName",userID)
 
 		for line in userDetails:
 			if line["userName"] == userID:
@@ -18,7 +19,7 @@ class LoginFuncs(object):
 
 		return response
 
-	def create(self, userID, password, email=None):
+	def create(userID, password, email=None):
 
 		response = { "status":"fail" }
 

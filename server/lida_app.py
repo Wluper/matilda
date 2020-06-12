@@ -8,404 +8,127 @@ import sys
 import json
 import copy
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
+from collections import defaultdict
 
 # == Flask ==
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 
 # == Local ==
 from annotator_config import Configuration
-from annotator import DialogueAnnotator
+from annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
 from database import DatabaseManagement
 from login import LoginFuncs
 
 
 ##############################################
-#  CODE
+#  MAIN
 ##############################################
 
-class LidaApp(object):
+"""
+Container Class that orchastrates the app.
+"""
+__DEFAULT_PATH = "LIDA_ANNOTATIONS"
+path = __DEFAULT_PATH
+multiAnnotator=False
+
+LidaApp = Flask(__name__,
+    static_url_path='',
+    static_folder='../gui',
+    template_folder='../gui'
+    )
+LidaApp.config.from_object(__name__)
+CORS(LidaApp)
+#set_main_path(path)
+dialogueFile = DialogueAnnotator(path)
+annotationFiles = MultiAnnotator(path)
+
+annotatorErrors = {}
+annotatorErrorsMeta = {}
+
+@LidaApp.route('/')
+def hello():
+    return render_template("index.html")
+
+##############################################
+#  FUNCTION HANDLERS
+##############################################
+
+@LidaApp.route('/<user>/dialogues_metadata',methods=['GET'])
+@LidaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
+def handle_dialogues_metadata_resource(user, id=None):
     """
-    Container Class that orchastrates the app.
+    GET - All dialogues metadata
+
+    PUT - Handle
     """
-    __DEFAULT_PATH = "LIDA_ANNOTATIONS"
-    app = None
-
-    def __init__(self, path=None, multiAnnotator=False):
-        """
-        Creates the Flask App & setups all the api calls
-        """
-        # Flask
-        self.app = Flask(__name__)
-        self.app.config.from_object(__name__)
-        CORS(self.app)
-
-        # Initialising all the necessary classes & default paths.
-        self.set_main_path(path)
-
-        #AT THE MOMENT SINGLE FILE ONLY
-        self.dialogueFile = DialogueAnnotator(self.path)
-
-        # Container for Database Function
-        self.databaseFuncs = DatabaseManagement
-
-        # Setting the final endpoints
-        self.setup_endpoints()
+    if request.method == "GET":
+        responseObject = dialogueFile.get_dialogues_metadata(user)
 
 
-    def set_main_path(self, path=None):
-        """
-        creates the main path or
-        """
-        if path:
-            self.path = path
-        else:
-            self.path = LidaApp.__DEFAULT_PATH
+    if request.method == "PUT":
+        error = None
+        data  = request.get_json()
 
-        if not os.path.exists(self.path):
-            os.mkdir(self.path)
+        responseObject = dialogueFile.update_dialogue_name( user, id, data["id"])
+
+    dialogueFile.save(user)
+    return jsonify( responseObject )
 
 
-    def run(self, port=5000):
-        """
-        runs the app
-        """
-        self.app.run(port=port, host='0.0.0.0')
+@LidaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
+@LidaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','PUT','DELETE'])
+@LidaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
+def handle_dialogues_resource(user, id=None, fileName=None):
+    """
+    GET - All dialogues
 
+    POST - Create a new one, either from data(json, string) or empty
 
-    def add_endpoint(self, endpoint=None, endpoint_name=None, methods=None, handler=None):
-        """
-        adds an endpoint to the API.
-        """
-        self.app.add_url_rule( endpoint, endpoint_name, handler, methods=methods )
+    PUT - change specific dialogue with a dialogue
+    """
 
+    if fileName:
+        if request.method == "POST":
+            responseObject = __handle_post_of_new_dialogues(user, fileName)
 
-
-    def setup_endpoints(self):
-        """
-        sets all the endpoints, that this app has.
-        """
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues_metadata",
-                            endpoint_name="/<user>/dialogues_metadata",
-                            methods=["GET"],
-                            handler= self.handle_dialogues_metadata_resource  )
-
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues_metadata/<id>",
-                            endpoint_name="/<user>/dialogues_metadata/<id>",
-                            methods=["PUT"],
-                            handler= self.handle_dialogues_metadata_resource  )
-
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues",
-                            endpoint_name="/<user>/dialogues",
-                            methods=["GET","POST","DELETE"],
-                            handler= self.handle_dialogues_resource )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues/<id>",
-                            endpoint_name="/<user>/dialogues/<id>",
-                            methods=["GET", "POST", "PUT", "DELETE"],
-                            handler= self.handle_dialogues_resource )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues/collection/<fileName>",
-                            endpoint_name="/<user>/dialogues/collection/<fileName>",
-                            methods=["POST"],
-                            handler= self.handle_dialogues_resource )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues_wipe",
-                            endpoint_name="/<user>/dialogues_wipe",
-                            methods=["DELETE"],
-                            handler= self.handle_wipe_request )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogues_recover",
-                            endpoint_name="/<user>/dialogues_recover",
-                            methods=["POST"],
-                            handler= self.handle_recover_request )
-
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogue_annotationstyle/<id>",
-                            endpoint_name="/<user>/dialogue_annotationstyle/<id>",
-                            methods=["GET"],
-                            handler = self.handle_annotations_resource )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/dialogue/<id>/<tag>/<value>",
-                            endpoint_name="/<user>/dialogue/<id>/<tag>/<value>",
-                            methods=["POST"],
-                            handler = self.handle_dialogues_tag )
-
-        self.add_endpoint( \
-                            endpoint="/turns",
-                            endpoint_name="/turns",
-                            methods=["POST"],
-                            handler= self.handle_turns_resource  )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/name",
-                            endpoint_name="/<user>/name",
-                            methods=["GET", "PUT"],
-                            handler= self.handle_name_resource  )
-
-        self.add_endpoint( \
-                            endpoint="/<user>/database",
-                            endpoint_name="/<user>/database",
-                            methods=["GET", "PUT"],
-                            handler= self.handle_database_resource )
-        self.add_endpoint( \
-                            endpoint="/<user>/backup",
-                            endpoint_name="/<user>/backup",
-                            methods=["GET", "PUT"],
-                            handler= self.handle_backup_resource )
-
-        self.add_endpoint( \
-                            endpoint="/database/<id>/<DBcollection>",
-                            endpoint_name="/database/<id>/<DBcollection>",
-                            methods=["GET","POST","DELETE"],
-                            handler= self.handle_database_resource )
-        self.add_endpoint( \
-                            endpoint="/database/download",
-                            endpoint_name="/database/download",
-                            methods=["GET"],
-                            handler= self.handle_database_download )
-        self.add_endpoint( \
-                            endpoint="/login/<id>/<idPass>",
-                            endpoint_name="login/<id>/<idPass>",
-                            methods=["POST","PUT"],
-                            handler= self.handle_login )
-
-        self.add_endpoint( \
-                            endpoint="/collections",
-                            endpoint_name="/collections",
-                            methods=["GET"],
-                            handler= self.handle_collections )
-
-        self.add_endpoint( \
-                            endpoint="/collections/<id>",
-                            endpoint_name="/collections/<id>",
-                            methods=["GET","POST"],
-                            handler= self.handle_collections )
-
-        self.add_endpoint( \
-                            endpoint="/collections/<id>/<user>",
-                            endpoint_name="/collections/<id>/<user>",
-                            methods=["PUT"],
-                            handler= self.handle_collections )
-
-    def handle_collections(self, id=None, user=None):
-
-        if not id:
-
-            if request.method == "GET":
-
-                collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
-
-                response = collectionNames
-
-        if id:
-
-            if id == "ids":
-                if request.method == "GET":
-
-                    collectionNames = DatabaseManagement.readDatabase("dialogues","_id",None,"assignedTo")
-
-                    response = collectionNames
-
-            if request.method == "PUT":
-
-                    response = self.__update_collection_from_workspace(user, id)
-
-            if request.method == "POST":
-
-                values = request.get_json()
-
-                response = DatabaseManagement.createCollection(id, values["json"])
-
-        return jsonify ( response )
-
-
-    def handle_database_resource(self,id=None,user=None, DBcollection=None):
-        """
-        GET - Gets the dialogues id in the database collection for the user
-            or Gets an entire database document 
-
-        POST - Gets the entire dialogues in the database and import them
-
-        PUT - Updates the database collection
-
-        DELETE - Delete an entry in collection
-
-        """
-        if not DBcollection:
-            DBcollection = "database"
-
-        responseObject = {}
-
-        if user:
-            if request.method == "PUT":
-                responseObject = DatabaseManagement.updateDatabase( self, user )
-
-            if request.method == "GET":
-                responseObject = DatabaseManagement.getDatabaseIds(self)
-
-        if id:
-            if request.method == "GET":
-                responseObject = DatabaseManagement.readDatabase(DBcollection,"_id",id)
-
-            if request.method == "POST":
-                responseObject = DatabaseManagement.getUserEntry(self,id)
-
-            if request.method == "DELETE":
-                responseObject.update( DatabaseManagement.deleteEntry(self,id=id) )
-
-        return jsonify(responseObject)
-
-    def handle_backup_resource(self,user):
-        """
-        GET - Gets the database collection
-        """
-        responseObject = {}
+    elif id:
 
         if request.method == "GET":
-            backup = user+"_backup"
-            responseObject = DatabaseManagement.getUserEntry(self, backup)
+            responseObject = dialogueFile.get_dialogue(user, id = id)
 
         if request.method == "PUT":
-            responseObject = DatabaseManagement.updateDatabase(self, user, True)
+            data = request.get_json()
+            Configuration.validate_dialogue( data )
+            responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
 
-        return jsonify(responseObject)
+        if request.method == "DELETE":
+            responseObject = dialogueFile.delete_dialogue(user, id=id)
 
-
-    def handle_database_download(self,id=None):
-        """
-        GET - Gets the database collection
-        """
-        responseObject = {}
+    else:
 
         if request.method == "GET":
-            responseObject = DatabaseManagement.downloadDatabase(self)
-
-        return jsonify(responseObject)
-
-    def handle_name_resource(self,user):
-        """
-        GET - Gets the fileName
-
-        PUT - Updates the fileName
-        """
-        responseObject = {
-            "status" : "success",
-        }
-        #if request.method == "GET":
-        #    responseObject.update( user )
-
-        if request.method == "PUT":
-            self.dialogueFile.change_file_name(user)
-
-        return jsonify(responseObject);
-
-    def handle_dialogues_tag(self, user, id, tag, value):
-
-        responseObject = {
-            "status" : "success"
-        }
+            responseObject = dialogueFile.get_dialogues(user)
 
         if request.method == "POST":
-            self.dialogueFile.insert_meta_tags(user, id, tag, value)
+            responseObject = __handle_post_of_new_dialogues(user)
 
-        return responseObject
+    dialogueFile.save(user)
+    return jsonify( responseObject )
 
+@LidaApp.route('/dialogue_annotationstyle', methods=['GET'])
+@LidaApp.route('/<user>/dialogue_annotationstyle/<id>',methods=['GET'])
+def handle_annotations_resource(user=None,id=None):
+    """
+    GET - Returns the annotation style
+    """
+    
+    if not user and not id:
+        return jsonify( Configuration.create_annotation_dict() )
 
-
-    def handle_dialogues_resource(self, user, id=None, fileName=None):
-        """
-        GET - All dialogues
-
-        POST - Create a new one, either from data(json, string) or empty
-
-        PUT - change specific dialogue with a dialogue
-        """
-
-        if fileName:
-            if request.method == "POST":
-                responseObject = self.__handle_post_of_new_dialogues(user, fileName)
-
-        elif id:
-
-            if request.method == "GET":
-                responseObject = self.dialogueFile.get_dialogue(user, id = id)
-
-            if request.method == "PUT":
-                data = request.get_json()
-                Configuration.validate_dialogue( data )
-                responseObject = self.dialogueFile.update_dialogue(user, id=id, newDialogue=data )
-
-            if request.method == "DELETE":
-                responseObject = self.dialogueFile.delete_dialogue(user, id=id)
-
-        else:
-
-            if request.method == "GET":
-                responseObject = self.dialogueFile.get_dialogues(user)
-
-            if request.method == "POST":
-                responseObject = self.__handle_post_of_new_dialogues(user)
-
-        self.dialogueFile.save(user)
-        return jsonify( responseObject )
-
-
-    def handle_wipe_request(self, user):
-
-        responseObject = {}
-
-        responseObject = self.dialogueFile.clean_workspace(user)
-
-        return responseObject
-
-    def handle_recover_request(self, user):
-
-        responseObject = {}
-
-        dialogueDict = request.get_json()
-
-        responseObject = self.dialogueFile.recover_copies(user, dialogueDict)
-
-        return responseObject
-
-    def handle_dialogues_metadata_resource(self,user,id=None):
-        """
-        GET - All dialogues metadata
-
-        PUT - Handle
-        """
-        if request.method == "GET":
-            responseObject = self.dialogueFile.get_dialogues_metadata(user)
-
-
-        if request.method == "PUT":
-            error = None
-            data  = request.get_json()
-
-            responseObject = self.dialogueFile.update_dialogue_name( user, id, data["id"])
-
-        self.dialogueFile.save(user)
-        return jsonify( responseObject )
-
-
-    def handle_annotations_resource(self,user,id):
-        """
-        GET - Returns the annotation style
-        """
-        dialogue = self.dialogueFile.get_dialogue(user, id = id)
+    else:
+        dialogue = dialogueFile.get_dialogue(user, id = id)
 
         #test for correct annotation style
 
@@ -413,75 +136,581 @@ class LidaApp(object):
 
         return jsonify( Configuration.create_annotation_dict() )
 
+@LidaApp.route('/turns',methods=['POST'])
+def handle_turns_resource():
+    """
+    POST - Returns the annotation style
+    """
+    if request.method == "POST":
+        query = request.get_json()['query']
 
+        responseObject = {
+            "status" : "success",
+        }
 
-    def handle_turns_resource(self):
-        """
-        POST - Returns the annotation style
-        """
+        responseObject.update( LidaApp.run_models_on_query(query) )
+
+    else:
+
+        responseObject = {
+            "status" : "error",
+            "error"  : "not available"
+        }
+
+    return jsonify( responseObject )
+
+@LidaApp.route('/<user>/name',methods=['GET','PUT'])  
+def handle_name_resource(user):
+    """
+    GET - Gets the fileName
+
+    PUT - Updates the fileName
+    """
+    responseObject = {
+        "status" : "success",
+    }
+    #if request.method == "GET":
+    #    responseObject.update( user )
+
+    if request.method == "PUT":
+        dialogueFile.change_file_name(user)
+
+    return jsonify(responseObject)
+
+@LidaApp.route('/database', methods=['GET'])
+@LidaApp.route('/<user>/database',methods=['GET','PUT'])
+@LidaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
+def handle_database_resource(id=None, user=None, DBcollection=None):
+    """
+    GET - Gets the dialogues id in the database collection for the user
+        or Gets an entire database document 
+
+    POST - Gets the entire dialogues in the database and import them
+
+    PUT - Updates the database collection
+
+    DELETE - Delete an entry in collection
+
+    """
+    if not DBcollection:
+        DBcollection = "database"
+
+    responseObject = {}
+
+    if user:
+        if request.method == "PUT":
+            responseObject = DatabaseManagement.updateDatabase( user )
+
+        if request.method == "GET":
+            responseObject = DatabaseManagement.getDatabaseIds()
+
+    elif id:
+        if request.method == "GET":
+            responseObject = DatabaseManagement.readDatabase(DBcollection,"_id",id)
 
         if request.method == "POST":
-            query = request.get_json()['query']
+            responseObject = DatabaseManagement.getUserEntry(id)
 
-            responseObject = {
-                "status" : "success",
-            }
+        if request.method == "DELETE":
+            responseObject.update( DatabaseManagement.deleteEntry(id=id) )
 
-            responseObject.update( LidaApp.run_models_on_query(query) )
+    else:
+        responseObject = DatabaseManagement.getDatabaseIds()
 
-        else:
-
-            responseObject = {
-                "status" : "error",
-                "error"  : "not available"
-            }
-
-        return jsonify( responseObject )
+    return jsonify(responseObject)    
 
 
-    def __handle_post_of_new_dialogues(self, user, fileName=None):
-        """
-        takes care of posting new dialogues
-        """
-        responseObject = {}
+@LidaApp.route('/<user>/dialogue/<id>/<tag>/<value>',methods=['GET','PUT']) 
+def handle_dialogues_tag(user, id, tag, value):
 
-        stringListOrJsonDict = request.get_json()
+    responseObject = {
+        "status" : "success"
+    }
 
-        if isinstance(stringListOrJsonDict, str):
-            responseObject["error"]  = "JSON parsing failed"
-            responseObject["status"] = "error"
+    if request.method == "POST":
+        dialogueFile.insert_meta_tags(user, id, tag, value)
 
-        elif not stringListOrJsonDict:
-            if fileName:
-                responseObject = self.dialogueFile.add_new_dialogue(user, None, None, fileName)
+    return responseObject
+
+
+@LidaApp.route('/<user>/dialogues_recover',methods=['POST'])
+def handle_recover_request(user):
+
+    responseObject = {}
+
+    dialogueDict = request.get_json()
+
+    responseObject = dialogueFile.recover_copies(user, dialogueDict)
+
+    return responseObject
+
+@LidaApp.route('/<user>/backup',methods=['GET','PUT'])
+def handle_backup_resource(user):
+    """
+    GET - Gets the database collection
+    """
+    responseObject = {}
+
+    if request.method == "GET":
+        backup = user+"_backup"
+        responseObject = DatabaseManagement.getUserEntry(backup)
+
+    if request.method == "PUT":
+        responseObject = DatabaseManagement.updateDatabase(user, True)
+
+    return jsonify(responseObject)
+
+#################################################
+# ADMIN ROUTES
+#################################################
+
+@LidaApp.route('/dialogues_metadata',methods=['GET'])
+@LidaApp.route('/dialogues_metadata/<id>', methods=['PUT'])
+def admin_dialogues_metadata_resource(id=None):
+    """
+    GET - All dialogues metadata
+
+    PUT - Handle
+    """
+    if request.method == "GET":
+        responseObject = annotationFiles.get_dialogues_metadata()
+
+    if request.method == "PUT":
+        error = None
+        data  = request.get_json()
+
+        responseObject = annotationFiles.update_dialogue_name( id, data["id"])
+
+    annotationFiles.save()
+    return jsonify( responseObject )
+
+@LidaApp.route('/dialogues', methods=['GET','POST','DELETE'])
+@LidaApp.route('/dialogues/<id>', methods=['GET','POST','PUT','DELETE'])
+def admin_dialogues_resource(id=None):
+    """
+    GET - All dialogues
+
+    POST - Create a new one, either from data(json, string) or empty
+
+    PUT - change specific dialogue with a dialogue
+    """
+    if id:
+
+        if request.method == "GET":
+
+            if id:
+                responseObject = annotationFiles.get_dialogue(id)
             else:
-                responseObject = self.dialogueFile.add_new_dialogue(user)
+                responseObject = annotationFiles.get_dialogues()
 
-        elif isinstance(stringListOrJsonDict, list):
-            responseObject = self.__add_new_dialogues_from_string_lists(user, fileName, responseObject, dialogueList=stringListOrJsonDict)
+        if request.method == "PUT":
+            data = request.get_json()
+            data = Configuration.validate_dialogue( data )
 
-        elif isinstance(stringListOrJsonDict, dict):
-            responseObject = self.__add_new_dialogues_from_json_dict(user, fileName, responseObject, dialogueDict=stringListOrJsonDict)
+            if isinstance(dialogue, str):
+                currentResponseObject["error"] = data
+                currentResponseObject["status"] = "error"
+                return jsonify( currentResponseObject )
 
-        return responseObject
+            responseObject = annotationFiles.update_dialogue( id=id, newDialogue=data )
 
+        if request.method == "DELETE":
+            responseObject = annotationFiles.delete_dialogue(id=id)
 
+    else:
 
+        if request.method == "GET":
+            responseObject = annotationFiles.get_dialogues()
 
-    def __add_new_dialogues_from_json_dict(self, user, fileName, currentResponseObject, dialogueDict):
-        """
-        Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
-        """
+        if request.method == "POST":
+            responseObject = admin_post_of_new_dialogues()
 
-        if fileName:
-            collectionTag = fileName
+    annotationFiles.save()
+    return jsonify( responseObject )
+
+@LidaApp.route('/dialogues_import', methods=['POST'])
+def handle_dialogues_import():
+
+    responseObject = {}
+
+    dialogues = request.get_json()
+
+    responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=dialogues )
+
+    return jsonify( responseObject )
+
+@LidaApp.route('/errors', methods=['PUT'])
+@LidaApp.route('/errors/<id>', methods=['GET'])
+def handle_errors_resource(id=None):
+    """
+    POST - Returns the annotation style
+    """
+
+    if request.method == "GET":
+
+        responseObject = {
+            "status" : "success",
+        }
+
+        listOfDialogue = annotationFiles.get_all_files( dialogueId = id )
+        errorList = annotatorErrors.get(id)
+
+        if errorList:
+            metaList = annotatorErrorsMeta[id]
+            errorMetaDict = {"errors": errorList, "meta": metaList}
+
         else:
-            collectionTag = ""
+            errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+            annotatorErrors[id] = errorMetaDict["errors"]
+            annotatorErrorsMeta[id] = errorMetaDict["meta"]
 
-        added_dialogues = []
-        overwritten = []
+        for error in errorMetaDict["errors"]:
+            __update_gold_from_error_id(id, error)
 
-        for dialogue_name, dialogue in dialogueDict.items():
+        responseObject.update(errorMetaDict)
+
+
+    elif request.method == "PUT":
+
+        responseObject = {
+            "status" : "success",
+        }
+
+        data = request.get_json()
+
+        meta = data["meta"]
+        error = data["errorObject"]
+        dialogueId = data["dialogueId"]
+        errorId = data["errorId"]
+
+        __update_gold_from_error_id(dialogueId, error)
+
+        annotatorErrors[dialogueId][errorId] = error
+        annotatorErrorsMeta[dialogueId][errorId] = meta
+
+    else:
+
+        responseObject = {
+            "status" : "error",
+            "error"  : "not available"
+        }
+
+    return jsonify( responseObject )
+
+@LidaApp.route('/agreements', methods=['GET'])
+def handle_agreements_resource(self):
+    """
+    GET - Returns the interannotator agreement
+    """
+    if request.method == "GET":
+
+        responseObject = {
+            "status" : "success",
+        }
+        totalTurns = 0
+
+        totalAnnotations = 0
+        errors = 0
+        kappa = 0
+        accuracy = 0
+
+        dialogues = [ x[0] for x in annotationFiles.get_dialogues_metadata() ]
+
+        for name in dialogues:
+
+            listOfDialogue = annotationFiles.get_all_files( dialogueId = name )
+
+            turnsData = InterannotatorMethods.get_turns_data( listOfDialogue )
+
+            for turn in turnsData:
+                totalTurns += 1
+                for annotationName, listOfAnnotations in turn.items():
+
+                    if annotationName=="turn_idx":
+                        continue
+ 
+                    annotationType = Configuration.configDict[annotationName]["label_type"]
+
+                    agreementScoreFunc = agreementScoreConfig[ annotationType ]
+
+                    if agreementScoreFunc:
+                        totalLabels =   len( Configuration.configDict[annotationName]["labels"] )
+                        temp = agreementScoreFunc( listOfAnnotations, totalLabels )
+
+                        errors += temp.get("errors")
+                        totalAnnotations += totalLabels
+                        kappa += temp.get("kappa")
+                        accuracy += temp.get("accuracy")
+
+        responseObject["errors"] = errors
+        responseObject["total"] = totalAnnotations
+        responseObject["kappa"] = kappa / totalTurns
+        responseObject["accuracy"] = accuracy  / totalTurns
+
+    else:
+
+        responseObject = {
+            "status" : "error",
+            "error" : "Something truly frightening is happening on the backend."
+        }
+
+
+    return jsonify( responseObject )
+
+@LidaApp.route('/users', methods=['GET'])
+@LidaApp.route('/users/<user>/<userPass>/<email>', methods=['POST'])
+def handle_users(user=None, userPass=None, email=None): 
+    """
+    GET - all users, POST create a new user
+    """
+    responseObject = {}
+
+    if request.method == "GET":
+
+        responseObject = DatabaseManagement.readDatabase("users","userName")
+
+    if request.method == "POST":
+
+        responseObject = LoginFuncs.create(user,userPass,email)
+
+    return jsonify(responseObject)
+
+#################################################
+# COMMON ROUTES
+#################################################
+
+@LidaApp.route('/dialogues_wipe', methods=['DELETE']) #admin
+@LidaApp.route('/<user>/dialogues_wipe',methods=['DELETE'])
+def handle_wipe_request(user=None):
+
+    responseObject = {}
+
+    if not user:
+        responseObject = annotationFiles.wipe_view()
+    else:
+        responseObject = dialogueFile.clean_workspace(user)
+
+    return responseObject
+
+@LidaApp.route('/collections',methods=['GET'])
+@LidaApp.route('/collections/<id>',methods=['GET','POST'])
+@LidaApp.route('/collections/<id>/<user>',methods=['PUT'])
+def handle_collections(id=None, user=None):
+    if not id:
+
+        if request.method == "GET":
+
+            collectionNames = DatabaseManagement.readDatabase("dialogues","_id")
+
+            response = collectionNames
+
+    if id:
+
+        if id == "ids":
+            if request.method == "GET":
+
+                collectionNames = DatabaseManagement.readDatabase("dialogues","_id",None,"assignedTo")
+
+                response = collectionNames
+
+        if request.method == "PUT":
+
+                response = __update_collection_from_workspace(user, id)
+
+        if request.method == "POST":
+
+            values = request.get_json()
+
+            response = DatabaseManagement.createCollection(id, values["json"])
+
+    return jsonify ( response )
+
+@LidaApp.route('/database/download',methods=['GET'])
+def handle_database_download(id=None):
+    """
+    GET - Gets the database collection
+    """
+    responseObject = {}
+
+    if request.method == "GET":
+        responseObject = DatabaseManagement.downloadDatabase()
+
+    return jsonify(responseObject)
+
+
+@LidaApp.route('/login/<id>/<idPass>',methods=['POST','PUT'])
+def handle_login(id, idPass=None):
+    """
+    Check if user login is permitted
+    """
+    responseObject = {}
+
+    if request.method == "POST":
+        responseObject = LoginFuncs.logIn( id, idPass)
+
+    if request.method == "PUT":
+        responseObject = LoginFuncs.create(id)
+
+    return jsonify(responseObject)
+
+#################################################
+# INDEX FUNCTIONS
+#################################################
+
+
+def __handle_post_of_new_dialogues(user, fileName=None):
+    """
+    takes care of posting new dialogues
+    """
+    responseObject = {}
+
+    stringListOrJsonDict = request.get_json()
+
+    if isinstance(stringListOrJsonDict, str):
+        responseObject["error"]  = "JSON parsing failed"
+        responseObject["status"] = "error"
+
+    elif not stringListOrJsonDict:
+        if fileName:
+            responseObject = dialogueFile.add_new_dialogue(user, None, None, fileName)
+        else:
+            responseObject = dialogueFile.add_new_dialogue(user)
+
+    elif isinstance(stringListOrJsonDict, list):
+        responseObject = __add_new_dialogues_from_string_lists(user, fileName, responseObject, dialogueList=stringListOrJsonDict)
+
+    elif isinstance(stringListOrJsonDict, dict):
+        responseObject = __add_new_dialogues_from_json_dict(user, fileName, responseObject, dialogueDict=stringListOrJsonDict)
+
+    return responseObject
+
+
+def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, dialogueDict):
+    """
+    Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
+    """
+
+    if fileName:
+        collectionTag = fileName
+    else:
+        collectionTag = ""
+
+    added_dialogues = []
+    overwritten = []
+
+    for dialogue_name, dialogue in dialogueDict.items():
+
+        dialogue = Configuration.validate_dialogue(dialogue)
+
+        if isinstance(dialogue, str):
+            currentResponseObject["error"] = dialogue
+            currentResponseObject["status"] = "error"
+            break
+
+        result = dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collectionTag)
+        added_dialogues.append(result["id"])
+        if result["overwritten"] != "": 
+            overwritten.append(result["overwritten"])
+
+    if "error" not in currentResponseObject:
+        currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
+        currentResponseObject["overwritten"] = overwritten
+
+    return currentResponseObject
+
+
+def __add_new_dialogues_from_string_lists(user, fileName, currentResponseObject, dialogueList):
+    """
+    Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
+    through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
+    """
+    if fileName:
+        collectionTag = fileName
+    else:
+        collectionTag = ""
+
+    currentResponseObject["message"] = []
+    currentResponseObject["new_dialogue_id"] = []
+
+    for string_list in dialogueList:
+
+        string_list      = [x for x in string_list.split("\n") if x.strip()]
+        newId = dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
+
+        currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
+        currentResponseObject["new_dialogue_id"].append(newId["id"])
+
+    return currentResponseObject
+
+
+def __update_collection_from_workspace(user, collectionID):
+    """
+    Update a collection from user workspace
+    """
+
+    responseObject = {"error":"Dialogue List is empty"}
+
+    #get user's dialogues
+
+    userDocument = dialogueFile.get_dialogues(user)
+
+    responseObject = {"error":"No collection with that ID"}
+
+    #update collectionID document field in DB
+
+    field = {"document":userDocument}
+
+    DatabaseManagement.updateCollection(collectionID, field)
+
+    responseObject = {"status":"success"}
+
+    return responseObject
+
+
+#######################################################
+#   ADMIN FUNCTIONS
+#######################################################
+
+def admin_post_of_new_dialogues():
+    """
+    takes care of posting new dialogues
+    """
+    responseObject = {}
+
+    dialoguesData = request.get_json()
+
+    stringListOrJsonDict = dialoguesData["payload"]
+
+    optionalFileName = dialoguesData["name"]
+
+    if isinstance(stringListOrJsonDict, str):
+        responseObject["error"]  = "JSON parsing failed"
+        responseObject["status"] = "error"
+
+    elif not stringListOrJsonDict:
+        responseObject = annotationFiles.add_new_dialogue()
+
+    elif isinstance(stringListOrJsonDict, list):
+        responseObject = admin__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
+
+    elif isinstance(stringListOrJsonDict, dict):
+        # print("MADE IT SOFAR 2.0", file=sys.stderr)
+        responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
+
+    return responseObject
+
+def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict, fileName=None):
+    """
+    Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
+    """
+    if not fileName:
+        fileName = ""
+
+    addedDialogues = []
+
+    if dialogueDict:
+
+        for dialogueName, dialogue in dialogueDict.items():
 
             dialogue = Configuration.validate_dialogue(dialogue)
 
@@ -490,45 +719,202 @@ class LidaApp(object):
                 currentResponseObject["status"] = "error"
                 break
 
-            result = self.dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collectionTag)
-            added_dialogues.append(result["id"])
-            if result["overwritten"] != "": 
-                overwritten.append(result["overwritten"])
+            addedDialogues.append(dialogueName)
+
 
         if "error" not in currentResponseObject:
-            currentResponseObject["message"] = "Added new dialogues: " + " ".join(added_dialogues)
-            currentResponseObject["overwritten"] = overwritten
+            annotationFiles.add_dialogue_file(dialogueDict, fileName=fileName)
+            currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
 
         return currentResponseObject
 
+def admin__add_new_dialogues_from_string_lists(currentResponseObject, dialogueList):
+    """
+    Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
+    through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
+    """
+
+    currentResponseObject["message"] = []
+    currentResponseObject["new_dialogue_id"] = []
+
+    for string_list in dialogueList:
+
+        string_list      = [x for x in string_list.split("\n") if x.strip()]
+        DIALOGUES[newId] = run_models_on_dialogue( convert_string_list_into_dialogue(string_list) )
+
+        currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
+        currentResponseObject["new_dialogue_id"].append(newId)
+
+    return currentResponseObject
 
 
+def mock_handle_errors_resource(id=None):
+    with self.app.app_context():
+
+        responseObject = {
+        "status" : "success",
+        }
+
+        listOfDialogue = annotationFiles.get_all_files( dialogueId = id )
+
+        responseObject.update( InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue ) )
+
+        return responseObject
 
 
-    def __add_new_dialogues_from_string_lists(self, user, fileName, currentResponseObject, dialogueList):
+def mock_analyse_interannotator_agreement(dialogueIdCap=None):
+    with self.app.app_context():
+        print(annotationFiles.allFiles.keys())
+
+        report = {}
+        totalCount = 0
+
+        if not dialogueIdCap:
+            dialogueIdCap = 74
+
+        for x in range(dialogueIdCap+1):
+            dialogueId = "Dialogue"+str(x)
+            listOfDialogue = annotationFiles.get_all_files( dialogueId = dialogueId )
+            responseObject = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+            totalCount += len( responseObject["errors"] )
+
+        report["totalCount"] = totalCount
+        return report
+
+def __update_gold_from_error_id(dialogueId, error):
+    """
+    updates GOLD from error
+    """
+    dialogue = annotationFiles.get_dialogue(id=dialogueId)["dialogue"]
+    annotationName = error["name"]
+    turnId = error["turn"]
+    dialogue[turnId][annotationName]= error["predictions"]
+
+    annotationFiles.update_dialogue(id=dialogueId, newDialogue=dialogue)
+    annotationFiles.save()
+
+
+################################
+# STATIC METHODS
+################################
+class InterannotatorMethods:
+
+    @staticmethod
+    def find_errors_in_list_of_dialogue(listOfDialogue):
         """
-        Takes lists of strings, each string corresponding to a dialogue, formats them into a dialogue, runs them
-        through the models and adds them to the dialogue list. Returns a dict of info about dialogues added.
+        finds errors in the list of dialogues
+
+            meta : [
+                {
+                    turn: 1,
+                    name: "hotel_belief_state",
+                    accepted: false,
+                    annotateBy: 5
+                },...
+            errors : [
+                {
+                    usr : "Hi, how do I get to the moon?",
+                    sys : "Call Elon, find 500K and fly.",
+                    turn : 1,
+                    type : "multilabel_classification_string",
+                    name : "hotel_belief_state",
+                    predictions: [
+                        ["hotel-book people",5]
+                    ],
+                },...
         """
-        if fileName:
-            collectionTag = fileName
-        else:
-            collectionTag = ""
+        errorList = []
+        metaList = []
 
-        currentResponseObject["message"] = []
-        currentResponseObject["new_dialogue_id"] = []
+        turnsData = InterannotatorMethods.get_turns_data(listOfDialogue)
 
-        for string_list in dialogueList:
+        # Getting the errors
+        for turnId, turn in enumerate(turnsData):
 
-            string_list      = [x for x in string_list.split("\n") if x.strip()]
-            newId = self.dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
+            for annotationName, listOfAnnotations in turn.items():
+                error = {}
+                error["turn"] = turnId
 
-            currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
-            currentResponseObject["new_dialogue_id"].append(newId["id"])
+                meta = {}
+                meta["turn"] = turnId
+                meta["accepted"] = False
 
-        return currentResponseObject
+                predictions = None
+                agreementFunc = None
 
 
+                if annotationName=="turn_idx":
+                    continue
+
+                #metatags can be ignored
+                if annotationName != "annotation_style" or "description" or "title":
+                    try:
+                        #confront
+                        annotationType = Configuration.configDict[annotationName]["label_type"]
+                        agreementFunc = agreementConfig[ annotationType ]
+                    except:
+                        #in case of mismatched number in turn_id
+                        if annotationName == "turn_id":
+                            continue
+
+                if agreementFunc:
+
+                    temp = agreementFunc( listOfAnnotations )
+                    predictions = temp.get("predictions")
+
+                if predictions: #means there is discrepency
+
+                    error["usr"] = turnsData[turnId]["usr"][0]
+                    error["sys"] = turnsData[turnId]["sys"][0]
+                    error["type"] = annotationType
+                    error["name"] = annotationName
+                    error["predictions"] = predictions
+                    error["counts"] = temp.get("counts")
+
+                    meta["name"] = annotationName
+                    meta["annotateBy"] = len(listOfAnnotations)
+
+                    errorList.append(error)
+                    metaList.append(meta)
+
+        return {"errors": errorList, "meta": metaList}
+
+    @staticmethod
+    def get_turns_data(listOfDialogue):
+        """
+        list of dialogue - turns data
+        """
+        turnsData = []
+        #create per turn data
+        for dialogue in listOfDialogue:
+
+            for turnId,turn in enumerate( dialogue ):
+
+                if len(turnsData)>turnId:
+                    InterannotatorMethods.update_defaultdict_list_with_dict( turnsData[turnId], turn )
+
+                else:
+                    temp = defaultdict(list)
+                    InterannotatorMethods.update_defaultdict_list_with_dict( temp, turn )
+
+                    turnsData.append(temp)
+
+        return turnsData
+
+    @staticmethod
+    def update_defaultdict_list_with_dict(defaultDict, newDict):
+        """
+        appends on the keys
+        """
+        for key, value in newDict.items():
+
+            defaultDict[key].append(value)
+
+########################
+# COMMON STATIC METHODS
+########################
+
+class Models:
     @staticmethod
     def run_models_on_query(query):
         """
@@ -573,52 +959,9 @@ class LidaApp(object):
 
         return newDialogue
 
+##############
+# INIT
+##############
 
-    def handle_login(self, id, idPass=None):
-        """
-        Check if user login is permitted
-        """
-        responseObject = {}
-
-        if request.method == "POST":
-            responseObject = LoginFuncs.logIn(self, id, idPass)
-
-        if request.method == "PUT":
-            responseObject = LoginFuncs.create(self,id)
-
-
-        return jsonify(responseObject)
-
-    def __update_collection_from_workspace(self, user, collectionID):
-        """
-        Update a collection from user workspace
-        """
-
-        responseObject = {"error":"Dialogue List is empty"}
-
-        #get user's dialogues
-
-        userDocument = self.dialogueFile.get_dialogues(user)
-
-        responseObject = {"error":"No collection with that ID"}
-
-        #update collectionID document field in DB
-
-        field = {"document":userDocument}
-
-        self.databaseFuncs.updateCollection(collectionID, field)
-
-        responseObject = {"status":"success"}
-
-        return responseObject
-
-
-##############################################
-# MAIN
-##############################################
-
-if __name__ == '__main__':
-
-    app = LidaApp()
-
-    app.run()
+if __name__ == "__main__":
+    LidaApp.run(host='0.0.0.0')
