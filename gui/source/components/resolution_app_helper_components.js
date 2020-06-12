@@ -358,16 +358,6 @@ Vue.component("string-type-data", {
     template:
     `
     <div class="string-type-data">
-        <div class="string-type">
-            <div class="string-type-name">
-                usr
-            </div>
-
-            <div class="string-type-text">
-                {{usr}}
-            </div>
-
-        </div>
 
         <div class="string-type">
             <div class="string-type-name">
@@ -377,8 +367,18 @@ Vue.component("string-type-data", {
             <div class="user-string-type-text">
                 <comm-input v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
             </div>
-
         </div>
+
+        <div class="string-type">
+            <div class="string-type-name">
+                usr
+            </div>
+            
+            <div class="string-type-text">
+                {{usr}}
+            </div>
+        </div>
+
     </div>
     `
 });
