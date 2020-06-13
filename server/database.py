@@ -85,7 +85,7 @@ class DatabaseManagement(object):
 
 		return entries
 
-	def deleteEntry(id,collection):
+	def deleteEntry(collection, id):
 
 		#delete a database document by id
 

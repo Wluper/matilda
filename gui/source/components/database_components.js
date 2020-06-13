@@ -79,7 +79,7 @@ Vue.component("database-view", {
         },
 
         import_from_database() {
-            //manually synchronize from database, it will delete server dialogue-source for the user
+            //manually synchronize from database, it will wipe server dialogue-source for the user
             this.userName = localStorage["remember"];
             let add = confirm(guiMessages.selected.database.confirmImport);
             if (add == true) {

@@ -70,7 +70,11 @@ async function get_annotation_style_async(id){
 
     var dialogues = {}
 
-    const apiLink = API_LINK+"/"+session_name()+`/dialogue_annotationstyle/${id}`
+    if (id == undefined) {
+        var apiLink = API_LINK+"/dialogue_annotationstyle";
+    } else {
+        var apiLink = API_LINK+"/"+session_name()+`/dialogue_annotationstyle/${id}`
+    }
 
     try {
         var response = await axios.get(apiLink)
@@ -97,7 +101,7 @@ async function get_annotation_style_async(id){
 
 async function write_tag(id,tag,value) {
 
-  const apiLink = API_LINK+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
+  var apiLink = API_LINK+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
 
   try {
 
@@ -115,11 +119,18 @@ async function write_tag(id,tag,value) {
 
 }
 
-async function get_all_dialogue_ids_async() {
+async function get_all_dialogue_ids_async(admin) {
 
   var dialogues = {}
 
-  const apiLink = API_LINK+"/"+session_name()+'/dialogues_metadata'
+  if (admin == undefined) {
+
+    var apiLink = API_LINK+"/"+session_name()+'/dialogues_metadata';
+
+  } else {
+
+    var apiLink = API_LINK+"/dialogues_metadata";
+  }
 
   try {
 
@@ -144,7 +155,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = API_LINK+"/"+session_name()+`/dialogues_metadata/${oldName}`
+    var apiLink = API_LINK+"/"+session_name()+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -167,9 +178,32 @@ async function change_dialogue_name_async(oldName, newName) {
 * DIALOGUES RESOURCE
 ***************************************/
 
-async function get_all_dialogues_async(){
+async function get_all_dialogues_async(admin) {
+
+    // admin workspace
 
     var dialogues = {}
+
+    if (admin != undefined) {
+
+        apiLink = API_LINK+"/dialogues";
+
+        try { 
+            var response = await axios.get( apiLink )
+
+            dialogues = response.data
+            return dialogues 
+
+        } catch(error) {
+
+            console.log(error)
+            return response
+        }
+
+        return dialogues
+    }
+
+    //users workspaces
 
     try {
         var response = await RESTdialogues( "GET", null, {})
@@ -231,7 +265,6 @@ async function post_empty_dialogue(collection) {
 
 async function post_new_dialogues_from_string_lists_async(stringLists) {
 
-
     try {
 
         const response = await RESTdialogues("POST", null, stringLists );
@@ -244,9 +277,7 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
     } catch(error) {
 
         console.log(error);
-
     }
-
 }
 
 
@@ -256,7 +287,7 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
 
     try {
 
-        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString), fileName )
+        const response = await RESTdialogues( "POST", JSON.parse(jsonString), fileName )
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)
@@ -306,9 +337,13 @@ async function del_single_dialogue_async(dialogueId) {
 
 };
 
-async function del_all_dialogues_async() {
+async function del_all_dialogues_async(admin) {
 
-    const apiLink = API_LINK+"/"+session_name()+`/dialogues_wipe`
+    if (admin == undefined) {
+        var apiLink = API_LINK+"/"+session_name()+`/dialogues_wipe`
+    } else {
+        var apiLink = API_LINK+"/dialogues_wipe"
+    }
 
     try {
 
@@ -321,9 +356,7 @@ async function del_all_dialogues_async() {
 
         console.log(error);
         alert(guiMessages.selected.lida.connectionError)
-
-  }
-
+    }
 }
 
 async function recover_dialogues(jsonString) {
@@ -386,7 +419,7 @@ async function get_all_db_entries_ids() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK+"/"+session_name()+'/database'
+  const apiLink = API_LINK+"/database"
 
   try {
 
@@ -467,20 +500,37 @@ async function update_backup(user) {
 
 }
 
-async function del_db_entry_async(entryId) {
+async function del_db_entry_async(entryId, collection) {
 
     console.log("DELETING",entryId);
 
-    var apiLink = API_LINK+`/database/${entryId}`;
+    if (collection == undefined) {
+        var apiLink = API_LINK+`/database/${entryId}`;
 
-    try {
+        try {
 
-        var response = await axios.delete( apiLink, entryId );
-        console.log('---- RESPONSE TO DEL ----', response);
+            var response = await axios.delete( apiLink, entryId );
+            console.log('---- RESPONSE TO DEL ----', response);
 
-    } catch(error) {
+        } catch(error) {
 
-        console.log(error);
+            console.log(error);
+        }
+    
+    } else {
+
+        var apiLink = API_LINK+`/database/${entryId}/${collection}`;
+
+        try {
+
+            var response = await axios.delete( apiLink, entryId, collection );
+            console.log('---- RESPONSE TO DEL ----', response);
+            return response
+
+        } catch(error) {
+
+            console.log(error);
+        }
     }
 }
 
@@ -583,6 +633,10 @@ async function login(loginName,loginPass) {
 
 }
 
+/***************************************
+*  COLLECTIONS RESOURCE
+***************************************/
+
 async function update_collection_from_workspace_async(collection_ID) {
 
     const apiLink = API_LINK+"/collections/"+collection_ID+"/"+session_name()
@@ -650,6 +704,187 @@ async function get_collections_async() {
   }
 }
 
+async function update_collection_async(id, params) {
+
+    const apiLink = API_LINK+`/collections/${id}`
+
+    try {
+        if (typeof(params) != "object") {
+            response = await axios.post(apiLink, {json: JSON.parse(params)})
+        } else {
+            response = await axios.post(apiLink, {json: params})
+        }
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Couldn't connect to server, check that it's running.")
+        response = error 
+    }
+
+    return response
+}
+
+/********************************
+*  ADMIN 
+********************************/
+
+async function get_scores_async(){
+
+    var dialogues = {}
+
+    const apiLink = API_LINK+"/agreements"
+    try {
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+async function get_errors_async(dialogueId){
+
+    var dialogues = {}
+
+    const apiLink = API_LINK+`/errors/${dialogueId}`
+    try {
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+async function put_error_async(error, meta, errorId, dialogueId){
+
+    params = {
+        errorObject : error,
+        meta : meta,
+        errorId : errorId,
+        dialogueId : dialogueId
+    }
+    const apiLink = API_LINK+"/errors"
+    try {
+        var response = await axios.put( apiLink, params );
+
+
+        console.log("=============ERRORS==============")
+        console.log(response)
+        return true
+
+    } catch (error) {
+
+        console.log(error);
+        return false
+    }
+}
+
+async function admin_post_empty_dialogue() {
+
+    const apiLink = API_LINK+"/dialogues";
+
+    try {
+        var response = await axios.post( apiLink, null, null )
+
+        console.log(response)
+
+        return response.data.id
+
+    } catch(error) {
+
+        console.log(error)
+    }
+}
+
+async function import_new_dialogues_from_string_lists_async(stringLists) {
+
+    var apiLink = API_LINK+`/dialogues_import`
+
+    try {
+
+        var response = await axios.post( apiLink, stringLists )
+        console.log('---- RESPONSE TO POST DATA ----', response);
+        return true;
+
+    } catch(error) {
+
+        console.log(error);
+    }
+    return false;
+}
+
+
+async function import_new_dialogue_from_json_string_async(jsonString, fileName=null) {
+
+    fileName = fileName.split(".")[0]
+
+    var apiLink = API_LINK+"/dialogues_import"
+
+    try {
+
+        var response = await axios.post( apiLink, { payload:JSON.parse(jsonString), name:fileName } )
+
+        console.log('RECEIVED RESPONSE TO POST DATA')
+        console.log(response)
+
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+
+    }
+}
+
+async function get_all_users(){
+    
+    const apiLink = API_LINK+"/users"
+
+    var users = {}
+
+    try {
+        var response = await axios.get( apiLink )
+
+        users = response.data
+        return users
+
+    } catch(error) {
+
+        console.log(error);
+    }
+}
+
+async function create_user(user,pass,email){
+    
+    const apiLink = API_LINK+`/users/${user}/${pass}/${email}`;
+
+    var response = {}
+
+    try {
+        var response = await axios.post( apiLink, { user, pass, email } )
+
+        response = response.data
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+    }
+}
+
+
 /********************************
 * Exporting
 ********************************/
@@ -668,6 +903,7 @@ backend =
     del_single_dialogue_async                   : del_single_dialogue_async,
     del_all_dialogues_async                     : del_all_dialogues_async,
     change_dialogue_name_async                  : change_dialogue_name_async,
+    recover_dialogues                           : recover_dialogues,
 
     post_empty_dialogue                         : post_empty_dialogue,
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
@@ -680,12 +916,23 @@ backend =
     get_user_db_entry_async                     : get_user_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
+
     login                                       : login,
-    recover_dialogues                           : recover_dialogues,
+    get_all_users                               : get_all_users,
+    create_user                                 : create_user,
 
     update_collection_from_workspace_async      : update_collection_from_workspace_async,
+    update_collection_async                     : update_collection_async,
     get_collections_ids_async                   : get_collections_ids_async,
     get_collections_async                       : get_collections_async,
+
+    get_scores_async                            : get_scores_async,
+    get_errors_async                            : get_errors_async,
+    put_error_async                             : put_error_async,
+
+    admin_post_empty_dialogue                    : admin_post_empty_dialogue,
+    import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,
+    import_new_dialogue_from_json_string_async   : import_new_dialogue_from_json_string_async
 }
 
 

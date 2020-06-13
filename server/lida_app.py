@@ -212,7 +212,7 @@ def handle_database_resource(id=None, user=None, DBcollection=None):
             responseObject = DatabaseManagement.getUserEntry(id)
 
         if request.method == "DELETE":
-            responseObject.update( DatabaseManagement.deleteEntry(id=id) )
+            responseObject.update( DatabaseManagement.deleteEntry(DBcollection, id ) )
 
     else:
         responseObject = DatabaseManagement.getDatabaseIds()
@@ -329,15 +329,32 @@ def admin_dialogues_resource(id=None):
     return jsonify( responseObject )
 
 @LidaApp.route('/dialogues_import', methods=['POST'])
-def handle_dialogues_import():
-
+def admin_post_of_new_dialogues():
+    """
+    takes care of posting new dialogues
+    """
     responseObject = {}
 
-    dialogues = request.get_json()
+    dialoguesData = request.get_json()
 
-    responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=dialogues )
+    stringListOrJsonDict = dialoguesData["payload"]
 
-    return jsonify( responseObject )
+    optionalFileName = dialoguesData["name"]
+
+    if isinstance(stringListOrJsonDict, str):
+        responseObject["error"]  = "JSON parsing failed"
+        responseObject["status"] = "error"
+
+    elif not stringListOrJsonDict:
+        responseObject = annotationFiles.add_new_dialogue()
+
+    elif isinstance(stringListOrJsonDict, list):
+        responseObject = admin__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
+
+    elif isinstance(stringListOrJsonDict, dict):
+        responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
+
+    return responseObject
 
 @LidaApp.route('/errors', methods=['PUT'])
 @LidaApp.route('/errors/<id>', methods=['GET'])
@@ -670,34 +687,6 @@ def __update_collection_from_workspace(user, collectionID):
 #######################################################
 #   ADMIN FUNCTIONS
 #######################################################
-
-def admin_post_of_new_dialogues():
-    """
-    takes care of posting new dialogues
-    """
-    responseObject = {}
-
-    dialoguesData = request.get_json()
-
-    stringListOrJsonDict = dialoguesData["payload"]
-
-    optionalFileName = dialoguesData["name"]
-
-    if isinstance(stringListOrJsonDict, str):
-        responseObject["error"]  = "JSON parsing failed"
-        responseObject["status"] = "error"
-
-    elif not stringListOrJsonDict:
-        responseObject = annotationFiles.add_new_dialogue()
-
-    elif isinstance(stringListOrJsonDict, list):
-        responseObject = admin__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
-
-    elif isinstance(stringListOrJsonDict, dict):
-        # print("MADE IT SOFAR 2.0", file=sys.stderr)
-        responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
-
-    return responseObject
 
 def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict, fileName=None):
     """

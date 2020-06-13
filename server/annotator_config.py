@@ -63,41 +63,45 @@ class Configuration(object):
         """
         validates the dialogue and makes sure it conforms to the configDict
         """
-        for i, turn in enumerate(dialogue):
+        try:
+            for i, turn in enumerate(dialogue):
 
-            for labelName, info in Configuration.configDict.items():
+                for labelName, info in Configuration.configDict.items():
 
-                try:
-                    turn[labelName]
-                except KeyError:
+                    try:
+                        turn[labelName]
+                    except KeyError:
 
-                    # turn 0 stores meta-tags
-                    if i is 0:
-                        continue
+                        # turn 0 stores meta-tags
+                        if i is 0:
+                            continue
 
-                    if info["required"]:
-                        message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
-                                "config.py file, but is missing from the provided " \
-                                "dialogue in turn {}.".format(labelName, i))
-                        print(message)
-                        return message
-
-                    if info["required"] and not turn[labelName]:
-                        message = ("ERROR2: Required label, \'{}\', does not have a value " \
-                            "provided in the dialogue in turn {}".format(labelName, i))
-                        print(message)
-                        return message
-
-                    if info["required"] and ("multilabel_classification" == info["label_type"]):
-
-                        providedLabels = turn[labelName]
-
-                        if not all(x in info["labels"] for x in providedLabels):
-                            message = "ERROR3: One of the provided labels in the list: " \
-                               "\'{}\' is not in allowed list according to " \
-                               "config.py in turn {}".format(providedLabels, i)
+                        if info["required"]:
+                            message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
+                                    "config.py file, but is missing from the provided " \
+                                    "dialogue in turn {}.".format(labelName, i))
                             print(message)
                             return message
+
+                        if info["required"] and not turn[labelName]:
+                            message = ("ERROR2: Required label, \'{}\', does not have a value " \
+                                "provided in the dialogue in turn {}".format(labelName, i))
+                            print(message)
+                            return message
+
+                        if info["required"] and ("multilabel_classification" == info["label_type"]):
+
+                            providedLabels = turn[labelName]
+
+                            if not all(x in info["labels"] for x in providedLabels):
+                                message = "ERROR3: One of the provided labels in the list: " \
+                                   "\'{}\' is not in allowed list according to " \
+                                   "config.py in turn {}".format(providedLabels, i)
+                                print(message)
+                                return message
+        except:
+            print("dialogue",i,"in list couldn't validate with the current annotation style model")
+            return
 
         return dialogue
 

@@ -53,6 +53,8 @@ guiMessages = {
             importResult: "Import",
             importSuccess: "Success! Dialogues correctly loaded in your list.",
             importSuccessAddendum: "They are available in your dialogue list.",
+            confirmImport: "This will load the selected collection replacing all the current dialogues in the list.",
+            confirmRevision: "This will load the selected collection in the Interannotator conflict resolver list, adding it to the current dialogues",
             collTitle: "Title",
             collDesc: "Description",
             collAnnot: "Annotation Style",
@@ -256,6 +258,7 @@ guiMessages = {
             new: "Importato",
             old: "Precedente",
             confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi nella tua lista.",
+            confirmRevision: "Questa operazione aggiungerà la collezione nella lista di revisione, confrontandola con eventuali collezioni già presenti",
             save: "Save and Update Collection"
         },
         annotation_app: {

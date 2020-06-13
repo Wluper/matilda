@@ -1,5 +1,5 @@
 /************************************
-* All Dialgoues View "aka MAIN LIDA VIEW"
+* All Dialgoues View "aka MAIN ADMIN LIDA VIEW"
 *************************************/
 
 Vue.component("main-admin", {
@@ -77,7 +77,7 @@ Vue.component("main-admin", {
 
     getAllDialogueIdsFromServer() {
 
-      backend.get_all_dialogue_ids_async()
+      backend.get_all_dialogue_ids_async("admin")
           .then( (response) => {
 
               this.allDialogueMetadata = response;
@@ -113,7 +113,7 @@ Vue.component("main-admin", {
 
     create_new_dialogue(event) {
 
-        backend.post_empty_dialogue()
+        backend.admin_post_empty_dialogue()
             .then( (newDialogueId) => {
 
                 this.allDialogueMetadata.push({id: newDialogueId, num_turns: 0});
@@ -137,7 +137,7 @@ Vue.component("main-admin", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                backend.post_new_dialogue_from_json_string_async(text, file.name)
+                backend.import_new_dialogue_from_json_string_async(text, file.name)
                     .then( (response) => {
 
                         if ('error' in response.data) {
@@ -173,7 +173,7 @@ Vue.component("main-admin", {
 
     clean_view() {
         if (confirm(guiMessages.selected.admin.wipeConfirm)) {
-            backend.del_all_dialogues_async()
+            backend.del_all_dialogues_async("admin")
                 .then( (response) => {
                     console.log(response);
                     this.getAllDialogueIdsFromServer();

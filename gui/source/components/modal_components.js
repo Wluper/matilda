@@ -176,22 +176,38 @@ Vue.component('database-entry-modal', {
          },
 
          load_collection(doc) {
-            let del = confirm(guiMessages.selected.collection.confirmImport);
-            if (del == true) {
-               backend.del_all_dialogues_async()
+            //if role is admin loading in admin workspace
+            if (this.role == "admin") {
+               let del = confirm(guiMessages.selected.collection.confirmRevision);
+               if (del == true) {
+                  backend.import_new_dialogue_from_json_string_async(doc, this.entry._id)
+                  .then( (response) => {
+                     console.log("==== INTERANNOTATOR IMPORT  ====");
+                     console.log();
+                     //set global variable with the collection name
+                     //send event in all dialogues
+                     this.showResult = true;
+                     databaseEventBus.$emit( "collection_active", this.entry._id);
+                  })
+               }
+            } else {
+               let del = confirm(guiMessages.selected.collection.confirmImport);
+               if (del == true) {
+                  backend.del_all_dialogues_async()
                   .then( (response) => {
                      console.log(response);
-                     backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                        backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
                         .then( (response) => {
-                           console.log("==== IMPORT SUCCESS ====");
+                           console.log("==== DIALOGUES IMPORT ====");
                            console.log();
                            //set global variable with the collection name
                            //send event in all dialogues
                            this.showResult = true;
                            databaseEventBus.$emit( "collection_active", this.entry._id);
                         });
-                  });
+                  })   
                }
+            }
          },
 
          import_doc(doc, conversion) {
@@ -201,14 +217,14 @@ Vue.component('database-entry-modal', {
                      console.log(response);
                      if (conversion != undefined) {
                         doc = JSON.stringify(JSON.parse(doc));
-                        backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                        backend.import_new_dialogue_from_json_string_async(doc, this.entry._id)
                            .then( (response) => {
                               console.log("==== IMPORT FROM JSON SUCCESS ====");
                               console.log();
                               this.showResult = true;
                         });
                      } else {
-                        backend.post_new_dialogues_from_string_lists_async(doc)
+                        backend.import_new_dialogues_from_string_lists_async(doc)
                            .then( (response) => {
                               console.log("==== IMPORT FROM STRING SUCCESS ====");
                               console.log();
@@ -406,7 +422,7 @@ Vue.component('collection-creation-modal', {
       },
 
       add_from_view() {
-         backend.get_all_dialogues_async()
+         backend.get_all_dialogues_async("admin")
             .then( (response) => {
                 this.formatJSON(response);
          });
@@ -668,7 +684,7 @@ Vue.component('help-database-modal', {
 })
 
 Vue.component('help-collection-modal', {
-  
+
   data() { 
     return {
       guiMessages,
