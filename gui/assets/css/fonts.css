@@ -24,6 +24,10 @@
     src: url('../fonts/Montserrat-Bold.otf');
 }
 
+@font-face {
+    font-family: 'Asap';
+    src: url('../fonts/Asap-Symbol.otf');
+}
 
 
 

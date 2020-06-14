@@ -81,7 +81,7 @@ Vue.component("login-view", {
     `
         <div id="login-view">
             <div class="login_block">
-                <img src="assets/images/lida_favicon.png" class="login_logo">
+                <img src="assets/images/lida_favicon.png" class="login_logo"> <h1> 2.0</h1>
                 <div class="login_form">
                     <input v-if="role != 'admin'" id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
                     <input v-if="role == 'admin'" id="login_input" class="admin_input" type="text" name="login_username" v-bind:value="insertedName" placeholder="admin" value="admin" readonly>

@@ -148,7 +148,7 @@ def handle_turns_resource():
             "status" : "success",
         }
 
-        responseObject.update( LidaApp.run_models_on_query(query) )
+        responseObject.update( Models.run_models_on_query(query) )
 
     else:
 
@@ -652,7 +652,7 @@ def __add_new_dialogues_from_string_lists(user, fileName, currentResponseObject,
     for string_list in dialogueList:
 
         string_list      = [x for x in string_list.split("\n") if x.strip()]
-        newId = dialogueFile.add_new_dialogue( user, LidaApp.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
+        newId = dialogueFile.add_new_dialogue( user, Models.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
 
         currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
         currentResponseObject["new_dialogue_id"].append(newId["id"])
@@ -729,7 +729,7 @@ def admin__add_new_dialogues_from_string_lists(currentResponseObject, dialogueLi
     for string_list in dialogueList:
 
         string_list      = [x for x in string_list.split("\n") if x.strip()]
-        DIALOGUES[newId] = run_models_on_dialogue( convert_string_list_into_dialogue(string_list) )
+        DIALOGUES[newId] = Models.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) )
 
         currentResponseObject["message"].append("Added new dialogue: {}".format(newId))
         currentResponseObject["new_dialogue_id"].append(newId)
@@ -944,7 +944,7 @@ class Models:
 
             userQuery = turn["usr"]
 
-            newDialogue.append( LidaApp.run_models_on_query(userQuery)["turn"] )
+            newDialogue.append( Models.run_models_on_query(userQuery)["turn"] )
 
         return newDialogue
 
