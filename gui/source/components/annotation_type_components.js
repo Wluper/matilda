@@ -528,7 +528,7 @@ Vue.component('classification-global-annotation',{
             } 
             this.dTurns[0]["global_slot"][event.target.id] = event.target.value;
             console.log("Dialogue updated:",this.dTurns);
-            annotationAppEventBus.$emit( "save_dialogue");
+            annotationAppEventBus.$emit("save_dialogue");
             }
         },
 

@@ -18,7 +18,8 @@ Vue.component("annotation-app", {
             allDataSaved: true,
             primaryElementClassName: "primary-turn-input",
             globalSlotNonEmpty: 0,
-            metaTags: []
+            metaTags: [],
+            annotatedTurns: [],
         }
     },
 
@@ -60,7 +61,7 @@ Vue.component("annotation-app", {
         annotationAppEventBus.$on("go_back", this.go_back );
 
         // DIALOGUE TURNS EVENTS
-        annotationAppEventBus.$on( "turn_updated_string", this.turn_update );
+        //annotationAppEventBus.$on( "turn_updated_string", this.turn_update );
         annotationAppEventBus.$on( "update_turn_id", this.id_updated_from_ids_list );
         annotationAppEventBus.$on( "delete_turn", this.remove_turn );
 
@@ -89,7 +90,7 @@ Vue.component("annotation-app", {
             annotationAppEventBus.$off("go_back", this.go_back );
 
             // DIALOGUE TURNS EVENTS
-            annotationAppEventBus.$off( "turn_updated_string", this.turn_update );
+            //annotationAppEventBus.$off( "turn_updated_string", this.turn_update );
             annotationAppEventBus.$off( "update_turn_id", this.id_updated_from_ids_list );
             annotationAppEventBus.$off( "delete_turn", this.remove_turn );
 
@@ -191,11 +192,25 @@ Vue.component("annotation-app", {
             if (this.dCurrentId != 0) {
                 console.log("-----> Updating turn", event)
                 this.allDataSaved = false;
+                //update annotation rate
+                this.update_annotation_rate(event, this.dTurns.length);
+                //update turn
                 utils.update_turn( this.dTurns[this.dCurrentId], event);
                 console.log("-----> Turn Updated", this.dCurrentTurn)
             } else {
                 console.log(guiMessages.selected.annotation_app.noTurn);
             }
+        },
+
+        update_annotation_rate: function(annotations, turnTot) {
+            let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) );
+            console.log(this.dTurns);
+            console.log(oldValue);
+            let increment = Number(utils.annotation_increment(this.dCurrentId, annotations, turnTot, this.annotatedTurns));
+            console.log(increment);
+            console.log(this.annotatedTurns);
+            let newValue = Number(oldValue) + Number(increment);
+            this.dTurns[0]["annotated"] = newValue + "%";
         },
 
         append_new_turn: function(event){
@@ -533,9 +548,11 @@ Vue.component('dialogue-turn',{
             </div>
 
         <div class="user-string-type-text">
-            <comm-textarea v-if="stringType.data.length > 80" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
+            <comm-textarea v-if="stringType.data.length > 80" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
+            <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-textarea>  
-            <comm-input v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)">
+            <comm-input v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly>
+            <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-input>  
         </div>   
 
@@ -553,7 +570,8 @@ Vue.component('dialogue-turn',{
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-blur v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" class="user-string-type-text" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-blur v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" class="user-string-type-text" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> </comm-input>
+                <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </div>
 
         </div>
@@ -596,7 +614,8 @@ Vue.component('annotations',{
                                    v-bind:classification="classification.data"
                                    v-bind:classFormat="classification.params"
                                    v-bind:uniqueName="classification.name"
-                                   v-bind:info="classification.info">
+                                   v-bind:info="classification.info"
+                                   v-bind:turn="currentId">
         </classification-annotation>
         <classification-string-annotation v-if="dialogueNonEmpty"
                                           v-for="classString in classifications_strings"

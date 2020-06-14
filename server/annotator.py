@@ -284,7 +284,12 @@ class DialogueAnnotator(object):
             except:
                 collection = ""
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection})
+            try:
+                annotated = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["annotated"]
+            except:
+                annotated = "0%"
+
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection, "annotated":annotated})
 
         return metadata
 
@@ -372,6 +377,7 @@ class DialogueAnnotator(object):
                 collectionTag = ""
 
         self.insert_meta_tags(user, id, "collection", collectionTag)
+        self.insert_meta_tags(user, id, "annotated", "0%")
 
         self.save( user )
 
@@ -386,8 +392,13 @@ class DialogueAnnotator(object):
         DialogueAnnotator.__SESSION_USER = user
 
         try:
+            #verifiy if meta-tag header exists
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag] = value
+            try:
+                #verify if specific tag already exists
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag]
+            except:
+                self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag] = value
         except:
             self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ].insert(0, { tag:value })
         

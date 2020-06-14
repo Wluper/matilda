@@ -96,12 +96,12 @@ Vue.component("all-dialogues", {
 
                 backend.post_empty_dialogue(collectionValue)
                     .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:collectionValue});
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotated:"0%", collection:collectionValue});
                 });
             } else {
                 backend.post_empty_dialogue()
                     .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, collection:""});
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotated:"0%", collection:""});
                 });
             }
       },
