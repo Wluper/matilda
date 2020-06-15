@@ -78,7 +78,8 @@ guiMessages = {
             close: "Close",
             select: "Select or write text from turn",
             expand: "Click to Expand",
-            noTurn: "No turn selected. Please select one to annotate"
+            noTurn: "No turn selected. Please select one to annotate",
+            rate: "Annotation rate",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -276,7 +277,8 @@ guiMessages = {
             close: "Chiudi",
             select: "Seleziona o scrivi dal turno",
             expand: "Clicca per espandere",
-            noTurn: "Nessun turno selezionato, nessuna modifica effettuata."
+            noTurn: "Nessun turno selezionato, nessuna modifica effettuata.",
+            rate: "Stima annotazione",
         },
         resolution_app: {
             errorId: "Id Conflitto:",

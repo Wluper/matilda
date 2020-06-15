@@ -20,6 +20,7 @@ Vue.component("annotation-app", {
             globalSlotNonEmpty: 0,
             metaTags: [],
             annotatedTurns: [],
+            annotationRate: '0%',
         }
     },
 
@@ -69,6 +70,7 @@ Vue.component("annotation-app", {
         annotationAppEventBus.$on( "update_classification", this.turn_update );
         annotationAppEventBus.$on( "classification_string_updated", this.turn_update );
         annotationAppEventBus.$on( "resume_annotation_tools", this.resume_annotation_tools );
+        annotationAppEventBus.$on( "turn_is_annotated", this.turn_is_annotated );
 
         // INPUT BOX EVENTS
         annotationAppEventBus.$on( "new_turn", this.append_new_turn );
@@ -105,18 +107,19 @@ Vue.component("annotation-app", {
 
         init: function() {
 
-          // Step One :: Download a Single Dialogue
-         backend.get_single_dialogue_async(this.dialogueId)
-              .then( (response) => {
-                  console.log('---- RECEIVED DATA FROM THE SERVER ----')
-                  console.log(response);
-                  this.metaTags = response[0];
-                  console.log('---- END ----')
-                  this.dTurns = response;
-                  //format collection meta-tag
-                  if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined))
+            // Step One :: Download a Single Dialogue
+            backend.get_single_dialogue_async(this.dialogueId)
+                .then( (response) => {
+                    console.log('---- RECEIVED DATA FROM THE SERVER ----')
+                    console.log(response);
+                    this.metaTags = response[0];
+                    console.log('---- END ----')
+                    this.dTurns = response;
+                    //format collection meta-tag
+                    if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined))
                     this.metaTags["collection"] = "";
-              })
+                    this.annotationRate = this.metaTags["annotated"];
+                })
 
           // Step Two :: Get the Annotation Styles
           backend.get_annotation_style_async(this.dialogueId)
@@ -202,11 +205,24 @@ Vue.component("annotation-app", {
             }
         },
 
+        turn_is_annotated: function(event) {
+            console.log("currentID:",this.dCurrentId);
+            console.log("event:",event);
+            console.log(this.annotatedTurns[this.dCurrentId]);
+            if (event != undefined)
+                this.annotatedTurns[event] = true;
+        },
+
         update_annotation_rate: function(annotations, turnTot) {
-            let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) );
-            let increment = Number(utils.annotation_increment(this.dCurrentId, annotations, turnTot, this.annotatedTurns));
-            let newValue = Number(oldValue) + Number(increment);
+            let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) ).toFixed(0);
+            let increment = Number(utils.annotation_increment(this.dCurrentId, annotations, turnTot, this.annotatedTurns)).toFixed(0);
+            let newValue = (Number(oldValue) + Number(increment)).toFixed(0);
+            //small adjustments due to decimals removal and exceptions
+            if (newValue > 98) newValue = 100;
+            else if (newValue < 0) newValue = 0;
+            //updating value
             this.dTurns[0]["annotated"] = newValue + "%";
+            this.annotationRate = newValue + "%";
         },
 
         append_new_turn: function(event){
@@ -276,7 +292,8 @@ Vue.component("annotation-app", {
     <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
         <dialogue-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId">
+                       v-bind:dialogueTitle="dialogueId"
+                       v-bind:annotationRate="annotationRate">
         </dialogue-menu>
 
         <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
@@ -309,7 +326,7 @@ Vue.component("annotation-app", {
 ********************************/
 
 Vue.component('dialogue-menu',{
-    props : ["turn","currentId", "changesSaved", "dialogueTitle","metaTags"],
+    props : ["turn","currentId", "changesSaved", "dialogueTitle","metaTags","annotationRate"],
 
     data () {
       return {
@@ -368,6 +385,10 @@ Vue.component('dialogue-menu',{
                   {{ dialogueTitle }}
             </span>
 
+        </div>
+
+        <div class="annotation-rate">
+            {{guiMessages.selected.annotation_app.rate}} {{annotationRate}}
         </div>
 
         <div class="saved-status">
@@ -454,12 +475,12 @@ Vue.component('dialogue-meta',{
         </div>
 
         <div v-for="content,tag in metaTags" class="meta-tags" v-if="tag != 'global_slot'">
-            <div class="meta-type">
+            <div class="meta-type" :id="'meta_type_'+tag">
                 {{tag}}
             </div>
 
             <div class="meta-value">
-                <comm-input v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
+                <comm-input :id="'meta_value_'+tag" v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
             </div>
 
         </div>
@@ -606,7 +627,8 @@ Vue.component('annotations',{
                                           v-bind:classification_strings="classString.data"
                                           v-bind:uniqueName="classString.name"
                                           v-bind:classes="classString.params"
-                                          v-bind:info="classString.info">
+                                          v-bind:info="classString.info"
+                                          v-bind:currentId="currentId">
         </classification-string-annotation>
 
     </div>

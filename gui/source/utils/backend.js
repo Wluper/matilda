@@ -81,7 +81,7 @@ async function get_annotation_style_async(id){
 
 
         dialogueStyle = response.data
-        console.log("=============ANNOTATION==============")
+        console.log("=============ANNOTATION CLASSES==============")
         console.log(dialogueStyle)
         return dialogueStyle
 
@@ -284,7 +284,7 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
 async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
     
     fileName = fileName.split(".")[0]
-    
+
     try {
 
         const response = await RESTdialogues( "POST", null, JSON.parse(jsonString), fileName );

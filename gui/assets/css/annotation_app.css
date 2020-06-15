@@ -36,7 +36,7 @@
     padding: 10px 24px;
     display: grid;
     grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
-                   [row2-start] ". button-section . title-section . status-section" 5fr [row2-end]
+                   [row2-start] ". button-section . title-section rate-section status-section" 5fr [row2-end]
                    [row3-start] ". . . . . ." 1fr [row3-end]
                    / 0.0fr 0.9fr 0.05fr 1fr 2fr 1fr;
 
@@ -59,6 +59,12 @@
 
 .dialogue-title-span {
 
+}
+
+.annotation-rate {
+    grid-area: rate-section;
+    align-self: center;
+    font-family: CoreSansNR35Light;
 }
 
 .saved-status {

@@ -340,7 +340,7 @@ Vue.component("all-dialogues", {
                   <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
 
                   <div class="dialogue-annotated">
-                    <span>Annotation:{{dat.annotated}}</span>
+                    <span>Annotation: {{dat.annotated}}</span>
                     <div class="annotated-bar">
                         <div class="annotated-fill" v-bind:style="{ width: dat.annotated }"></div>
                     </div>

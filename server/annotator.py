@@ -237,7 +237,7 @@ class DialogueAnnotator(object):
             self.addedDialogues = {}
             self.addedDialogues[newName] = 0
 
-        print("\n * New session created for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
+        print("\n * Session requested for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
 
     def set_file( self, filePath, fileName=None ):
         """
