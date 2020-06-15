@@ -7,6 +7,7 @@ guiMessages = {
         admin: {
             dataItems: "Data Items",
             visited: "Visited",
+            notVisited: "Not visited",
             button_downloadAll:"Download All Data",
             button_interAgreement:"Inter-annotator Agreement", 
             annotators:"Annotators", 
@@ -14,6 +15,7 @@ guiMessages = {
             dropAnywhere: "Drop Files Anywhere to Upload!",
             userButton: "Users Management",
             createButton: "Add",
+            createUserButton: "Add a new user",
             deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
             wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
             button_wipeView:"Clean dialogues view"
@@ -203,6 +205,7 @@ guiMessages = {
         admin: {
             dataItems: "Dialoghi",
             visited: "Visitato",
+            notVisited: "Non visitato",
             button_downloadAll:"Scarica i dati",
             button_interAgreement:"Indice di concordanza", 
             annotators:"Annotatori", 
@@ -210,6 +213,7 @@ guiMessages = {
             dropAnywhere: "Rilascia il file per caricarlo!",
             userButton: "Gestione Utenti",
             createButton: "Crea",
+            createUserButton: "Crea nuovo utente",
             deleteConfirm:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
             wipeConfirm:"Si è sicuri di voler azzerare la lista dei dialoghi? I dialoghi non saranno eliminati dai loro file",
             button_wipeView:"Pulisci la lista"

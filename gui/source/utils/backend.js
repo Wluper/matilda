@@ -282,12 +282,12 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
 
 
 async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
-
+    
     fileName = fileName.split(".")[0]
-
+    
     try {
 
-        const response = await RESTdialogues( "POST", JSON.parse(jsonString), fileName )
+        const response = await RESTdialogues( "POST", null, JSON.parse(jsonString), fileName );
 
         console.log('RECEIVED RESPONSE TO POST DATA')
         console.log(response)

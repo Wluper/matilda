@@ -24,6 +24,7 @@ var mainApp = new Vue({
       restored:'false',
       userName:'',
       role: 'user',
+      activeCollection:'',
     }
   },
 
@@ -50,7 +51,7 @@ var mainApp = new Vue({
 
       //Check if already logged, restore session
       this.check_login_cookie();
-
+      this.check_collection_cookie();
   },
 
   methods: {
@@ -78,6 +79,14 @@ var mainApp = new Vue({
             localStorage.setItem("remember", name);
             localStorage.setItem("password", pass);
         }
+    },
+
+    check_collection_cookie: function() {
+      if (localStorage["collection"] == undefined) {
+        return;
+      } else {
+        this.activeCollection = localStorage["collection"];
+      }
     },
 
     check_login_cookie: function() {
@@ -113,6 +122,7 @@ var mainApp = new Vue({
     set_active_collection: function (event) {
         console.log(event);
         localStorage["collection"] = event;
+        this.activeCollection = localStorage["collection"];
     },
 
     clear_annotation: function (event) {

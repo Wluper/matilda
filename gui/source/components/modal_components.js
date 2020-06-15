@@ -404,6 +404,7 @@ Vue.component('collection-creation-modal', {
          guiMessages,
          update: {},
          userList: [],
+         allUsers: [],
          checkedUsers: [],
          showSelector: false,
          role:''
@@ -411,14 +412,18 @@ Vue.component('collection-creation-modal', {
    },
 
    mounted () {
-      this.init();
+      this.get_all_users();
       this.role = mainApp.role;
    },
 
    methods: {
 
-      init : function(){
-      
+      get_all_users() {
+         backend.get_all_users()
+            .then( (response) => {
+                  console.log();
+                  this.allUsers = response;
+         });
       },
 
       add_from_view() {
@@ -577,11 +582,14 @@ Vue.component('collection-creation-modal', {
                   <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
                   <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
                   <br>
-                  <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.assignedTo" :placeholder="guiMessages.selected.coll_creation[4]">
-                  <br>
                   <strong>Status:</strong>
                   <input class="collection-input" type="text" v-model="entry.status" :placeholder="guiMessages.selected.coll_creation[5]">
+                  <br>
+                  <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
+                  <select class="modal-select" v-model="entry.assignedTo">
+                     <option disabled value="">{{guiMessages.selected.coll_creation[4]}}</option>
+                     <option v-for="user in allUsers" v-bind:value="user._id">{{user._id}}</option>
+                  </select>
                   <br><br>
                   <strong>
                   {{guiMessages.selected.modal_document[0]}}

@@ -144,6 +144,26 @@
   transform: scale(1.1);
 }
 
+.modal-select {
+    font-size: 16px;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    /* line-height: 2em; */
+    width: 100%;
+    font-family: CoreSansNR35Light;
+    color: grey;
+    padding: 1px;
+}
+
+.user-creation {
+  width:100%;
+  margin-bottom:7px !important;
+}
+
 
 
 /* EOF */

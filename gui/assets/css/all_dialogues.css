@@ -104,7 +104,7 @@
 
 .dialogue-list-single-item-container{
     display: grid;
-    grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    grid-template: [row1-start] "info vis" [row1-end] / 21fr 3fr;
     /* background-color: green; */
     /* padding: 10px; */
     border-left: 5px solid #d1d1d3;
@@ -148,7 +148,7 @@
 .dialouge-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id . annotStyle visited numTurns" [row1-end] / 3fr 0fr 4fr 2fr 2fr;
+    grid-template: [row1-start] "id . annotStyle numTurns" [row1-end] / 3fr 0fr 4fr 2fr;
     cursor: pointer;
     background-color: white;
     color: #222;
@@ -168,17 +168,27 @@
 }
 
 .visited-indicator{
-        grid-area: visited;
+    grid-area: vis;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: #10c349;
+    border: 1px solid #19c349;
     font-weight: bold;
     font-family: montserrat;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 1px;
+    padding:4px;
+    margin:13px 13px 10px 0px;
+}
+
+.not-visited {
+    border: 1px solid red;
+    color: red;
+    font-size:9px;
+    margin:10px 10px 10px 0px;  
 }
 
 .dialogue-id {
@@ -205,7 +215,7 @@
     letter-spacing: 1px;
 }
 
-.dialogue-annot_style {
+.dialogue-collection {
     grid-area: annotStyle;
     overflow-x: hidden;
     display: flex;
@@ -213,11 +223,37 @@
     align-items: center;
     text-align: right;
     font-weight: bold;
-    font-family: montserrat;
+    font-family: "montserrat";
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
     color:#aeaeb3;
+}
+
+.dialogue-annotated {
+    grid-area:annotStyle;
+    align-self:center;
+    font-family: "montserrat";
+    font-weight:bold;
+    text-transform: uppercase;
+    font-size:11px;
+    letter-spacing:1px;
+    color:#aeaeb3;
+}
+
+.annotated-bar {
+    background-color: rgba(0,0,0,0.1);
+    width: 100%;
+    display: block;
+    height: 3px;
+    color:grey;
+    font-size:10px;
+}
+
+.annotated-fill {
+    display:block;
+    height:3px;
+    background-color: #259af7ad;
 }
 
 .add-button-container {

@@ -22,8 +22,10 @@ Vue.component("all-dialogues", {
    computed : {
       userName : function(){
             //console.log("computing user name");
-            userName = localStorage["remember"];
-            return userName
+            return localStorage["remember"];
+      },
+      activeColl: function() {
+            return mainApp.activeCollection; 
       }
    },
   created() {
@@ -278,7 +280,7 @@ Vue.component("all-dialogues", {
 
           <div class="all-dialogues-list-title">
               <h2 v-if="!(dragging)" >
-                  {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
+                  <span>{{activeColl}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
               </h2>
 
               <h2 v-else>
@@ -321,33 +323,35 @@ Vue.component("all-dialogues", {
 
             <div class="dialogue-list-single-item-container">
 
-              <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
-                {{ guiMessages.selected.lida.button_delete }}
-              </div>
-
+                <div v-if="dialogue_already_visited(dat.id)"
+                       class="visited-indicator">
+                       {{ guiMessages.selected.admin.visited }}
+                </div>
+                <div v-else
+                       class="visited-indicator not-visited">
+                       {{ guiMessages.selected.admin.notVisited }}
+                </div>
 
               <div class="dialouge-info" v-on:click="clicked_dialogue(index)">
                   <div class="dialogue-id">
                     {{dat.id}}
                   </div>
 
-                  <div v-if="dialogue_already_visited(dat.id)"
-                       class="visited-indicator">
-                       {{ guiMessages.selected.admin.visited }}
-                  </div>
-
                   <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
-                  <div class="dialogue-annot_style" v-if="(dat.collection == '')">No collection</div>
-                  <div class="dialogue-annot_style" v-else-if="(dat.collection == null)">No collection</div>
-                  <div class="dialogue-annot_style" v-else>{{dat.collection}}</div>
-              </div>
 
+                  <div class="dialogue-annotated">
+                    <span>Annotation:{{dat.annotated}}</span>
+                    <div class="annotated-bar">
+                        <div class="annotated-fill" v-bind:style="{ width: dat.annotated }"></div>
+                    </div>
+                  </div>
+              </div>
             </div>
 
         </li>
 
       </ul>
-      
+      <!--
       <ul class="btn-set">
         <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">{{ guiMessages.selected.lida.button_newDialogue }}</button></li>
         <li><button class="add-dialogue-button btn btn-sm" v-on:click="clean_dialogues()">{{ guiMessages.selected.lida.button_wipeDialogues }}</button></li>
@@ -366,6 +370,7 @@ Vue.component("all-dialogues", {
               </label>
         </li>
       </ul>
+      -->
       
 
   

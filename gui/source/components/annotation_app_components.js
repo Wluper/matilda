@@ -167,7 +167,7 @@ Vue.component("annotation-app", {
         change_focus_based_on_current_turn_id : function () {
             // Changes the focus of the current text field to be the first input
             // field in the turn which has the current ID.
-
+            console.log("Changing focus");
             turnInputElements = document.querySelectorAll('.' + this.primaryElementClassName)
 
             for (var i = 0; i < turnInputElements.length; i++) {
@@ -204,11 +204,7 @@ Vue.component("annotation-app", {
 
         update_annotation_rate: function(annotations, turnTot) {
             let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) );
-            console.log(this.dTurns);
-            console.log(oldValue);
             let increment = Number(utils.annotation_increment(this.dCurrentId, annotations, turnTot, this.annotatedTurns));
-            console.log(increment);
-            console.log(this.annotatedTurns);
             let newValue = Number(oldValue) + Number(increment);
             this.dTurns[0]["annotated"] = newValue + "%";
         },
@@ -435,18 +431,6 @@ Vue.component('dialogue-meta',{
         update_id(){
             annotationAppEventBus.$emit("update_turn_id", this.myId)
         },
-    },
-    mounted(){
-        if (this.currentId==this.myId){
-            var elem = this.$el
-            elem.scrollIntoView({ block: "start", behavior: "smooth" });
-        }
-    },
-    updated(){
-        if (this.currentId==this.myId){
-            var elem = this.$el
-            elem.scrollIntoView({ block: "start", behavior: "smooth" });
-        }
     },
 
     directives: {
