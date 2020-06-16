@@ -99,7 +99,7 @@ class DatabaseManagement(object):
 		responseObject = { "status":"success" }
 		return responseObject
 
-	def updateDatabase(username, backup=None):
+	def updateDatabase(username, destination, backup=None):
 
 		#update the database user's document
 
@@ -119,7 +119,7 @@ class DatabaseManagement(object):
 				return responseObject
 
 		#saving
-		DatabaseConfiguration.collection.save({"_id":username,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
+		DatabaseConfiguration.collection.save({"_id":destination,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
 		
 		responseObject = {"status":"success"}
 		return responseObject

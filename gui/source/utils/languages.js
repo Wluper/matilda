@@ -35,6 +35,7 @@ guiMessages = {
             backupPost:"Backup postponed: nothing to save.",
             backupFailed:"Backup failed.",
             backupNext:"Next scheduled in two mintues...",
+            annotated: "Annotated",
         },
         collection: {
             title: "Collections Management",
@@ -234,6 +235,7 @@ guiMessages = {
             backupPost:"Backup postposto: niente da salvare.",
             backupFailed:"Backup fallito.",
             backupNext:"Prossimo tra due minuti...",
+            annotated:"Annotato",
         },
         collection: {
             title: "Gestione Collezioni",

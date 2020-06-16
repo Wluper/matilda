@@ -22,11 +22,10 @@ Vue.component('classification-annotation',{
     computed: {
         correctClassification : function(){
             console.log("Classification Computed");
-            console.log(this.classification);
             if (this.classification.length > 0) {
               //if turn already annotated, send event for annotation rate
               annotationAppEventBus.$emit("turn_is_annotated", this.turn);
-            }
+            } 
             return this.classification
         }
     },
@@ -284,8 +283,6 @@ Vue.component('classification-string-annotation', {
 
               if (this.classification_strings[classStringTuple][0] == labelName) {
                   console.log(this.classification_strings[classStringTuple][0]);
-                  //if turn already annotated send an event for annotation rate
-                  annotationAppEventBus.$emit("turn_is_annotated", this.currentId);
                   return this.classification_strings[classStringTuple][1]
 
               }
@@ -346,7 +343,7 @@ Vue.component('classification-string-annotation', {
           this.$forceUpdate();
 
           outEvent = {name: this.uniqueName, data: this.classification_strings}
-          annotationAppEventBus.$emit('classification_string_updated', outEvent)
+          annotationAppEventBus.$emit('classification_string_updated', outEvent);
 
       },
 

@@ -140,7 +140,6 @@ async function get_all_dialogue_ids_async(admin) {
 
     dialoguesList = response.data
     console.log("=========== ALL DIALOGUE METADATA LIST ===========")
-    console.log(dialoguesList)
     return dialoguesList
 
   } catch(error) {

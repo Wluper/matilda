@@ -189,7 +189,8 @@
     border: 1px solid red;
     color: red;
     font-size:9px;
-    margin:10px 10px 10px 0px;  
+    margin:10px 10px 10px 0px;
+    padding:3px 6px 3px 8px;
 }
 
 .dialogue-id {

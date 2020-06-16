@@ -182,9 +182,10 @@ function update_turn(turn, turnData){
 function annotation_increment(turnNumber, annotations, turnTot, turnList) {
     // if turn is not already annotated return the dialogue relative % increment
     let unitRate = (100 / (turnTot-1)).toFixed(1);
+
     if (annotations.data != undefined) {
         if (annotations.data.length > 0) {
-            if ((turnList[turnNumber] == undefined) || (turnList[turnNumber] == false)) {
+            if ((turnList[turnNumber] == undefined) || (turnList[turnNumber] == false) || (turnList[turnNumber] == "annotated")) {
                 turnList[turnNumber] = true;
                 return unitRate
             } else {

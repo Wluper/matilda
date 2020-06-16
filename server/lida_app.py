@@ -199,7 +199,7 @@ def handle_database_resource(id=None, user=None, DBcollection=None):
 
     if user:
         if request.method == "PUT":
-            responseObject = DatabaseManagement.updateDatabase( user )
+            responseObject = DatabaseManagement.updateDatabase( user, user )
 
         if request.method == "GET":
             responseObject = DatabaseManagement.getDatabaseIds()
@@ -256,7 +256,7 @@ def handle_backup_resource(user):
         responseObject = DatabaseManagement.getUserEntry(backup)
 
     if request.method == "PUT":
-        responseObject = DatabaseManagement.updateDatabase(user, True)
+        responseObject = DatabaseManagement.updateDatabase(user, user, True)
 
     return jsonify(responseObject)
 
@@ -580,6 +580,9 @@ def __handle_post_of_new_dialogues(user, fileName=None):
     takes care of posting new dialogues
     """
     responseObject = {}
+
+    if fileName:
+        dialogueFile.change_collection(user, fileName)
 
     stringListOrJsonDict = request.get_json()
 

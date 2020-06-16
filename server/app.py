@@ -12,8 +12,7 @@ from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 # == Flask ==
 
 # == Local ==
-from lida_app import LidaApp
-from interannotator_app import InterAnnotatorApp
+from lida_app import *
 
 ##############################################
 #  CODE

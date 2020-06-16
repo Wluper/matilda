@@ -16,7 +16,8 @@ Vue.component("all-dialogues", {
          dragging: false,
          showModal: false,
          // Reference to the language item
-         guiMessages
+         guiMessages,
+         collectionRate:'',
       }
    },
    computed : {
@@ -75,12 +76,29 @@ Vue.component("all-dialogues", {
 
                this.allDialogueMetadata = response;
                console.log(response);
+               this.collectionAnnotationRate();
                if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database(mainApp.userName);
                }
                mainApp.restored = "true";
          });
+      },
+
+      collectionAnnotationRate() {
+          let summatory = 0; 
+          total_turns = 0;
+          for (i=0; i < this.allDialogueMetadata.length; i++) {
+              total_turns += Number(this.allDialogueMetadata[i]["num_turns"]-1);
+              summatory += Number(this.allDialogueMetadata[i]["annotated"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
+          }
+          this.collectionRate = Number( summatory / total_turns).toFixed(1);
+          if (this.collectionRate <= 0) {
+            this.collectionRate = 0;
+          } else if (this.collectionRate >= 99) {
+            this.collectionRate = 100;
+          }
+          this.collectionRate = this.collectionRate+"%";
       },
 
       dialogue_already_visited(id) {
@@ -280,7 +298,7 @@ Vue.component("all-dialogues", {
 
           <div class="all-dialogues-list-title">
               <h2 v-if="!(dragging)" >
-                  <span>{{activeColl}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
+                  <span>{{activeColl}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
               </h2>
 
               <h2 v-else>

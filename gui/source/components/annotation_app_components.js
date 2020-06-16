@@ -99,6 +99,7 @@ Vue.component("annotation-app", {
             // ANNOTATION EVENTS
             annotationAppEventBus.$off( "update_classification", this.turn_update );
             annotationAppEventBus.$off( "classification_string_updated", this.turn_update );
+            annotationAppEventBus.$off( "turn_is_annotated", this.turn_is_annotated );
 
             // INPUT BOX EVENTS
             annotationAppEventBus.$off( "new_turn", this.append_new_turn );
@@ -141,7 +142,6 @@ Vue.component("annotation-app", {
         },
 
         change_turn: function(event) {
-
             console.log(" ************ DTURNS ************ ")
             console.log(this.dCurrentId)
             console.log(event)
@@ -193,32 +193,30 @@ Vue.component("annotation-app", {
         turn_update: function(event){
             //turn 0 is meta-tags and global_slot reserved so it's skipped
             if (this.dCurrentId != 0) {
-                console.log("-----> Updating turn", event)
                 this.allDataSaved = false;
-                //update annotation rate
-                this.update_annotation_rate(event, this.dTurns.length);
+                //update annotation rate, slots don't count
+                if (event.turn != undefined)
+                    this.update_annotation_rate(event, this.dTurns.length);
                 //update turn
                 utils.update_turn( this.dTurns[this.dCurrentId], event);
-                console.log("-----> Turn Updated", this.dCurrentTurn)
+                console.log("-----> Turn Updated", this.dCurrentTurn);
+
             } else {
                 console.log(guiMessages.selected.annotation_app.noTurn);
             }
         },
 
         turn_is_annotated: function(event) {
-            console.log("currentID:",this.dCurrentId);
-            console.log("event:",event);
-            console.log(this.annotatedTurns[this.dCurrentId]);
-            if (event != undefined)
-                this.annotatedTurns[event] = true;
+            if (this.annotatedTurns[event] == undefined)
+                this.annotatedTurns[event] = "annotated";
         },
 
         update_annotation_rate: function(annotations, turnTot) {
             let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) ).toFixed(0);
-            let increment = Number(utils.annotation_increment(this.dCurrentId, annotations, turnTot, this.annotatedTurns)).toFixed(0);
+            let increment = Number(utils.annotation_increment(annotations.turn, annotations, turnTot, this.annotatedTurns)).toFixed(0);
             let newValue = (Number(oldValue) + Number(increment)).toFixed(0);
             //small adjustments due to decimals removal and exceptions
-            if (newValue > 98) newValue = 100;
+            if (newValue >= 97) newValue = 100;
             else if (newValue < 0) newValue = 0;
             //updating value
             this.dTurns[0]["annotated"] = newValue + "%";
