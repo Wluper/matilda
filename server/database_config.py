@@ -35,7 +35,6 @@ class DatabaseConfiguration:
 	client = MongoClient(databaseLocation,databasePort)
 	db = client.mymongodb
 
-	collection = db.lida_database
 	users = db.lida_users
 	dialogues = db.lida_dialogues
 

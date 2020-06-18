@@ -5,6 +5,9 @@
 guiMessages = {
     en: {
         admin: {
+            title:"Annotation-Conflicts Resover",
+            titlePanel:"Administration Panel",
+            interAnno:"Interannotator Resolution",
             dataItems: "Data Items",
             visited: "Visited",
             notVisited: "Not visited",
@@ -18,7 +21,8 @@ guiMessages = {
             createUserButton: "Add a new user",
             deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
             wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
-            button_wipeView:"Clean dialogues view"
+            button_wipeView:"Clean dialogues view",
+            annotation:"Annotation",
         },
         lida: {
             button_fileFormatInfo: "File Format Info",
@@ -36,6 +40,8 @@ guiMessages = {
             backupFailed:"Backup failed.",
             backupNext:"Next scheduled in two mintues...",
             annotated: "Annotated",
+            logOut:"logout",
+            confirmLogout: "Do you want to log out?",
         },
         collection: {
             title: "Collections Management",
@@ -157,32 +163,20 @@ guiMessages = {
             "You can assign this dialogues to an user, only them will be able to update it",
             "You can note down here the progress of the annotation work",
         ],
-        modal_databaseInfo:
-        [
-            "Workspace",
-            "For each user LIDA creates a backup of all dialogues they work on.",
-            "This backup is updated on every editing and this way stays synced with the server copy.",
-            "In addition a recurring backup is automatically executed every two minutes and memorized in a second database document",
-        ],
-        modal_databaseButtons:
-        [
-            "this button recovers the session stored in user's backup copy. Dialogues in user's current list will be overwritten with the ones inside the database backup copy.",
-            "this button allows manual update of the backup document in the database. It's the opposite operation of the previous button.",
-        ],
         modal_collectionInfo:
         [
             "Collections",
             "Collections are group of dialogues linked for easy handling and assignment.",
             "To preserve them and avoid mixtures you can work on one collection at a time",
             "This is why loading or importing a collection will wipe your actual dialogue list.",
-            "When an annotator is satisfied with their work is able to send the annotations done and update the collection document.",
-            "memorized in the database. This way the job done will be available for gathering, revision and control.",
+            "When an annotator is satisfied with their work is able to send the annotations and update the collection document.",
+            "stored in the database. Anyway, the editings performed on collections are saved periodically even without pressing that button.",
         ],
         modal_collectionButtons:
         [
             "This button is shown to administrators only and it allows to create a collection from a json file, the dialogues currently present in the inter-annotator dialogue list or the dialogues in the user's workspaces stored in database.",
             "This button imports the selected collection in your LIDA interface to start annotating it",
-            "This button sends your local annotations performed on the collections to the collection document memorized in the database. A control check will verify the correct destination document in the database in order to avoid overwriting a collection with, for example, dialogues you imported from file while working on other projects.",
+            "This button sends your local annotations performed on the collections to the document stored in the database. You may use this before a pause or closing LIDA.",
         ],
         database: {
             title: "Workspaces Management",
@@ -205,6 +199,9 @@ guiMessages = {
     },
     it: {
         admin: {
+            title:"Risoluzione Conflitti di Annotazione",
+            titlePanel:"Pannello di Amministrazione",
+            interAnno:"Interannotator Resolution",
             dataItems: "Dialoghi",
             visited: "Visitato",
             notVisited: "Non visitato",
@@ -218,7 +215,9 @@ guiMessages = {
             createUserButton: "Crea nuovo utente",
             deleteConfirm:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
             wipeConfirm:"Si è sicuri di voler azzerare la lista dei dialoghi? I dialoghi non saranno eliminati dai loro file",
-            button_wipeView:"Pulisci la lista"
+            button_wipeView:"Pulisci la lista",
+            supervision:"Supervisione",
+            annotation:"Annotazione",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -236,6 +235,8 @@ guiMessages = {
             backupFailed:"Backup fallito.",
             backupNext:"Prossimo tra due minuti...",
             annotated:"Annotato",
+            logOut:"logout",
+            confirmLogout:"Vuoi eseguire il logout?",
         },
         collection: {
             title: "Gestione Collezioni",
@@ -356,26 +357,14 @@ guiMessages = {
             "Puoi assegnare la collezione ad un utente, solo lui potrà modificarla e annotarla",
             "Puoi scrivere qui i progressi nel lavoro di annotazione",
         ],
-        modal_databaseInfo:
-        [
-            "Workspace",
-            "Per ogni utente che utilizza LIDA viene creato un backup dei dialoghi su cui sta lavorando nel database.",
-            "Questo backup viene aggiornato ad ogni modifica sui dialoghi, rimanendo quindi sincronizzato con il server.",
-            "In aggiunta un backup periodico è effettuato ogni due minuti e memorizzato in un secondo documento.",
-        ],
-        modal_databaseButtons:
-        [
-            "Questo pulsante ripristina la sessione dal backup del database. I dialoghi attualmente visualizzati nell'interfaccia di LIDA verranno sovrascritti con quelli all'interno del database.",
-            "Questo pulsante permette l'aggiornamento manuale del backup nel database.",
-        ],
         modal_collectionInfo:
         [
             "Collezioni",
-            "Le collezioni sono gruppi di dialoghi uniti per essere facilmente gestiti e assegnati",
+            "Le collezioni sono gruppi di dialoghi uniti per essere facilmente gestiti e assegnati.",
             "Per evitare commistioni o sovrascritture è possibile lavorare su una sola collezione per volta.",
             "Importare o caricare una collezione di dialoghi cancellerà quindi tutti i dialoghi presenti nella lista dell'utente.",
-            "Quando un annotatore è soddisfatto del proprio lavoro su una collezione può salvare le sue annotazioni direttamente",
-            "sulla collezione memorizzata nel database. In questo modo sarà anche disponibile per il controllo e la revisione da parte di altri.",
+            "Quando un annotatore è soddisfatto del proprio lavoro o deve fare una pausa può salvare manualmente le sue annotazioni",
+            "sulla collezione memorizzata nel database, che viene comunque aggiornata anche automaticamente.",
         ],
         modal_collectionButtons:
         [

@@ -295,11 +295,11 @@ class DialogueAnnotator(object):
                 collection = ""
 
             try:
-                annotated = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["annotated"]
+                status = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["status"]
             except:
-                annotated = "0%"
+                status = "0%"
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection, "annotated":annotated})
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection, "status":status})
 
         return metadata
 
@@ -378,7 +378,7 @@ class DialogueAnnotator(object):
                 collectionTag = ""
 
         self.insert_meta_tags(user, id, "collection", collectionTag)
-        self.insert_meta_tags(user, id, "annotated", "0%")
+        self.insert_meta_tags(user, id, "status", "0%")
 
         self.save( user )
 

@@ -2,6 +2,13 @@
 * FILE NAME FUNCTIONS
 ********************************/
 
+url = window.location.href;
+if (url.split("/").pop() != "admin.html") {
+    var API_BASE = url;
+} else {
+    var API_BASE = url.split("/").splice(0,-1);
+}
+
 function session_name() {
     username = "user_1";
     if (localStorage["remember"] != undefined) {
@@ -17,7 +24,7 @@ async function put_name(name){
 
     var dialogues = {}
 
-    const apiLink = API_LINK+"/"+name+'/name'
+    const apiLink = API_BASE+"/"+name+'/name'
     try {
         var response = await axios.put( apiLink, {name : name} )
         return true;
@@ -42,7 +49,7 @@ async function annotate_query(query){
 
     var dialogues = {}
 
-    const apiLink = API_LINK+'/turns'
+    const apiLink = API_BASE+'/turns'
     try {
         var response = await axios.post( apiLink, { query: query}  );
         console.log(response.data)
@@ -71,9 +78,9 @@ async function get_annotation_style_async(id){
     var dialogues = {}
 
     if (id == undefined) {
-        var apiLink = API_LINK+"/dialogue_annotationstyle";
+        var apiLink = API_BASE+"/dialogue_annotationstyle";
     } else {
-        var apiLink = API_LINK+"/"+session_name()+`/dialogue_annotationstyle/${id}`
+        var apiLink = API_BASE+"/"+session_name()+`/dialogue_annotationstyle/${id}`
     }
 
     try {
@@ -101,7 +108,7 @@ async function get_annotation_style_async(id){
 
 async function write_tag(id,tag,value) {
 
-  var apiLink = API_LINK+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
+  var apiLink = API_BASE+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
 
   try {
 
@@ -125,11 +132,11 @@ async function get_all_dialogue_ids_async(admin) {
 
   if (admin == undefined) {
 
-    var apiLink = API_LINK+"/"+session_name()+'/dialogues_metadata';
+    var apiLink = API_BASE+"/"+session_name()+'/dialogues_metadata';
 
   } else {
 
-    var apiLink = API_LINK+"/dialogues_metadata";
+    var apiLink = API_BASE+"/dialogues_metadata";
   }
 
   try {
@@ -154,7 +161,7 @@ async function get_all_dialogue_ids_async(admin) {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    var apiLink = API_LINK+"/"+session_name()+`/dialogues_metadata/${oldName}`
+    var apiLink = API_BASE+"/"+session_name()+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -185,7 +192,7 @@ async function get_all_dialogues_async(admin) {
 
     if (admin != undefined) {
 
-        apiLink = API_LINK+"/dialogues";
+        apiLink = API_BASE+"/dialogues";
 
         try { 
             var response = await axios.get( apiLink )
@@ -339,9 +346,9 @@ async function del_single_dialogue_async(dialogueId) {
 async function del_all_dialogues_async(admin) {
 
     if (admin == undefined) {
-        var apiLink = API_LINK+"/"+session_name()+`/dialogues_wipe`
+        var apiLink = API_BASE+"/"+session_name()+`/dialogues_wipe`
     } else {
-        var apiLink = API_LINK+"/dialogues_wipe"
+        var apiLink = API_BASE+"/dialogues_wipe"
     }
 
     try {
@@ -358,13 +365,13 @@ async function del_all_dialogues_async(admin) {
     }
 }
 
-async function recover_dialogues(jsonString) {
+async function recover_dialogues(collection) {
 
-const apiLink = API_LINK+"/"+session_name()+`/dialogues_recover`
+const apiLink = API_BASE+"/"+session_name()+`/dialogues_recover/${collection}`
 
     try {
 
-        var response = await axios.post(apiLink, JSON.parse(jsonString))
+        var response = await axios.get(apiLink, collection)
 
         console.log("=========== RECOVERY DONE ===========")
         return response
@@ -388,9 +395,9 @@ async function RESTdialogues(method, id, params, fileName){
     console.log("COLLECTION "+fileName)
 
     //
-    if (fileName != undefined) { var apiLink = API_LINK+"/"+session_name()+`/dialogues/collection/${fileName}` }
-    else if (id==null) { var apiLink = API_LINK+"/"+session_name()+`/dialogues` }
-    else { var apiLink = API_LINK+"/"+session_name()+`/dialogues/${id}` }
+    if (fileName != undefined) { var apiLink = API_BASE+"/"+session_name()+`/dialogues/collection/${fileName}` }
+    else if (id==null) { var apiLink = API_BASE+"/"+session_name()+`/dialogues` }
+    else { var apiLink = API_BASE+"/"+session_name()+`/dialogues/${id}` }
 
     //
     if (method=="DELETE") {
@@ -418,7 +425,7 @@ async function get_all_db_entries_ids() {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK+"/database"
+  const apiLink = API_BASE+"/database"
 
   try {
 
@@ -440,15 +447,15 @@ async function get_all_db_entries_ids() {
 
 }
 
-async function update_db(user) {
-
-  if (user == undefined) {
-    user = session_name()
-  }
+async function update_db(annotationRate, backup) {
 
   var entries_ids = {}
 
-  const apiLink = API_LINK+"/"+user+'/database'
+  if (backup == true) {
+    var apiLink = API_BASE+"/"+session_name()+`/backup/${annotationRate}`
+  } else {
+    var apiLink = API_BASE+"/"+session_name()+`/database/${annotationRate}`
+  }
 
   try {
 
@@ -470,41 +477,12 @@ async function update_db(user) {
 
 }
 
-async function update_backup(user) {
-
-  if (user == undefined) {
-    user = session_name()
-  }
-
-  var entries_ids = {}
-
-  const apiLink = API_LINK+"/"+user+'/backup'
-
-  try {
-
-    var response = await axios.put(apiLink)
-
-    console.log(response)
-
-    entriesList = response.data
-    console.log(entriesList)
-    return entriesList
-
-  } catch(error) {
-
-    console.log(error);
-    alert(guiMessages.selected.lida.connectionError)
-
-  }
-
-}
-
 async function del_db_entry_async(entryId, collection) {
 
     console.log("DELETING",entryId);
 
     if (collection == undefined) {
-        var apiLink = API_LINK+`/database/${entryId}`;
+        var apiLink = API_BASE+`/database/${entryId}`;
 
         try {
 
@@ -518,7 +496,7 @@ async function del_db_entry_async(entryId, collection) {
     
     } else {
 
-        var apiLink = API_LINK+`/database/${entryId}/${collection}`;
+        var apiLink = API_BASE+`/database/${entryId}/${collection}`;
 
         try {
 
@@ -533,43 +511,11 @@ async function del_db_entry_async(entryId, collection) {
     }
 }
 
-async function get_user_db_entry_async(entryId, collection) {
-
-    //get user's dialogues saved in database from previous session
-
-    console.log("GETTING USER",entryId, "database document");
-
-    var apiLink = API_LINK+`/database/${entryId}/${collection}`;
-
-    try {
-
-        var response = await axios.post( apiLink, entryId );
-        console.log('---- DATABASE SESSION DIALOGUES ----', response.data);
-
-        //adds dialogues from database if response not empty
-        let dialogues = JSON.stringify(response.data)
-        if (( dialogues != "{}" ) || ( dialogues != "[]")) {
-            dialogues_to_add = response.data
-            console.log(response)
-            post_new_dialogues_from_string_lists_async(dialogues_to_add)
-                .then((response) => {
-                    allDialoguesEventBus.$emit("refresh_dialogue_list");   
-            })
-        } else {
-            return "Server Response: Database Backup empty"
-        }
-
-    } catch(error) {
-
-        console.log(error);
-    }
-}
-
 async function get_db_entry_async(entryId,DBcollection) {
 
     console.log("GETTING ID:",entryId, "in collection",DBcollection);
 
-    var apiLink = API_LINK+`/database/${entryId}/${DBcollection}`;
+    var apiLink = API_BASE+`/database/${entryId}/${DBcollection}`;
 
     try {
 
@@ -588,7 +534,7 @@ async function get_all_entries_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK+'/database/download'
+  const apiLink = API_BASE+'/database/download'
 
   try {
 
@@ -612,7 +558,7 @@ async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_LINK+`/login/${loginName}/${loginPass}`;
+  const apiLink = API_BASE+`/login/${loginName}/${loginPass}`;
 
   try {
 
@@ -636,30 +582,11 @@ async function login(loginName,loginPass) {
 *  COLLECTIONS RESOURCE
 ***************************************/
 
-async function update_collection_from_workspace_async(collection_ID) {
-
-    const apiLink = API_LINK+"/collections/"+collection_ID+"/"+session_name()
-
-  try {
-
-    var response = await axios.put(apiLink)
-
-    return response
-
-  } catch(error) {
-
-    console.log(error);
-    alert(guiMessages.selected.lida.connectionError)
-
-  }
-
-}
-
 async function get_collections_ids_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK+`/collections/ids`
+  const apiLink = API_BASE+`/collections/ids`
 
   try {
 
@@ -683,7 +610,7 @@ async function get_collections_async() {
 
   entriesList = []
 
-  const apiLink = API_LINK+`/collections`
+  const apiLink = API_BASE+`/collections`
 
   try {
 
@@ -703,21 +630,21 @@ async function get_collections_async() {
   }
 }
 
-async function update_collection_async(id, params) {
+async function update_collection_async(id, params, doc) {
 
-    const apiLink = API_LINK+`/collections/${id}`
+    doc = JSON.parse("{"+doc+"}");
+    params.document = doc
+
+    const apiLink = API_BASE+`/collections/${id}`
 
     try {
-        if (typeof(params) != "object") {
-            response = await axios.post(apiLink, {json: JSON.parse(params)})
-        } else {
-            response = await axios.post(apiLink, {json: params})
-        }
+
+        response = await axios.post(apiLink, {json: params})
 
     } catch(error) {
 
         console.log(error);
-        alert("Couldn't connect to server, check that it's running.")
+        alert("Error. This could be caused by a server error or a wrong character in your collection file")
         response = error 
     }
 
@@ -732,7 +659,7 @@ async function get_scores_async(){
 
     var dialogues = {}
 
-    const apiLink = API_LINK+"/agreements"
+    const apiLink = API_BASE+"/agreements"
     try {
         var response = await axios.get( apiLink );
 
@@ -751,7 +678,7 @@ async function get_errors_async(dialogueId){
 
     var dialogues = {}
 
-    const apiLink = API_LINK+`/errors/${dialogueId}`
+    const apiLink = API_BASE+`/errors/${dialogueId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -774,7 +701,7 @@ async function put_error_async(error, meta, errorId, dialogueId){
         errorId : errorId,
         dialogueId : dialogueId
     }
-    const apiLink = API_LINK+"/errors"
+    const apiLink = API_BASE+"/errors"
     try {
         var response = await axios.put( apiLink, params );
 
@@ -792,7 +719,7 @@ async function put_error_async(error, meta, errorId, dialogueId){
 
 async function admin_post_empty_dialogue() {
 
-    const apiLink = API_LINK+"/dialogues";
+    const apiLink = API_BASE+"/dialogues";
 
     try {
         var response = await axios.post( apiLink, null, null )
@@ -809,7 +736,7 @@ async function admin_post_empty_dialogue() {
 
 async function import_new_dialogues_from_string_lists_async(stringLists) {
 
-    var apiLink = API_LINK+`/dialogues_import`
+    var apiLink = API_BASE+`/dialogues_import`
 
     try {
 
@@ -829,7 +756,7 @@ async function import_new_dialogue_from_json_string_async(jsonString, fileName=n
 
     fileName = fileName.split(".")[0]
 
-    var apiLink = API_LINK+"/dialogues_import"
+    var apiLink = API_BASE+"/dialogues_import"
 
     try {
 
@@ -849,7 +776,7 @@ async function import_new_dialogue_from_json_string_async(jsonString, fileName=n
 
 async function get_all_users(){
     
-    const apiLink = API_LINK+"/users"
+    const apiLink = API_BASE+"/users"
 
     var users = {}
 
@@ -865,14 +792,14 @@ async function get_all_users(){
     }
 }
 
-async function create_user(user,pass,email){
+async function create_user(user,pass,role,email){
     
-    const apiLink = API_LINK+`/users/${user}/${pass}/${email}`;
+    const apiLink = API_BASE+`/create_users`;
 
     var response = {}
 
     try {
-        var response = await axios.post( apiLink, { user, pass, email } )
+        var response = await axios.post( apiLink, { "user":user,"pass":pass, "role":role, "email":email } )
 
         response = response.data
         return response
@@ -909,10 +836,8 @@ backend =
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
 
     get_all_db_entries_ids                      : get_all_db_entries_ids,
-    update_backup                               : update_backup,
     update_db                                   : update_db,
     get_db_entry_async                          : get_db_entry_async,
-    get_user_db_entry_async                     : get_user_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
     get_all_entries_async                       : get_all_entries_async,
 
@@ -920,7 +845,6 @@ backend =
     get_all_users                               : get_all_users,
     create_user                                 : create_user,
 
-    update_collection_from_workspace_async      : update_collection_from_workspace_async,
     update_collection_async                     : update_collection_async,
     get_collections_ids_async                   : get_collections_ids_async,
     get_collections_async                       : get_collections_async,

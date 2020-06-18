@@ -25,6 +25,7 @@ var mainApp = new Vue({
       userName:'',
       role: 'user',
       activeCollection:'',
+      collectionRate:'',
     }
   },
 
@@ -44,7 +45,6 @@ var mainApp = new Vue({
       allDialoguesEventBus.$on( "update_username", this.update_username )
 
       //Database View Event Bus
-      databaseEventBus.$on( "database_selected", this.load_database_view )
       databaseEventBus.$on( "document_selected", this.load_document_view )
       databaseEventBus.$on( "collections_selected", this.load_collections_view )
       databaseEventBus.$on( "collection_active", this.set_active_collection )
@@ -172,11 +172,6 @@ var mainApp = new Vue({
         this.splittingTextSourceFile = event.name;
     },
 
-    load_database_view: function (event) {
-        console.log('---- DATABASE VIEW ----');
-        this.status = 'database-view';
-    },
-
     load_document_view: function (event) {
         this.displayingDocument = event;
     },
@@ -192,7 +187,7 @@ var mainApp = new Vue({
         */
         console.log("======= CYCLIC BACKUP ======")
         if (!document.hidden) {
-            backend.update_backup()
+            backend.update_db(mainApp.collectionRate, true)
             .then( (response) => {
                 if (response.status == "success") {
                     console.log(utils.create_date(),guiMessages.selected.lida.backupDone);
@@ -224,14 +219,13 @@ var mainApp = new Vue({
                    v-bind:sourceFname="splittingTextSourceFile">
     </text-splitter>
 
-    <database-view v-else-if="status === 'database-view'">
-    </database-view>
-
     <collection-view v-else-if="status === 'collection-view'">
     </collection-view>
 
     <all-dialogues v-else
-                   v-bind:alreadyVisited="alreadyVisited">
+                   v-bind:alreadyVisited="alreadyVisited"
+                   v-bind:activeCollection="activeCollection"
+                   v-bind:userName="userName">
     </all-dialogues>
   `
 

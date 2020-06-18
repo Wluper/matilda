@@ -7,7 +7,7 @@
 Vue.component("all-dialogues", {
 
    props: [
-      "alreadyVisited"
+      "alreadyVisited", "userName", "activeCollection"
    ],
 
    data () {
@@ -18,15 +18,6 @@ Vue.component("all-dialogues", {
          // Reference to the language item
          guiMessages,
          collectionRate:'',
-      }
-   },
-   computed : {
-      userName : function(){
-            //console.log("computing user name");
-            return localStorage["remember"];
-      },
-      activeColl: function() {
-            return mainApp.activeCollection; 
       }
    },
   created() {
@@ -79,7 +70,7 @@ Vue.component("all-dialogues", {
                this.collectionAnnotationRate();
                if ((mainApp.restored == "false") && (response.length == 0)) {
                   //if new session then recover from database
-                  this.restore_session_from_database(mainApp.userName);
+                  this.restore_session_from_database();
                }
                mainApp.restored = "true";
          });
@@ -90,7 +81,7 @@ Vue.component("all-dialogues", {
           total_turns = 0;
           for (i=0; i < this.allDialogueMetadata.length; i++) {
               total_turns += Number(this.allDialogueMetadata[i]["num_turns"]-1);
-              summatory += Number(this.allDialogueMetadata[i]["annotated"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
+              summatory += Number(this.allDialogueMetadata[i]["status"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
           }
           this.collectionRate = Number( summatory / total_turns).toFixed(1);
           if (this.collectionRate <= 0) {
@@ -99,6 +90,7 @@ Vue.component("all-dialogues", {
             this.collectionRate = 100;
           }
           this.collectionRate = this.collectionRate+"%";
+          mainApp.collectionRate = this.collectionRate;
       },
 
       dialogue_already_visited(id) {
@@ -116,12 +108,12 @@ Vue.component("all-dialogues", {
 
                 backend.post_empty_dialogue(collectionValue)
                     .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotated:"0%", collection:collectionValue});
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, status:"0%", collection:collectionValue});
                 });
             } else {
                 backend.post_empty_dialogue()
                     .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, annotated:"0%", collection:""});
+                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, status:"0%", collection:""});
                 });
             }
       },
@@ -137,7 +129,7 @@ Vue.component("all-dialogues", {
             backend.del_single_dialogue_async(nameToDelete)
                .then( () => {
                     allDialoguesEventBus.$emit("refresh_dialogue_list");
-                    backend.update_db();
+                    backend.update_db(mainApp.collectionRate, false);
                });
 
             allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
@@ -192,14 +184,6 @@ Vue.component("all-dialogues", {
         }
     },
 
-      log_out() {
-         let ask = confirm("Do you want to log out?");
-         if (ask == true) {
-            localStorage.removeItem("remember");
-            location.reload();
-         }
-      },
-
       handle_file_name_change : function(event){
          console.log('---- CHANGING FILE NAME ----');
          console.log(event);
@@ -219,11 +203,16 @@ Vue.component("all-dialogues", {
          })
     },
 
-      restore_session_from_database: function (fileName) {
+      restore_session_from_database: function () {
          console.log("Ready to restore from database");
          const mainContainer = document.getElementById("mainContainer");
          mainContainer.style.cursor = "progress";
-         backend.get_user_db_entry_async(fileName, "database")
+         if (this.activeCollection != undefined) {
+            var collection = this.activeCollection;
+         } else {
+            var collection = this.userName
+         }
+         backend.recover_dialogues(collection)
             .then( (response) => {
                console.log(response);
                allDialoguesEventBus.$emit("refresh_dialogue_list");
@@ -298,7 +287,7 @@ Vue.component("all-dialogues", {
 
           <div class="all-dialogues-list-title">
               <h2 v-if="!(dragging)" >
-                  <span>{{activeColl}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
+                  <span>{{activeCollection}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
               </h2>
 
               <h2 v-else>
@@ -306,24 +295,12 @@ Vue.component("all-dialogues", {
               </h2>
           </div>
 
-          <div class="file-name-container">
-            <div class="inner">
-              <span> LOGGED: </span>
-              <input readonly id="fileNameInput"
-                    type="text"
-                    v-bind:value="userName" 
-                    @click="log_out()">
-              </input>
-              <span> .json </span>
-            </div>
-          </div>
+          <user-bar v-bind:userName="userName"></user-bar>
 
           <div class="help-button-container">
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
               <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
               <button class="help-button btn btn-sm" @click="clicked_collections_button()">{{guiMessages.selected.lida.buttonCollections}}</button> 
-              <button class="help-button btn btn-sm" @click="clicked_database_button()">Workspaces</button>
-              
           </div>
       </div>
 
@@ -358,9 +335,9 @@ Vue.component("all-dialogues", {
                   <div class="dialogue-num-turns" >{{dat.num_turns-1}} {{ guiMessages.selected.lida.turns }}</div>
 
                   <div class="dialogue-annotated">
-                    <span>Annotation: {{dat.annotated}}</span>
+                    <span>Annotation: {{dat.status}}</span>
                     <div class="annotated-bar">
-                        <div class="annotated-fill" v-bind:style="{ width: dat.annotated }"></div>
+                        <div class="annotated-fill" v-bind:style="{ width: dat.status }"></div>
                     </div>
                   </div>
               </div>

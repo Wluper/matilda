@@ -40,42 +40,22 @@ Vue.component("login-view", {
         },
         check_credentials() {
             console.log('---- CHECKING USERNAME ----');
-            if (this.check_if_first_start(this.insertedName, this.insertedPass)) {
-                console.log("Default combination")
-                if (this.role != "admin") {
-                    allDialoguesEventBus.$emit("update_username", "admin", this.insertedPass);
-                } else { 
-                    annotationAppEventBus.$emit("go_back");
-                }
-                return;
-            }
             backend.login(this.insertedName,this.insertedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username and password is valid");
                         if (this.role != "admin")
                             allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
-                        else
+                        else {
+                            //no file name update needed in admin panel
                             annotationAppEventBus.$emit("go_back");
+                        }
                     } else {
                         alert(guiMessages.selected.login.fail)
                     }
                 }
             );
         },
-        check_if_first_start(name,pass) {
-            if ((this.role == "admin") && (DEFAULT_ADMIN_PASSWORD != undefined)) {
-                if (DEFAULT_ADMIN_PASSWORD == pass)
-                    return true;
-
-            } else if (DEFAULT_USER_COMBINATION.active == true) {
-                if ((name == DEFAULT_USER_COMBINATION.username) && (pass == DEFAULT_USER_COMBINATION.password))
-                    return true
-                
-            } else {
-                return false
-            }
-        }
     },
     template:
     `
@@ -91,4 +71,48 @@ Vue.component("login-view", {
             </div>
         </div>
     `
+});
+
+Vue.component("user-bar", {
+
+  props: [
+      "userName",
+  ],
+
+  data () {
+      return {
+          //Reference to the language data
+          guiMessages
+      }
+  },
+
+  mounted () {
+     //
+  },
+
+  methods: {
+
+    log_out() {
+        let ask = confirm("guiMessages.lida.confirmLogout");
+        if (ask == true) {
+            localStorage.removeItem("remember");
+            location.reload();
+         }
+    },
+  },
+  template:
+  `
+      <div class="file-name-container">
+              <div class="inner">
+                <span> LOGGED: </span>
+                <input readonly id="fileNameInput"
+                      type="text"
+                      v-bind:value="userName" 
+                      @click="log_out()">
+                </input>
+                <button class="help-button btn btn-tn" @click="log_out()">{{ guiMessages.selected.lida.logOut }}</button>
+              </div>
+        </div>
+  `
+
 });

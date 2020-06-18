@@ -34,7 +34,7 @@ class DatabaseManagement(object):
 
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 	
-	def readDatabase(coll,attribute,string=None, field=None):
+	def readDatabase(coll,attribute,string=None, fields=None):
 		# if field parameter is provided the search will be a projection of the id
 		# and the requested field only.
 		# if string is provided the search will be restricted to the req string
@@ -44,17 +44,24 @@ class DatabaseManagement(object):
 		print(" * Searching in:",coll,"for key-value",attribute,string)
 
 		entries = {}
-		collection_selected = DatabaseConfiguration.collection
 
 		if coll == "users":
 			collection_selected = DatabaseConfiguration.users
-		elif coll == "dialogues":
+		else: 
 			collection_selected = DatabaseConfiguration.dialogues
 
+		#simple search for one interested field
 		if string is not None:
 			query = collection_selected.find({attribute:string})
-		elif field is not None:
-			query = collection_selected.find({},{field:1})
+		
+		#search with projection of interested fields only
+		elif fields is not None:
+			projection = {}
+			for element in fields:
+				projection[element]=1
+			query = collection_selected.find({},projection)
+		
+		#gets all
 		else:
 			query = collection_selected.find()
 
@@ -63,43 +70,20 @@ class DatabaseManagement(object):
 
 		return responseObject
 
-	def downloadDatabase():
-
-		entries = []
-
-		collection_dict = DatabaseConfiguration.collection.find()
-		for index,entry in enumerate(collection_dict,1):
-			entries.append({"File "+str(index):entry})
-
-		return entries
-
-	def getDatabaseIds():
-
-		entries = []
-
-		collection_dict = DatabaseConfiguration.collection.find()
-		for entry in collection_dict:
-			#print("* Database Entry *************** \n",entry)
-			entries.append( { "_id":str(entry["_id"]), "lastUpdate":str(entry["lastUpdate"]) })
-		print("* Response ***********\n",entries,"\n ********************")
-
-		return entries
-
 	def deleteEntry(collection, id):
 
 		#delete a database document by id
 
 		if collection == "dialogues":
 			DatabaseConfiguration.dialogues.delete_one({"_id":id})
-		elif collection == "users":
+		else: 
+			collection = "users"
 			DatabaseConfiguration.users.delete_one({"_id":id})
-		else:
-			DatabaseConfiguration.collection.delete_one({"_id":id})
 
 		responseObject = { "status":"success" }
 		return responseObject
 
-	def updateDatabase(username, destination, backup=None):
+	def updateDatabase(username, destination, annotationRate, backup=None):
 
 		#update the database user's document
 
@@ -113,31 +97,19 @@ class DatabaseManagement(object):
 		# checks if document will be empty before saving
 		if backup:
 			if annotations != {}:
-				username = username+"_backup"
+				DatabaseConfiguration.dialogues.save(
+				{"_id":"backup_"+destination, "document":annotations, "lastUpdate":datetime.datetime.utcnow(), "status":annotationRate})
 			else:
 				responseObject = {"status":"empty"}
 				return responseObject
 
 		#saving
-		DatabaseConfiguration.collection.save({"_id":destination,"lastUpdate":datetime.datetime.utcnow(),"annotations":annotations})
+		DatabaseConfiguration.dialogues.update(
+			{"_id":destination},
+			{ "$set": { "lastUpdate":datetime.datetime.utcnow(), "status":annotationRate, "document": annotations } }
+		)
 		
 		responseObject = {"status":"success"}
-		return responseObject
-
-	def getUserEntry(id):
-
-		#check the database and format the response
-
-		responseObject = []
-
-		elaborate = DatabaseManagement.readDatabase("database","_id",id)
-
-		for line in elaborate:
-			for name in line:
-				if name == "annotations":
-					#print(line[name])
-					responseObject = line[name]
-
 		return responseObject
 
 	"""
@@ -164,5 +136,5 @@ class DatabaseManagement(object):
 		for field in fields:
 			DatabaseConfiguration.dialogues.update(
 				{"_id":collection_id}, 
-				{ "$set": { field : json.dumps(fields[field]) } }
+				{ "$set": { field : fields[field] } }
 			)

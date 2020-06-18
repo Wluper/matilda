@@ -15,6 +15,7 @@
 .all-dialogues-container {
     overflow-y: scroll;
     padding-bottom: 50px;
+    background-color:#f1f1f3;
 }
 
 .all-dialogues-container .btn-set li:last-of-type {
@@ -344,8 +345,4 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
     cursor: pointer
-}
-
-.entry-list-single-item-container {
-    grid-template: none !important;
 }

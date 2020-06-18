@@ -2,10 +2,10 @@
 * All Dialgoues View "aka MAIN ADMIN LIDA VIEW"
 *************************************/
 
-Vue.component("main-admin", {
+Vue.component("interannotator-view", {
 
   props: [
-      "alreadyVisited",
+      "alreadyVisited", "userName"
   ],
 
   data () {
@@ -35,14 +35,17 @@ Vue.component("main-admin", {
       this.getAllDialogueIdsFromServer();
   },
 
-  methods: {
+  methods: {        
+
+    go_back : function(){
+        console.log("==================================");
+        console.log("==================================");
+        console.log("==================================");
+        annotationAppEventBus.$emit("go_back", event);
+    },
 
     clicked_users_button() {
         allDialoguesEventBus.$emit("usersManagement_clicked");
-    },
-
-    clicked_database_button() {
-        allDialoguesEventBus.$emit("database_clicked");
     },
     clicked_collection_button() {
         allDialoguesEventBus.$emit("collection_clicked");
@@ -195,20 +198,21 @@ Vue.component("main-admin", {
     <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
 
     <div class="dialogue-list-title-container">
-        <h2 v-if="!(dragging)" class="all-dialogues-list-title">
-            {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
-        </h2>
+        <div v-if="!(dragging)" class="all-dialogues-list-title">
+          <h2>{{guiMessages.selected.admin.title}}: {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
+          </h2>
+        </div>
 
-        <h2 v-else class="all-dialogues-list-title">
-            {{guiMessages.selected.lida.drop}}
-        </h2>
+        <div v-else class="all-dialogues-list-title">
+            <h2>{{guiMessages.selected.lida.drop}}</h2>
+        </div>
+
+        <user-bar v-bind:userName="userName"></user-bar>
 
         <div class="help-button-container">
             <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
             <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
-            <button class="help-button btn btn-sm" @click="clicked_users_button()">{{ guiMessages.selected.admin.userButton }}</button>
-            <button class="help-button btn btn-sm" @click="clicked_database_button()">{{ guiMessages.selected.database.title}}</button>
-            <button class="help-button btn btn-sm" @click="clicked_collection_button()">{{ guiMessages.selected.collection.title}}</button>
+            <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
         </div>
     </div>
     

@@ -1,5 +1,6 @@
 #login-view {
     text-align:center;
+    background-color:#f1f1f3;
 }
 
 .login_block {
@@ -89,6 +90,18 @@
     margin-right:auto;
     margin-left:auto;
     border:1px solid rgba(0,0,0,0.2);
+}
+
+.users-view {
+    background-color:#f1f1f3
+}
+
+.btn-tn {
+    font-size:13px;
+    padding: 0px 17px;
+    line-height: 25px;
+    margin: 0;
+    box-shadow: none
 }
 
 input:-webkit-autofill,

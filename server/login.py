@@ -19,11 +19,11 @@ class LoginFuncs(object):
 
 		return response
 
-	def create(userID, password, email=None):
+	def create(params):
 
 		response = { "status":"fail" }
 
-		DatabaseConfiguration.users.save({"_id":userID,"userName":userID,"password":password, "email":email})
+		DatabaseConfiguration.users.save({"_id":params["user"],"userName":params["user"],"password":params["pass"], "role":params["role"], "email":params["email"]})
 		response = { "status": "success" }
 
 		return response

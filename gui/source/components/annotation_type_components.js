@@ -366,6 +366,7 @@ Vue.component('classification-string-annotation', {
          let labelName = activeLabel.title;
          let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+
          //updating
          if ((text == undefined) || (text == "")) {
             annotationAppEventBus.$emit("resume_annotation_tools");
@@ -375,8 +376,7 @@ Vue.component('classification-string-annotation', {
          this.updateClassAndString(activeLabel, labelName);
          //put all back to place
          annotationAppEventBus.$emit("resume_annotation_tools");
-      }, 
-
+      },
     },
 
     template:

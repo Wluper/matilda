@@ -119,7 +119,7 @@ Vue.component("annotation-app", {
                     //format collection meta-tag
                     if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined))
                     this.metaTags["collection"] = "";
-                    this.annotationRate = this.metaTags["annotated"];
+                    this.annotationRate = this.metaTags["status"];
                 })
 
           // Step Two :: Get the Annotation Styles
@@ -212,14 +212,14 @@ Vue.component("annotation-app", {
         },
 
         update_annotation_rate: function(annotations, turnTot) {
-            let oldValue = Number( this.dTurns[0]["annotated"].slice(0,-1) ).toFixed(0);
+            let oldValue = Number( this.dTurns[0]["status"].slice(0,-1) ).toFixed(0);
             let increment = Number(utils.annotation_increment(annotations.turn, annotations, turnTot, this.annotatedTurns)).toFixed(0);
             let newValue = (Number(oldValue) + Number(increment)).toFixed(0);
             //small adjustments due to decimals removal and exceptions
             if (newValue >= 97) newValue = 100;
             else if (newValue < 0) newValue = 0;
             //updating value
-            this.dTurns[0]["annotated"] = newValue + "%";
+            this.dTurns[0]["status"] = newValue + "%";
             this.annotationRate = newValue + "%";
         },
 
@@ -250,7 +250,7 @@ Vue.component("annotation-app", {
 
                     if (status == "success") {
                         this.allDataSaved = true;
-                        backend.update_db();
+                        backend.update_db(mainApp.collectionRate, false);
                     } else {
                         this.allDataSaved = false;
                         alert("Server error, dialogue not saved!")

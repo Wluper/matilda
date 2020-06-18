@@ -1,4 +1,13 @@
-.del-dialogue-button {
+.admin-panel {
+    display: grid;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
+}
+
+.panel {
+    padding: 10px 17px !important;
+}
+
+.del-entry-button {
     grid-area: del;
     border: 1px solid red;
     color: red;
@@ -14,7 +23,7 @@
     margin-top: 13px;
 }
 
-.del-dialogue-button:hover {
+.del-entry-button:hover {
     background-color: red;
     color: white;
     cursor: pointer;
@@ -31,7 +40,7 @@
 
 .user-list-single-item-container {
     display: grid;
-    grid-template: [row1-start] "info del" [row1-end] / 1fr;
+    grid-template: [row1-start] "info del" [row1-end] / 1fr 0fr;
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 5px 3px rgba(0,0,0,0.05);
     transition: ease 175ms all;
@@ -73,7 +82,7 @@
 
 .user-info {
     display:grid;
-    grid-template: [row1-start] "id password email" [row1-end] / 1fr 1fr 2fr;
+    grid-template: [row1-start] "id password role email" [row1-end] / 1fr 1fr 0fr 2fr;
 }
 
 .user-id {
@@ -85,9 +94,11 @@
 
 .user-password {
     grid-area: password;
+    max-width: 100px;
 }
 .user-password input {
     color:#888;
+    max-width: inherit;
 }
 .user-id, .user-password {
     color:#888;
@@ -101,11 +112,18 @@
     justify-content: flex-end;
     align-items: center;
     text-align: right;
-    padding-right: 26px;
+    padding-right: 34px;
     font-weight: bold;
     font-family: montserrat;
     text-transform: uppercase;
     font-size: 11px;
+}
+
+.user-role {
+    grid-area:role;
+    color:#888;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
 #create_user {
@@ -121,7 +139,7 @@
     margin-right:10px;
 }
 
-.user-id span, .user-password span {
+.user-span {
     color:black;
     display:block;
     font-size:10px;

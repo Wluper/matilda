@@ -1,11 +1,14 @@
 Vue.component("users-view", {
 
+    props: ["userName"],
+
     data() {
         return {
             changesSaved: "",
             allUsers:[],
             guiMessages,
             showCreation: false,
+            showUsersHelp: false,
         }
     },
 
@@ -66,19 +69,25 @@ Vue.component("users-view", {
     },
     template:
     `
-        <div id="users-page">
-           <div class="users-list-title-container">
-                <h2 class="all-dialogues-list-title">{{guiMessages.selected.admin.userButton}}</h2>
+    <div class="users-view">
+          <div class="all-dialogues-container">
 
-                <div class="config-container">
-                </div>
-
-                <div class="help-button-container">
-                    <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
-                </div>
+        <div class="dialogue-list-title-container">
+            <div class="all-dialogues-list-title">
+              <h2>
+                {{guiMessages.selected.admin.userButton}}
+              </h2>
             </div>
-            <div class="inner-wrap">
 
+            <user-bar v-bind:userName="userName"></user-bar>
+
+          <div class="help-button-container">
+                <button class="help-button btn btn-sm" @click="log_out()">{{ guiMessages.selected.lida.logOut }}</button>
+                <button class="help-button btn btn-sm" @click="showUsersHelp = true">{{ guiMessages.selected.database.showHelp }}</button>
+                <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+          </div>
+        </div>
+            <div class="inner-wrap">
                 <ul class="user-list">
                     <li class="listed-user" v-for="name in allUsers" v-bind:id="name._id">
 
@@ -87,16 +96,23 @@ Vue.component("users-view", {
                             <div class="user-info">
 
                                 <div class="user-id">
-                                    <span>Username</span> {{name._id}}
+                                    <span class="user-span">Username</span> {{name._id}}
                                 </div>
 
                                 <div class="user-password">
-                                    <span>Password</span>
-                                    <input v-on:click="show_password($event)" type="password" :value="name.password">
+                                    <span class="user-span">Password</span>
+                                    <input v-on:click="show_password($event)" type="password" :value="name.password" autocomplete="off" readonly>
                                 </div>
 
-                                <div class="user-email" v-if="name.email != 'email not provided'">
-                                    {{name.email}}
+                                <div class="user-email">
+                                  <template v-if="name.email == ''">email not provided</template>
+                                  <template v-else>{{name.email}}</template>
+                                </div>
+
+                                <div class="user-role">
+                                   <span class="user-span">Role</span>
+                                   <template v-if="name.role == 'admin'">ADMN</template> 
+                                   <template v-else>ANNT</template> 
                                 </div>
                             </div>
 
@@ -112,8 +128,10 @@ Vue.component("users-view", {
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
                 <users-creation-modal v-if="showCreation" @close="showCreation = false"></users-creation-modal>
+                <users-help-modal v-if="showUsersHelp" @close="showUsersHelp = false"></users-help-modal>
             </div>
         </div>
+    </div>
     `
 });
 
@@ -128,13 +146,14 @@ Vue.component('users-creation-modal', {
             let newUser = document.getElementById("create_username").value;
             let newPassword = document.getElementById("create_password").value;
             let newMail = document.getElementById("create_email").value;
-            if ((newPassword == '') || (newUser == '')) {
+            let newRole = document.getElementById("select_role").value;
+            if ((newPassword == '') || (newUser == '') || (newRole == '')) {
                 alert(guiMessages.selected.login.warning)
                 return;
             }
-            if (newMail == '')
-                newMail = "email not provided";
-            backend.create_user(newUser,newPassword,newMail) 
+            if (newMail == undefined)
+                newMail = "";
+            backend.create_user(newUser,newPassword,newRole,newMail) 
                 .then( (response) => {
                     console.log();
                     this.$emit('close');
@@ -168,6 +187,13 @@ Vue.component('users-creation-modal', {
                     <br>
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">
+                    <br>
+                    <label for="select_role">Role:</label>
+                    <select class="modal-select" id="select_role">
+                        <option disabled value="">Role</option>
+                        <option value="annotator">Annotator</option>
+                        <option value="admin">Administrator</option>
+                    </select>
                     <br><br>
                     <button id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
                 </div>            
@@ -190,3 +216,73 @@ Vue.component('users-creation-modal', {
   </transition>
   `
 })
+
+Vue.component('users-help-modal', {
+
+  data() { 
+    return {
+      guiMessages,
+      role:''
+    }
+  },
+
+  mounted() {
+    this.role = mainApp.role;
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              <strong>{{guiMessages.selected.modal_collectionInfo[0]}}</strong>
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+            {{guiMessages.selected.modal_collectionInfo[1]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[2]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[3]}}
+            <br><br>
+            {{guiMessages.selected.modal_collectionInfo[4]}}
+            {{guiMessages.selected.modal_collectionInfo[5]}}
+              <ul>
+                <li v-if="role == 'admin'"> 
+                  <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
+                </li>
+                <li> 
+                  <strong>{{guiMessages.selected.collection.importColl}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[1]}}
+                </li>
+                <li> 
+                  <strong>{{guiMessages.selected.collection.update}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[2]}}
+                </li>
+              </ul>
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+})
+
