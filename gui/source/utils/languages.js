@@ -46,7 +46,7 @@ guiMessages = {
         collection: {
             title: "Collections Management",
             create: "Create collection",
-            update: "Send annotations",
+            update: "Update annotations manually",
             updateConfirm1: "You are updating Collection",
             updateConfirm2: "with your annotations. This will edit the database document.",
             noCollection: "You have no active collection now. Your editings are only saved in your workspace",
@@ -167,9 +167,9 @@ guiMessages = {
         [
             "Collections",
             "Collections are group of dialogues linked for easy handling and assignment.",
-            "To preserve them and avoid mixtures you can work on one collection at a time",
-            "This is why loading or importing a collection will wipe your actual dialogue list.",
-            "When an annotator is satisfied with their work is able to send the annotations and update the collection document.",
+            "To preserve them and avoid mixtures you can work on one collection at a time.",
+            "A backup of in-use collections is performed automatically every two minutes.",
+            "When an annotator is satisfied with their work is able to send the annotations and update the collection document",
             "stored in the database. Anyway, the editings performed on collections are saved periodically even without pressing that button.",
         ],
         modal_collectionButtons:
@@ -241,7 +241,7 @@ guiMessages = {
         collection: {
             title: "Gestione Collezioni",
             create: "Crea collezione",
-            update: "Invia annotazioni",
+            update: "Aggiorna annotazioni manualmente",
             updateConfirm1: "Stai per aggiornare la Collezione",
             updateConfirm2: "con le tue annotazioni. Questo modificherà il documento nel database.",
             noCollection: "Al momento non hai una collezione attiva, le tue modifiche vengono salvate solo nel tuo workspace.",
@@ -362,7 +362,7 @@ guiMessages = {
             "Collezioni",
             "Le collezioni sono gruppi di dialoghi uniti per essere facilmente gestiti e assegnati.",
             "Per evitare commistioni o sovrascritture è possibile lavorare su una sola collezione per volta.",
-            "Importare o caricare una collezione di dialoghi cancellerà quindi tutti i dialoghi presenti nella lista dell'utente.",
+            "LIDA crea un backup di ogni collezione in uso da almeno un utente, ogni due minuti.",
             "Quando un annotatore è soddisfatto del proprio lavoro o deve fare una pausa può salvare manualmente le sue annotazioni",
             "sulla collezione memorizzata nel database, che viene comunque aggiornata anche automaticamente.",
         ],
@@ -370,7 +370,7 @@ guiMessages = {
         [
             "Questo pulsante è visibile solo agli amministratori e permette di creare una collezione a partire da un file, da dialoghi presenti nell'interfaccia di LIDA o dai backup dei workspace nel database.",
             "Questo pulsante permette di caricare la collezione selezionata per iniziare ad annotarla",
-            "Questo pulsante invia le annotazioni fatte localmente dall'utente al documento della collezione nel database. Un meccanismo di controllo identifica il corretto documento di destinazione: se stai lavorando su un'altra collezione o liberamente, ad esempio, da file caricati, non corri il pericolo di sovrascrivere una collezione nel database.",
+            "Questo pulsante invia le annotazioni fatte localmente dall'utente al documento della collezione nel database. Un meccanismo di controllo identifica il corretto documento di destinazione.",
         ],
         database: {
             title: "Gestione Workspaces",

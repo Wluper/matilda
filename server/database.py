@@ -47,7 +47,7 @@ class DatabaseManagement(object):
 
 		if coll == "users":
 			collection_selected = DatabaseConfiguration.users
-		else: 
+		else:
 			collection_selected = DatabaseConfiguration.dialogues
 
 		#simple search for one interested field
@@ -77,7 +77,6 @@ class DatabaseManagement(object):
 		if collection == "dialogues":
 			DatabaseConfiguration.dialogues.delete_one({"_id":id})
 		else: 
-			collection = "users"
 			DatabaseConfiguration.users.delete_one({"_id":id})
 
 		responseObject = { "status":"success" }
@@ -98,7 +97,7 @@ class DatabaseManagement(object):
 		if backup:
 			if annotations != {}:
 				DatabaseConfiguration.dialogues.save(
-				{"_id":"backup_"+destination, "document":annotations, "lastUpdate":datetime.datetime.utcnow(), "status":annotationRate})
+				{"_id":username+"_"+destination, "document":annotations, "lastUpdate":datetime.datetime.utcnow(), "status":annotationRate})
 			else:
 				responseObject = {"status":"empty"}
 				return responseObject

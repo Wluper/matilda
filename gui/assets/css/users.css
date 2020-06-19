@@ -96,6 +96,13 @@
     background-color:#f1f1f3
 }
 
+.user-admin {
+    color:#ff000082
+}
+.user-annt {
+    color:#7dbbed;
+}
+
 .btn-tn {
     font-size:13px;
     padding: 0px 17px;

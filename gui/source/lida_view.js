@@ -189,12 +189,13 @@ var mainApp = new Vue({
         if (!document.hidden) {
             backend.update_db(mainApp.collectionRate, true)
             .then( (response) => {
+                console.log(utils.create_date());
                 if (response.status == "success") {
-                    console.log(utils.create_date(),guiMessages.selected.lida.backupDone);
+                    console.log(guiMessages.selected.lida.backupDone);
                 } else if (response.status == "empty") {
-                    console.log(utils.create_date(),guiMessages.selected.lida.backupPost);
+                    console.log(guiMessages.selected.lida.backupPost);
                 } else {
-                    console.log(utils.create_date(),guiMessages.selected.lida.backupFailed);
+                    console.log(guiMessages.selected.lida.backupFailed);
                 }
                 console.log(guiMessages.selected.lida.backupNext);
             })

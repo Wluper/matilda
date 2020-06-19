@@ -10,9 +10,9 @@
 
 function create_date(){
     let now = new Date();
-    let print = String(now.getHours()+"_"+now.getMinutes()+"_");
-    print += String(now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear());
-    return print
+    let out = String(now.getHours()+":"+now.getMinutes()+" ");
+    out += String(now.getDate()+"/"+now.getMonth()+"/"+now.getFullYear());
+    return out
 }
 
 function create_empty_turn(validAnnotations){
@@ -181,7 +181,7 @@ function update_turn(turn, turnData){
 
 function annotation_increment(turnNumber, annotations, turnTot, turnList) {
     // if turn is not already annotated return the dialogue relative % increment
-    let unitRate = (100 / (turnTot-1)).toFixed(1);
+    let unitRate = (100 / (turnTot-1));
 
     if (annotations.data != undefined) {
         if (annotations.data.length > 0) {

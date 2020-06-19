@@ -204,8 +204,8 @@ def handle_database_resource(id=None, user=None, annotationRate=None, DBcollecti
         if request.method == "PUT":
             responseObject = DatabaseManagement.updateDatabase( user, dialogueFile.activeCollection[user], annotationRate )
 
-        if request.method == "GET":
-            responseObject = DatabaseManagement.getDatabaseIds()
+        #if request.method == "GET":
+        #    responseObject = DatabaseManagement.getDatabaseIds()
 
     elif id:
         if request.method == "GET":
@@ -217,8 +217,8 @@ def handle_database_resource(id=None, user=None, annotationRate=None, DBcollecti
         if request.method == "DELETE":
             responseObject.update( DatabaseManagement.deleteEntry(DBcollection, id ) )
 
-    else:
-        responseObject = DatabaseManagement.getDatabaseIds()
+    #else:
+        #responseObject = DatabaseManagement.getDatabaseIds()
 
     return jsonify(responseObject)    
 

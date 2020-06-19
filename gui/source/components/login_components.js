@@ -93,7 +93,7 @@ Vue.component("user-bar", {
   methods: {
 
     log_out() {
-        let ask = confirm("guiMessages.lida.confirmLogout");
+        let ask = confirm(guiMessages.lida.confirmLogout);
         if (ask == true) {
             localStorage.removeItem("remember");
             location.reload();

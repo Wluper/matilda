@@ -111,8 +111,8 @@ Vue.component("users-view", {
 
                                 <div class="user-role">
                                    <span class="user-span">Role</span>
-                                   <template v-if="name.role == 'admin'">ADMN</template> 
-                                   <template v-else>ANNT</template> 
+                                   <span class="user-admin" v-if="name.role == 'administrator'">ADMN</span> 
+                                   <span class="user-annt" v-else>ANNT</span> 
                                 </div>
                             </div>
 
@@ -192,7 +192,7 @@ Vue.component('users-creation-modal', {
                     <select class="modal-select" id="select_role">
                         <option disabled value="">Role</option>
                         <option value="annotator">Annotator</option>
-                        <option value="admin">Administrator</option>
+                        <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
                     <button id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>

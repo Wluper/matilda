@@ -455,7 +455,6 @@ Vue.component('collection-creation-modal', {
             description:"",
             assignedTo:"",
             annotationStyle:"",
-            status:"",
             document:"",
          },
          guiMessages,
@@ -550,7 +549,7 @@ Vue.component('collection-creation-modal', {
             description:this.entry.description,
             annotationStyle:this.entry.annotationStyle,
             assignedTo:this.entry.assignedTo,
-            status:this.entry.status,
+            status:"0%",
          }
          for (element in params) {
             if (params[element] == undefined)
@@ -637,9 +636,6 @@ Vue.component('collection-creation-modal', {
                   <br><br>
                   <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
                   <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
-                  <br>
-                  <strong>Status:</strong>
-                  <input class="collection-input" type="text" v-model="entry.status" :placeholder="guiMessages.selected.coll_creation[5]">
                   <br>
                   <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
                   <select class="modal-select" v-model="entry.assignedTo">

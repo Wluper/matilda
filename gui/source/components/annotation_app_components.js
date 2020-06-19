@@ -212,11 +212,11 @@ Vue.component("annotation-app", {
         },
 
         update_annotation_rate: function(annotations, turnTot) {
-            let oldValue = Number( this.dTurns[0]["status"].slice(0,-1) ).toFixed(0);
-            let increment = Number(utils.annotation_increment(annotations.turn, annotations, turnTot, this.annotatedTurns)).toFixed(0);
-            let newValue = (Number(oldValue) + Number(increment)).toFixed(0);
+            let oldValue = Number(this.dTurns[0]["status"].slice(0,-1));
+            let increment = Number(utils.annotation_increment(annotations.turn, annotations, turnTot, this.annotatedTurns));
+            let newValue = ( Number(oldValue) + Number(increment) ).toFixed(1);
             //small adjustments due to decimals removal and exceptions
-            if (newValue >= 97) newValue = 100;
+            if (newValue >= 98) newValue = 100;
             else if (newValue < 0) newValue = 0;
             //updating value
             this.dTurns[0]["status"] = newValue + "%";
@@ -551,9 +551,11 @@ Vue.component('dialogue-turn',{
             </div>
 
         <div class="user-string-type-text">
-            <comm-textarea v-if="stringType.data.length > 80" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
+            
+            <comm-textarea v-if="stringType.data.length > 95" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
             <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-textarea>  
+            
             <comm-input v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly>
             <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-input>  
