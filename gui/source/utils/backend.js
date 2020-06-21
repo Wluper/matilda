@@ -2,12 +2,7 @@
 * FILE NAME FUNCTIONS
 ********************************/
 
-url = window.location.href;
-if (url.split("/").pop() != "admin.html") {
-    var API_BASE = url;
-} else {
-    var API_BASE = url.split("/").splice(0,-1);
-}
+API_BASE = window.origin
 
 function session_name() {
     username = "user_1";
@@ -554,15 +549,15 @@ async function get_all_entries_async() {
   }
 }
 
-async function login(loginName,loginPass) {
+async function login(loginName,loginPass,role) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_BASE+`/login/${loginName}/${loginPass}`;
+  const apiLink = API_BASE+`/login/${loginName}/${loginPass}/${role}`;
 
   try {
 
-    var response = await axios.post(apiLink, loginName, loginPass);
+    var response = await axios.post(apiLink, loginName, loginPass, role);
 
     console.log(response);
 
@@ -799,7 +794,7 @@ async function create_user(user,pass,role,email){
     var response = {}
 
     try {
-        var response = await axios.post( apiLink, { "user":user,"pass":pass, "role":role, "email":email } )
+        var response = await axios.post( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
 
         response = response.data
         return response

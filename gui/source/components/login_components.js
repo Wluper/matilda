@@ -5,7 +5,7 @@ Vue.component("login-view", {
             guiMessages,
             insertedName: 'username',
             insertedPass: 'password',
-            role: 'user'
+            role: 'annotator'
         }
     },
 
@@ -13,8 +13,8 @@ Vue.component("login-view", {
         //detects if admin page
         let title = document.getElementsByTagName("title")[0].textContent;
         if (title != " LIDA ") {
-            this.role = "admin";
-            this.insertedName = this.role;
+            this.role = "administrator";
+            this.insertedName = "admin"
         }
     },
 
@@ -40,14 +40,15 @@ Vue.component("login-view", {
         },
         check_credentials() {
             console.log('---- CHECKING USERNAME ----');
-            backend.login(this.insertedName,this.insertedPass)
+            backend.login(this.insertedName,this.insertedPass, this.role)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username and password is valid");
-                        if (this.role != "admin")
+                        if (this.role != "administrator")
                             allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
                         else {
-                            //no file name update needed in admin panel
+                            //no file name update needed in admin panel but role update
+                            mainApp.role = this.role;
                             annotationAppEventBus.$emit("go_back");
                         }
                     } else {
@@ -63,8 +64,8 @@ Vue.component("login-view", {
             <div class="login_block">
                 <img src="assets/images/lida_favicon.png" class="login_logo"> <h1> 2.0</h1>
                 <div class="login_form">
-                    <input v-if="role != 'admin'" id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
-                    <input v-if="role == 'admin'" id="login_input" class="admin_input" type="text" name="login_username" v-bind:value="insertedName" placeholder="admin" value="admin" readonly>
+                    <input v-if="role != 'administrator'" id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
+                    <input v-if="role == 'administrator'" id="login_input" class="admin_input" type="text" name="login_username" v-bind:value="insertedName" placeholder="admin" value="admin" readonly>
                     <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null" v-on:keyup.enter="login()">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
                 </div>
@@ -76,13 +77,14 @@ Vue.component("login-view", {
 Vue.component("user-bar", {
 
   props: [
-      "userName",
+      "userName"
   ],
 
   data () {
       return {
           //Reference to the language data
-          guiMessages
+          role: mainApp.role,
+          guiMessages,
       }
   },
 
@@ -93,7 +95,7 @@ Vue.component("user-bar", {
   methods: {
 
     log_out() {
-        let ask = confirm(guiMessages.lida.confirmLogout);
+        let ask = confirm(guiMessages.selected.lida.confirmLogout);
         if (ask == true) {
             localStorage.removeItem("remember");
             location.reload();
@@ -110,6 +112,7 @@ Vue.component("user-bar", {
                       v-bind:value="userName" 
                       @click="log_out()">
                 </input>
+                <button class="help-button btn btn-tn""> {{role}} </button>
                 <button class="help-button btn btn-tn" @click="log_out()">{{ guiMessages.selected.lida.logOut }}</button>
               </div>
         </div>

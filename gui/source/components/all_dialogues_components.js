@@ -17,7 +17,7 @@ Vue.component("all-dialogues", {
          showModal: false,
          // Reference to the language item
          guiMessages,
-         collectionRate:'',
+         collectionRate:'0%',
       }
    },
   created() {
@@ -84,7 +84,7 @@ Vue.component("all-dialogues", {
               summatory += Number(this.allDialogueMetadata[i]["status"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
           }
           this.collectionRate = Number( summatory / total_turns).toFixed(1);
-          if (this.collectionRate <= 0) {
+          if ((this.collectionRate <= 0) || (this.collectionRate = NaN)) {
             this.collectionRate = 0;
           } else if (this.collectionRate >= 99) {
             this.collectionRate = 100;

@@ -89,14 +89,14 @@ Vue.component("users-view", {
         </div>
             <div class="inner-wrap">
                 <ul class="user-list">
-                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name._id">
+                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
 
                         <div class="user-list-single-item-container">
 
                             <div class="user-info">
 
                                 <div class="user-id">
-                                    <span class="user-span">Username</span> {{name._id}}
+                                    <span class="user-span">Username</span> {{name.userName}}
                                 </div>
 
                                 <div class="user-password">

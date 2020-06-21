@@ -11,7 +11,7 @@ var mainApp = new Vue({
             displayingDialogue: '',
             status : 'logging',
             alreadyVisited: [],
-            role: 'admin',
+            role: 'administrator',
             userName:'admin',
       }
   },

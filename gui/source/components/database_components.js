@@ -134,7 +134,7 @@ Vue.component("collection-view", {
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
                 idToDelete = event.target.parentNode.parentNode.id;
-                backend.del_db_entry_async(idToDelete, "dialogues")
+                backend.del_db_entry_async(idToDelete, "dialogues_collections")
                     .then( () => {
                         databaseEventBus.$emit('collections_changed');
                     });
@@ -154,7 +154,6 @@ Vue.component("collection-view", {
         },
 
         update_collection() {
-
             if (this.activeCollection == "null") {
                 alert(guiMessages.selected.collection.noCollection);
                 return
@@ -173,14 +172,11 @@ Vue.component("collection-view", {
             <div class="inner-wrap">
                 <ul class="collection-list">
 
-                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name._id">
-                        <div v-if="role != 'admin'" class="entry-list-single-item-container" style="grid-template: [row1-start] 'info' [row1-end] / 1fr;">
-                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="delete_entry($event)">
-                                {{guiMessages.selected.lida.button_delete}}
-                            </div>
-                            <div class="entry-info" v-on:click="clicked_entry(name._id)">
+                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
+                        <div v-if="role != 'administrator'" class="entry-list-single-item-container" style="grid-template: [row1-start] 'info' [row1-end] / 1fr;">
+                            <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
-                                    <span>Collection:</span> {{name._id}}
+                                    <span>Collection:</span> {{name.id}}
                                 </div>
                               <div class="entry-annotated">
                                 <span>Status: {{name.status}}</span>
@@ -198,12 +194,12 @@ Vue.component("collection-view", {
                         </div>
 
                         <div v-else class="entry-list-single-item-container">
-                            <div v-if="role == 'admin'" class="del-dialogue-button" v-on:click="delete_entry($event)">
+                            <div v-if="role == 'administrator'" class="del-dialogue-button" v-on:click="delete_entry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
-                            <div class="entry-info" v-on:click="clicked_entry(name._id)">
+                            <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
-                                    <span>Collection:</span> {{name._id}}
+                                    <span>Collection:</span> {{name.id}}
                                 </div>
                               <div class="entry-annotated">
                                 <span>Status: {{name.status}}</span>
@@ -221,8 +217,8 @@ Vue.component("collection-view", {
                         </div>
                     </li>
                 </ul>
-                <button v-if="role == 'admin'" v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
-                <button v-if="role != 'admin'" v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button>
+                <button v-if="role == 'administrator'" v-on:click="showCreateModal = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.create}}</button>
+                <button v-if="role != 'administrator'" v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
@@ -243,21 +239,20 @@ Vue.component('database-entry-modal', {
             guiMessages,
             view: '',
             update: {},
-            role: '',
+            role: mainApp.role,
             showResult:false,
          }
    },
 
    mounted () {
       this.init();
-      this.role = mainApp.role;
    },
 
    methods: {
 
          init : function(){
             this.view = mainApp.status;
-            collection = "dialogues";
+            collection = "dialogues_collections";
             backend.get_db_entry_async(mainApp.displayingDocument,collection)
                   .then( (response) => {
                      console.log();
@@ -272,17 +267,17 @@ Vue.component('database-entry-modal', {
 
          load_collection(doc) {
             //if role is admin loading in admin workspace
-            if (this.role == "admin") {
+            if (this.role == "administrator") {
                let del = confirm(guiMessages.selected.collection.confirmRevision);
                if (del == true) {
-                  backend.import_new_dialogue_from_json_string_async(doc, this.entry._id)
+                  backend.import_new_dialogue_from_json_string_async(doc, this.entry.id)
                   .then( (response) => {
                      console.log("==== INTERANNOTATOR IMPORT  ====");
                      console.log();
                      //set global variable with the collection name
                      //send event in all dialogues
                      this.showResult = true;
-                     databaseEventBus.$emit( "collection_active", this.entry._id);
+                     databaseEventBus.$emit( "collection_active", this.entry.id);
                   })
                }
             } else {
@@ -291,14 +286,14 @@ Vue.component('database-entry-modal', {
                   backend.del_all_dialogues_async()
                   .then( (response) => {
                      console.log(response);
-                        backend.post_new_dialogue_from_json_string_async(doc, this.entry._id)
+                        backend.post_new_dialogue_from_json_string_async(doc, this.entry.id)
                         .then( (response) => {
                            console.log("==== DIALOGUES IMPORT ====");
                            console.log();
                            //set global variable with the collection name
                            //send event in all dialogues
                            this.showResult = true;
-                           databaseEventBus.$emit( "collection_active", this.entry._id);
+                           databaseEventBus.$emit( "collection_active", this.entry.id);
                         });
                   })   
                }
@@ -312,7 +307,7 @@ Vue.component('database-entry-modal', {
                      console.log(response);
                      if (conversion != undefined) {
                         doc = JSON.stringify(JSON.parse(doc));
-                        backend.import_new_dialogue_from_json_string_async(doc, this.entry._id)
+                        backend.import_new_dialogue_from_json_string_async(doc, this.entry.id)
                            .then( (response) => {
                               console.log("==== IMPORT FROM JSON SUCCESS ====");
                               console.log();
@@ -344,7 +339,7 @@ Vue.component('database-entry-modal', {
                   params[element] = ""
             }
             let preparedDocument = params;
-            backend.update_collection_async(this.entry._id, preparedDocument)
+            backend.update_collection_async(this.entry.id, preparedDocument)
                .then( (response) => {
                   console.log();
                   console.log("============== Dialogues-Collection Updated ==============");
@@ -396,7 +391,7 @@ Vue.component('database-entry-modal', {
             <div class="modal-body">
               <slot name="body">
                   <strong>ID:</strong>
-                  <input class="collection-input" type="text" v-model="entry._id" readonly>
+                  <input class="collection-input" type="text" v-model="entry.id" readonly>
                   <br>
                   <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
                   <input class="collection-input" type="text" v-model="entry.title" readonly>
@@ -430,7 +425,7 @@ Vue.component('database-entry-modal', {
               <button class="modal-big-button" @click="load_collection(entry.document)">
                 {{guiMessages.selected.collection.importColl}}
               </button>
-              <button v-if="role == 'admin'" class="modal-big-button" @click="save()">
+              <button v-if="role == 'administrator'" class="modal-big-button" @click="save()">
                 {{guiMessages.selected.annotation_app.save}}
               </button>
               <button class="modal-big-button modal-right-button" @click="$emit('close')">
@@ -450,7 +445,7 @@ Vue.component('collection-creation-modal', {
    data () {
       return {
          entry : {
-            _id:"",
+            id:"",
             title:"",
             description:"",
             assignedTo:"",
@@ -463,13 +458,12 @@ Vue.component('collection-creation-modal', {
          allUsers: [],
          checkedUsers: [],
          showSelector: false,
-         role:''
+         role:mainApp.role
       }
    },
 
    mounted () {
       this.get_all_users();
-      this.role = mainApp.role;
    },
 
    methods: {
@@ -508,7 +502,7 @@ Vue.component('collection-creation-modal', {
 
       add_from_user(selected) {
          if (selected != true) {
-            backend.get_all_db_entries_ids()
+            backend.get_all_db_entriesi_ds()
                .then( (response) => {
                   console.log();
                   this.userList = response;
@@ -544,7 +538,7 @@ Vue.component('collection-creation-modal', {
 
       save() {
          params = {
-            _id:this.entry._id,
+            id:this.entry.id,
             title:this.entry.title, 
             description:this.entry.description,
             annotationStyle:this.entry.annotationStyle,
@@ -555,11 +549,11 @@ Vue.component('collection-creation-modal', {
             if (params[element] == undefined)
                   params[element] = ""
          }
-         if ((params._id == "") || (params._id == undefined)) {
-               params._id = "Collection"+Math.floor(Math.random() * 10001);
+         if ((params.id == "") || (params.id == undefined)) {
+               params.id = "Collection"+Math.floor(Math.random() * 10001);
          }
          doc = this.entry.document.trim();
-         backend.update_collection_async(params._id, params, doc)
+         backend.update_collection_async(params.id, params, doc)
                .then( (response) => {
                   console.log();
                   console.log("Database: Dialogue Collection updated");
@@ -589,10 +583,10 @@ Vue.component('collection-creation-modal', {
 
                      <li class="listed-entry" v-for="name in userList">
                         <div class="entry-list-single-user-container">
-                        <input type="checkbox" class="user-checkbox" v-bind:id="name._id" :value="name._id" v-model="checkedUsers">
+                        <input type="checkbox" class="user-checkbox" v-bind:id="name.id" :value="name.id" v-model="checkedUsers">
                            <div class="entry-info in-selector with-top-border">
-                              <label :for="name._id"> 
-                                 <strong>ID:</strong> {{name._id}} 
+                              <label :for="name.id"> 
+                                 <strong>ID:</strong> {{name.id}} 
                                  <br>
                                  <strong>Last updated:</strong> {{name.lastUpdate}} 
                               </label>
@@ -626,7 +620,7 @@ Vue.component('collection-creation-modal', {
             <div class="modal-body">
               <slot name="body">
                   <strong>ID:</strong>
-                  <input class="collection-input" type="text" v-model="entry._id" :placeholder="guiMessages.selected.coll_creation[0]">
+                  <input class="collection-input" type="text" v-model="entry.id" :placeholder="guiMessages.selected.coll_creation[0]">
                   <br>
                   <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
                   <input class="collection-input" type="text" v-model="entry.title" :placeholder="guiMessages.selected.coll_creation[1]">
@@ -640,7 +634,7 @@ Vue.component('collection-creation-modal', {
                   <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
                   <select class="modal-select" v-model="entry.assignedTo">
                      <option disabled value="">{{guiMessages.selected.coll_creation[4]}}</option>
-                     <option v-for="user in allUsers" v-bind:value="user._id">{{user._id}}</option>
+                     <option v-for="user in allUsers" v-bind:value="user.id">{{user.id}}</option>
                   </select>
                   <br><br>
                   <strong>

@@ -23,7 +23,7 @@ var mainApp = new Vue({
       logged:'false',
       restored:'false',
       userName:'',
-      role: 'user',
+      role: 'annotator',
       activeCollection:'',
       collectionRate:'',
     }
