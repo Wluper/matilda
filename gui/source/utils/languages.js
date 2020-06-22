@@ -42,6 +42,7 @@ guiMessages = {
             annotated: "Annotated",
             logOut:"logout",
             confirmLogout: "Do you want to log out?",
+            load:"Load collection",
         },
         collection: {
             title: "Collections Management",
@@ -72,7 +73,8 @@ guiMessages = {
             collStatus: "Status",
             new: "Imported",
             old: "Previous",
-            save: "Save and Update Collection"
+            save: "Save and Update Collection",
+            done: "Annotations completed"
         },
         annotation_app: {
             turnId: "Turn Id",
@@ -237,6 +239,7 @@ guiMessages = {
             annotated:"Annotato",
             logOut:"logout",
             confirmLogout:"Vuoi eseguire il logout?",
+            load:"Carica collezione",
         },
         collection: {
             title: "Gestione Collezioni",
@@ -267,7 +270,8 @@ guiMessages = {
             old: "Precedente",
             confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi nella tua lista.",
             confirmRevision: "Questa operazione aggiungerà la collezione nella lista di revisione, confrontandola con eventuali collezioni già presenti",
-            save: "Save and Update Collection"
+            save: "Save and Update Collection",
+            done: "Annotazione completata",
         },
         annotation_app: {
             turnId: "Id Turno",
@@ -337,7 +341,7 @@ guiMessages = {
         modal_agreementScores:
         [ 
             "Indice di Concordanza tra gli annotatori",
-            "Questo è un rapporto suoi tuoi dati.",
+            "Questo è un rapporto sui tuoi dati.",
             "Annotazioni disponibili:",
             "Riepilogo"
         ],

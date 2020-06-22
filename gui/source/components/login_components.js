@@ -44,8 +44,10 @@ Vue.component("login-view", {
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username and password is valid");
-                        if (this.role != "administrator")
+                        if (this.role != "administrator") {
+                            mainApp.userName = this.insertedName;
                             allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
+                        }
                         else {
                             //no file name update needed in admin panel but role update
                             mainApp.role = this.role;

@@ -10,7 +10,7 @@ class LoginFuncs(object):
 
 		response = { "status":"fail" }
 
-		userDetails = DatabaseManagement.readDatabase("users","userName")
+		userDetails = DatabaseManagement.readDatabase("users")
 
 		for line in userDetails:
 			if line["role"] == role:
@@ -24,7 +24,7 @@ class LoginFuncs(object):
 
 		response = { "status":"fail" }
 
-		if len(DatabaseManagement.readDatabase("users","userName",params["userName"])) == 0:
+		if len(DatabaseManagement.readDatabase("users",{"userName":params["userName"]})) == 0:
 			DatabaseManagement.createDoc(params["userName"], "users", params)			
 		else:
 			DatabaseManagement.updateDoc(params["userName"], "users", params)

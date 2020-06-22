@@ -373,7 +373,7 @@
 .dialouge-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 6fr 2fr 1fr 3fr;
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 5fr 2fr 1fr 3fr;
     cursor: pointer;
 }
 
@@ -402,6 +402,9 @@
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
+    padding:0px 5px 0px 5px;
+    padding-bottom:0;
+    margin-top:10px;
 }
 
 .dialogue-id {

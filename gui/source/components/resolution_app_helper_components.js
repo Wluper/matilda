@@ -13,7 +13,7 @@ Vue.component("resolution-menu", {
 
     methods :{
         go_back_to_all_dialogues : function(){
-            annotationAppEventBus.$emit("go_back")
+            annotationAppEventBus.$emit("clean_events")
         }
     },
     template:

@@ -2,12 +2,10 @@
 * All Dialgoues View "aka MAIN LIDA VIEW"
 *************************************/
 
-
-
 Vue.component("all-dialogues", {
 
    props: [
-      "alreadyVisited", "userName", "activeCollection"
+      "alreadyVisited"
    ],
 
    data () {
@@ -18,6 +16,8 @@ Vue.component("all-dialogues", {
          // Reference to the language item
          guiMessages,
          collectionRate:'0%',
+         userName: mainApp.userName,
+         activeCollection: mainApp.activeCollection
       }
    },
   created() {
@@ -64,15 +64,19 @@ Vue.component("all-dialogues", {
       getAllDialogueIdsFromServer() {
          backend.get_all_dialogue_ids_async()
             .then( (response) => {
-
                this.allDialogueMetadata = response;
                console.log(response);
                this.collectionAnnotationRate();
-               if ((mainApp.restored == "false") && (response.length == 0)) {
+               if ((mainApp.restored == false) && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database();
                }
-               mainApp.restored = "true";
+               if (mainApp.restored != true) {
+                  //wait for 10 seconds then start cyclic-backups
+                  setTimeout(this.cyclic_backup, 10000);
+               }
+               mainApp.restored = true;
+
          });
       },
 
@@ -84,13 +88,15 @@ Vue.component("all-dialogues", {
               summatory += Number(this.allDialogueMetadata[i]["status"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
           }
           this.collectionRate = Number( summatory / total_turns).toFixed(1);
-          if ((this.collectionRate <= 0) || (this.collectionRate = NaN)) {
+          if ((this.collectionRate <= 0) || (this.collectionRate == NaN)) {
             this.collectionRate = 0;
           } else if (this.collectionRate >= 99) {
             this.collectionRate = 100;
           }
           this.collectionRate = this.collectionRate+"%";
           mainApp.collectionRate = this.collectionRate;
+          if (mainApp.collectionRate != "NaN%")
+            backend.update_db(mainApp.collectionRate, false);
       },
 
       dialogue_already_visited(id) {
@@ -142,7 +148,7 @@ Vue.component("all-dialogues", {
 
     },
 
-      open_file(event){
+    open_file(event){
          let file = event.target.files[0];
          this.handle_file(file);
     },
@@ -208,11 +214,11 @@ Vue.component("all-dialogues", {
          const mainContainer = document.getElementById("mainContainer");
          mainContainer.style.cursor = "progress";
          if (this.activeCollection != undefined) {
-            var collection = this.activeCollection;
+            var doc = this.activeCollection;
          } else {
-            var collection = this.userName
+            return
          }
-         backend.recover_dialogues(collection)
+         backend.recover_dialogues(doc)
             .then( (response) => {
                console.log(response);
                allDialoguesEventBus.$emit("refresh_dialogue_list");
@@ -265,9 +271,6 @@ Vue.component("all-dialogues", {
          }
       },
 
-      clicked_database_button() {
-         databaseEventBus.$emit("database_selected");
-      },
       clicked_collections_button() {
          databaseEventBus.$emit("collections_selected");
       },

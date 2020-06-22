@@ -236,10 +236,10 @@ Vue.component('help-collection-modal', {
                 <li v-if="role == 'administrator'"> 
                   <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
                 </li>
-                <li> 
+                <li v-if="role != 'administrator'"> 
                   <strong>{{guiMessages.selected.collection.importColl}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[1]}}
                 </li>
-                <li> 
+                <li v-if="role != 'administrator'">
                   <strong>{{guiMessages.selected.collection.update}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[2]}}
                 </li>
               </ul>

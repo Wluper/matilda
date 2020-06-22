@@ -2,6 +2,10 @@
 * MODAL
 ********************************/
 
+#collection-review {
+  font-size:14px;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;

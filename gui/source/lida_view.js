@@ -21,10 +21,10 @@ var mainApp = new Vue({
       splittingFile: '',
       splittingTextSourceFile: '',
       logged:'false',
-      restored:'false',
+      restored:false,
       userName:'',
-      role: 'annotator',
-      activeCollection:'',
+      role:'annotator',
+      activeCollection:localStorage["collection"],
       collectionRate:'',
     }
   },
@@ -64,9 +64,7 @@ var mainApp = new Vue({
                 if (response) {
                     console.log("File name updated");
                     this.set_cookie(newName,pass);
-                    this.status = "list-all";
-                    //wait for 10 seconds then start cyclic-backups
-                    setTimeout(this.cyclic_backup, 10000);
+                    this.status = "collection-view";
                 } else {
                     alert('Server error, name not changed.');
                 }
@@ -83,7 +81,7 @@ var mainApp = new Vue({
 
     check_collection_cookie: function() {
       if (localStorage["collection"] == undefined) {
-        return;
+        return
       } else {
         this.activeCollection = localStorage["collection"];
       }
@@ -224,9 +222,7 @@ var mainApp = new Vue({
     </collection-view>
 
     <all-dialogues v-else
-                   v-bind:alreadyVisited="alreadyVisited"
-                   v-bind:activeCollection="activeCollection"
-                   v-bind:userName="userName">
+                   v-bind:alreadyVisited="alreadyVisited">
     </all-dialogues>
   `
 

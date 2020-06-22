@@ -42,8 +42,8 @@ var mainApp = new Vue({
       },
 
       switchStatusToSupervision() {
-        console.log('--- SUPERVISION ----');
-        this.status = 'supervision';
+        //console.log('--- SUPERVISION ----');
+        //this.status = 'supervision';
       },
 
       switchStatusToAnnotation() {
@@ -86,8 +86,8 @@ var mainApp = new Vue({
       v-bind:userName="userName">
       </users-view>
 
-      <collection-view v-else-if="status === 'collection'">
-      </collection-view>
+      <datamanagement-view v-else-if="status === 'collection'">
+      </datamanagement-view>
 
       <supervision-view v-else-if="status === 'supervision'">
       </supervision-view>
