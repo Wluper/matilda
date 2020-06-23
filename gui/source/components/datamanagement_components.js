@@ -140,7 +140,7 @@ Vue.component('collection-creation-modal', {
          update: {},
          userList: [],
          allUsers: [],
-         checkedUsers: [],
+         checkedUsers:[],
          showSelector: false,
          role:mainApp.role
       }
@@ -228,8 +228,7 @@ Vue.component('collection-creation-modal', {
             annotationStyle:this.entry.annotationStyle,
             errors:{},
             gold:{},
-            assignedTo:this.entry.assignedTo,
-            
+            assignedTo:this.checkedUsers,
          }
          for (element in params) {
             if (params[element] == undefined)
@@ -319,7 +318,7 @@ Vue.component('collection-creation-modal', {
                   <br>
                   <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
                   <template v-for="user in allUsers">
-                    <input type="checkbox" :value="user.userName" :id="user.userName" v-model="entry.assignedTo">
+                    <input type="checkbox" :value="user.userName" :id="user.userName" v-model="checkedUsers">
                     <label :for="user.userName">{{user.userName}}</label>
                   </template>
                   <br><br>
@@ -379,14 +378,25 @@ Vue.component('collection-entry-modal', {
             update: {},
             role: mainApp.role,
             showResult:false,
+            allUsers:[],
+            checkedUsers:[],
          }
    },
 
    mounted () {
       this.init();
+      this.get_all_users();
    },
 
    methods: {
+
+          get_all_users() {
+              backend.get_all_users()
+                .then( (response) => {
+                    this.allUsers = response;
+                    console.log(this.allUsers);
+              });
+          },
 
          init : function(){
             this.view = mainApp.status;
@@ -476,14 +486,15 @@ Vue.component('collection-entry-modal', {
                assignedTo:this.entry.assignedTo,
                gold:this.entry.gold,
                errors:this.entry.errors,
-               document:this.entry.document
             }
             for (element in params) {
                if (params[element] == undefined)
                   params[element] = ""
             }
-            let preparedDocument = params;
-            backend.update_collection_async(this.entry.id, preparedDocument)
+            let preparedDocument = this.entry.document;
+            if (preparedDocument == undefined)
+              preparedDocument = " "
+            backend.update_collection_async(this.entry.id, params, preparedDocument)
                .then( (response) => {
                   console.log();
                   console.log("============== Dialogues-Collection Updated ==============");
@@ -547,7 +558,10 @@ Vue.component('collection-entry-modal', {
                   <input class="collection-input" type="text" v-model="entry.annotationStyle" readonly>
                   <br>
                   <strong>{{guiMessages.selected.collection.collAssi}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.assignedTo" readonly>
+                      <template v-for="user in allUsers">
+                          <input type="checkbox" :value="user.userName" :id="user.userName" v-model="entry.assignedTo">
+                          <label :for="user.userName">{{user.userName}}</label>
+                      </template>
                   <br>
                   <strong>{{guiMessages.selected.collection.collUpda}}:</strong>
                   <input class="collection-input" type="text" v-model="entry.lastUpdate" readonly>

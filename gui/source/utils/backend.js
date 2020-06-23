@@ -673,8 +673,12 @@ async function get_specific_collections(DBcollection,fields) {
 
 async function update_collection_async(id, params, doc) {
 
-    doc = JSON.parse("{"+doc+"}");
-    params.document = doc
+    if (typeof(doc) != "string") {
+        doc = JSON.parse("{"+doc+"}");
+        params.document = doc
+    } else {
+        doc = "{"+doc+"}"
+    }
 
     DBcollection = "dialogues_collections"
 

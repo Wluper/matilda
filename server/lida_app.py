@@ -244,7 +244,7 @@ def handle_switch_collection_request(user, doc):
     #get collection document from database
     if request.method == "PUT":
         
-        docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc})
+        docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})

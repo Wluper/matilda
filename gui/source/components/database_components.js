@@ -7,6 +7,7 @@ Vue.component("database-header", {
             guiMessages,
             showHelpWork:"",
             showHelpColl:"",
+            userName:mainApp.userName,
         }
     
     },
@@ -44,12 +45,7 @@ Vue.component("database-header", {
     `
             <div class="database-menu">
                 <h2 class="database-title">{{guiMessages.selected.collection.title}}</h2>
-                <div class="config-container">
-                    <div class="inner">
-                        <span>{{guiMessages.selected.database.location}}</span> <input v-model="db_address" readonly>
-                        <span>{{guiMessages.selected.database.port}}</span> <input v-model="db_port" readonly>
-                    </div>
-                </div>
+                <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
 
@@ -242,7 +238,7 @@ Vue.component("collection-view", {
 
                 <ul class="annotation-list">
                 <h2>Assigned collections</h2>
-                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
+                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id" v-if="name.id != activeCollection">
                         <div class="entry-list-single-item-container">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
