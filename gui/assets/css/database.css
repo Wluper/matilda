@@ -295,6 +295,10 @@ pre:first-line {
     border:2px solid #259af7;
 }
 
+.gold-true {
+    color:#087fdd !important;
+}
+
 #ask-selector label {
     display:inline-block;
     padding:3px 0px 7px 7px;

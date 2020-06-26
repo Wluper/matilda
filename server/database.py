@@ -85,6 +85,8 @@ class DatabaseManagement(object):
 
 	def createDoc(document_id, collection, values):
 
+		print(values)
+
 		DatabaseManagement.selected(collection).save(values)
 		
 		response = {"staus":"success"}

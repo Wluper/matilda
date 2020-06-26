@@ -64,13 +64,21 @@ Vue.component("interannotator-view", {
 
     clicked_collection(clickedCollection) {
         //load in interannotator all the annotated versions of the same collection
+        mainContainer.style.cursor = "progress";
         backend.del_all_dialogues_async("admin")
             .then( (response) => {
-                  console.log(response);
-            backend.admin_import_all_annotations(clickedCollection)
-                .then( (response) => {
-                    this.allConfrontMetadata.push(response);
-                    allDialoguesEventBus.$emit("conflicts_on_collection", clickedCollection);
+                console.log(response);
+                backend.admin_import_all_annotations(clickedCollection)
+                    .then( (response) => {
+                        console.log("===== LOADING ANNOTATED COLLECTIONS FOR",clickedCollection," =====");
+                        console.log(response);
+                        mainContainer.style.cursor = null;
+                        if (response.data.status == "fail") {
+                            alert(guiMessages.selected.admin.importConflictsResult);
+                            return;
+                        } else {
+                          allDialoguesEventBus.$emit("conflicts_on_collection", clickedCollection);
+                        }
             });
         });
     },
@@ -116,7 +124,6 @@ Vue.component("interannotator-view", {
         <user-bar v-bind:userName="userName"></user-bar>
 
         <div class="help-button-container">
-            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
             <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
         </div>
     </div>

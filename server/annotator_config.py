@@ -58,6 +58,9 @@ class Configuration(object):
             if "()" in str(sub_value):
                 configDict[key][sub_key] = eval(sub_value)
 
+    #accepted metaTags, can be customized
+    metaTags = ["collection","status","ID"]
+
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
         """
@@ -331,12 +334,14 @@ agreementConfig = {
     "data" : None,
     "string" : None,
     "multilabel_classification" : agreement_classification,
-    "multilabel_classification_string" : agreement_classification_string
+    "multilabel_classification_string" : agreement_classification_string,
+    "multilabel_global_string" : agreement_classification_string
 }
 
 agreementScoreConfig = {
     "data" : None,
     "string" : None,
     "multilabel_classification" : agreement_classification_score,
-    "multilabel_classification_string" : None
+    "multilabel_classification_string" : None,
+    "multilabel_global_string" : None
 }

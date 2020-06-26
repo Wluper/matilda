@@ -695,10 +695,10 @@ async function update_collection_async(id, params, doc) {
 
     if (typeof(doc) != "string") {
         doc = JSON.parse("{"+doc+"}");
-        params.document = doc
     } else {
         doc = "{"+doc+"}"
     }
+    params["document"] = doc
 
     DBcollection = "dialogues_collections"
 
@@ -809,7 +809,7 @@ async function admin_import_all_annotations(collection) {
 
         var response = await axios.get( apiLink )
         console.log('---- RESPONSE TO POST DATA ----', response);
-        return true;
+        return response;
 
     } catch(error) {
 

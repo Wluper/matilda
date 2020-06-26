@@ -213,7 +213,7 @@ Vue.component("collection-view", {
             <div class="inner-wrap">
 
                 <ul class="active-collection">
-                <h2>Active Collection</h2>
+                <h2>{{guiMessages.selected.lida.activeColl}}</h2>
                     <div v-if="activeCollection != null" class="entry-list-single-item-container">
                         <div class="entry-info" v-on:click="clicked_active()">
                             <div class="entry-id">
@@ -233,14 +233,14 @@ Vue.component("collection-view", {
                             </div>
                             <div></div>
                             <div class="entry-done">
-                                Done: <span>{{done}}</span>
+                                Done: <span class="gold-true">{{done}}</span>
                             </div>
                         </div>
                     </div>
                 </ul>
 
                 <ul class="annotation-list">
-                <h2>Assigned collections</h2>
+                <h2>{{guiMessages.selected.lida.assignedColl}}</h2>
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id" v-if="name.id != activeCollection">
                         <div class="entry-list-single-item-container">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
@@ -382,14 +382,13 @@ Vue.component('database-entry-modal', {
                annotationStyle:this.entry.annotationStyle,
                annotator:this.entry.owner,
                status:this.entry.status,
-               document:this.entry.document
+               document:this.entry.document,
             }
             for (element in params) {
                if (params[element] == undefined)
                   params[element] = ""
             }
-            let preparedDocument = params;
-            backend.update_collection_async(this.entry.id, preparedDocument)
+            backend.update_collection_async(this.entry.id, params)
                .then( (response) => {
                   console.log();
                   console.log("============== Dialogues-Collection Updated ==============");

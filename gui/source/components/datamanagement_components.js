@@ -237,6 +237,8 @@ Vue.component('collection-creation-modal', {
          if ((params.id == "") || (params.id == undefined)) {
                params.id = "Collection"+Math.floor(Math.random() * 10001);
          }
+         if (this.entry.document.length == 0)
+            this.entry.document = " ";
          doc = this.entry.document.trim();
          backend.update_collection_async(params.id, params, doc)
                .then( (response) => {

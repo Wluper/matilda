@@ -287,6 +287,12 @@ class DialogueAnnotator(object):
 
         metadata = []
 
+        #if it fails server has ben rebooted and lost user's workspace
+        try:
+            self.__dialogues[DialogueAnnotator.__SESSION_USER]
+        except:
+            return {"status":"fail, server rebooted. New login is needed"}
+
         for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
             
             try:

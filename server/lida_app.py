@@ -7,6 +7,7 @@ import os
 import sys
 import json
 import copy
+import datetime
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
 
@@ -474,16 +475,18 @@ def handle_agreements_resource():
                 totalTurns += 1
                 for annotationName, listOfAnnotations in turn.items():
 
-                    if annotationName=="turn_idx":
+                    if annotationName=="turn_idx" or annotationName=="turn_id":
                         continue
+
+                    if annotationName not in Configuration.metaTags:
  
-                    annotationType = Configuration.configDict[annotationName]["label_type"]
+                        annotationType = Configuration.configDict[annotationName]["label_type"]
 
-                    agreementScoreFunc = agreementScoreConfig[ annotationType ]
+                        agreementScoreFunc = agreementScoreConfig[ annotationType ]
 
-                    if agreementScoreFunc:
-                        totalLabels =   len( Configuration.configDict[annotationName]["labels"] )
-                        temp = agreementScoreFunc( listOfAnnotations, totalLabels )
+                        if agreementScoreFunc:
+                            totalLabels = len( Configuration.configDict[annotationName]["labels"] )
+                            temp = agreementScoreFunc( listOfAnnotations, totalLabels )
 
                         errors += temp.get("errors")
                         totalAnnotations += totalLabels
@@ -590,11 +593,13 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
         if request.method == "POST":
 
             values = request.get_json()
+            values = values["json"]
             #adds necessary fields
             values["gold"] = {}
             values["errors"] = {}
+            values["lastUpdate"] = datetime.datetime.utcnow()
 
-            response = DatabaseManagement.createDoc(id, DBcollection, values["json"])
+            response = DatabaseManagement.createDoc(id, DBcollection, values)
 
     return jsonify ( response )
 
@@ -617,15 +622,17 @@ def handle_login(id, idPass=None,role=None):
 @LidaApp.route('/annotations_import/<collection_id>',methods=['GET'])
 def handle_annotations_import(collection_id):
 
-    responseObject = {}
+    responseObject = {"status":"fail"}
 
     collections = DatabaseManagement.readDatabase("annotated_collections", {"id":collection_id})
 
-    for collection in collections:
-        admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection["annotator"])
+    if collections != []:
+        if collections[0]["document"]:
+            for collection in collections:
+                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection["annotator"])
 
-    responseObject = {"status":"success"}
-
+            responseObject = {"status":"success", "imported":collections}
+            
     return jsonify(responseObject)
 
 
@@ -875,7 +882,7 @@ class InterannotatorMethods:
                     continue
 
                 #metatags can be ignored
-                if annotationName != "annotation_style" or "description" or "title":
+                if annotationName not in Configuration.metaTags:
                     try:
                         #confront
                         annotationType = Configuration.configDict[annotationName]["label_type"]

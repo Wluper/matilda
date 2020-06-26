@@ -212,7 +212,7 @@ Vue.component("interannotator-app", {
         <div class="help-button-container">
             <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
             <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
-            <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+            <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.admin.backToColl}}</button>
         </div>
     </div>
     
