@@ -41,6 +41,11 @@ var mainApp = new Vue({
         this.status = 'listview';
       },
 
+      switchStatusToConflictsReview() {
+         console.log('--- INTERRANOTATOR Collection ----');
+        this.status = 'collection-conflicts';
+      },
+
       switchStatusToSupervision() {
         //console.log('--- SUPERVISION ----');
         //this.status = 'supervision';
@@ -62,6 +67,7 @@ var mainApp = new Vue({
        allDialoguesEventBus.$on("usersManagement_clicked", this.switchStatusToUsersManagement);
        allDialoguesEventBus.$on("collection_clicked", this.switchStatusToCollection);
        allDialoguesEventBus.$on("conflicts_clicked", this.switchStatusToConflicts);
+       allDialoguesEventBus.$on("conflicts_on_collection", this.switchStatusToConflictsReview);
        allDialoguesEventBus.$on("annotation_clicked", this.switchStatusToAnnotation);
        allDialoguesEventBus.$on("supervision_clicked", this.switchStatusToSupervision);
        databaseEventBus.$on( "document_selected", this.load_document_view );
@@ -91,6 +97,11 @@ var mainApp = new Vue({
 
       <supervision-view v-else-if="status === 'supervision'">
       </supervision-view>
+
+      <interannotator-app v-else-if="status === 'collection-conflicts'" 
+      v-bind:alreadyVisited="alreadyVisited"
+      v-bind:userName="userName">
+      </interannotator-app>
 
       <resolution-app v-else-if="status === 'resolving'"
       v-bind:dialogueId="displayingDialogue">

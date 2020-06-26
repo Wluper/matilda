@@ -250,7 +250,8 @@ Vue.component("annotation-app", {
 
                     if (status == "success") {
                         this.allDataSaved = true;
-                        backend.update_db(mainApp.collectionRate, false);
+                        fields = {"status":mainApp.collectionRate};
+                        backend.update_annotations(mainApp.activeCollection, fields, false);
                     } else {
                         this.allDataSaved = false;
                         alert("Server error, dialogue not saved!")

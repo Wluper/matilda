@@ -60,6 +60,10 @@ Vue.component("database-header", {
 
 Vue.component("collection-view", {
 
+    props: [
+        "collectionRate","done"
+    ],
+
     data() {
         return {
             changesSaved: "",
@@ -72,7 +76,6 @@ Vue.component("collection-view", {
             db_port:"27017",
             userName: mainApp.userName,
             activeCollection: mainApp.activeCollection,
-            collectionRate: mainApp.collectionRate,
             activeCollectionMeta: {},
         }
     },
@@ -86,13 +89,6 @@ Vue.component("collection-view", {
     },
 
     computed : {
-        activeCollectionCheck : function() {
-            if (localStorage["collection"] == undefined) {
-                localStorage["collection"] = "";
-            }
-            return localStorage["collection"];
-        },
-
         role: function() {
             return mainApp.role;
         }
@@ -119,19 +115,25 @@ Vue.component("collection-view", {
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
                     mainContainer.style.cursor = null;
-                    this.retrieveActiveCollection();
+                    if (mainApp.boot == true)
+                      this.retrieveActiveCollection();
             })
 
         },
 
         retrieveActiveCollection() {
+            console.log("Loading meta-data for active collection");
             search = {"id":mainApp.activeCollection,"annotator":mainApp.userName}
-            backend.get_specific_collections("annotated_collections",search)
+            projection = {"status":1,"done":1,"lastUpdate":1}
+            backend.get_specific_collections("annotated_collections",search, projection)
                 .then( (response) => {
-                    mainApp.collectionRate = response[0].status;
-                    this.collectionRate = response[0].status;
                     this.activeCollectionMeta = response[0]
                     console.log("Active Collection",this.activeCollectionMeta);
+                    //storing data for persistence
+                    mainApp.collectionRate = response[0].status;
+                    mainApp.done = response[0].done;
+                    //executed only once
+                    //mainApp.boot = false;
                 });
         },
 
@@ -152,7 +154,6 @@ Vue.component("collection-view", {
                            databaseEventBus.$emit( "collection_active", clickedEntry);
                            //create annotated_document
                            console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
-                           //backend.update_db(clickedEntry,"0%");
                            mainContainer.style.cursor = null;
                            annotationAppEventBus.$emit("go_back");
                     });
@@ -179,7 +180,8 @@ Vue.component("collection-view", {
 
         update_annotations(collectionID) {
             mainContainer.style.cursor = "progress";
-            backend.update_db(mainApp.collectionRate, false)
+            fields = {"status":mainApp.collectionRate}
+            backend.update_annotations(mainApp.activeCollection, fields, false)
                 .then( (response) => {
                     mainContainer.style.cursor = null;
                     databaseEventBus.$emit('collections_changed');
@@ -198,7 +200,8 @@ Vue.component("collection-view", {
         },
 
         set_done() {
-
+            fields = {"done": true};
+            backend.update_collection_fields(this.activeCollection, fields)
         }
     },
     template:
@@ -211,7 +214,7 @@ Vue.component("collection-view", {
 
                 <ul class="active-collection">
                 <h2>Active Collection</h2>
-                    <div class="entry-list-single-item-container">
+                    <div v-if="activeCollection != null" class="entry-list-single-item-container">
                         <div class="entry-info" v-on:click="clicked_active()">
                             <div class="entry-id">
                                 <span>Collection:</span> {{activeCollection}}
@@ -230,7 +233,7 @@ Vue.component("collection-view", {
                             </div>
                             <div></div>
                             <div class="entry-done">
-                                Done: <span>{{activeCollectionMeta.done}}</span>
+                                Done: <span>{{done}}</span>
                             </div>
                         </div>
                     </div>
@@ -339,7 +342,8 @@ Vue.component('database-entry-modal', {
                            databaseEventBus.$emit( "collection_active", this.entry.id);
                            //create annotated_document
                            console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
-                           backend.update_db(this.entry.id,"0%");
+                           fields = {"status":"0%"}
+                           backend.update_annotations(mainApp.activeCollection, fields, false);
                         });
                   })   
                }

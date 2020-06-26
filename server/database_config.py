@@ -10,6 +10,7 @@ import copy
 import json
 import datetime
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
+from pprint import pprint
 import functools
 import ast
 
@@ -29,13 +30,28 @@ from bson.objectid import ObjectId
 
 class DatabaseConfiguration:
 
-	databaseLocation = "localhost" 
-	databasePort = 27017
+#<<<<<<< HEAD
+	databaseURL="mongodb://localhost"
+#	databaseURL="mongodb+srv://<user>:<passwd>@cluster0-wyaud.mongodb.net/lida?retryWrites=true&w=majority"
 
-	client = MongoClient(databaseLocation,databasePort)
-	db = client["lida"]
+	db = MongoClient(databaseURL)["lida"]
+	print("Connecting to DB");
+#	client = MongoClient("mongodb+srv://augusto:asterix@cluster0-wyaud.mongodb.net/<dbname>?retryWrites=true&w=majority")
+#	db = client.mymongodb
+#	serverStatusResult=db.command("serverStatus")
+#	pprint(serverStatusResult)
+#	collection = db.lida_database
+#	users = db.lida_users
+#	dialogues = db.lida_dialogues
+#=======
+#	databaseLocation = "localhost" 
+#	databasePort = 27017
+
+#	client = MongoClient(databaseLocation,databasePort)
+#	db = client["lida"]
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
 	annotatedCollections = db["annotated_collections"]
+#>>>>>>> master
 

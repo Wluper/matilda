@@ -26,6 +26,8 @@ var mainApp = new Vue({
       role:'annotator',
       activeCollection:localStorage["collection"],
       collectionRate:'',
+      done:false,
+      boot:true,
     }
   },
 
@@ -81,7 +83,8 @@ var mainApp = new Vue({
 
     check_collection_cookie: function() {
       if (localStorage["collection"] == undefined) {
-        return
+        //ask server otherwise
+        this.activeCollection = null;
       } else {
         this.activeCollection = localStorage["collection"];
       }
@@ -115,6 +118,7 @@ var mainApp = new Vue({
         if (!this.alreadyVisited.includes(event)) {
             this.alreadyVisited.push(event)
         }
+        setTimeout(this.cyclic_backup, 10000);
     },
 
     set_active_collection: function (event) {
@@ -185,7 +189,8 @@ var mainApp = new Vue({
         */
         console.log("======= CYCLIC BACKUP ======")
         if (!document.hidden) {
-            backend.update_db(mainApp.collectionRate, true)
+            fields = {"status":mainApp.collectionRate};
+            backend.update_annotations(mainApp.activeCollection, fields, true)
             .then( (response) => {
                 console.log(utils.create_date());
                 if (response.status == "success") {
@@ -218,11 +223,14 @@ var mainApp = new Vue({
                    v-bind:sourceFname="splittingTextSourceFile">
     </text-splitter>
 
-    <collection-view v-else-if="status === 'collection-view'">
+    <collection-view v-else-if="status === 'collection-view'"
+                   v-bind:collectionRate="collectionRate"
+                   v-bind:done="done">
     </collection-view>
 
     <all-dialogues v-else
-                   v-bind:alreadyVisited="alreadyVisited">
+                   v-bind:alreadyVisited="alreadyVisited"
+                   v-bind:collectionRate="collectionRate">
     </all-dialogues>
   `
 

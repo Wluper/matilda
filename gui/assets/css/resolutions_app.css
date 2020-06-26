@@ -415,6 +415,28 @@
     align-items: center;
 }
 
+.gold-space {
+    grid-area:filler;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform:uppercase;
+    font-size:11px;
+}
+
+.gold-space span {
+    font-weight: 100;
+    color:red;
+    padding-left:4px;
+}
+
+.gold-true {
+    color:#259af7;
+}
+
 .dialogue-num-turns {
     grid-area: numTurns;
     overflow-x: visible;
@@ -422,7 +444,6 @@
     justify-content: flex-end;
     align-items: center;
     text-align: right;
-    padding: 10px;
     padding-right: 20px;
     font-weight: bold;
     font-family: montserrat;

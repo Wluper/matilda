@@ -5,7 +5,7 @@
 Vue.component("all-dialogues", {
 
    props: [
-      "alreadyVisited"
+      "alreadyVisited", "collectionRate"
    ],
 
    data () {
@@ -15,7 +15,6 @@ Vue.component("all-dialogues", {
          showModal: false,
          // Reference to the language item
          guiMessages,
-         collectionRate:'0%',
          userName: mainApp.userName,
          activeCollection: mainApp.activeCollection
       }
@@ -71,12 +70,7 @@ Vue.component("all-dialogues", {
                   //if new session then recover from database
                   this.restore_session_from_database();
                }
-               if (mainApp.restored != true) {
-                  //wait for 10 seconds then start cyclic-backups
-                  setTimeout(this.cyclic_backup, 10000);
-               }
                mainApp.restored = true;
-
          });
       },
 
@@ -87,16 +81,19 @@ Vue.component("all-dialogues", {
               total_turns += Number(this.allDialogueMetadata[i]["num_turns"]-1);
               summatory += Number(this.allDialogueMetadata[i]["status"].slice(0,-1) * this.allDialogueMetadata[i]["num_turns"]-1)
           }
-          this.collectionRate = Number( summatory / total_turns).toFixed(1);
-          if ((this.collectionRate <= 0) || (this.collectionRate == NaN)) {
-            this.collectionRate = 0;
-          } else if (this.collectionRate >= 99) {
-            this.collectionRate = 100;
+          mainApp.collectionRate = Number( summatory / total_turns).toFixed(1);
+          if ((mainApp.collectionRate <= 0) || (mainApp.collectionRate == NaN)) {
+            mainApp.collectionRate = 0;
+          } else if (mainApp.collectionRate >= 99) {
+            mainApp.collectionRate = 100;
           }
-          this.collectionRate = this.collectionRate+"%";
-          mainApp.collectionRate = this.collectionRate;
-          if (mainApp.collectionRate != "NaN%")
-            backend.update_db(mainApp.collectionRate, false);
+          mainApp.collectionRate = mainApp.collectionRate+"%";
+          if (mainApp.collectionRate == "NaN%") {
+              mainApp.collectionRate = "0%";
+              mainApp.collectionRate = "0%"
+          }
+          fields = {"status":mainApp.collectionRate}
+          backend.update_collection_fields(mainApp.activeCollection,fields, false);
       },
 
       dialogue_already_visited(id) {
@@ -135,7 +132,8 @@ Vue.component("all-dialogues", {
             backend.del_single_dialogue_async(nameToDelete)
                .then( () => {
                     allDialoguesEventBus.$emit("refresh_dialogue_list");
-                    backend.update_db(mainApp.collectionRate, false);
+                    fields = {"status":mainApp.collectionRate}
+                    backend.update_annotations(mainApp.activeCollection, fields, false);
                });
 
             allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);

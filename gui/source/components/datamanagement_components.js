@@ -241,8 +241,9 @@ Vue.component('collection-creation-modal', {
          backend.update_collection_async(params.id, params, doc)
                .then( (response) => {
                   console.log();
-                  console.log("Database: Dialogue Collection updated");
+                  console.log("Database: Dialogue Collection updloaded with id",params.id);
                   databaseEventBus.$emit('collections_changed');
+                  this.$emit("close");
          });
       }
   },

@@ -85,7 +85,7 @@ Vue.component("resolution-app", {
 
             annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
-            allDialoguesEventBus.$emit("conflicts_clicked");
+            allDialoguesEventBus.$emit("conflicts_on_collection");
         },
         init: function() {
             //console.log(this.metaDataList)
