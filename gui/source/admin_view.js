@@ -2,17 +2,17 @@
 * MAIN VIEW
 *******************************************************************************/
 
-var mainApp = new Vue({
-  el: '#main-app',
+/*
+Vue.component("admin-panel", {
 
   data() {
       return {
             // displayingDialogue: 'Dialogue1',
             displayingDialogue: '',
-            status : 'logging',
             alreadyVisited: [],
-            role: 'administrator',
-            userName:'admin',
+            role:mainApp.role,
+            status:"admin-panel",
+            userName:mainApp.userName,
       }
   },
 
@@ -76,7 +76,7 @@ var mainApp = new Vue({
 
   template:
   `
-      <main-admin-view v-if="status === 'welcome'" 
+      <main-admin-view v-if="status === 'admin-panel'" 
       v-bind:userName="userName">
       </main-admin-view>
 
@@ -85,14 +85,11 @@ var mainApp = new Vue({
       v-bind:userName="userName">
       </interannotator-view>
 
-      <login-view v-else-if="status === 'logging'">
-      </login-view>
-
       <users-view v-else-if="status === 'users-view'" 
       v-bind:userName="userName">
       </users-view>
 
-      <datamanagement-view v-else-if="status === 'collection'">
+      <datamanagement-view v-else-if="status === 'datamanagement-view'">
       </datamanagement-view>
 
       <supervision-view v-else-if="status === 'supervision'">
@@ -109,6 +106,8 @@ var mainApp = new Vue({
   `
 });
 
+*/
+
 /************************************
 * All Dialgoues View "aka MAIN ADMIN LIDA VIEW"
 *************************************/
@@ -116,18 +115,32 @@ var mainApp = new Vue({
 Vue.component("main-admin-view", {
 
   props: [
-      "userName",
+      "userName"
   ],
 
   data () {
       return {
           //Reference to the language data
-          guiMessages
+          guiMessages,
+          view:"admin-panel",
+          displayingDialogue: '',
+          alreadyVisited: [],
       }
   },
 
   mounted () {
      //
+  },
+
+  created () {
+      adminEventBus.$on("go_back", this.switchToMain);
+      adminEventBus.$on("collection_clicked", this.switchToCollection);
+      adminEventBus.$on("conflicts_on_collection", this.switchToConflictsReview);
+      adminEventBus.$on("dialogue_clicked", this.switchToResolving);
+      adminEventBus.$on("usersManagement_clicked", this.switchToUsersManagement);
+      adminEventBus.$on("conflicts_clicked", this.switchToConflicts);
+      adminEventBus.$on("supervision_clicked", this.switchToSupervision);
+      //databaseEventBus.$on( "document_selected", this.load_document_view );
   },
 
   methods: {
@@ -139,20 +152,43 @@ Vue.component("main-admin-view", {
             location.reload();
          }
     },
-    clicked_users_button() {
-        allDialoguesEventBus.$emit("usersManagement_clicked");
+    switchToMain() {
+       this.view = "admin-panel";
     },
-    clicked_collection_button() {
-        allDialoguesEventBus.$emit("collection_clicked");
+
+    switchToResolving(dialogueName) {
+          this.displayingDialogue = dialogueName
+          this.view = 'resolving'
+          this.alreadyVisited.push(dialogueName)
     },
-    clicked_interannotator_button() {
-        allDialoguesEventBus.$emit("conflicts_clicked");
+
+    switchToUsersManagement() {
+          this.view = 'users-view';
     },
-    clicked_supervision_button() {
-        allDialoguesEventBus.$emit("supervision_clicked");
+
+    switchToCollection() {
+        console.log('--- DATAMANAGEMENT VIEW ----');
+        this.view = 'datamanagement';
     },
-    clicked_annotator_button() {
-        allDialoguesEventBus.$emit("annotation_clicked");
+
+    switchToConflicts() {
+        console.log('--- INTERRANOTATOR MAIN ----');
+        this.view = 'listview';
+    },
+
+    switchToConflictsReview() {
+         console.log('--- INTERRANOTATOR Collection ----');
+         this.view = 'collection-conflicts';
+    },
+
+    switchToSupervision() {
+        //console.log('--- SUPERVISION ----');
+        //this.view = 'supervision';
+    },
+
+    switchToAnnotation() {
+        console.log('--- BACK TO ANNOTATION VIEW ----');
+        databaseEventBus.$emit("assignements_selected");
     },
 
 
@@ -163,31 +199,57 @@ Vue.component("main-admin-view", {
   },
   template:
   `
-  <div class="all-dialogues-container">
+<div id="admin_main">
+  <div v-if="view === 'admin-panel'">
+    <div class="all-dialogues-container">
+      <div class="dialogue-list-title-container">
+          <div class="all-dialogues-list-title">
+            <h2>
+              {{guiMessages.selected.admin.titlePanel}}
+            </h2>
+          </div>
 
-    <div class="dialogue-list-title-container">
-        <div class="all-dialogues-list-title">
-          <h2>
-            {{guiMessages.selected.admin.titlePanel}}
-          </h2>
+        <user-bar v-bind:userName="userName"></user-bar>
+        <div class="help-button-container">
+              
         </div>
-
-      <user-bar v-bind:userName="userName"></user-bar>
-
-      <div class="help-button-container">
-            
       </div>
-    </div>
-    <div class="inner-wrap">
-      <div class="admin-panel">
-        <button class="help-button btn btn-sm btn-primary panel" @click="clicked_interannotator_button()">{{ guiMessages.selected.admin.interAnno }}</button>
-        <button class="help-button btn btn-sm btn-primary panel" @click="clicked_users_button()">{{ guiMessages.selected.admin.userButton }}</button>
-        <button class="help-button btn btn-sm btn-primary panel" @click="clicked_collection_button()">{{ guiMessages.selected.collection.title}}</button>
-        <button class="help-button btn btn-sm btn-primary panel" @click="clicked_supervision_button()">{{ guiMessages.selected.admin.supervision}}</button>
-        <button class="help-button btn btn-sm btn-primary panel" @click="clicked_annotator_button()">{{ guiMessages.selected.admin.annotation}}</button>
+      <div class="inner-wrap">
+        <div class="admin-panel">
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToConflicts()">{{ guiMessages.selected.admin.interAnno }}</button>
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToUsersManagement()">{{ guiMessages.selected.admin.userButton }}</button>
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.collection.title}}</button>
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToSupervision()">{{ guiMessages.selected.admin.supervision}}</button>
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToAnnotation()">{{ guiMessages.selected.admin.annotation}}</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <interannotator-view v-if="view === 'listview'" 
+      v-bind:alreadyVisited="alreadyVisited"
+      v-bind:userName="userName">
+  </interannotator-view>
+
+  <users-view v-else-if="view === 'users-view'" 
+      v-bind:userName="userName">
+  </users-view>
+
+  <datamanagement-view v-else-if="view === 'datamanagement'">
+  </datamanagement-view>
+
+  <supervision-view v-else-if="view === 'supervision'">
+  </supervision-view>
+
+  <interannotator-app v-else-if="view === 'collection-conflicts'" 
+      v-bind:alreadyVisited="alreadyVisited"
+      v-bind:userName="userName">
+  </interannotator-app>
+
+  <resolution-app v-else-if="view === 'resolving'"
+      v-bind:dialogueId="displayingDialogue">
+  </resolution-app>  
+</div>
   `
 
 });

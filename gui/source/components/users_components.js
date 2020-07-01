@@ -16,7 +16,7 @@ Vue.component("users-view", {
         this.init()
     },
     created (){
-        allDialoguesEventBus.$on( "users_updated", this.get_all_users )
+        adminEventBus.$on("users_updated", this.get_all_users )
     },
 
     beforeDestroyed() {
@@ -34,7 +34,7 @@ Vue.component("users-view", {
             console.log("==================================");
             console.log("==================================");
             console.log("==================================");
-            annotationAppEventBus.$emit("go_back", event);
+            adminEventBus.$emit("go_back", event);
         },
 
         get_all_users() {
@@ -156,7 +156,7 @@ Vue.component('users-creation-modal', {
                 .then( (response) => {
                     console.log();
                     this.$emit('close');
-                    allDialoguesEventBus.$emit("users_updated");
+                    adminEventBus.$emit("users_updated");
                 })
         },  
     },  

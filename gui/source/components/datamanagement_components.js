@@ -6,10 +6,9 @@ Vue.component("datamanagement-view", {
             guiMessages,
             allEntryMetadata: [],
             showModal: false,
+            showHelpColl: false,
             showCreateModal: false,
             showSelectModal: false,
-            db_address:"127.0.0.1",
-            db_port:"27017",
             userName: mainApp.userName,
         }
     },
@@ -40,6 +39,10 @@ Vue.component("datamanagement-view", {
             this.getAllEntriesFromServer();
         },
 
+        go_back: function() {
+            adminEventBus.$emit("go_back");
+        },
+
         getAllEntriesFromServer() {
             mainContainer.style.cursor = "progress";
             backend.get_collections_ids_async("dialogues_collections")
@@ -59,7 +62,7 @@ Vue.component("datamanagement-view", {
         },
 
         clicked_active() {
-            annotationAppEventBus.$emit("go_back");
+            adminAppEventBus.$emit("go_back");
         },
 
         delete_entry(event) {
@@ -78,9 +81,15 @@ Vue.component("datamanagement-view", {
     template:
     `
         <div id="collection-view">
-            <database-header v-bind:db_port="db_port"
-                             v-bind:db_address="db_address">
-            </database-header>
+            <div class="database-menu">
+                <h2 class="database-title">{{guiMessages.selected.collection.title}}</h2>
+                <user-bar v-bind:userName="userName"></user-bar>
+                <div class="help-button-container">
+                    <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
+                    <button v-on:click="go_back()" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                </div>
+                <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
+            </div>
             <div class="inner-wrap">
 
                 <ul class="collection-list">

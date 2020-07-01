@@ -248,7 +248,7 @@ def handle_dialogues_tag(user, id, tag, value):
 @LidaApp.route('/<user>/annotations_recover/<doc>',methods=['GET'])
 def handle_switch_collection_request(user, doc):
 
-    responseObject = {}
+    responseObject = {"status":"fail", "created":False}
 
     #get collection document from database
     if request.method == "PUT":
@@ -257,19 +257,33 @@ def handle_switch_collection_request(user, doc):
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
+            #create document 
+            values = {
+                "id":doc, 
+                "fromCollection":doc, 
+                "annotator":user, 
+                "done":False, 
+                "status":"0%",
+                "document":docRetrieved[0]["document"],
+                "lastUpdate":datetime.datetime.utcnow()
+            }
+            DatabaseManagement.createDoc(doc, "annotated_collections", values)
+            responseObject["created"] = True
 
         #import and format new dialogues
-        for doc_collection in docRetrieved:
-            __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=doc_collection["document"])
+        for docCollection in docRetrieved:
+            __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
 
         dialogueFile.change_collection(user, doc)
-        return {"status":"success"}
+        responseObject["status"] = "success"
+
+        return responseObject
     else:
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc, "annotator":user})
 
     #update lida dialogue source
-    for doc_collection in docRetrieved:
-        dialogueFile.update_dialogues(user, doc_collection["document"])
+    for docCollection in docRetrieved:
+        dialogueFile.update_dialogues(user, docCollection["document"])
 
     dialogueFile.change_collection(user, doc)
 
@@ -488,10 +502,10 @@ def handle_agreements_resource():
                             totalLabels = len( Configuration.configDict[annotationName]["labels"] )
                             temp = agreementScoreFunc( listOfAnnotations, totalLabels )
 
-                        errors += temp.get("errors")
-                        totalAnnotations += totalLabels
-                        kappa += temp.get("kappa")
-                        accuracy += temp.get("accuracy")
+                            errors += temp.get("errors")
+                            totalAnnotations += totalLabels
+                            kappa += temp.get("kappa")
+                            accuracy += temp.get("accuracy")
 
         responseObject["errors"] = errors
         responseObject["total"] = totalAnnotations

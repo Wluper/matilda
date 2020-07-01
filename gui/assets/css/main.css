@@ -81,6 +81,9 @@ input:focus {
     color:#259af7;
 }
 
+.btn-mid {
+    margin-right:3px;
+}
 
 
 .btn.btn-sm {
@@ -158,8 +161,145 @@ input:focus {
     grid-area: button-section;
 }
 
+.admin-panel {
+    display: grid;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
+}
+
+.panel {
+    padding: 10px 17px !important;
+}
 
 
+/*******************************************************************************
+********************************************************************************
+* ADMIN SPECIFIC
+********************************************************************************
+*******************************************************************************/
+
+.int-coll-list-single-item-container {
+    display: grid;
+    grid-template: [row1-start] "info" [row1-end] / 1fr;
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+    color: #222;
+}
+
+.int-coll-info {
+    grid-area: info;
+    display: grid;
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 5fr 2fr 1fr 3fr;
+    cursor: pointer;
+    background-color: white;
+    color: #222;
+    padding: 5px;
+    transition: ease 250ms all;
+}
+
+.int-coll-id {
+    grid-area: id;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 3px 0 0 3px;
+}
+
+.gold-space {
+    grid-area: filler;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.gold-space span {
+    font-weight: 100;
+    color: red;
+    padding-left: 4px;
+}
+
+.int-coll-num-turns {
+    grid-area: numTurns;
+    overflow-x: visible;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding-right: 20px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.int-coll-num-turns:hover {
+    background-color: #999;
+    transition: 0.2s;
+    color: white;
+}
+
+.int-coll-num-turns-clicked {
+    grid-area: numTurns;
+    overflow-x: visible;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding-right: 20px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    background-color: #999;
+    transition: 0.2s;
+    color: white;
+}
+
+.int-el {
+    grid-template: [row1-start] "info" [row1-end] / 1fr !important;
+}
+
+.int-info {
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 5fr 2fr 1fr 3fr !important;
+}
+
+.int-dialogue-id {
+    grid-area: id;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.filler-space {
+    grid-area:filler;
+}
+
+.int-visited-indicator {
+    grid-area: visited;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #10c349;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 0px 5px 0px 5px;
+    margin: 10px 13px 10px 0px;
+    border: 1px solid #19c349;
+}
 
 /*******************************************************************************
 ********************************************************************************

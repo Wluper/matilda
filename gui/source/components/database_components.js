@@ -1,13 +1,12 @@
 Vue.component("database-header", {
 
-    props: [ "db_address", "db_port"],
-
     data(){ 
         return {
             guiMessages,
             showHelpWork:"",
             showHelpColl:"",
             userName:mainApp.userName,
+            role:mainApp.role,
         }
     
     },
@@ -20,25 +19,13 @@ Vue.component("database-header", {
             annotationAppEventBus.$emit("go_back", event);
         },
 
-        download_collections(event) {
-            backend.get_collections_async("annotated_collections")
-                .then( (response) => {
-                    console.log();
-                    let fileContent = response;
-                    for (doc in fileContent) {
-                        fileContent[doc]["document"] = fileContent[doc]["document"]
-                    }
-                    let blob = new Blob([JSON.stringify(fileContent, null, 4)], {type: 'application/json'});
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    console.log("----- File ready for download ----")
-                    fileName = "Collections_"+utils.create_date()+".json";
-                    link.setAttribute('download', fileName );
-                    document.body.appendChild(link);
-                    link.click();
-                });
-        },
+        admin_panel_clicked() {
+            console.log("==================================");
+            console.log("==================================");
+            console.log("==================================");
+            annotationAppEventBus.$emit("admin_panel_clicked");
+        }
+
     },
 
     template: 
@@ -48,9 +35,7 @@ Vue.component("database-header", {
                 <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
-
-                    <button v-on:click="download_collections()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.button_downloadAll}}</button>
-                    
+                    <button v-if="role == 'administrator'" class="btn-mid btn btn-sm btn-primary" @click="admin_panel_clicked()">{{guiMessages.selected.admin.button_admin}}</button>
                     <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
@@ -61,7 +46,7 @@ Vue.component("database-header", {
 Vue.component("collection-view", {
 
     props: [
-        "collectionRate","done"
+        "done"
     ],
 
     data() {
@@ -77,6 +62,7 @@ Vue.component("collection-view", {
             userName: mainApp.userName,
             activeCollection: mainApp.activeCollection,
             activeCollectionMeta: {},
+            collectionRate: mainApp.collectionRate
         }
     },
 
@@ -107,11 +93,10 @@ Vue.component("collection-view", {
         },
 
         getAllEntriesFromServer() {
-            search = {"assignedTo":mainApp.userName}
             mainContainer.style.cursor = "progress";
-            backend.get_specific_collections("dialogues_collections",search)
+            backend.get_specific_collections("dialogues_collections",{"assignedTo":mainApp.userName})
                 .then( (response) => {
-                    console.log();
+                    console.log("==== ASSIGNED COLLECTIONS ====");
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
                     mainContainer.style.cursor = null;
@@ -122,18 +107,23 @@ Vue.component("collection-view", {
         },
 
         retrieveActiveCollection() {
-            console.log("Loading meta-data for active collection");
+            console.log("==== ACTIVE COLLECTION ====");
             search = {"id":mainApp.activeCollection,"annotator":mainApp.userName}
             projection = {"status":1,"done":1,"lastUpdate":1}
             backend.get_specific_collections("annotated_collections",search, projection)
                 .then( (response) => {
-                    this.activeCollectionMeta = response[0]
-                    console.log("Active Collection",this.activeCollectionMeta);
-                    //storing data for persistence
-                    mainApp.collectionRate = response[0].status;
-                    mainApp.done = response[0].done;
-                    //executed only once
-                    //mainApp.boot = false;
+                     if (response.length != 0) {
+                        this.activeCollectionMeta = response[0]
+                        console.log("Active Collection",this.activeCollectionMeta);
+                        //storing data for persistence
+                        mainApp.collectionRate = response[0].status;
+                        mainApp.done = response[0].done;
+                        collectionRate = response[0].status;
+                        //executed only once
+                        //mainApp.boot = false;
+                     } else {
+                        return
+                     }
                 });
         },
 
@@ -147,13 +137,12 @@ Vue.component("collection-view", {
                         backend.load_dialogues(clickedEntry)
                         .then( (response) => {
                            console.log("==== DIALOGUES IMPORT ====");
-                           console.log();
+                           console.log(response);
+                           if (response.data.created == true)
+                              console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
                            //set global variable with the collection name
-                           //send event in all dialogues
-                           this.showResult = true;
-                           databaseEventBus.$emit( "collection_active", clickedEntry);
+                           databaseEventBus.$emit("collection_active", clickedEntry);
                            //create annotated_document
-                           console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
                            mainContainer.style.cursor = null;
                            annotationAppEventBus.$emit("go_back");
                     });
@@ -162,26 +151,15 @@ Vue.component("collection-view", {
         },
 
         clicked_active() {
-            annotationAppEventBus.$emit("go_back");
-        },
-
-        delete_entry(event) {
-            if (confirm(guiMessages.selected.admin.deleteConfirm)) {
-                console.log('-------- DELETING --------')
-                idToDelete = event.target.parentNode.parentNode.id;
-                backend.del_db_entry_async(idToDelete, "annotated_collections")
-                    .then( () => {
-                        databaseEventBus.$emit('collections_changed');
-                    });
-            } else {
-                return
-            }
-        },
+            if (this.activeCollectionMeta.done == false)
+                annotationAppEventBus.$emit("go_back");
+            else
+                allDialoguesEventBus.$emit("show_message",guiMessages.selected.collection.freezed);
+        }, 
 
         update_annotations(collectionID) {
             mainContainer.style.cursor = "progress";
-            fields = {"status":mainApp.collectionRate}
-            backend.update_annotations(mainApp.activeCollection, fields, false)
+            backend.update_annotations(mainApp.activeCollection, {"status":mainApp.collectionRate}, false)
                 .then( (response) => {
                     mainContainer.style.cursor = null;
                     databaseEventBus.$emit('collections_changed');
@@ -191,7 +169,7 @@ Vue.component("collection-view", {
 
         update_collection() {
             if (this.activeCollection == "null") {
-                alert(guiMessages.selected.collection.noCollection);
+                allDialoguesEventBus.$emit("show_message",guiMessages.selected.collection.noCollection);
                 return
             }
             if (confirm(guiMessages.selected.collection.updateConfirm1+" "+this.activeCollection+" "+guiMessages.selected.collection.updateConfirm2)) {
@@ -200,8 +178,14 @@ Vue.component("collection-view", {
         },
 
         set_done() {
-            fields = {"done": true};
-            backend.update_collection_fields(this.activeCollection, fields)
+            if (confirm(guiMessages.selected.collection.freeze)) {
+                if (this.activeCollectionMeta.done != true) {
+                  backend.update_collection_fields(this.activeCollection, {"done":true})
+                    .then((response) => {
+                        databaseEventBus.$emit('collections_changed');
+                  });
+                }
+            }
         }
     },
     template:
@@ -219,12 +203,20 @@ Vue.component("collection-view", {
                             <div class="entry-id">
                                 <span>Collection:</span> {{activeCollection}}
                             </div>
-                            <div class="entry-annotated">
+
+                            <div v-if="collectionRate != ''" class="entry-annotated">
                                 <span>Status: {{collectionRate}}</span>
                                 <div class="annotated-bar">
                                     <div class="annotated-fill" v-bind:style="{ width: collectionRate }"></div>
                                 </div>
                             </div>
+                            <div v-else class="entry-annotated">
+                                <span>Status: {{activeCollectionMeta.status}}</span>
+                                <div class="annotated-bar">
+                                    <div class="annotated-fill" v-bind:style="{ width: activeCollectionMeta.status }"></div>
+                                </div>
+                            </div>
+
                             <div class="entry-assigned">
                                     <span>Annotator: </span> {{userName}}
                             </div>
@@ -233,7 +225,8 @@ Vue.component("collection-view", {
                             </div>
                             <div></div>
                             <div class="entry-done">
-                                Done: <span class="gold-true">{{done}}</span>
+                                Done: <span v-if="done" class="gold-true">{{done}}</span>
+                                      <span v-else class="gold-false">{{done}}</span>
                             </div>
                         </div>
                     </div>
@@ -342,8 +335,7 @@ Vue.component('database-entry-modal', {
                            databaseEventBus.$emit( "collection_active", this.entry.id);
                            //create annotated_document
                            console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
-                           fields = {"status":"0%"}
-                           backend.update_annotations(mainApp.activeCollection, fields, false);
+                           //backend.update_annotations(mainApp.activeCollection, {"status":"0%"}, false);
                         });
                   })   
                }

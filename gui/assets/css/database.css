@@ -4,11 +4,6 @@
 ********************************************************************************
 *******************************************************************************/
 
-#annotation-view {
-    overflow-y:scroll;
-    background-color:#f1f1f3;
-}
-
 .database-menu {
     display:grid;
     grid-template:[row1-start] "title-zone name-zone help-button-zone" [row1-end] / 1fr 1.5fr 1fr;
@@ -297,6 +292,9 @@ pre:first-line {
 
 .gold-true {
     color:#087fdd !important;
+}
+.gold-false {
+    color:red !important;
 }
 
 #ask-selector label {

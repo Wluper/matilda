@@ -13,9 +13,7 @@
 }
 
 .all-dialogues-container {
-    overflow-y: scroll;
     padding-bottom: 50px;
-    background-color:#f1f1f3;
 }
 
 .all-dialogues-container .btn-set li:last-of-type {

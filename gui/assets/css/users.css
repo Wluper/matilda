@@ -111,6 +111,147 @@
     box-shadow: none
 }
 
+.user-string-type-text{
+    background-color: #ffffff!important;
+    border-radius: 2px;
+    height: 100%;
+    grid-column-start: 2;
+    grid-column-end: -1;
+
+}
+
+.user-string-type-text input{
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin: 0;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
+}
+
+.users-list-title-container {
+    display: grid;
+    grid-template: [row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 3fr 1fr;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px 24px
+}
+
+.user-list-single-item-container {
+    display: grid;
+    grid-template: [row1-start] "info del" [row1-end] / 1fr 0fr;
+    border-left: 5px solid #d1d1d3;
+    box-shadow: 0px 5px 3px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+    color: #222;
+    padding-top:2px;
+}
+
+.user-list-single-item-container:hover {
+    border-left: 5px solid #f7db11;
+}
+
+.config-container .inner-form {
+    color: #888;
+    top: 50%;
+    transform: translate(0%, 50%);
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.user-list {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    padding: 0;
+    margin: 0px -10px 35px;
+    overflow: hidden;
+}
+
+.listed-user {
+    margin: 10px 0;
+    color: white;
+    transition: ease 175ms all;
+    padding: 0 10px;
+    width: 50%;
+    float: left;
+}
+
+.user-info {
+    display:grid;
+    grid-template: [row1-start] "id password role email" [row1-end] / 1fr 1fr 0fr 2fr;
+}
+
+.user-id {
+    grid-area: id;
+    overflow-x:hidden;
+    align-items:center;
+    padding-left:10px;
+}
+
+.user-password {
+    grid-area: password;
+    max-width: 100px;
+}
+.user-password input {
+    color:#888;
+    max-width: inherit;
+}
+.user-id, .user-password {
+    color:#888;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.user-email {
+    grid-area: email;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    padding-right: 30px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.user-role {
+    grid-area:role;
+    color:#888;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+#create_user {
+    line-height:25px;
+}
+
+.listed-user .del-dialogue-button {
+    width:110%;
+    align-self:center;
+    margin-top:0;
+    position:relative;
+    left:-17px;
+    margin-right:10px;
+}
+
+.user-span {
+    color:black;
+    display:block;
+    font-size:10px;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    letter-spacing:0.5px;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus,

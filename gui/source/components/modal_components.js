@@ -262,3 +262,55 @@ Vue.component('help-collection-modal', {
   </transition>
   `
 })
+
+Vue.component('message-modal', {
+  
+  data() { 
+    return {
+      guiMessages,
+      message:mainApp.showMessage
+    }
+  },
+
+  methods: {
+    close_message: function() {
+        allDialoguesEventBus.$emit("show_message",false);
+    }
+  },
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              {{guiMessages.selected.lida.alert}}
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+            {{message}}
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              LIDA
+              <button class="modal-default-button" @click="close_message">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+});

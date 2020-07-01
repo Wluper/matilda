@@ -42,11 +42,11 @@ Vue.component("interannotator-view", {
         console.log("==================================");
         console.log("==================================");
         console.log("==================================");
-        annotationAppEventBus.$emit("go_back", event);
+        adminEventBus.$emit("go_back", event);
     },
 
     clicked_collection_button() {
-        allDialoguesEventBus.$emit("collection_clicked");
+        adminEventBus.$emit("collection_clicked");
     },
 
     getAllCollectionIdsFromServer() {
@@ -77,7 +77,7 @@ Vue.component("interannotator-view", {
                             alert(guiMessages.selected.admin.importConflictsResult);
                             return;
                         } else {
-                          allDialoguesEventBus.$emit("conflicts_on_collection", clickedCollection);
+                          adminEventBus.$emit("conflicts_on_collection", clickedCollection);
                         }
             });
         });
@@ -134,11 +134,11 @@ Vue.component("interannotator-view", {
       <li class="listed-dialogue"
           v-for="(name) in allCollectionsMetadata">
 
-          <div class="dialogue-list-single-item-container">
+          <div class="int-coll-list-single-item-container">
 
-            <div class="dialouge-info">
+            <div class="int-coll-info">
 
-                <div class="dialogue-id" v-on:click="clicked_collection(name.id)">
+                <div class="int-coll-id" v-on:click="clicked_collection(name.id)">
                     {{name.id}}
                 </div>
 
@@ -148,13 +148,13 @@ Vue.component("interannotator-view", {
                 </div>
 
                 <div v-if="show_annotators(name.id)"
-                     class="dialogue-num-turns"
+                     class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo }}
                 </div>
 
                 <div v-else
-                     class="dialogue-num-turns"
+                     class="int-coll-num-turns"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo.length }}
                 </div>

@@ -13,10 +13,9 @@ class LoginFuncs(object):
 		userDetails = DatabaseManagement.readDatabase("users")
 
 		for line in userDetails:
-			if line["role"] == role:
-				if line["userName"] == userID:
-					if line["password"] == userPass:
-						response = { "status":"success" }
+			if line["userName"] == userID:
+				if line["password"] == userPass:
+					response = { "status":"success", "role":line["role"] }
 
 		return response
 

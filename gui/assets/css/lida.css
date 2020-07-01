@@ -3,6 +3,12 @@
 * MAIN GRID
 ********************************************************************************
 *******************************************************************************/
+
+#lida_main {
+    overflow-y: scroll;
+    background-color:#f1f1f3;
+}
+
 #mainContainer{
     display: grid !important;
     grid-template-columns: 1fr;

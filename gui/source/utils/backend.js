@@ -387,8 +387,6 @@ const apiLink = API_BASE+"/"+session_name()+`/annotations_load/${doc}`
     try {
 
         var response = await axios.put(apiLink, doc)
-
-        console.log("=========== RECOVERY DONE ===========")
         return response
 
     } catch(error) {
@@ -475,8 +473,6 @@ async function update_annotations(activeColl,fields,backup) {
   try {
 
     var response = await axios.put(apiLink, fields)
-
-    console.log(response)
 
     entriesList = response.data
     console.log("======== UPDATING DATABASE ========")
@@ -676,8 +672,6 @@ async function get_specific_collections(DBcollection,fields,projection) {
         var response = await axios.post(apiLink, {search:JSON.stringify(fields)})
     else
         var response = await axios.post(apiLink, {search:JSON.stringify(fields), "projection":JSON.stringify(projection)})
-
-    console.log(response)
 
     entriesList = response.data
 

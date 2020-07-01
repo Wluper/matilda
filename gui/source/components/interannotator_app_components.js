@@ -41,14 +41,14 @@ Vue.component("interannotator-app", {
         console.log("==================================");
         console.log("==================================");
         console.log("==================================");
-        allDialoguesEventBus.$emit("conflicts_clicked");
+        adminEventBus.$emit("conflicts_clicked");
     },
 
     clicked_users_button() {
-        allDialoguesEventBus.$emit("usersManagement_clicked");
+        adminEventBus.$emit("usersManagement_clicked");
     },
     clicked_collection_button() {
-        allDialoguesEventBus.$emit("collection_clicked");
+        adminEventBus.$emit("collection_clicked");
     },
 
     handleDragOver(event) {
@@ -94,7 +94,7 @@ Vue.component("interannotator-app", {
     },
 
     clicked_dialogue(clickedDialogue) {
-        allDialoguesEventBus.$emit("dialogue_clicked", clickedDialogue)
+        adminEventBus.$emit("dialogue_clicked", clickedDialogue)
     },
 
     toggle_show_annotators(dialogueName){
@@ -212,7 +212,7 @@ Vue.component("interannotator-app", {
         <div class="help-button-container">
             <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
             <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
-            <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.admin.backToColl}}</button>
+            <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.admin.backToColl}}</button>
         </div>
     </div>
     
@@ -239,11 +239,11 @@ Vue.component("interannotator-app", {
           v-for="(dat, index) in allDialogueMetadata"
           v-bind:id="index">
 
-          <div class="dialogue-list-single-item-container">
+          <div class="int-el dialogue-list-single-item-container">
 
-            <div class="dialouge-info">
+            <div class="int-info dialouge-info">
 
-                <div class="dialogue-id" v-on:click="clicked_dialogue(dat[0])">
+                <div class="int-dialogue-id" v-on:click="clicked_dialogue(dat[0])">
                     {{dat[0]}}
                 </div>
 
@@ -251,7 +251,7 @@ Vue.component("interannotator-app", {
                 </div>
 
                 <div v-if="dialogue_already_visited(dat[0])"
-                     class="visited-indicator"
+                     class="int-visited-indicator"
                      v-on:click="clicked_dialogue(dat[0])">
                      {{ guiMessages.selected.admin.visited }}
                 </div>

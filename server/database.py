@@ -25,6 +25,7 @@ from bson.objectid import ObjectId
 from utils import load_json_file, save_json_file
 from database_config import DatabaseConfiguration
 from annotator_config import Configuration
+from annotator import DialogueAnnotator
 
 class DatabaseManagement(object):
 
@@ -84,9 +85,7 @@ class DatabaseManagement(object):
 		return responseObject
 
 	def createDoc(document_id, collection, values):
-
-		print(values)
-
+		print(" * Creating document", document_id, "in",collection)
 		DatabaseManagement.selected(collection).save(values)
 		
 		response = {"staus":"success"}
@@ -102,13 +101,8 @@ class DatabaseManagement(object):
 ################################################
 
 	def storeAnnotations(username, destination, fields, backup=None):
-
 		#update the database user's document
-		try:
-			with open(DatabaseManagement.__DEFAULT_PATH+"/"+username+".json") as file:
-				annotations = json.load(file)
-		except:
-			annotations = {}
+		annotations = DialogueAnnotator.get_dialogues(DialogueAnnotator,username)
 
 		#if back up mode then saves with a different id and 
 		# checks if document will be empty before saving
@@ -119,21 +113,21 @@ class DatabaseManagement(object):
 
 		#saving or updating
 		if len(DatabaseManagement.readDatabase("annotated_collections",{"id":destination, "annotator":username})) == 0:
-			fields = {
+			values = {
 				"id":destination, 
 				"fromCollection":destination, 
 				"annotator":username, 
 				"done":False, 
-				"status":fields["status"], 
+				"status":fields["status"],
 				"document":annotations,
 				"lastUpdate":datetime.datetime.utcnow()
 			}
 			print(" * Creating document", destination, "in annotated_collections")
-			DatabaseManagement.createDoc(destination, "annotated_collections", fields)
+			DatabaseManagement.createDoc(destination, "annotated_collections", values)
 		else:
 			print(" * Updating document", destination, "in annotated_collections")
-			fields = { "status":fields["status"], "document":annotations, "lastUpdate":datetime.datetime.utcnow() }
-			DatabaseManagement.updateAnnotations(username, destination, fields)
+			values = { "status":fields["status"], "document":annotations, "lastUpdate":datetime.datetime.utcnow() }
+			DatabaseManagement.updateAnnotations(username, destination, values)
 		
 		responseObject = {"status":"success"}
 		return responseObject	

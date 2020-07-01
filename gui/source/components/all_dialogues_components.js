@@ -92,8 +92,7 @@ Vue.component("all-dialogues", {
               mainApp.collectionRate = "0%";
               mainApp.collectionRate = "0%"
           }
-          fields = {"status":mainApp.collectionRate}
-          backend.update_collection_fields(mainApp.activeCollection,fields, false);
+          //backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
       },
 
       dialogue_already_visited(id) {
@@ -101,50 +100,12 @@ Vue.component("all-dialogues", {
       },
 
       clicked_dialogue(clickedDialogue) {
-         allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
-      },
-
-      create_new_dialogue(event) {
-        //if a collection is active then new dialogues are member of the active collection
-            if ((localStorage["collection"] != "null") && (localStorage["collection"] != "null")) {
-                let collectionValue = localStorage["collection"];
-
-                backend.post_empty_dialogue(collectionValue)
-                    .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, status:"0%", collection:collectionValue});
-                });
-            } else {
-                backend.post_empty_dialogue()
-                    .then( (newDialogueId) => {
-                        this.allDialogueMetadata.push({id: newDialogueId, num_turns: 1, status:"0%", collection:""});
-                });
-            }
-      },
-
-      delete_dialogue(event) {
-
-         if (confirm("Are you sure you want to permanently delete this dialogue? This cannot be undone!")) {
-
-            console.log('-------- DELETING --------')
-            console.log()
-            idToDelete = event.target.parentNode.parentNode.id;
-            nameToDelete = this.allDialogueMetadata[idToDelete].id
-            backend.del_single_dialogue_async(nameToDelete)
-               .then( () => {
-                    allDialoguesEventBus.$emit("refresh_dialogue_list");
-                    fields = {"status":mainApp.collectionRate}
-                    backend.update_annotations(mainApp.activeCollection, fields, false);
-               });
-
-            allDialoguesEventBus.$emit('dialogue_deleted', nameToDelete);
-
-        } else {
-
-            return
-
-        }
-
-    },
+         //if collection is freezed dialogues can't be opened
+         if (!mainApp.done)
+            allDialoguesEventBus.$emit("dialogue_selected", this.allDialogueMetadata[clickedDialogue].id)
+         else
+            allDialoguesEventBus.$emit("show_message", guiMessages.selected.collection.freezed )
+      }, 
 
     open_file(event){
          let file = event.target.files[0];
@@ -270,7 +231,7 @@ Vue.component("all-dialogues", {
       },
 
       clicked_collections_button() {
-         databaseEventBus.$emit("collections_selected");
+         databaseEventBus.$emit("assignements_selected");
       },
   },
 
