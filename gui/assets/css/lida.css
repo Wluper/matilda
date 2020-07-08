@@ -9,6 +9,10 @@
     background-color:#f1f1f3;
 }
 
+#admin_main {
+    height: 100%
+}
+
 #mainContainer{
     display: grid !important;
     grid-template-columns: 1fr;

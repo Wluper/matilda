@@ -5,11 +5,12 @@
 guiMessages = {
     en: {
         admin: {
-            title:"Annotation-Conflicts Resover",
+            title:"Conflicts Resover",
             titlePanel:"Administration Panel",
             interAnno:"Interannotator Resolution",
             dataItems: "Items",
             visited: "Visited",
+            visited_dialogues: "Visited Dialogues",
             supervision:"Supervision",
             notVisited: "Not visited",
             button_downloadAll:"Download Data",
@@ -28,6 +29,7 @@ guiMessages = {
             annotation:"Annotation",
             backToColl:"Back",
             importConflictsResult:"Nothing to import, no annotated versions have been produced yet",
+            cantDeleteAdmin:"Sorry, default admin account can't be deleted",
         },
         lida: {
             button_fileFormatInfo: "File Format Info",
@@ -213,10 +215,11 @@ guiMessages = {
     },
     it: {
         admin: {
-            title:"Risoluzione Conflitti di Annotazione",
+            title:"Conflitti di Annotazione",
             titlePanel:"Pannello di Amministrazione",
             interAnno:"Interannotator Resolution",
             dataItems: "Dialoghi",
+            visited_dialogues: "Dialoghi visitati",
             visited: "Visitato",
             notVisited: "Non visitato",
             button_downloadAll:"Scarica i dati",
@@ -234,8 +237,9 @@ guiMessages = {
             button_wipeView:"Pulisci la lista",
             supervision:"Supervisione",
             annotation:"Annotazione",
-            backToColl: "Indietro alle Collezioni",
+            backToColl: "Indietro: Collezioni",
             importConflictsResult:"Non è stato trovato niente da importare, nessuna versione annotata è stata ancora prodotta.",
+            cantDeleteAdmin:"L'account speciale 'admin' non può essere eliminato",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",

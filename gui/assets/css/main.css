@@ -190,7 +190,7 @@ input:focus {
 .int-coll-info {
     grid-area: info;
     display: grid;
-    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 5fr 2fr 1fr 3fr;
+    grid-template: [row1-start] "id errors filler numTurns" [row1-end] / 3fr 2fr 2fr 3fr;
     cursor: pointer;
     background-color: white;
     color: #222;
@@ -223,6 +223,18 @@ input:focus {
     font-weight: 100;
     color: red;
     padding-left: 4px;
+}
+
+.errors-space {
+    grid-area: errors;
+    overflow-x: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
 }
 
 .int-coll-num-turns {

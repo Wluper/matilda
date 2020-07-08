@@ -168,6 +168,11 @@
   margin-bottom:7px !important;
 }
 
+.modal-user-creation {
+  overflow:auto;
+  border: 1px solid #259af7
+}
+
 
 
 /* EOF */

@@ -40,6 +40,9 @@ class MultiAnnotator(object):
         self.allFiles = { MultiAnnotator.__GOLD_FILE_NAME : AdminAnnotator(self.path, MultiAnnotator.__GOLD_FILE_NAME) }
         self.filesAdded = 0
 
+        self.annotatorErrors = {}
+        self.annotatorErrorsMeta = {}
+
         #self.__load_all_jsons(self.path)
 
     def get_all_files(self, dialogueId):
@@ -69,7 +72,7 @@ class MultiAnnotator(object):
         self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObject)
 
         self.allFiles[ fileName ] = AdminAnnotator( self.path, fileName )
-        self.save()
+        #self.save()
 
     def get_metadata(self):
         """
@@ -167,6 +170,9 @@ class MultiAnnotator(object):
         self.allFiles = {}
         self.fileAdded = 0
         self.__init__(self.path)
+        
+        AdminAnnotator.__dialogues = {}
+        self.__dialogues = {}
 
         return {"status":"success"}
 
@@ -429,8 +435,6 @@ class DialogueAnnotator(object):
         DialogueAnnotator.__SESSION_USER = user
 
         save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, user+".json" ) )
-
-
 
 
     def __get_new_dialogue_id(self,user):

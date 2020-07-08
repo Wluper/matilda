@@ -259,11 +259,6 @@ pre:first-line {
     width:100%;
 }
 
-#collection-view {
-    overflow-y:scroll;
-    background-color:#f1f1f3;
-}
-
 #database-view .inner-wrap .modal-mask .modal-wrapper .modal-container {
     width:70%;
 }
@@ -292,9 +287,13 @@ pre:first-line {
 
 .gold-true {
     color:#087fdd !important;
+    font-weight: 100;
+    padding-left:3px;
 }
 .gold-false {
+    font-weight: 100;
     color:red !important;
+    padding-left:3px;
 }
 
 #ask-selector label {

@@ -53,7 +53,6 @@ Vue.component("interannotator-view", {
       backend.get_collections_ids_async("dialogues_collections")
           .then( (response) => {
               this.allCollectionsMetadata = response;
-
           });
 
     },
@@ -142,6 +141,11 @@ Vue.component("interannotator-view", {
                     {{name.id}}
                 </div>
 
+                <div class="errors-space" v-on:click="clicked_collection(name.id)">
+                    Errors: <span v-if="name.errors.errorsList" class="gold-true">True</span>
+                          <span v-else></span>
+                </div>
+
                 <div class="gold-space" v-on:click="clicked_collection(name.id)">
                     Gold: <span v-if="name.gold == true" class="gold-true">{{name.gold}}</span>
                           <span v-else>{{name.gold}}</span>
@@ -167,10 +171,6 @@ Vue.component("interannotator-view", {
 
     </ul>
     </div>
-
-    
-   
-
   </div>
   `
 

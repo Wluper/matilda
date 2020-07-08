@@ -5,7 +5,7 @@
 Vue.component("interannotator-app", {
 
   props: [
-      "alreadyVisited", "userName"
+      "alreadyVisited", "userName", "displayingCollection"
   ],
 
   data () {
@@ -38,8 +38,6 @@ Vue.component("interannotator-app", {
   methods: {        
 
     go_back : function(){
-        console.log("==================================");
-        console.log("==================================");
         console.log("==================================");
         adminEventBus.$emit("conflicts_clicked");
     },
@@ -79,14 +77,16 @@ Vue.component("interannotator-app", {
     },
 
     getAllDialogueIdsFromServer() {
-
       backend.get_all_dialogue_ids_async("admin")
           .then( (response) => {
-
               this.allDialogueMetadata = response;
-
+              backend.get_collection_errors_async(this.displayingCollection)
+                  .then( (response) => {
+                      console.log(response)
+                      //this.errorList = response.errors
+                      //this.metaDataList = response.meta;
+                  });
           });
-
     },
 
     dialogue_already_visited(id) {
@@ -199,7 +199,7 @@ Vue.component("interannotator-app", {
 
     <div class="dialogue-list-title-container">
         <div v-if="!(dragging)" class="all-dialogues-list-title">
-          <h2>{{guiMessages.selected.admin.title}}: {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
+          <h2>{{displayingCollection}}: {{ alreadyVisited.length }}/{{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.visited_dialogues }}
           </h2>
         </div>
 

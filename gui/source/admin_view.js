@@ -124,6 +124,7 @@ Vue.component("main-admin-view", {
           guiMessages,
           view:"admin-panel",
           displayingDialogue: '',
+          displayingCollection: '',
           alreadyVisited: [],
       }
   },
@@ -176,8 +177,9 @@ Vue.component("main-admin-view", {
         this.view = 'listview';
     },
 
-    switchToConflictsReview() {
+    switchToConflictsReview(collectionName) {
          console.log('--- INTERRANOTATOR Collection ----');
+         this.displayingCollection = collectionName;
          this.view = 'collection-conflicts';
     },
 
@@ -241,12 +243,14 @@ Vue.component("main-admin-view", {
   <supervision-view v-else-if="view === 'supervision'">
   </supervision-view>
 
-  <interannotator-app v-else-if="view === 'collection-conflicts'" 
+  <interannotator-app v-else-if="view === 'collection-conflicts'"
+      v-bind:displayingCollection="displayingCollection" 
       v-bind:alreadyVisited="alreadyVisited"
       v-bind:userName="userName">
   </interannotator-app>
 
   <resolution-app v-else-if="view === 'resolving'"
+      v-bind:collectionId="displayingCollection"
       v-bind:dialogueId="displayingDialogue">
   </resolution-app>  
 </div>

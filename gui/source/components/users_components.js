@@ -8,7 +8,7 @@ Vue.component("users-view", {
             allUsers:[],
             guiMessages,
             showCreation: false,
-            showUsersHelp: false,
+            activeUser:"",
         }
     },
 
@@ -16,7 +16,8 @@ Vue.component("users-view", {
         this.init()
     },
     created (){
-        adminEventBus.$on("users_updated", this.get_all_users )
+        adminEventBus.$on("users_updated", this.get_all_users );
+        adminEventBus.$on("clean_active_user", this.clean_active_user );
     },
 
     beforeDestroyed() {
@@ -43,17 +44,35 @@ Vue.component("users-view", {
                     console.log();
                     this.allUsers = response;
                     console.log(this.allUsers);
-          });
+            });
+        },
+
+        clean_active_user() {
+            this.activeUser = "";
+        },
+
+        clicked_user(name) {
+          for (index in this.allUsers) {
+            if (this.allUsers[index]["userName"] == name)
+              this.activeUser = this.allUsers[index];
+          }
+          this.showCreation = true;
         },
 
         show_password(event) {
+            event.stopPropagation();
             event.target.setAttribute("type","text");
             event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
         },
 
         delete_user(event) {
+            event.stopPropagation(); 
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 let name = event.target.parentNode.parentNode.id;
+                if (name == 'admin') {
+                    alert(guiMessages.selected.admin.cantDeleteAdmin)
+                    return
+                }
                 backend.del_db_entry_async(name,"users")
                     .then( (response) => {
                         console.log(response);
@@ -82,13 +101,12 @@ Vue.component("users-view", {
             <user-bar v-bind:userName="userName"></user-bar>
 
           <div class="help-button-container">
-                <button class="help-button btn btn-sm" @click="showUsersHelp = true">{{ guiMessages.selected.database.showHelp }}</button>
                 <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
           </div>
         </div>
             <div class="inner-wrap">
                 <ul class="user-list">
-                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
+                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName" @click="clicked_user(name.userName)">
 
                         <div class="user-list-single-item-container">
 
@@ -126,8 +144,7 @@ Vue.component("users-view", {
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
-                <users-creation-modal v-if="showCreation" @close="showCreation = false"></users-creation-modal>
-                <users-help-modal v-if="showUsersHelp" @close="showUsersHelp = false"></users-help-modal>
+                <users-creation-modal v-if="showCreation" @close="showCreation = false" v-bind:activeUser="activeUser"></users-creation-modal>
             </div>
         </div>
     </div>
@@ -135,37 +152,68 @@ Vue.component("users-view", {
 });
 
 Vue.component('users-creation-modal', {
+
+    props: ["activeUser"],
+
     data() { 
         return {
             guiMessages
         }
     },
-    methods: {
+
+    mounted () {
+        this.init()
+    },
+    methods:{
+        init : function(){
+            console.log(this.activeUser);
+            if (this.activeUser != "")
+              this.get_active_user(this.activeUser);
+        },
+        get_active_user: function(user) {
+          if (this.activeUser.userName == "admin") {
+            document.getElementById("create_username").setAttribute("readonly",true);
+          }
+          document.getElementById("create_username").value = this.activeUser.userName;
+          document.getElementById("create_password").value = this.activeUser.password;
+          document.getElementById("select_role").value = this.activeUser.role;
+          if (this.activeUser.mail != undefined)
+            document.getElementById("create_email").value = this.activeUser.mail;
+        },
         user_create: function() {
             let newUser = document.getElementById("create_username").value;
             let newPassword = document.getElementById("create_password").value;
             let newMail = document.getElementById("create_email").value;
             let newRole = document.getElementById("select_role").value;
             if ((newPassword == '') || (newUser == '') || (newRole == '')) {
-                alert(guiMessages.selected.login.warning)
+                alert(guiMessages.selected.login.warning);
                 return;
+            }
+            if (newUser == 'admin') {
+                //not allowed to downgrade default admin account
+                newRole = "administrator";
             }
             if (newMail == undefined)
                 newMail = "";
             backend.create_user(newUser,newPassword,newRole,newMail) 
                 .then( (response) => {
                     console.log();
-                    this.$emit('close');
+                    this.close();
                     adminEventBus.$emit("users_updated");
                 })
-        },  
+        }, 
+
+        close: function() {
+            adminEventBus.$emit("clean_active_user");
+            this.$emit('close');
+        } 
     },  
     template:
 `
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container modal-user-creation">
 
           <div class="modal-header">
             <slot name="header">
@@ -204,8 +252,8 @@ Vue.component('users-creation-modal', {
           <div class="modal-footer">
             <slot name="footer">
               LIDA
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
+              <button class="modal-default-button" @click="close()">
+                {{guiMessages.selected.annotation_app.close}}
               </button>
             </slot>
           </div>
@@ -214,74 +262,5 @@ Vue.component('users-creation-modal', {
     </div>
   </transition>
   `
-})
-
-Vue.component('users-help-modal', {
-
-  data() { 
-    return {
-      guiMessages,
-      role:''
-    }
-  },
-
-  mounted() {
-    this.role = mainApp.role;
-  },
-
-  template:
-  `
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-
-          <div class="modal-header">
-            <slot name="header">
-              <strong>{{guiMessages.selected.modal_collectionInfo[0]}}</strong>
-            </slot>
-          </div>
-
-          <hr>
-
-          <div class="modal-body">
-            <slot name="body">
-            {{guiMessages.selected.modal_collectionInfo[1]}}
-            <br><br>
-            {{guiMessages.selected.modal_collectionInfo[2]}}
-            <br><br>
-            {{guiMessages.selected.modal_collectionInfo[3]}}
-            <br><br>
-            {{guiMessages.selected.modal_collectionInfo[4]}}
-            {{guiMessages.selected.modal_collectionInfo[5]}}
-              <ul>
-                <li v-if="role == 'admin'"> 
-                  <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
-                </li>
-                <li> 
-                  <strong>{{guiMessages.selected.collection.importColl}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[1]}}
-                </li>
-                <li> 
-                  <strong>{{guiMessages.selected.collection.update}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[2]}}
-                </li>
-              </ul>
-            </slot>
-          </div>
-
-          <hr>
-
-          <div class="modal-footer">
-            <slot name="footer">
-              LIDA
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
-              </button>
-            </slot>
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>
-  `
-})
+});
 

@@ -754,13 +754,33 @@ async function get_errors_async(dialogueId){
     }
 }
 
-async function put_error_async(error, meta, errorId, dialogueId){
+async function get_collection_errors_async(collectionId){
+
+    var dialogues = {}
+
+    const apiLink = API_BASE+`/errors/collection/${collectionId}`
+    try {
+        var response = await axios.get( apiLink );
+
+        errors = response.data
+        console.log("=============ERRORS==============")
+        console.log(errors)
+        return errors
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+async function put_error_async(error, meta, errorId, dialogueId, collectionId){
 
     params = {
         errorObject : error,
         meta : meta,
         errorId : errorId,
-        dialogueId : dialogueId
+        dialogueId : dialogueId,
+        collectionId : collectionId
     }
     const apiLink = API_BASE+"/errors"
     try {
@@ -933,6 +953,7 @@ backend =
     get_specific_collections                    : get_specific_collections,
 
     get_scores_async                            : get_scores_async,
+    get_collection_errors_async                 : get_collection_errors_async,
     get_errors_async                            : get_errors_async,
     put_error_async                             : put_error_async,
 

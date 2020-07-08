@@ -45,9 +45,6 @@ CORS(LidaApp)
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
 
-annotatorErrors = {}
-annotatorErrorsMeta = {}
-
 @LidaApp.route('/')
 def welcome():
     return render_template("index.html")
@@ -416,16 +413,16 @@ def handle_errors_resource(id=None):
 
         listOfDialogue = annotationFiles.get_all_files( dialogueId = id )
 
-        errorList = annotatorErrors.get(id)
+        errorList = annotationFiles.annotatorErrors.get(id)
 
         if errorList:
-            metaList = annotatorErrorsMeta[id]
+            metaList = annotationFiles.annotatorErrorsMeta[id]
             errorMetaDict = {"errors": errorList, "meta": metaList}
 
         else:
             errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
-            annotatorErrors[id] = errorMetaDict["errors"]
-            annotatorErrorsMeta[id] = errorMetaDict["meta"]
+            annotationFiles.annotatorErrors[id] = errorMetaDict["errors"]
+            annotationFiles.annotatorErrorsMeta[id] = errorMetaDict["meta"]
 
         for error in errorMetaDict["errors"]:
             __update_gold_from_error_id(id, error)
@@ -445,11 +442,14 @@ def handle_errors_resource(id=None):
         error = data["errorObject"]
         dialogueId = data["dialogueId"]
         errorId = data["errorId"]
+        collectionId = data["collectionId"]
 
-        __update_gold_from_error_id(dialogueId, error)
+        __update_gold_from_error_id(dialogueId, error, collectionId)
 
-        annotatorErrors[dialogueId][errorId] = error
-        annotatorErrorsMeta[dialogueId][errorId] = meta
+        annotationFiles.annotatorErrors[dialogueId][errorId] = error
+        annotationFiles.annotatorErrorsMeta[dialogueId][errorId] = meta
+
+        DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
 
     else:
 
@@ -459,6 +459,30 @@ def handle_errors_resource(id=None):
         }
 
     return jsonify( responseObject )
+
+@LidaApp.route('/errors/collection/<collectionId>', methods=['GET'])
+def restore_errorsList(collectionId):
+
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"errors", "gold"})
+
+    if search[0]["errors"] != {}:
+
+        annotationFiles.annotatorErrors = search[0]["errors"]["errorsList"]
+        annotationFiles.annotatorErrorsMeta = search[0]["errors"]["errorsMeta"]
+
+        responseObject = {
+            "errors" : search[0]["errors"]["errorsList"],
+            "meta" : search[0]["errors"]["errorsMeta"]
+        }
+
+    else:
+        responseObject = {
+            "status": "nothing to restore"
+        }
+
+    return jsonify (responseObject)
+
+
 
 @LidaApp.route('/agreements', methods=['GET'])
 def handle_agreements_resource():
@@ -553,7 +577,10 @@ def handle_wipe_request(user=None):
     responseObject = {}
 
     if not user:
-        responseObject = annotationFiles.wipe_view()
+        annotationFiles.annotatorErrors = {}
+        annotationFiles.annotatorErrorsMeta = {}
+        annotationFiles.wipe_view()
+        responseObject = {"status":"success"}
     else:
         responseObject = dialogueFile.clean_workspace(user)
 
@@ -586,7 +613,7 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
         if id == "ids":
             if request.method == "GET":
 
-                collectionNames = DatabaseManagement.readDatabase(DBcollection, None, {"id","assignedTo","status","lastUpdate","done","gold"})
+                collectionNames = DatabaseManagement.readDatabase(DBcollection, None, {"id","assignedTo","status","lastUpdate","errors","done","gold"})
 
                 #only return if gold is empty or not
                 try: 
@@ -830,7 +857,7 @@ def mock_analyse_interannotator_agreement(dialogueIdCap=None):
         report["totalCount"] = totalCount
         return report
 
-def __update_gold_from_error_id(dialogueId, error):
+def __update_gold_from_error_id(dialogueId, error, collectionId=None):
     """
     updates GOLD from error
     """
@@ -840,7 +867,10 @@ def __update_gold_from_error_id(dialogueId, error):
     dialogue[turnId][annotationName]= error["predictions"]
 
     annotationFiles.update_dialogue(id=dialogueId, newDialogue=dialogue)
-    annotationFiles.save()
+    #annotationFiles.save()
+
+    if collectionId: 
+        DatabaseManagement.updateDoc(collectionId, "dialogues_collections", {"gold":annotationFiles.get_dialogues()})
 
 
 ################################
@@ -963,6 +993,7 @@ class InterannotatorMethods:
 ########################
 
 class Models:
+
     @staticmethod
     def run_models_on_query(query):
         """

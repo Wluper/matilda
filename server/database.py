@@ -29,10 +29,6 @@ from annotator import DialogueAnnotator
 
 class DatabaseManagement(object):
 
-	"""
-	MAIN PART
-	"""
-
 	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
 
 	def selected(collection):

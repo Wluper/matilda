@@ -348,6 +348,10 @@ Vue.component('classification-string-annotation', {
       },
 
       select_word: function(event,labelName) {
+         //prevent useless execution in interannotator
+         if (document.getElementsByClassName("dialogue-turn-selected")[0] == undefined)
+            return;
+          
          annotationAppEventBus.$emit( "resume_annotation_tools");
 
          let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];

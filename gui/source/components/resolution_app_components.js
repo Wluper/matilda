@@ -5,7 +5,7 @@
 Vue.component("resolution-app", {
 
     props: [
-        "dialogueId", "dialogue"
+        "dialogueId", "dialogue", "collectionId"
     ],
 
     data () {
@@ -73,8 +73,6 @@ Vue.component("resolution-app", {
 
         go_back : function(){
             console.log("==================================");
-            console.log("==================================");
-            console.log("==================================");
             // GENERAL EVENT LISTENERS
             window.removeEventListener('keyup', this.resolve_keyboard_input);
             annotationAppEventBus.$off("go_back", this.go_back)
@@ -85,7 +83,7 @@ Vue.component("resolution-app", {
 
             annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
-            adminEventBus.$emit("conflicts_on_collection");
+            adminEventBus.$emit("conflicts_on_collection", this.collectionId);
         },
         init: function() {
             //console.log(this.metaDataList)
@@ -100,7 +98,6 @@ Vue.component("resolution-app", {
             .then( (response) => {
                 this.errorList = response.errors
                 this.metaDataList = response.meta;
-                console.log(this.errorList);
             });
 
         },
@@ -135,7 +132,7 @@ Vue.component("resolution-app", {
         accept: function(event) {
             this.metaDataList[this.currentErrorId-1].accepted=true;
 
-            backend.put_error_async(this.errorList[this.currentErrorId-1],this.metaDataList[this.currentErrorId-1], this.currentErrorId-1,this.dialogueId )
+            backend.put_error_async(this.errorList[this.currentErrorId-1],this.metaDataList[this.currentErrorId-1], this.currentErrorId-1,this.dialogueId, this.collectionId )
 
             this.change_turn( {key:"ArrowRight"})
         },

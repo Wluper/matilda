@@ -129,22 +129,20 @@ Vue.component("collection-view", {
 
         clicked_entry(clickedEntry) {
             let del = confirm(guiMessages.selected.collection.confirmImport);
-               if (del == true) {
-                  mainContainer.style.cursor = "progress";
-                  backend.del_all_dialogues_async()
-                  .then( (response) => {
-                     console.log(response);
-                        backend.load_dialogues(clickedEntry)
-                        .then( (response) => {
-                           console.log("==== DIALOGUES IMPORT ====");
-                           console.log(response);
-                           if (response.data.created == true)
-                              console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
-                           //set global variable with the collection name
-                           databaseEventBus.$emit("collection_active", clickedEntry);
-                           //create annotated_document
-                           mainContainer.style.cursor = null;
-                           annotationAppEventBus.$emit("go_back");
+            if (del == true) {
+               mainContainer.style.cursor = "progress";
+               backend.del_all_dialogues_async()
+               .then( (response) => {
+                  console.log(response);
+                     backend.load_dialogues(clickedEntry)
+                     .then( (response) => {
+                        console.log("==== DIALOGUES IMPORT ====");
+                        console.log(response);
+                        if (response.data.created == true)
+                           console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
+                        databaseEventBus.$emit("collection_active", clickedEntry);
+                        mainContainer.style.cursor = null;
+                        annotationAppEventBus.$emit("go_back");
                     });
                 })   
             }

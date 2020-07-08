@@ -49,7 +49,7 @@ class AdminAnnotator(object):
         oldFileName = self.__fileName
         self.__fileName = newName
 
-        self.save()
+        #self.save()
 
         if remove:
             os.remove( os.path.join( self.__filePath, oldFileName ) )
@@ -159,7 +159,7 @@ class AdminAnnotator(object):
         """
         Save the dialogues dictionary
         """
-        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName ) )
+        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, "int_"+self.__fileName+".json" ) )
 
 
 
