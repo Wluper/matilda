@@ -64,6 +64,12 @@ Vue.component("error-list", {
       "currentId"
     ],
 
+    data() {
+        return {
+            guiMessages
+        }
+    },
+
     // mounted () {
     //     this.init();
     // },
@@ -79,12 +85,15 @@ Vue.component("error-list", {
     template:
     `
     <div id="error-list">
-        <div class="inner-wrap">
+        <div class="inner-wrap" v-if="metaList.length > 0">
             <error-element v-for="(meta, index) in metaList"
                            v-bind:currentId="currentId"
                            v-bind:myId="index + 1"
                            v-bind:metaData="meta">
             </error-element>
+        </div>
+        <div class="inner-wrap" v-else>
+            <h1>{{guiMessages.selected.resolution_app.noConflicts}}</h1>
         </div>
     </div>
     `
@@ -365,7 +374,7 @@ Vue.component("string-type-data", {
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
             </div>
         </div>
 
@@ -374,8 +383,8 @@ Vue.component("string-type-data", {
                 usr
             </div>
             
-            <div class="string-type-text">
-                {{usr}}
+            <div class="user-string-type-text">
+                <comm-input id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr"> </comm-input>
             </div>
         </div>
 

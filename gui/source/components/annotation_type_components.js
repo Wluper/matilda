@@ -348,27 +348,24 @@ Vue.component('classification-string-annotation', {
       },
 
       select_word: function(event,labelName) {
-         //prevent useless execution in interannotator
-         if (document.getElementsByClassName("dialogue-turn-selected")[0] == undefined)
-            return;
-          
-         annotationAppEventBus.$emit( "resume_annotation_tools");
+          annotationAppEventBus.$emit( "resume_annotation_tools");
 
-         let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-         let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
-         event.target.title = labelName;
-         event.target.id = "active_label";
+          let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
+          if (activeTurn != null)
+            activeTurn.style.border = "3px solid #fafa69";
 
-         activeTurn.style.border = "3px solid #fafa69";
-         Array.from(activeInputs).forEach(element => element.onmouseup = this.update_slot);
+          event.target.title = labelName;
+          event.target.id = "active_label";
 
+          document.getElementById("usr").onmouseup = this.update_slot;
+          document.getElementById("sys").onmouseup = this.update_slot;
       },
 
       update_slot: function(event) {
-         console.log("Gathering text");
+         console.log("=== Gathering text ===");
          let activeLabel = document.getElementById("active_label"); 
          let labelName = activeLabel.title;
-         let context = event.target.parentNode.parentNode.getElementsByClassName("user-string-type-name")[0].textContent;
+         let context = event.target.id;
          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
 
          //updating
@@ -378,7 +375,7 @@ Vue.component('classification-string-annotation', {
          }
          activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
          this.updateClassAndString(activeLabel, labelName);
-         //put all back to place
+         //put all back in place
          annotationAppEventBus.$emit("resume_annotation_tools");
       },
     },
@@ -446,12 +443,16 @@ Vue.component('classification-string-annotation', {
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
-                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} </span>
-                    <span v-else> {{labelName}} || {{get_confidence(labelName)}}</span>
+                    <span v-if="checkedMethod(labelName)"> {{labelName}} || {{get_confidence(labelName)}} 
+                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                    </span>
+                    
+                    <span v-else> {{labelName}} || {{get_confidence(labelName)}} 
+                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"></button>
+                    </span>
                 </label>
 
                 <input class="multilabel-string-input"
-                       v-on:click="select_word($event,labelName)"
                        v-bind:value="getStringPart(labelName)"
                        v-on:input="updateClassAndString($event, labelName)">
                 </input>

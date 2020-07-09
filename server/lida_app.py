@@ -463,7 +463,7 @@ def handle_errors_resource(id=None):
 @LidaApp.route('/errors/collection/<collectionId>', methods=['GET'])
 def restore_errorsList(collectionId):
 
-    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"errors", "gold"})
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"document","errors", "gold"})
 
     if search[0]["errors"] != {}:
 
@@ -477,8 +477,30 @@ def restore_errorsList(collectionId):
 
     else:
         responseObject = {
-            "status": "nothing to restore"
+            "status": "nothing to restore, performed error scan"
         }
+
+        for dialogue in search[0]["document"]:
+
+            listOfDialogue = annotationFiles.get_all_files( dialogueId = dialogue )
+
+            errorList = annotationFiles.annotatorErrors.get(dialogue)
+
+            if errorList:
+                metaList = annotationFiles.annotatorErrorsMeta[dialogue]
+                errorMetaDict = {"errors": errorList, "meta": metaList}
+
+            else:
+                errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+                annotationFiles.annotatorErrors[dialogue] = errorMetaDict["errors"]
+                annotationFiles.annotatorErrorsMeta[dialogue] = errorMetaDict["meta"]
+
+            for error in errorMetaDict["errors"]:
+                __update_gold_from_error_id(dialogue, error)
+
+            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", 
+                { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
+
 
     return jsonify (responseObject)
 

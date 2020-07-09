@@ -25,7 +25,7 @@ Vue.component("interannotator-app", {
 
           // A list of dialogue IDs for which annotator names should be displayed
           showAnnotatorNamesForIds: [],
-
+          dialoguesWithErrors: [],
           //Reference to the language data
           guiMessages,
       }
@@ -77,16 +77,26 @@ Vue.component("interannotator-app", {
     },
 
     getAllDialogueIdsFromServer() {
-      backend.get_all_dialogue_ids_async("admin")
+        backend.get_all_dialogue_ids_async("admin")
           .then( (response) => {
               this.allDialogueMetadata = response;
               backend.get_collection_errors_async(this.displayingCollection)
-                  .then( (response) => {
-                      console.log(response)
-                      //this.errorList = response.errors
-                      //this.metaDataList = response.meta;
-                  });
-          });
+                .then( (response) => {
+                    console.log(response)
+                    this.get_dialogues_with_errors(response);
+                    //this.errorList = response.errors
+                    //this.metaDataList = response.meta;
+              });
+        });
+    },
+
+    get_dialogues_with_errors(errors) {
+        for (dialogue in errors["errors"]) {
+            if (errors["errors"][dialogue].length != 0) {
+                this.dialoguesWithErrors.push(dialogue)
+                this.dialoguesWithErrors.forEach( element => document.getElementById(element).setAttribute("class","int-listed-dialogue relevant"))
+            }
+        }
     },
 
     dialogue_already_visited(id) {
@@ -230,14 +240,14 @@ Vue.component("interannotator-app", {
                    {{ guiMessages.selected.admin.button_upload }}
             </label></li>
             <li>
-                <button class="help-button btn btn-sm" @click="clean_view()">{{ guiMessages.selected.admin.button_wipeView}}</button>
+                <!-- <button class="help-button btn btn-sm" @click="clean_view()">{{ guiMessages.selected.admin.button_wipeView}}</button> -->
             </li>
         </ul>
     <ul class="dialogue-list">
 
-      <li class="listed-dialogue"
+      <li class="int-listed-dialogue"
           v-for="(dat, index) in allDialogueMetadata"
-          v-bind:id="index">
+          v-bind:id="dat[0]">
 
           <div class="int-el dialogue-list-single-item-container">
 

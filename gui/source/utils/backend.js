@@ -763,8 +763,7 @@ async function get_collection_errors_async(collectionId){
         var response = await axios.get( apiLink );
 
         errors = response.data
-        console.log("=============ERRORS==============")
-        console.log(errors)
+        console.log("========= CHECKING SESSION TO RESTORE =========")
         return errors
 
     } catch (error) {

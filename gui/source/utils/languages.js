@@ -110,7 +110,8 @@ guiMessages = {
             accepted: "Accepted",
             review: "Review",
             fail: "FAIL!",
-            accept:"Accept"
+            accept:"Accept",
+            noConflicts:"No annotation conflicts found in this dialogue"
         },
         modal_formatInfo:
         [ 
@@ -237,7 +238,7 @@ guiMessages = {
             button_wipeView:"Pulisci la lista",
             supervision:"Supervisione",
             annotation:"Annotazione",
-            backToColl: "Indietro: Collezioni",
+            backToColl: "Indietro",
             importConflictsResult:"Non è stato trovato niente da importare, nessuna versione annotata è stata ancora prodotta.",
             cantDeleteAdmin:"L'account speciale 'admin' non può essere eliminato",
         },
@@ -319,7 +320,8 @@ guiMessages = {
             accepted: "Accettato",
             review: "Revisiona",
             fail: "ERRORE!",
-            accept:"Accetta"
+            accept:"Accetta",
+            noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo"
         },
         modal_formatInfo:
         [ 

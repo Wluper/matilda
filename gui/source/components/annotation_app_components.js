@@ -263,24 +263,26 @@ Vue.component("annotation-app", {
         resume_annotation_tools: function(event) {
             console.log("Resuming annotation tools");
             //resuming label
+            document.getElementById("usr").onmouseup = null;
+            document.getElementById("sys").onmouseup = null;
             if (document.getElementById("active_label") != undefined) {
                 let activeLabel = document.getElementById("active_label");
                 let labelName = activeLabel.title;
-                activeLabel.id = null;
-                activeLabel.title = null;
+                activeLabel.removeAttribute("id");
+                activeLabel.removeAttribute("title");
             }
             //resuming turn
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
             if (activeTurn != undefined) {
                 activeTurn.style = null;
-                let activeInputs = activeTurn.getElementsByClassName("primary-turn-input");
-                Array.from(activeInputs).forEach(element => element.onmouseup = null);
             }
             //resuming annotation sections
-            let annotations = document.getElementById("annotations").querySelectorAll("div.classification-annotation");
-            for (i=1;i < annotations.length; i++) {
-                annotations[i].style.pointerEvents = null;
-                annotations[i].style.color = null;
+            if (document.getElementById("annotations") != undefined) {
+                let annotations = document.getElementById("annotations").querySelectorAll("div.classification-annotation");
+                for (i=1;i < annotations.length; i++) {
+                    annotations[i].style.pointerEvents = null;
+                    annotations[i].style.color = null;
+                }
             }
         },
 
@@ -553,11 +555,11 @@ Vue.component('dialogue-turn',{
 
         <div class="user-string-type-text">
             
-            <comm-textarea v-if="stringType.data.length > 95" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
+            <comm-textarea :id="stringType.name" v-if="stringType.data.length > 95" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
             <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-textarea>  
             
-            <comm-input v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly>
+            <comm-input :id="stringType.name" v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly>
             <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-input>  
         </div>   

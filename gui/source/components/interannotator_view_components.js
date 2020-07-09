@@ -50,11 +50,31 @@ Vue.component("interannotator-view", {
     },
 
     getAllCollectionIdsFromServer() {
-      backend.get_collections_ids_async("dialogues_collections")
-          .then( (response) => {
-              this.allCollectionsMetadata = response;
-          });
+        backend.get_collections_ids_async("dialogues_collections")
+            .then( (response) => {
+                this.allCollectionsMetadata = response;
+                this.count_errors();
+        });
+    },
 
+    count_errors() {
+        for (i=0; i < this.allCollectionsMetadata.length-1; i++) {
+            var count = 0;
+            var resolved = 0;
+            if (this.allCollectionsMetadata[i]["errors"]["errorsMeta"] != undefined) {
+                for (dialogue in this.allCollectionsMetadata[i]["errors"]["errorsMeta"]) {
+                    for (error in this.allCollectionsMetadata[i]["errors"]["errorsMeta"][dialogue]) {
+                        count += 1;
+                        if (this.allCollectionsMetadata[i]["errors"]["errorsMeta"][dialogue][error]["accepted"]) {
+                            resolved += 1;
+                        }
+                    }
+                }
+            }
+            this.allCollectionsMetadata[i]["errors"]["found"] = count; 
+            this.allCollectionsMetadata[i]["errors"]["resolved"] = resolved;  
+        }
+        console.log(this.allCollectionsMetadata)
     },
 
     dialogue_already_visited(id) {
@@ -142,8 +162,8 @@ Vue.component("interannotator-view", {
                 </div>
 
                 <div class="errors-space" v-on:click="clicked_collection(name.id)">
-                    Errors: <span v-if="name.errors.errorsList" class="gold-true">True</span>
-                          <span v-else></span>
+                    Errors: <span v-if="name.errors.found > 0" class="gold-true">{{name.errors.resolved}}/{{name.errors.found}}</span>
+                          <span v-else class="gold-false">0</span>
                 </div>
 
                 <div class="gold-space" v-on:click="clicked_collection(name.id)">

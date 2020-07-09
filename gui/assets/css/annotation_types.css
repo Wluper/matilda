@@ -119,7 +119,28 @@
 }
 
 #active_label {
+    border:1px solid rgba(250, 250, 105, 0.48);
+    vertical-align:bottom;
     background-color: rgb(255, 255, 182);
+}
+
+.txt-sel-button {
+    vertical-align: bottom;
+}
+
+.txt-sel-button img {
+    width:13px;
+    vertical-align: bottom;
+    pointer-events:none;
+}
+
+.text-sel-span {
+    padding-left: 2px;
+    font-size: 13px;
+    vertical-align: baseline;
+    margin: 0;
+    line-height: 8px;
+    pointer-events:none;
 }
 
 .annotation-header {

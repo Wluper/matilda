@@ -35,6 +35,28 @@
 
 }
 
+#error-list h1 {
+    color: rgba(0, 0, 0, 0.62);
+    text-align: center;
+}
+
+.int-listed-dialogue {
+    opacity:0.3;
+    margin: 10px 0;
+    color: white;
+    transition: ease 175ms all;
+    padding:0 10px;
+    width: 50%;
+    float: left;
+}
+
+.int-listed-dialogue:hover .dialogue-list-single-item-container {
+    border-left:5px solid #259af7;
+}
+
+.relevant {
+    opacity:1 !important;
+}
 
 
 /*******************************************************************************
