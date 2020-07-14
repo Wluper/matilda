@@ -74,7 +74,7 @@ Vue.component("interannotator-view", {
             this.allCollectionsMetadata[i]["errors"]["found"] = count; 
             this.allCollectionsMetadata[i]["errors"]["resolved"] = resolved;  
         }
-        console.log(this.allCollectionsMetadata)
+        console.log(this.allCollectionsMetadata);
     },
 
     dialogue_already_visited(id) {
@@ -174,13 +174,13 @@ Vue.component("interannotator-view", {
                 <div v-if="show_annotators(name.id)"
                      class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo }}
+                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo }}
                 </div>
 
                 <div v-else
                      class="int-coll-num-turns"
                      v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo.length }}
+                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo.length }}
                 </div>
 
             </div>

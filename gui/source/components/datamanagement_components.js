@@ -492,6 +492,7 @@ Vue.component('collection-entry-modal', {
 
          save() {
             params = {
+               id: this.entry.id,
                title:this.entry.title, 
                description:this.entry.description,
                annotationStyle:this.entry.annotationStyle,

@@ -188,7 +188,6 @@ class DialogueAnnotator(object):
 
 
     class dialogues(object):
-
         def __getitem__(self,key):
             return getattr(self,key)
     

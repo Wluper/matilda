@@ -11,7 +11,6 @@ Vue.component("all-dialogues", {
    data () {
       return {
          allDialogueMetadata: [],
-         dragging: false,
          showModal: false,
          // Reference to the language item
          guiMessages,
@@ -30,34 +29,7 @@ Vue.component("all-dialogues", {
 
       init : function(){
          // Step ONE: Get FILE NAME
-         mainApp.userName = localStorage["remember"];
          this.getAllDialogueIdsFromServer();
-      },
-      handleDragOver(event) {
-         event.stopPropagation();
-         event.preventDefault();
-         let elem = document.getElementById('listedDialoguesContainer');
-         elem.style.transition = '0.3s'
-         elem.style.backgroundColor = '#c2c6c4';
-         event.dataTransfer.effectAllowed = 'copyMove';
-         event.dataTransfer.dropEffect = 'copy';
-         this.dragging = true;
-      },
-
-      handleDragOut(event) {
-         event.preventDefault();
-         let elem = document.getElementById('listedDialoguesContainer');
-         elem.style.backgroundColor = 'inherit';
-         this.dragging = false;
-      },
-
-      handleDrop(event) {
-         event.preventDefault();
-         let elem = document.getElementById('listedDialoguesContainer');
-         elem.style.backgroundColor = 'inherit';
-         this.dragging = false;
-         let file     = event.dataTransfer.files[0]
-         this.handle_file(file);
       },
 
       getAllDialogueIdsFromServer() {
@@ -107,67 +79,6 @@ Vue.component("all-dialogues", {
             allDialoguesEventBus.$emit("show_message", guiMessages.selected.collection.freezed )
       }, 
 
-    open_file(event){
-         let file = event.target.files[0];
-         this.handle_file(file);
-    },
-
-    handle_file(file) {
-         let textType = /text.plain/;
-         let jsonType = /application.json/;
-
-           if (file.type.match(textType)) {
-
-            allDialoguesEventBus.$emit('loaded_text_file', file);
-
-         } else if (file.type.match(jsonType)) {
-
-            console.log('---- HANDLING LOADED JSON FILE ----');
-            let reader = new FileReader();
-            reader.onload = (event) => {
-               console.log('THE READER VALUE', reader)
-               console.log('THE EVENT VALUE', event)
-               text = reader.result
-               backend.post_new_dialogue_from_json_string_async(text, file.name)
-                  .then( (response) => {
-
-                        if ('error' in response.data) {
-                           alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
-                        } else {
-                           allDialoguesEventBus.$emit("refresh_dialogue_list");
-                        }
-
-                  });
-            };
-
-            reader.readAsText(file);
-
-        } else {
-
-            alert('Only .txt or .json files are supported.')
-
-        }
-    },
-
-      handle_file_name_change : function(event){
-         console.log('---- CHANGING FILE NAME ----');
-         console.log(event);
-
-         // for some reason needs manual updating...
-         mainApp.userName = event.target.value;
-
-         backend.put_name("USER_"+event.target.value+".json")
-            .then( (response) => {
-
-               if (response) {
-                    console.log("Name Changed");
-               } else {
-                    alert('Server error, name not changed.')
-               }
-
-         })
-    },
-
       restore_session_from_database: function () {
          console.log("Ready to restore from database");
          const mainContainer = document.getElementById("mainContainer");
@@ -185,25 +96,6 @@ Vue.component("all-dialogues", {
          });
       },
 
-    //
-    // toggleFileEdit: function() {
-    //
-    //     let inputSection = document.getElementById('fileName')
-    //     let titleSpan    = document.getElementById('fileNameInput')
-    //
-    //     if (this.editingTitle) {
-    //         this.editingTitle          = false;
-    //         inputSection.style.display = 'none';
-    //         titleSpan.style.display    = 'inherit';
-    //     } else {
-    //         this.editingTitle          = true;
-    //         inputSection.style.display = 'inherit';
-    //         inputSection.focus();
-    //         titleSpan.style.display    = 'none';
-    //     }
-    //
-    // },
-
       download_all_dialogues_from_server(event) {
          backend.get_all_dialogues_async()
             .then( (response) => {
@@ -218,18 +110,6 @@ Vue.component("all-dialogues", {
          });
       },
 
-      clean_dialogues() {
-         let del = confirm(guiMessages.selected.lida.confirmWipe);
-         if (del == true) {
-            backend.del_all_dialogues_async()
-               .then( (response) => {
-                  console.log("All user's dialogues deleted.");
-                  allDialoguesEventBus.$emit("refresh_dialogue_list");
-                  databaseEventBus.$emit( "collection_active", "null");
-            });
-         }
-      },
-
       clicked_collections_button() {
          databaseEventBus.$emit("assignements_selected");
       },
@@ -239,21 +119,13 @@ Vue.component("all-dialogues", {
 
   `
   <div class="all-dialogues-container"
-       id="listedDialoguesContainer"
-       v-on:dragover="handleDragOver($event)"
-       v-on:dragleave="handleDragOut($event)"
-       v-on:drop="handleDrop($event)">
-    
+       id="listedDialoguesContainer">
     
      <div class="dialogue-list-title-container">
 
           <div class="all-dialogues-list-title">
-              <h2 v-if="!(dragging)" >
+              <h2>
                   <span>{{activeCollection}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
-              </h2>
-
-              <h2 v-else>
-                  {{ guiMessages.selected.admin.dropAnywhere }}
               </h2>
           </div>
 
@@ -269,8 +141,6 @@ Vue.component("all-dialogues", {
     <div class="inner-wrap">
 
       <modal v-if="showModal" @close="showModal = false"></modal>
-
-      
 
       <ul class="dialogue-list">
 

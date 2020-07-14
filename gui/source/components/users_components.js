@@ -242,7 +242,8 @@ Vue.component('users-creation-modal', {
                         <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
-                    <button id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
+                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.editButton}}</button>
+                    <button v-else id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
                 </div>            
             </slot>
           </div>

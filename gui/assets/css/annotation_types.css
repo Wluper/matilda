@@ -126,6 +126,10 @@
 
 .txt-sel-button {
     vertical-align: bottom;
+    background: white; 
+    border: 1px solid rgba(0,0,0,.1); 
+    line-height: 10px; 
+    margin-bottom: 1px;
 }
 
 .txt-sel-button img {

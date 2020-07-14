@@ -168,6 +168,7 @@ input:focus {
 
 .panel {
     padding: 10px 17px !important;
+    box-shadow:0 2px #1675c1, 0px 4px 6px 0px #00000026;
 }
 
 
@@ -181,7 +182,7 @@ input:focus {
     display: grid;
     grid-template: [row1-start] "info" [row1-end] / 1fr;
     border-left: 5px solid #d1d1d3;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0px 6px 5px rgba(0,0,0,0.05);
     transition: ease 175ms all;
     background: white;
     color: #222;
@@ -189,6 +190,7 @@ input:focus {
 
 .listed-dialogue:hover .int-coll-list-single-item-container {
     border-left:5px solid #259af7;
+    box-shadow:0px 2px 3px rgba(0,0,0,0.05)
 }
 
 .int-coll-info {
@@ -315,6 +317,39 @@ input:focus {
     padding: 0px 5px 0px 5px;
     margin: 10px 13px 10px 0px;
     border: 1px solid #19c349;
+}
+
+#annotated_wrap {
+    margin-top:20px;
+}
+
+#annotated_list .entry-list-single-item-container {
+    grid-template: [row1-start] "info del" [row1-end] / 1.4fr 0.2fr;
+    margin: 0px 20px 20px 0px;
+    width: 47%;
+    float: left;
+}
+#annotated_list .entry-info {
+    grid-template: [row1-start] "id status" [row1-end] / 1fr 0.7fr;
+}
+
+#annotated_list .entry-list-single-item-container:hover {
+    border-left:5px solid #f7db11;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.09);
+}
+
+#supervision #dialogue-menu {
+    height:3em;
+}
+#supervision #dialogue-menu .back-button {
+    display:none !important;
+}
+#supervision #dialogue-turns {
+    grid-row-start:1;
+    overflow-y:hidden;
+}
+#supervision #input-box {
+    display:none;
 }
 
 /*******************************************************************************

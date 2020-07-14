@@ -35,7 +35,7 @@ class DatabaseConfiguration:
 #	databaseURL="mongodb+srv://<user>:<passwd>@cluster0-wyaud.mongodb.net/lida?retryWrites=true&w=majority"
 
 	db = MongoClient(databaseURL)["lida"]
-	print("Connecting to DB");
+	print(" * Connecting to DB");
 #	client = MongoClient("mongodb+srv://augusto:asterix@cluster0-wyaud.mongodb.net/<dbname>?retryWrites=true&w=majority")
 #	db = client.mymongodb
 #	serverStatusResult=db.command("serverStatus")

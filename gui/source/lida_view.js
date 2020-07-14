@@ -88,6 +88,7 @@ var mainApp = new Vue({
     },
 
     check_login_cookie: function() {
+        //only in case of refresh or previous sessions
         if (this.logged == "true")
             return;
         if (localStorage["remember"] != undefined) {
@@ -135,7 +136,7 @@ var mainApp = new Vue({
             }
         }
     },
-
+    
     change_dialogue_name: function (event) {
         console.log('---- CHANGING DIALOGUE NAME ----');
         console.log(event);
@@ -164,7 +165,7 @@ var mainApp = new Vue({
     },
 
     load_collections_view: function (event) {
-        backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false)
+        backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate})
           .then((response) => {
               console.log("Collection Status % Updated");
               this.status = 'assignements-view';

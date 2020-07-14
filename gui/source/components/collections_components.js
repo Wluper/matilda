@@ -57,8 +57,6 @@ Vue.component("collection-view", {
             showModal: false,
             showCreateModal: false,
             showSelectModal: false,
-            db_address:"127.0.0.1",
-            db_port:"27017",
             userName: mainApp.userName,
             activeCollection: mainApp.activeCollection,
             activeCollectionMeta: {},
@@ -90,6 +88,7 @@ Vue.component("collection-view", {
         init : function(){
             //Get DATABASE COLLECTIONS
             this.getAllEntriesFromServer();
+            console.log(this.activeCollection)
         },
 
         getAllEntriesFromServer() {
@@ -189,8 +188,7 @@ Vue.component("collection-view", {
     template:
     `
         <div id="annotation-view">
-            <database-header v-bind:db_port="db_port"
-                             v-bind:db_address="db_address">
+            <database-header>
             </database-header>
             <div class="inner-wrap">
 
@@ -232,8 +230,24 @@ Vue.component("collection-view", {
 
                 <ul class="annotation-list">
                 <h2>{{guiMessages.selected.lida.assignedColl}}</h2>
-                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id" v-if="name.id != activeCollection">
-                        <div class="entry-list-single-item-container">
+                    <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
+                        <div v-if="name.id == activeCollection" class="entry-list-single-item-container" style="opacity:0.3">
+                            <div class="entry-info" v-on:click="clicked_entry(name.id)">
+                                <div class="entry-id">
+                                    <span>Collection:</span> {{name.id}}
+                                </div>
+                              <div class="entry-annotated">
+                                    <span class="load">{{guiMessages.selected.lida.load}}</span>
+                              </div>
+                                <div class="entry-assigned">
+                                    <span>Assigned to:</span> {{name.assignedTo}}
+                                </div>
+                                <div class="entry-date">
+                                    {{name.lastUpdate.slice(0,-3)}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="entry-list-single-item-container">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
                                     <span>Collection:</span> {{name.id}}
@@ -251,7 +265,7 @@ Vue.component("collection-view", {
                         </div>
                     </li>
                 </ul>
-                <div class="closing-list">
+                <div v-if="activeCollection != null" class="closing-list">
                     <button v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button>
                     <button v-on:click="set_done" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.done}}</button>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>

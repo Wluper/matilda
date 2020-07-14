@@ -19,8 +19,7 @@ from flask_cors import CORS
 from annotator_config import *
 from annotator import DialogueAnnotator, MultiAnnotator
 from text_splitter import convert_string_list_into_dialogue
-from database import DatabaseManagement
-from login import LoginFuncs
+from database import DatabaseManagement, LoginFuncs
 
 
 ##############################################
@@ -37,8 +36,7 @@ multiAnnotator=False
 LidaApp = Flask(__name__,
     static_url_path='',
     static_folder='../gui',
-    template_folder='../gui'
-    )
+    template_folder='../gui')
 LidaApp.config.from_object(__name__)
 CORS(LidaApp)
 #set_main_path(path)
@@ -48,9 +46,6 @@ annotationFiles = MultiAnnotator(path)
 @LidaApp.route('/')
 def welcome():
     return render_template("index.html")
-@LidaApp.route('/admin.html')
-def admin():
-    return render_template("admin.html")
 
 ##############################################
 #  FUNCTION HANDLERS
@@ -81,7 +76,8 @@ def handle_dialogues_metadata_resource(user, id=None):
 @LidaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
 @LidaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','PUT','DELETE'])
 @LidaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
-def handle_dialogues_resource(user, id=None, fileName=None):
+@LidaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
+def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None):
     """
     GET - All dialogues
 
@@ -89,10 +85,15 @@ def handle_dialogues_resource(user, id=None, fileName=None):
 
     PUT - change specific dialogue with a dialogue
     """
+    if supervisor:
+        if request.method == "GET":
+            responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+            return jsonify(responseObject)
 
     if fileName:
         if request.method == "POST":
             responseObject = __handle_post_of_new_dialogues(user, fileName)
+            dialogueFile.save(user)
 
     elif id:
 
@@ -114,27 +115,29 @@ def handle_dialogues_resource(user, id=None, fileName=None):
 
         if request.method == "POST":
             responseObject = __handle_post_of_new_dialogues(user)
+            dialogueFile.save(user)
 
-    dialogueFile.save(user)
     return jsonify( responseObject )
 
 @LidaApp.route('/dialogue_annotationstyle', methods=['GET'])
 @LidaApp.route('/<user>/dialogue_annotationstyle/<id>',methods=['GET'])
-def handle_annotations_resource(user=None,id=None):
+@LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<id>', methods=['GET'])
+def handle_annotation_style_resource(user=None,id=None,supervisor=None):
     """
     GET - Returns the annotation style
     """
+    if supervisor:
+        dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        Configuration.validate_dialogue(dialogue["dialogue"])
+        return jsonify( Configuration.create_annotation_dict() )
     
     if not user and not id:
         return jsonify( Configuration.create_annotation_dict() )
 
     else:
         dialogue = dialogueFile.get_dialogue(user, id = id)
-
         #test for correct annotation style
-
         Configuration.validate_dialogue(dialogue["dialogue"])
-
         return jsonify( Configuration.create_annotation_dict() )
 
 @LidaApp.route('/turns',methods=['POST'])
@@ -240,6 +243,31 @@ def handle_dialogues_tag(user, id, tag, value):
         dialogueFile.insert_meta_tags(user, id, tag, value)
 
     return responseObject
+
+@LidaApp.route('/<supervisor>/supervision',methods=['GET'])
+@LidaApp.route('/<supervisor>/supervision/<annotator>/<doc>',methods=['PUT'])
+def handle_supervision_mode(supervisor,annotator=None,doc=None):
+
+    responseObject = {"status":"pending"}
+
+    if request.method == "PUT":
+    
+        #first wipe destination workspace
+        dialogueFile.clean_workspace("Su_"+supervisor)
+    
+        #then load and import dialogues
+        docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":annotator})
+        if len(docRetrieved) != 0:
+            for docCollection in docRetrieved:
+                __add_new_dialogues_from_json_dict("Su_"+supervisor, doc, responseObject, dialogueDict=docCollection["document"])
+
+        responseObject = {"status":"success"}
+
+    if request.method == "GET":
+
+        responseObject = dialogueFile.get_dialogues_metadata("Su_"+supervisor)
+
+    return jsonify(responseObject)
 
 @LidaApp.route('/<user>/annotations_load/<doc>',methods=['PUT'])
 @LidaApp.route('/<user>/annotations_recover/<doc>',methods=['GET'])

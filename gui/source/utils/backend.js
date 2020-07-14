@@ -4,15 +4,6 @@
 
 API_BASE = window.origin
 
-function session_name() {
-    username = "user_1";
-    if (localStorage["remember"] != undefined) {
-        username =  localStorage["remember"]
-    }
-    return username
-}
-
-
 async function put_name(name){
 
     console.log("Set userspace",name);
@@ -68,14 +59,18 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
-async function get_annotation_style_async(id){
+async function get_annotation_style_async(id,supervision){
 
     var dialogues = {}
 
     if (id == undefined) {
         var apiLink = API_BASE+"/dialogue_annotationstyle";
     } else {
-        var apiLink = API_BASE+"/"+session_name()+`/dialogue_annotationstyle/${id}`
+        if (supervision != undefined) {
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+        } else { 
+            var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+        }
     }
 
     try {
@@ -103,7 +98,7 @@ async function get_annotation_style_async(id){
 
 async function write_tag(id,tag,value) {
 
-  var apiLink = API_BASE+"/"+session_name()+`/dialogue/${id}/${tag}/${value}`
+  var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue/${id}/${tag}/${value}`
 
   try {
 
@@ -127,9 +122,13 @@ async function get_all_dialogue_ids_async(admin) {
 
   if (admin == undefined) {
 
-    var apiLink = API_BASE+"/"+session_name()+'/dialogues_metadata';
+    var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata';
 
-  } else {
+  } else if (admin == "supervision") {
+
+    var apiLink = API_BASE+"/"+mainApp.userName+'/supervision';
+
+  } else { 
 
     var apiLink = API_BASE+"/dialogues_metadata";
   }
@@ -137,8 +136,6 @@ async function get_all_dialogue_ids_async(admin) {
   try {
 
     var response = await axios.get(apiLink)
-
-    console.log(response.data)
 
     dialoguesList = response.data
     console.log("=========== ALL DIALOGUE METADATA LIST ===========")
@@ -156,7 +153,7 @@ async function get_all_dialogue_ids_async(admin) {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    var apiLink = API_BASE+"/"+session_name()+`/dialogues_metadata/${oldName}`
+    var apiLink = API_BASE+"/"+mainApp.userName+`/dialogues_metadata/${oldName}`
 
     try {
 
@@ -202,26 +199,36 @@ async function get_all_dialogues_async(admin) {
         }
 
         return dialogues
+    
+    } else {
+
+        try {
+            var response = await RESTdialogues( "GET", null, {})
+
+            dialogues = response.data
+            return dialogues
+
+        } catch(error) {
+
+            console.log(error);
+
+        }
     }
-
-    //users workspaces
-
-    try {
-        var response = await RESTdialogues( "GET", null, {})
-
-        dialogues = response.data
-        return dialogues
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
-
 };
 
 
-async function get_single_dialogue_async(id) {
+async function get_single_dialogue_async(id, supervision) {
+
+    if (supervision != undefined) {
+
+        apiLink = API_BASE+"/supervision/"+mainApp.userName+"/dialogues/"+id;
+
+        var response = await axios.get( apiLink )
+
+        dialogues = response.data.dialogue
+
+        return dialogues
+    }
 
     try {
 
@@ -341,7 +348,7 @@ async function del_single_dialogue_async(dialogueId) {
 async function del_all_dialogues_async(admin) {
 
     if (admin == undefined) {
-        var apiLink = API_BASE+"/"+session_name()+`/dialogues_wipe`
+        var apiLink = API_BASE+"/"+mainApp.userName+`/dialogues_wipe`
     } else {
         var apiLink = API_BASE+"/dialogues_wipe"
     }
@@ -362,7 +369,7 @@ async function del_all_dialogues_async(admin) {
 
 async function recover_dialogues(doc) {
 
-const apiLink = API_BASE+"/"+session_name()+`/annotations_recover/${doc}`
+const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${doc}`
 
     try {
 
@@ -382,35 +389,48 @@ const apiLink = API_BASE+"/"+session_name()+`/annotations_recover/${doc}`
 
 async function load_dialogues(doc) {
 
-const apiLink = API_BASE+"/"+session_name()+`/annotations_load/${doc}`
+    const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_load/${doc}`
 
     try {
 
         var response = await axios.put(apiLink, doc)
         return response
-
+    
     } catch(error) {
 
         console.log(error);
         alert(guiMessages.selected.lida.connectionError)
-
-  }
-
+    }
 }
 
+async function supervision(annotator,doc) {
+
+    const apiLink = API_BASE+"/"+mainApp.userName+`/supervision/${annotator}/${doc}`
+    
+    try {
+
+        var response = await axios.put(apiLink)
+        return response
+    
+    } catch(error) {
+
+        console.log(error);
+        alert(guiMessages.selected.lida.connectionError)
+    }
+}
 
 async function RESTdialogues(method, id, params, fileName){
     console.log("********** ACCESSING DIALOGUES RESOURCE **********");
-    console.log("REQUESTED FROM: "+session_name())
+    console.log("REQUESTED FROM: "+mainApp.userName)
     console.log("ID: "+id)
     console.log("METHOD "+method)
     console.log("PARAMS "+params)
     console.log("COLLECTION "+fileName)
 
     //
-    if (fileName != undefined) { var apiLink = API_BASE+"/"+session_name()+`/dialogues/collection/${fileName}` }
-    else if (id==null) { var apiLink = API_BASE+"/"+session_name()+`/dialogues` }
-    else { var apiLink = API_BASE+"/"+session_name()+`/dialogues/${id}` }
+    if (fileName != undefined) { var apiLink = API_BASE+"/"+mainApp.userName+`/dialogues/collection/${fileName}` }
+    else if (id==null) { var apiLink = API_BASE+"/"+mainApp.userName+`/dialogues` }
+    else { var apiLink = API_BASE+"/"+mainApp.userName+`/dialogues/${id}` }
 
     //
     if (method=="DELETE") {
@@ -465,9 +485,9 @@ async function update_annotations(activeColl,fields,backup) {
   var entries_ids = {}
 
   if (backup == true) {
-    var apiLink = API_BASE+"/"+session_name()+`/backup/${activeColl}`
+    var apiLink = API_BASE+"/"+mainApp.userName+`/backup/${activeColl}`
   } else {
-    var apiLink = API_BASE+"/"+session_name()+`/database/annotations/${activeColl}`
+    var apiLink = API_BASE+"/"+mainApp.userName+`/database/annotations/${activeColl}`
   }
 
   try {
@@ -488,9 +508,12 @@ async function update_annotations(activeColl,fields,backup) {
 
 }
 
-async function update_collection_fields(activeColl,fields) {
+async function update_collection_fields(activeColl,fields, annotator) {
 
-    var apiLink = API_BASE+"/"+session_name()+`/database/fields/${activeColl}`
+    if (annotator == undefined)
+        annotator = mainApp.userName;
+
+    var apiLink = API_BASE+"/"+annotator+`/database/fields/${activeColl}`
 
     try {
 
@@ -669,9 +692,9 @@ async function get_specific_collections(DBcollection,fields,projection) {
   try {
 
     if (projection == undefined)
-        var response = await axios.post(apiLink, {search:JSON.stringify(fields)})
+        var response = await axios.post(apiLink, {"search":JSON.stringify(fields)})
     else
-        var response = await axios.post(apiLink, {search:JSON.stringify(fields), "projection":JSON.stringify(projection)})
+        var response = await axios.post(apiLink, {"search":JSON.stringify(fields), "projection":JSON.stringify(projection)})
 
     entriesList = response.data
 
@@ -956,6 +979,7 @@ backend =
     get_errors_async                            : get_errors_async,
     put_error_async                             : put_error_async,
 
+    supervision                                  : supervision,
     admin_import_all_annotations                 : admin_import_all_annotations,
     admin_post_empty_dialogue                    : admin_post_empty_dialogue,
     import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,

@@ -377,12 +377,13 @@ Vue.component('dialogue-menu',{
             <input type="text"
                    class="dialogue-name-edit"
                    v-bind:id="dialogueTitle + '-name-input'"
-                   v-bind:value="dialogueTitle"
+                   v-bind:value="dialogueTitle">
+                   <!--
                    v-on:keyup.enter="handle_dialogue_id_change($event)"
-                   v-on:focusout="toggleTitleEdit()">
+                   v-on:focusout="toggleTitleEdit()">--> 
 
-            <span v-bind:id="dialogueTitle + '-dialogue-title-span'"
-                  v-on:click="toggleTitleEdit()">
+            <span v-bind:id="dialogueTitle + '-dialogue-title-span'">
+                  <!-- v-on:click="toggleTitleEdit()"> -->
                   {{ dialogueTitle }}
             </span>
 

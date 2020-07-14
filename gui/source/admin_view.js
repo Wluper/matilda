@@ -1,115 +1,5 @@
-/*******************************************************************************
-* MAIN VIEW
-*******************************************************************************/
-
-/*
-Vue.component("admin-panel", {
-
-  data() {
-      return {
-            // displayingDialogue: 'Dialogue1',
-            displayingDialogue: '',
-            alreadyVisited: [],
-            role:mainApp.role,
-            status:"admin-panel",
-            userName:mainApp.userName,
-      }
-  },
-
-  methods: {
-
-      switchStatusToMain() {
-          this.status = "welcome"
-      },
-
-      switchStatusToResolving(dialogueName) {
-          this.displayingDialogue = dialogueName
-          this.status = 'resolving'
-          this.alreadyVisited.push(dialogueName)
-      },
-      switchStatusToUsersManagement() {
-          this.status = 'users-view';
-      },
-
-      switchStatusToCollection() {
-        console.log('--- COLLECTION VIEW ----');
-        this.status = 'collection';
-      },
-
-      switchStatusToConflicts() {
-        console.log('--- INTERRANOTATOR ----');
-        this.status = 'listview';
-      },
-
-      switchStatusToConflictsReview() {
-         console.log('--- INTERRANOTATOR Collection ----');
-        this.status = 'collection-conflicts';
-      },
-
-      switchStatusToSupervision() {
-        //console.log('--- SUPERVISION ----');
-        //this.status = 'supervision';
-      },
-
-      switchStatusToAnnotation() {
-        //
-      },
-
-      load_document_view: function (event) {
-        this.displayingDocument = event;
-      },
-
-  },
-
-  created (){
-       annotationAppEventBus.$on("go_back", this.switchStatusToMain);
-       allDialoguesEventBus.$on("dialogue_clicked", this.switchStatusToResolving);
-       allDialoguesEventBus.$on("usersManagement_clicked", this.switchStatusToUsersManagement);
-       allDialoguesEventBus.$on("collection_clicked", this.switchStatusToCollection);
-       allDialoguesEventBus.$on("conflicts_clicked", this.switchStatusToConflicts);
-       allDialoguesEventBus.$on("conflicts_on_collection", this.switchStatusToConflictsReview);
-       allDialoguesEventBus.$on("annotation_clicked", this.switchStatusToAnnotation);
-       allDialoguesEventBus.$on("supervision_clicked", this.switchStatusToSupervision);
-       databaseEventBus.$on( "document_selected", this.load_document_view );
-
-  },
-
-  template:
-  `
-      <main-admin-view v-if="status === 'admin-panel'" 
-      v-bind:userName="userName">
-      </main-admin-view>
-
-      <interannotator-view v-else-if="status === 'listview'" 
-      v-bind:alreadyVisited="alreadyVisited"
-      v-bind:userName="userName">
-      </interannotator-view>
-
-      <users-view v-else-if="status === 'users-view'" 
-      v-bind:userName="userName">
-      </users-view>
-
-      <datamanagement-view v-else-if="status === 'datamanagement-view'">
-      </datamanagement-view>
-
-      <supervision-view v-else-if="status === 'supervision'">
-      </supervision-view>
-
-      <interannotator-app v-else-if="status === 'collection-conflicts'" 
-      v-bind:alreadyVisited="alreadyVisited"
-      v-bind:userName="userName">
-      </interannotator-app>
-
-      <resolution-app v-else-if="status === 'resolving'"
-      v-bind:dialogueId="displayingDialogue">
-      </resolution-app>
-  `
-});
-
-*/
-
 /************************************
-* All Dialgoues View "aka MAIN ADMIN LIDA VIEW"
+* MAIN ADMIN LIDA VIEW
 *************************************/
 
 Vue.component("main-admin-view", {
@@ -154,7 +44,7 @@ Vue.component("main-admin-view", {
          }
     },
     switchToMain() {
-       this.view = "admin-panel";
+          this.view = "admin-panel";
     },
 
     switchToResolving(dialogueName) {
@@ -184,8 +74,8 @@ Vue.component("main-admin-view", {
     },
 
     switchToSupervision() {
-        //console.log('--- SUPERVISION ----');
-        //this.view = 'supervision';
+        console.log('--- SUPERVISION ----');
+        this.view = 'supervision';
     },
 
     switchToAnnotation() {
@@ -240,7 +130,8 @@ Vue.component("main-admin-view", {
   <datamanagement-view v-else-if="view === 'datamanagement'">
   </datamanagement-view>
 
-  <supervision-view v-else-if="view === 'supervision'">
+  <supervision-view v-else-if="view === 'supervision'"
+      v-bind:userName="userName">
   </supervision-view>
 
   <interannotator-app v-else-if="view === 'collection-conflicts'"

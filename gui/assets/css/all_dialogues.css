@@ -177,10 +177,9 @@
     font-weight: bold;
     font-family: montserrat;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 9.7px;
     letter-spacing: 1px;
-    padding:4px;
-    padding-bottom:2.5px;
+    padding:4px 3px 2.5px 3.5px;
     margin:13px 13px 10px 0px;
 }
 

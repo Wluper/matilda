@@ -64,9 +64,12 @@ class DatabaseManagement(object):
 			query = selected_collection.find(pairs)
 
 		#convert objectId into string and gold in true or false
+		#calculate document length which also is dialogues total number
 		for line in query:
-			if line["_id"]:
+			if line.get("_id") is not None:
 				line["_id"] = str(line["_id"])
+			if line.get("document") is not None:
+				line["documentLength"] = len(line["document"])
 			responseObject.append(line)
 
 		return responseObject
@@ -82,9 +85,16 @@ class DatabaseManagement(object):
 
 	def createDoc(document_id, collection, values):
 		print(" * Creating document", document_id, "in",collection)
-		DatabaseManagement.selected(collection).save(values)
+
+		#check if a document with the same id exists
+		search = DatabaseManagement.readDatabase(collection, {"id":document_id})
 		
-		response = {"staus":"success"}
+		if len(search) != 0:
+			response = {"error":"a document with the same id already exists"}
+		else:
+			DatabaseManagement.selected(collection).save(values)
+			response = {"staus":"success"}
+		
 		return response 
 
 	def updateDoc(doc_id, collection, fields):
@@ -131,3 +141,34 @@ class DatabaseManagement(object):
 	def updateAnnotations(username, destination, fields):
 		DatabaseManagement.selected("annotated_collections").update(
 			{ "id":destination, "annotator":username }, { "$set": fields })
+
+
+class LoginFuncs(object):
+	"""
+	Here all the username accepted by the server
+	"""
+	def logIn(userID, userPass, role):
+
+		response = { "status":"fail" }
+
+		userDetails = DatabaseManagement.readDatabase("users")
+
+		for line in userDetails:
+			if line["userName"] == userID:
+				if line["password"] == userPass:
+					response = { "status":"success", "role":line["role"] }
+
+		return response
+
+	def create(params):
+
+		response = { "status":"fail" }
+
+		if len(DatabaseManagement.readDatabase("users",{"userName":params["userName"]})) == 0:
+			DatabaseManagement.createDoc(params["userName"], "users", params)			
+		else:
+			DatabaseManagement.updateDoc(params["userName"], "users", params)
+
+		response = { "status": "success" }
+
+		return response
