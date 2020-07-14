@@ -367,13 +367,13 @@ async function del_all_dialogues_async(admin) {
     }
 }
 
-async function recover_dialogues(doc) {
+async function recover_dialogues(id) {
 
-const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${doc}`
+const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${id}`
 
     try {
 
-        var response = await axios.get(apiLink, doc)
+        var response = await axios.get(apiLink, id)
 
         console.log("=========== RECOVERY DONE ===========")
         return response
@@ -719,11 +719,11 @@ async function update_collection_async(id, params, doc) {
 
     DBcollection = "dialogues_collections"
 
-    const apiLink = API_BASE+`/collections/${DBcollection}/${id}`
+    const apiLink = API_BASE+`/new_collection/${DBcollection}/${id}`
 
     try {
 
-        response = await axios.post(apiLink, {json: params})
+        response = await axios.post(apiLink, params)
 
     } catch(error) {
 

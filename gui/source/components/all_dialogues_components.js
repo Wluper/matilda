@@ -96,6 +96,25 @@ Vue.component("all-dialogues", {
          });
       },
 
+      handle_file_name_change : function(event){
+         console.log('---- CHANGING FILE NAME ----');
+         console.log(event);
+
+         // for some reason needs manual updating...
+         mainApp.userName = event.target.value;
+
+         backend.put_name("USER_"+event.target.value+".json")
+            .then( (response) => {
+
+               if (response) {
+                    console.log("Name Changed");
+               } else {
+                    alert('Server error, name not changed.')
+               }
+
+         })
+      },
+
       download_all_dialogues_from_server(event) {
          backend.get_all_dialogues_async()
             .then( (response) => {

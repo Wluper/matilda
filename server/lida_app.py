@@ -277,10 +277,11 @@ def handle_switch_collection_request(user, doc):
 
     #get collection document from database
     if request.method == "PUT":
-        
+
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
+            print("No annotated version for user, creating...")
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
             #create document 
             values = {
@@ -681,16 +682,22 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
                 #response = __update_collection_from_workspace(user, id)
 
-        if request.method == "POST":
+    return jsonify ( response )
 
-            values = request.get_json()
-            values = values["json"]
-            #adds necessary fields
-            values["gold"] = {}
-            values["errors"] = {}
-            values["lastUpdate"] = datetime.datetime.utcnow()
 
-            response = DatabaseManagement.createDoc(id, DBcollection, values)
+@LidaApp.route('/new_collection/<destination>/<id>',methods=['POST'])
+def handle_post_of_collections(id, destination):
+    
+    response = {"status":"success" }
+
+    values = request.get_json()
+    #adds necessary fields
+    values["gold"] = {}
+    values["errors"] = {}
+    values["lastUpdate"] = datetime.datetime.utcnow()
+    values["document"] = json.loads(values["document"])
+
+    response = DatabaseManagement.createDoc(id, destination, values)
 
     return jsonify ( response )
 

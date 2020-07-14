@@ -10,6 +10,7 @@ Vue.component("supervision-view", {
          showAnnotatorNamesForIds: [],
          guiMessages,
          selectedCollection:'',
+         selectedAnnotator:'',
          mode:'supervision-collections-list',
       }
    },
@@ -19,7 +20,7 @@ Vue.component("supervision-view", {
    },
 
    created () {
-      adminEventBus.$on("display_dialogues", this.clicked_annotator);
+      adminEventBus.$on("annotator_selected", this.clicked_annotator);
       adminEventBus.$on("dialogue_selected", this.load_in_dialogue_in_supervision);
       adminEventBus.$on("supervision_go_back_to_dialogues", this.clear_view);
       annotationAppEventBus.$on("go_back", this.clear_view );
@@ -33,6 +34,7 @@ Vue.component("supervision-view", {
             this.mode = "supervision-dialogues-list";
          } else if (this.mode == "supervision-dialogues-list") {
             this.mode = "supervision-annotators-list";
+            this.selectedAnnotator = "";
          } else if (this.mode == "supervision-annotators-list") {
             this.mode = "supervision-collections-list";
             this.selectedCollection = "";
@@ -46,7 +48,9 @@ Vue.component("supervision-view", {
          this.mode = "supervision-annotators-list";
       },
 
-      clicked_annotator() {
+      clicked_annotator(annotator) {
+         console.log(annotator)
+         this.selectedAnnotator = annotator;
          this.mode = "supervision-dialogues-list";
       },
 
@@ -133,7 +137,8 @@ Vue.component("supervision-view", {
    </supervision-collection>
    
    <supervision-dialogues v-else-if="mode == 'supervision-dialogues-list' "
-   v-bind:Su_activeCollection="selectedCollection">
+   v-bind:Su_activeCollection="selectedCollection"
+   v-bind:selectedAnnotator="selectedAnnotator">
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
@@ -174,8 +179,8 @@ Vue.component("supervision-collection", {
       clicked_annotated: function(clickedAnnotator) {
          backend.supervision(clickedAnnotator,this.selectedCollection) 
             .then( (response) => {
-               console.log("==== LOADING ANNOTATIONS OF SELECTED USER ====");
-               adminEventBus.$emit("display_dialogues");
+               console.log("==== LOADING ANNOTATIONS FOR SELECTED USER ====");
+               adminEventBus.$emit("annotator_selected",clickedAnnotator);
             });
       },
 
@@ -232,7 +237,7 @@ Vue.component("supervision-collection", {
 Vue.component("supervision-dialogues", {
 
    props: [
-      "Su_activeCollection"
+      "Su_activeCollection", "selectedAnnotator"
    ],
 
    data () {
@@ -263,6 +268,7 @@ Vue.component("supervision-dialogues", {
          backend.get_all_dialogue_ids_async("supervision")
             .then( (response) => {
                this.supervisionDialogueMetadata = response;
+               this.collectionRate = response[0].status;
                console.log(response);
                this.collectionAnnotationRate();
          });
@@ -317,7 +323,7 @@ Vue.component("supervision-dialogues", {
     <div class="inner-wrap">
 
       <h2>
-         <span>{{Su_activeCollection}}:</span> {{ supervisionDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
+         <span>{{Su_activeCollection}}:</span> {{ supervisionDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}} {{guiMessages.selected.lida.annotatedBy}} {{selectedAnnotator}}
       </h2>
 
       <ul class="dialogue-list">

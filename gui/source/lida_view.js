@@ -122,8 +122,8 @@ var mainApp = new Vue({
 
     set_active_collection: function (event) {
         console.log(event);
+        this.activeCollection = event;
         localStorage["activeCollection"] = event;
-        this.activeCollection = localStorage["activeCollection"];
     },
 
     remove_dialogue_from_visited_list(id) {

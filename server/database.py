@@ -85,15 +85,8 @@ class DatabaseManagement(object):
 
 	def createDoc(document_id, collection, values):
 		print(" * Creating document", document_id, "in",collection)
-
-		#check if a document with the same id exists
-		search = DatabaseManagement.readDatabase(collection, {"id":document_id})
-		
-		if len(search) != 0:
-			response = {"error":"a document with the same id already exists"}
-		else:
-			DatabaseManagement.selected(collection).save(values)
-			response = {"staus":"success"}
+		DatabaseManagement.selected(collection).save(values)
+		response = {"staus":"success"}
 		
 		return response 
 

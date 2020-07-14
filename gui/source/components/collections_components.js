@@ -138,7 +138,7 @@ Vue.component("collection-view", {
                         console.log("==== DIALOGUES IMPORT ====");
                         console.log(response);
                         if (response.data.created == true)
-                           console.log("=== WRITING DESTINATION DOCUMENT FOR ANNOTATOR ====")
+                           console.log("=== CREATED NEW DOCUMENT ====")
                         databaseEventBus.$emit("collection_active", clickedEntry);
                         mainContainer.style.cursor = null;
                         annotationAppEventBus.$emit("go_back");
