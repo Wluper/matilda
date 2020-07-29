@@ -35,8 +35,8 @@ multiAnnotator=False
 
 LidaApp = Flask(__name__,
     static_url_path='',
-    static_folder='../gui',
-    template_folder='../gui')
+    static_folder='gui',
+    template_folder='gui')
 LidaApp.config.from_object(__name__)
 CORS(LidaApp)
 #set_main_path(path)
@@ -657,6 +657,8 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
         
         collectionNames = DatabaseManagement.readDatabase(DBcollection, fields, projection)
 
+        __check_if_gold(collectionNames)
+
         response = collectionNames
 
     if id:
@@ -666,15 +668,8 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
                 collectionNames = DatabaseManagement.readDatabase(DBcollection, None, {"id","assignedTo","status","lastUpdate","errors","done","gold"})
 
-                #only return if gold is empty or not
-                try: 
-                    for name in collectionNames:
-                        if name["gold"] != {}:
-                            name["gold"] = True
-                        else:
-                            name["gold"] = False
-                except:
-                    pass
+                #return if gold is empty or not
+                __check_if_gold(collectionNames)
 
                 response = collectionNames
 
@@ -702,7 +697,7 @@ def handle_post_of_collections(id, destination):
     return jsonify ( response )
 
 
-@LidaApp.route('/login/<id>/<idPass>/<role>',methods=['POST','PUT'])
+@LidaApp.route('/login/<id>/<idPass>',methods=['POST','PUT'])
 def handle_login(id, idPass=None,role=None):
     """
     Check if user login is permitted
@@ -710,7 +705,7 @@ def handle_login(id, idPass=None,role=None):
     responseObject = {}
 
     if request.method == "POST":
-        responseObject = LoginFuncs.logIn( id, idPass, role)
+        responseObject = LoginFuncs.logIn( id, idPass)
 
     if request.method == "PUT":
         responseObject = LoginFuncs.create(id)
@@ -826,7 +821,15 @@ def __add_new_dialogues_from_string_lists(user, fileName, currentResponseObject,
 
     return currentResponseObject
 
-
+def __check_if_gold(collectionNames):
+    try: 
+        for name in collectionNames:
+            if name["gold"] != {}:
+                name["gold"] = True
+            else:
+                name["gold"] = False
+    except:
+        pass
 
 #######################################################
 #   ADMIN FUNCTIONS

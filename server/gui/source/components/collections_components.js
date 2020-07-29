@@ -7,6 +7,7 @@ Vue.component("database-header", {
             showHelpColl:"",
             userName:mainApp.userName,
             role:mainApp.role,
+            activeColl: mainApp.activeCollection
         }
     
     },
@@ -36,7 +37,7 @@ Vue.component("database-header", {
                 <div class="help-button-container">
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-if="role == 'administrator'" class="btn-mid btn btn-sm btn-primary" @click="admin_panel_clicked()">{{guiMessages.selected.admin.button_admin}}</button>
-                    <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                    <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
@@ -102,7 +103,6 @@ Vue.component("collection-view", {
                     if (mainApp.boot == true)
                       this.retrieveActiveCollection();
             })
-
         },
 
         retrieveActiveCollection() {
@@ -121,13 +121,20 @@ Vue.component("collection-view", {
                         //executed only once
                         //mainApp.boot = false;
                      } else {
+                        //if active collection document doesn't exist anymore
+                        mainApp.activeCollection = null;
+                        this.activeCollection = null;
                         return
                      }
                 });
         },
 
         clicked_entry(clickedEntry) {
-            let del = confirm(guiMessages.selected.collection.confirmImport);
+            if (mainApp.activeCollection != null) {
+                var del = confirm(guiMessages.selected.collection.confirmImport);
+            } else {
+                del = true;
+            }
             if (del == true) {
                mainContainer.style.cursor = "progress";
                backend.del_all_dialogues_async()
@@ -165,7 +172,7 @@ Vue.component("collection-view", {
         },
 
         update_collection() {
-            if (this.activeCollection == "null") {
+            if (this.activeCollection == null) {
                 allDialoguesEventBus.$emit("show_message",guiMessages.selected.collection.noCollection);
                 return
             }
@@ -266,7 +273,7 @@ Vue.component("collection-view", {
                     </li>
                 </ul>
                 <div v-if="activeCollection != null" class="closing-list">
-                    <button v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button>
+                    <!-- <button v-on:click="update_collection" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.update}}</button> -->
                     <button v-on:click="set_done" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.collection.done}}</button>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>

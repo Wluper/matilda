@@ -140,7 +140,7 @@ class LoginFuncs(object):
 	"""
 	Here all the username accepted by the server
 	"""
-	def logIn(userID, userPass, role):
+	def logIn(userID, userPass):
 
 		response = { "status":"fail" }
 

@@ -230,7 +230,7 @@ Vue.component('users-creation-modal', {
                     <input class="user-creation" id="create_username" type="text">
                     <br>
                     <label for="create_password">Password:</label>
-                    <input class="user-creation" id="create_password" type="text">
+                    <input class="user-creation" id="create_password" type="password">
                     <br>
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">

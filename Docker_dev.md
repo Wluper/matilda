@@ -1,6 +1,6 @@
 ## How to build a Docker container
 
-Building a docker container depends on a deployment script, the Dockerfile, which is already in place already in place. The Dockerfile uses the "requirements.txt" file to configure the server, and the "gunicorn_run.sg" script to launch the server.
+Building a docker container depends on a deployment script, the Dockerfile, which is already in place. The Dockerfile uses the "requirements.txt" file to configure the server, and the "gunicorn_run.sg" script to launch the server.
 
 To build a new docker, use the command:
 

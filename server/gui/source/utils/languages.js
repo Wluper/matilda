@@ -8,7 +8,7 @@ guiMessages = {
             title:"Conflicts Resover",
             titlePanel:"Administration Panel",
             interAnno:"Interannotator Resolution",
-            dataItems: "Items",
+            dataItems: "Dialogues",
             visited: "Visited",
             visited_dialogues: "Visited Dialogues",
             supervision:"Supervision",
@@ -81,7 +81,7 @@ guiMessages = {
             importResult: "Import",
             importSuccess: "Success! Dialogues correctly loaded in your list.",
             importSuccessAddendum: "They are available in your dialogue list.",
-            confirmImport: "This will load the selected collection replacing all the current dialogues in the list.",
+            confirmImport: "This will load the selected collection and make it the active collection",
             confirmRevision: "This will load the selected collection in the Interannotator conflict resolver list, adding it to the current dialogues",
             collTitle: "Title",
             collDesc: "Description",
@@ -104,7 +104,7 @@ guiMessages = {
             enterQuery:"Enter New Query",
             allSaved: "All Changes Saved",
             unsaved: "Unsaved Changes",
-            backToAll: "Back to All Dialogues",
+            backToAll: "Back",
             close: "Close",
             select: "Select or write text from turn",
             expand: "Click to Expand",
@@ -120,6 +120,13 @@ guiMessages = {
             accept:"Accept",
             noConflicts:"No annotation conflicts found in this dialogue"
         },
+        admin_panel: [
+            "Confront annotations on the same collections and resolve their conflicts",
+            "Add, remove and edit annotator and administrator accounts",
+            "Create, edit and assign dialogues collections",
+            "Inspect how annotations are progressing",
+            "Annotate collections assigned to you",
+        ],
         modal_formatInfo:
         [ 
             `
@@ -307,7 +314,7 @@ guiMessages = {
             collStatus: "Stato di avanzamento",
             new: "Importato",
             old: "Precedente",
-            confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi nella tua lista.",
+            confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi e cambierà la collezione attiva.",
             confirmRevision: "Questa operazione aggiungerà la collezione nella lista di revisione, confrontandola con eventuali collezioni già presenti",
             save: "Save and Update Collection",
             done: "Annotazione completata",
@@ -337,6 +344,13 @@ guiMessages = {
             accept:"Accetta",
             noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo"
         },
+        admin_panel: [
+            "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
+            "Aggiungi, rimuovi o modifica account di tipo amministratore o annotatore",
+            "Crea, modifica e assegna le collezioni di dialoghi",
+            "Controlla come sta procedendo il lavoro di annotazione",
+            "Annota le collezioni assegnate a te",
+        ],
         modal_formatInfo:
         [ 
             `

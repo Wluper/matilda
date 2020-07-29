@@ -161,16 +161,6 @@ input:focus {
     grid-area: button-section;
 }
 
-.admin-panel {
-    display: grid;
-    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
-}
-
-.panel {
-    padding: 10px 17px !important;
-    box-shadow:0 2px #1675c1, 0px 4px 6px 0px #00000026;
-}
-
 
 /*******************************************************************************
 ********************************************************************************
@@ -352,6 +342,25 @@ input:focus {
     display:none;
 }
 
+.admin-panel {
+    display: grid;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
+    padding-top:20px;
+}
+
+.panel {
+    padding: 10px 17px !important;
+    box-shadow:0 2px #1675c1, 0px 4px 6px 0px #00000026;
+}
+
+.admin-panel p {
+    text-align:center;
+    font-size:14px;
+    margin-left:8px;
+    margin-right:8px;
+    color: rgba(0,0,0,0.7);
+}
+
 /*******************************************************************************
 ********************************************************************************
 * LAYOUT SPECIFIC
@@ -380,8 +389,8 @@ input:focus {
 }
 
 .copyright {
-    font-size: .6875em;
-    line-height: 4.7272727273em;
+    font-size: .7em;
+    line-height: 4em;
     color: #636b74;
     margin-left: 20px;
 }
@@ -392,10 +401,14 @@ input:focus {
 .language-list-title-container {
     float:right;
     text-align:center;
-    padding: 16px 24px;
+    padding: 13px 24px;
     vertical-align:bottom;
     color:#636b74;
     font-size:13px;
+}
+
+.language-list-title-container label {
+    vertical-align:middle;
 }
 
 .droplist_language_selector {

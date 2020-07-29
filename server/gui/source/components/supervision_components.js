@@ -111,7 +111,7 @@ Vue.component("supervision-view", {
                   </div>
 
                   <div class="gold-space" v-on:click="clicked_collection(name.id)">
-                     Gold: <span v-if="name.gold.length != 0" class="gold-true">True</span>
+                     Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
 

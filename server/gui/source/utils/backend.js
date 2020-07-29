@@ -607,15 +607,15 @@ async function get_all_entries_async() {
   }
 }
 
-async function login(loginName,loginPass,role) {
+async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_BASE+`/login/${loginName}/${loginPass}/${role}`;
+  const apiLink = API_BASE+`/login/${loginName}/${loginPass}`;
 
   try {
 
-    var response = await axios.post(apiLink, loginName, loginPass, role);
+    var response = await axios.post(apiLink, loginName, loginPass);
 
     console.log(response);
 

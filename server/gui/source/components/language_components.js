@@ -9,8 +9,9 @@ var languageSection = new Vue({
   
   data:{
     gui_languages: [
+      // new languages needs to be inserted here with their proper international code
       { name:"English", code:"en" }, 
-      { name:"Italian", code:"it"}
+      { name:"Italian", code:"it" }
     ],
     currentLanguage: "en",
     guiMessages,

@@ -35,7 +35,7 @@ Vue.component("login-view", {
         },
         check_credentials() {
             console.log('---- CHECKING USERNAME ----');
-            backend.login(this.insertedName,this.insertedPass, this.role)
+            backend.login(this.insertedName,this.insertedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username and password is valid");
