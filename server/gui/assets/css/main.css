@@ -361,6 +361,21 @@ input:focus {
     color: rgba(0,0,0,0.7);
 }
 
+.collection-dialogues {
+    width: 49%;
+    float: left;
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    margin: 0px 0px 15px 0px;
+}
+
+.collection-users {
+    list-style-type: none;
+    margin-left: 0;
+    overflow: hidden;
+}
+
 /*******************************************************************************
 ********************************************************************************
 * LAYOUT SPECIFIC

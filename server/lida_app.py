@@ -679,20 +679,33 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
     return jsonify ( response )
 
+@LidaApp.route('/<mode>/collection/<destination>',methods=['POST'])
+@LidaApp.route('/<mode>/collection/<destination>/<id>',methods=['POST'])
+def handle_post_of_collections(mode, destination, id=None):
 
-@LidaApp.route('/new_collection/<destination>/<id>',methods=['POST'])
-def handle_post_of_collections(id, destination):
-    
-    response = {"status":"success" }
+    response = {"status":"success"}
 
     values = request.get_json()
-    #adds necessary fields
-    values["gold"] = {}
-    values["errors"] = {}
-    values["lastUpdate"] = datetime.datetime.utcnow()
-    values["document"] = json.loads(values["document"])
 
-    response = DatabaseManagement.createDoc(id, destination, values)
+    if mode == "new":
+
+        #adds necessary fields
+        values["gold"] = {}
+        values["errors"] = {}
+        values["lastUpdate"] = datetime.datetime.utcnow()
+        values["document"] = json.loads(values["document"])
+
+        response = DatabaseManagement.createDoc(id, destination, values)
+
+    elif mode == "update":
+
+        response = DatabaseManagement.updateDoc(id, destination, values)
+
+    elif mode == "multiple":
+
+        for line in values:
+            DatabaseManagement.updateDoc(line, destination, {"assignedTo":values[line]})
+            response.update({line:values[line]})
 
     return jsonify ( response )
 

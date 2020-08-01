@@ -338,7 +338,20 @@ pre:first-line {
 }
 
 input:checked + div { 
-    border-left:5px solid #3a9dd6 !important;
+    border-left:5px solid #3a9dd6;
+}
+input:not(:checked) + div {
+    border-left-color:#d1d1d3 !important;
+    border-left:4px solid #d1d1d3;
+    opacity:0.3;
+}
+
+.radio-primary + div {
+    border-left-color:red !important;
+}
+
+.collection-list .entry-info:hover {
+    border-left:5px solid #3a9dd6;
 }
 
 .in-selector {
@@ -372,4 +385,73 @@ input:checked + div {
     transition: ease 175ms all;
     background: white;
     border-top:1px solid rgba(0,0,0,0.04);
+}
+
+#collection_editing .entry-annotated {
+    text-align:left;
+}
+
+.collection-user-list .entry-list-single-item-container,
+.collection-list .entry-list-single-item-container {
+    border-left:none !important;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
+}
+
+.collection-user-list .listed-entry:hover .entry-list-single-item-container,
+.collection-list .listed-entry:hover .entry-list-single-item-container {
+    border-left:none !important;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.1);
+}
+
+.collection-user-list .entry-annotated {
+    text-align:left !important;
+}
+
+.collection-list .listed-entry {
+    opacity:0.4;
+}
+
+.collection-user-list .listed-entry {
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
+}
+
+.two-columns {
+    float:left;
+    width:50%;
+    margin:0 0 20px 0;
+}
+
+.two-columns .listed-entry {
+    width:100% !important;
+    float:none !important;
+    list-style-type: none;
+    margin: 10px 0;
+}
+
+.collection-user-list .entry-info {
+    display:initial !important;
+    grid-template:none !important;
+}
+
+.listed-label {
+    grid-area: info;
+    display: grid;
+    grid-template: [row1-start] "id status" [row1-end] / 1.8fr 1fr;
+    cursor: pointer;
+    background-color: white;
+    color: #222;
+    padding: 0;
+    transition: ease 250ms all
+}
+
+#collection-user-editing .collection-list .listed-entry {
+    opacity:1;
+}
+
+#collection-user-editing .collection-list .listed-label {
+    display:grid;
+}
+
+#collection-user-editing .collection-list .entry-info {
+    display:block;
 }

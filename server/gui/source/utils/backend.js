@@ -708,7 +708,11 @@ async function get_specific_collections(DBcollection,fields,projection) {
   }
 }
 
-async function update_collection_async(id, params, doc) {
+/********************************
+*  ADMIN 
+********************************/
+
+async function new_collection_async(id, params, doc) {
 
     if (typeof(doc) != "string") {
         doc = JSON.parse("{"+doc+"}");
@@ -719,7 +723,7 @@ async function update_collection_async(id, params, doc) {
 
     DBcollection = "dialogues_collections"
 
-    const apiLink = API_BASE+`/new_collection/${DBcollection}/${id}`
+    const apiLink = API_BASE+`/new/collection/${DBcollection}/${id}`
 
     try {
 
@@ -735,9 +739,41 @@ async function update_collection_async(id, params, doc) {
     return response
 }
 
-/********************************
-*  ADMIN 
-********************************/
+async function update_collection_async(id, DBcollection, params) {
+
+    const apiLink = API_BASE+`/update/collection/${DBcollection}/${id}`
+
+    try {
+
+        response = await axios.post(apiLink, params)
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Error. This could be caused by a server error or a wrong character in your collection file")
+        response = error 
+    }
+
+    return response
+}
+
+async function update_multiple_collections_async(DBcollection, params) {
+
+    const apiLink = API_BASE+`/multiple/collection/${DBcollection}`
+
+    try {
+
+        response = await axios.post(apiLink, params)
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Error. This could be caused by a server error or a wrong character in your collection file")
+        response = error 
+    }
+
+    return response
+}
 
 async function get_scores_async(){
 
@@ -969,7 +1005,9 @@ backend =
     get_all_users                               : get_all_users,
     create_user                                 : create_user,
 
+    new_collection_async                        : new_collection_async,
     update_collection_async                     : update_collection_async,
+    update_multiple_collections_async           : update_multiple_collections_async,
     get_collections_ids_async                   : get_collections_ids_async,
     get_collections_async                       : get_collections_async,
     get_specific_collections                    : get_specific_collections,
