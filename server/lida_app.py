@@ -637,7 +637,7 @@ def handle_wipe_request(user=None):
 
     return responseObject
 
-@LidaApp.route('/collections/<DBcollection>',methods=['POST'])
+@LidaApp.route('/collections/<DBcollection>',methods=['POST','GET'])
 @LidaApp.route('/collections/<DBcollection>/<id>',methods=['GET','POST'])
 @LidaApp.route('/collections/<id>/<user>',methods=['PUT'])
 def handle_collections(id=None, DBcollection=None, user=None, fields=None):
@@ -659,7 +659,11 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
         __check_if_gold(collectionNames)
 
-        response = collectionNames
+    if fields is None:
+
+        collectionNames = DatabaseManagement.readDatabase(DBcollection, fields)
+
+        __check_if_gold(collectionNames)
 
     if id:
 
@@ -671,13 +675,11 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
                 #return if gold is empty or not
                 __check_if_gold(collectionNames)
 
-                response = collectionNames
-
         #if request.method == "PUT":
 
                 #response = __update_collection_from_workspace(user, id)
 
-    return jsonify ( response )
+    return jsonify ( collectionNames )
 
 @LidaApp.route('/<mode>/collection/<destination>',methods=['POST'])
 @LidaApp.route('/<mode>/collection/<destination>/<id>',methods=['POST'])

@@ -191,9 +191,7 @@
     padding-left:10px;
     padding-bottom:8px;
 }
-.entry-assigned span {
-    font-weight: bold; 
-}
+
 
 .entry-done {
     display: flex;
@@ -377,6 +375,8 @@ input:not(:checked) + div {
     border-radius: 1px;
     cursor: pointer;
     font-style:normal;
+    float: right;
+    margin-bottom: 5px;
 }
 
 .entry-list-single-user-container {
@@ -454,4 +454,82 @@ input:not(:checked) + div {
 
 #collection-user-editing .collection-list .entry-info {
     display:block;
+}
+
+.collection-dialogues textarea {
+    border-left: 1px solid #e1e1e3;
+    min-height: 174px;
+    font-size:12px;
+    padding:1px 15px 0px 1px;
+}
+
+.collection-list .entry-list-single-item-container {
+    grid-template: [row1-start] "info edit del" [row1-end] / 21fr 3fr 3fr;
+}
+
+.edit-dialogue-button {
+    grid-area: edit;
+    border: 1px solid #259af7;
+    color: #259af7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-weight: bold;
+    font-size: 13px;
+    width: 87%;
+    height: 50%;
+    margin-top: 13px;
+}
+
+.edit-dialogue-button:hover {
+    background-color: #259af7;
+    color: white;
+    cursor: pointer;
+}
+
+.open-close:hover {
+    background-color:grey;
+    color:white;
+}
+
+#collection-editing .listed-entry {
+    width:33.3%;
+    opacity:1;
+    margin:6px 0;
+}
+
+#collection-editing .del-dialogue-button {
+    margin-top:10px;
+}
+
+#collection-view .entry-info { 
+    grid-template: [row1-start] "id status" [row1-end] / 2.3fr .7fr;
+}
+
+.collection-list .listed-label {
+    grid-template: [row1-start] "id status" [row1-end] / 2fr .7fr;
+}
+
+input[type="password"]:hover {
+    background-color:white !important;
+}
+
+.dialogue-entry-list {
+    grid-template: [row1-start] "info del" [row1-end] / 3fr 0.6fr;
+    display: grid;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+    transition: ease 175ms all;
+    background: white;
+}
+
+.dialogue-entry-info {
+    grid-template: [row1-start] "id status" [row1-end] / 3fr 1.4fr;
+    grid-area: info;
+    display: grid;
+    cursor: pointer;
+    background-color: white;
+    color: #222;
+    padding: 5px;
+    transition: ease 250ms all;
 }

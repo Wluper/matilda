@@ -714,11 +714,6 @@ async function get_specific_collections(DBcollection,fields,projection) {
 
 async function new_collection_async(id, params, doc) {
 
-    if (typeof(doc) != "string") {
-        doc = JSON.parse("{"+doc+"}");
-    } else {
-        doc = "{"+doc+"}"
-    }
     params["document"] = doc
 
     DBcollection = "dialogues_collections"

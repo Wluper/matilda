@@ -8,17 +8,20 @@ Vue.component("datamanagement-view", {
             showCollection: "all",
             showUser:"all",
             showHelpColl: false,
+            status:"collections",
             userList:{},
             userName: mainApp.userName,
             allUsers:[],
             selectedCollection:"",
-            allEntriesNamedMetadata: [],
+            allEntriesNamedMetadata:{},
             tIndex:"",
         }
     },
 
     created() {
-        databaseEventBus.$on( "collections_changed", this.init )
+        databaseEventBus.$on("collections_changed", this.init );
+        databaseEventBus.$on("creation_completed", this.reset_view );
+        databaseEventBus.$on("entry_selected", this.inspect_entry );
     },
 
     mounted () {
@@ -49,7 +52,7 @@ Vue.component("datamanagement-view", {
 
         getAllEntriesFromServer() {
             mainContainer.style.cursor = "progress";
-            backend.get_collections_ids_async("dialogues_collections")
+            backend.get_collections_async("dialogues_collections")
                 .then( (response) => {
                     for (collection in response) {
                       this.allEntriesNamedMetadata[response[collection].id] = response[collection]
@@ -60,20 +63,21 @@ Vue.component("datamanagement-view", {
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
-                    });
+                });
             })
-
         },
 
         inspect_entry(clickedEntry) {
+            event.stopPropagation();
             mainContainer.style.cursor = "progress";
+            this.changesSaved = "";
+            this.showUser = "all";
             this.showCollection = clickedEntry;
+            this.status = "collection";
         },
 
         clicked_entry(clickedEntry, index) {
-            if (this.selectedCollection.id != undefined) {
-              document.getElementById(this.selectedCollection.id).style.opacity = null;
-            }
+            this.status = "collections";
             this.tIndex = index;
             this.selectedCollection = this.allEntriesNamedMetadata[clickedEntry];
             document.getElementById(this.selectedCollection.id).style.opacity = "1";
@@ -85,11 +89,6 @@ Vue.component("datamanagement-view", {
 
         clicked_active() {
             adminAppEventBus.$emit("go_back");
-        },
-
-        update_assigned_number() {
-            this.allEntryMetadata[this.tIndex]["assignedTo"] = this.selectedCollection.assignedTo;
-            console.log(this.allEntryMetadata[this.tIndex]["assignedTo"]);
         },
 
         clicked_user() {
@@ -111,16 +110,16 @@ Vue.component("datamanagement-view", {
             }
         },
 
-        delete_entry(event) {
+        delete_entry(clickedEntry) {
+            event.stopPropagation();
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
-                idToDelete = event.target.parentNode.parentNode.id;
-                backend.del_db_entry_async(idToDelete, "dialogues_collections")
+                backend.del_db_entry_async(clickedEntry, "dialogues_collections")
                     .then( (response) => {
                         databaseEventBus.$emit('collections_changed');
                     });
             } else {
-                return
+                return;
             }
         },
 
@@ -141,23 +140,24 @@ Vue.component("datamanagement-view", {
                 this.selectedCollection = "";
                 this.allEntriesNamedMetadata = [];
                 this.tIndex = "";
+                this.status = "users";
             } else if (this.showUser != "all") {
                 console.log("switching from user to collection view");
                 this.showCollection = "all";
                 this.showUser = "all";
+                this.status = "collection";
             }
         },
 
         reset_view() {
             if (this.selectedCollection != "") {
-                if (this.selectedCollection.id != undefined) {
-                    document.getElementById(this.selectedCollection.id).style.opacity = null;
-                }
                 this.selectedCollection = "";
             } else {
                 this.showUser = "all";
             }
             this.changesSaved = "";
+            this.showCollection = "all";
+            this.status = "collections";
             this.init();
         },
     },
@@ -173,15 +173,12 @@ Vue.component("datamanagement-view", {
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
-            <div class="inner-wrap">
+
+            <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
-                    <button type="button" v-on:click="showCreateModal = true" 
+                    <button type="button" v-on:click="status = 'creation'" 
                             class="help-button btn btn-sm btn-primary">
                             {{guiMessages.selected.collection.create}}
-                    </button> 
-                    <button type="button" v-on:click="inspect_entry()" 
-                            class="help-button btn btn-sm btn-primary">
-                            {{guiMessages.selected.collection.editColl}}
                     </button> 
 
                     <button v-if="selectedCollection != '' || showUser != 'all'" 
@@ -194,39 +191,71 @@ Vue.component("datamanagement-view", {
 
                 <ul class="collection-list two-columns" v-if="showCollection == 'all' && showUser == 'all' ">
                     <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
-                    <li class="listed-entry" v-for='collection,index in allEntryMetadata' v-bind:id="collection.id">
+                    <li class="listed-entry" v-for='collection,index in allEntryMetadata' v-bind:id="collection.id" style="opacity:1;">
                         <div class="entry-list-single-item-container" v-on:click="switch_view(collection.id)">
-                            <div class="del-dialogue-button" v-on:click="delete_entry($event)">
+                            <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
+                                {{guiMessages.selected.admin.editButton}}
+                            </div>
+                            <div class="del-dialogue-button" v-on:click="delete_entry(collection.id)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                             <input type="radio" class="user-checkbox radio-primary" v-bind:id="'coll_'+collection.id" v-bind:value="collection.id" v-model="selectedCollection.id">
-                            <div class="entry-info" v-on:click="clicked_entry(collection.id, index)">
+                            
+                            <div v-if="selectedCollection == ''" class="entry-info" v-on:click="clicked_entry(collection.id, index)" style="opacity:1;">
                                 <div class="entry-id">
-                                    <span>Collection:</span> {{collection.id}}
+                                    <span>ID:</span> {{collection.id}}
                                 </div>
-                            <div class="entry-annotated">
-                                <template v-if="collection.gold">
-                                Gold: <span class="gold-true">True</span>
-                                </template>
-                                <template v-else>
-                                Gold: <span class="gold-false">False</span>
-                                </template>
-                            </div>
-                            <div class="entry-assigned open-close">
-                                    <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)">
-                                    Assigned to: 
-                                        <span class="gold-false">{{collection.assignedTo.length}}</span> 
+                                <div class="entry-annotated">
+                                    <template v-if="collection.gold">
+                                        Gold: <span class="gold-true">True</span>
+                                    </template>
+                                    <template v-else>
+                                        Gold: <span class="gold-false">False</span>
+                                    </template>
+                                </div>
+                                <div class="entry-assigned">
+                                    <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                    Assigned: 
+                                        <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
                                     </span>
 
                                     <span v-else v-on:click="toggle_user_list(collection.id)">
-                                    Assigned To: 
-                                        <span class="gold-true">{{collection.assignedTo}}</span>
+                                    Assigned: 
+                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                            <div class="entry-date">
-                                {{collection.lastUpdate.slice(0,-3)}}
+                                <div class="entry-date">
+                                    {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
+                                </div>
                             </div>
+                            <div v-else class="entry-info" v-on:click="clicked_entry(collection.id, index)">
+                                <div class="entry-id">
+                                    <span>ID:</span> {{collection.id}}
+                                </div>
+                                <div class="entry-annotated">
+                                    <template v-if="collection.gold">
+                                        Gold: <span class="gold-true">True</span>
+                                    </template>
+                                    <template v-else>
+                                        Gold: <span class="gold-false">False</span>
+                                    </template>
+                                </div>
+                                <div class="entry-assigned">
+                                    <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                    Assigned: 
+                                        <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
+                                    </span>
+
+                                    <span v-else v-on:click="toggle_user_list(collection.id)">
+                                    Assigned: 
+                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
+                                    </span>
+                                </div>
+                                <div class="entry-date">
+                                    {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
+                                </div>
                             </div>
+
                         </div>
                     </li>
                 </ul>
@@ -264,22 +293,27 @@ Vue.component("datamanagement-view", {
                     </span>
                 </div>
                     
-                <collection-entry-details 
-                        v-if="showCollection != 'all' && showUser == 'all'"
-                        v-bind:selectedCollection="showCollection">
-                </collection-entry-details>
-
-                <collection-user-details
-                        v-if="showUser != 'all' && showCollection == 'all'"
+                <collection-users-reverse
+                        v-if="status == 'users'"
                         v-bind:selectedUserFromParent="showUser">
-                </collection-user-details>
-
+                </collection-users-reverse>
             </div>
+
+            <collection-entry-details 
+                        v-if="status == 'collection'"
+                        v-bind:allUsers="allUsers"
+                        v-bind:selectedCollection="showCollection">
+            </collection-entry-details>
+            
+            <collection-creation
+                        v-bind:allUsers="allUsers"
+                        v-if="status =='creation'">
+            </collection-creation>
         </div>
     `
 });
 
-Vue.component('collection-user-details', {
+Vue.component('collection-users-reverse', {
    
    props: ["selectedUserFromParent"],
 
@@ -292,7 +326,7 @@ Vue.component('collection-user-details', {
             allUsers:[],
             assignedCollections:[],
             changesSaved:'',
-            allEntriesNamedMetadata:[],
+            allEntriesNamedMetadata:{},
             saveTasks:{},
             selectedUser: this.selectedUserFromParent,
          }
@@ -311,7 +345,7 @@ Vue.component('collection-user-details', {
             this.allEntriesNamedMetadata = [];
             this.assignedCollections = [];
             //get data from server
-            backend.get_collections_ids_async("dialogues_collections")
+            backend.get_collections_async("dialogues_collections")
                   .then( (response) => {
                     console.log("All collections",response);
                     for (collection in response) {
@@ -347,6 +381,10 @@ Vue.component('collection-user-details', {
             this.init();
         },
 
+        inspect_entry: function(clickedEntry) {
+            databaseEventBus.$emit("entry_selected",clickedEntry);
+        },
+        
         add_or_remove: function(clickedCollection) {
             if (this.allEntriesNamedMetadata[clickedCollection]["assignedTo"].includes(this.selectedUser)) {
                 let index = this.allEntriesNamedMetadata[clickedCollection]["assignedTo"].indexOf(this.selectedUser);
@@ -356,13 +394,13 @@ Vue.component('collection-user-details', {
             }
             this.saveTasks[clickedCollection] = this.allEntriesNamedMetadata[clickedCollection].assignedTo;
             console.log("Output array updated",this.allEntriesNamedMetadata[clickedCollection].assignedTo);
-            console.log("Update plan",this.saveTasks);
         },
 
         save: function() {
+            console.log("Update plan",this.saveTasks);
             backend.update_multiple_collections_async("dialogues_collections",this.saveTasks) 
                 .then( (response) => {
-                    console.log(response);
+                    console.log("Collections updated",response);
                     this.init();
             })
         }
@@ -374,6 +412,9 @@ Vue.component('collection-user-details', {
                     <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
                     <li class="listed-entry" v-for='collection in allEntryMetadata' v-bind:id="collection.id">
                         <div class="entry-list-single-item-container">
+                            <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
+                                {{guiMessages.selected.admin.editButton}}
+                            </div>
                             <div class="del-dialogue-button" v-on:click="delete_entry($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
@@ -381,7 +422,7 @@ Vue.component('collection-user-details', {
                             <div class="entry-info">
                                 <label :for="'check_'+collection.id" class="listed-label" v-on:click="changesSaved = 'false'">
                                     <div class="entry-id">
-                                        <span>Collection:</span> {{collection.id}}
+                                        <span>ID:</span> {{collection.id}}
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="collection.gold">
@@ -392,10 +433,10 @@ Vue.component('collection-user-details', {
                                         </template>
                                     </div>
                                     <div class="entry-assigned">
-                                        <span>Assigned to: <span class="gold-false">{{collection.assignedTo}}</span> </span>
+                                        <span>Assigned: <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> </span>
                                     </div>
                                     <div class="entry-date">
-                                        {{collection.lastUpdate.slice(0,-3)}}
+                                        {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                     </div>
                                 </label>
                             </div>
@@ -436,15 +477,16 @@ Vue.component('collection-user-details', {
 
 Vue.component('collection-entry-details', {
    
-   props: ["selectedCollection"],
+   props: ["selectedCollection", "allUsers"],
 
    data () {
          return {
             entry : {},
             guiMessages,
             role: mainApp.role,
-            allUsers:[],
             checkedUsers:[],
+            changesSaved:"",
+            showGold: {boo: false, code:""}
          }
    },
 
@@ -457,39 +499,281 @@ Vue.component('collection-entry-details', {
          init : function(){
             backend.get_db_entry_async(this.selectedCollection,"dialogues_collections")
                   .then( (response) => {
-                     console.log("Collection",response[0]);
+                     console.log("Collection details",response[0]);
                      this.entry = response[0];
-                     this.allUsers = response[0]["assignedTo"]
+                     this.checkedUsers = response[0]["assignedTo"]
                      mainContainer.style.cursor = null;
+                     this.showGold.boo = this.check_if_gold(this.entry);
             });
         },
+
+        check_if_gold(response) {
+            this.showGold.code = JSON.stringify(response.gold);
+            if (this.showGold.code === "{}")
+                return false;
+            else
+                return true;
+        },
+
+        show_gold(mode) {
+            if (mode == undefined) {
+                document.getElementById("gold_expanded").style.display = "block";
+                document.getElementById("gold_field").style.display = "none";
+            } else {
+                document.getElementById("gold_expanded").style.display = "none";
+                document.getElementById("gold_field").style.display = "block";
+            }
+        },
+
+        close_document_view() {
+            databaseEventBus.$emit("creation_completed");
+        },
+
+        update() {
+            console.log(this.checkedUsers);
+            params = {
+               id: this.entry.id,
+               title:this.entry.title, 
+               description:this.entry.description,
+               annotationStyle:this.entry.annotationStyle,
+               assignedTo:this.checkedUsers,
+               gold:this.entry.gold,
+               errors:this.entry.errors,
+            }
+            if (params.assignedTo.length == 0) {
+                params.assignedTo = ["admin"];
+            }
+            for (element in params) {
+               if (params[element] == undefined)
+                  params[element] = ""
+            }
+            backend.update_collection_async(this.entry.id, "dialogues_collections", params)
+               .then( (response) => {
+                  console.log();
+                  console.log("============== Dialogues-Collection Updated ==============");
+                  databaseEventBus.$emit('creation_completed');
+            });
+        }
   },
   template:
-  `
-        <div id="collection_editing">
-            <ul class="collection-dialogues">
-                <h2>Dialogues</h2>
-                    <li v-for='(content,name) in entry.document' v-bind:id="name" class="entry-list-single-item-container">
-                        <div class="entry-info" v-on:click="clicked_active()">
-                            <div class="entry-id">
-                                {{name}}
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+  ` 
+  <div class="inner-wrap">
+    <div id="collection-editing">
+        <div id="collection-fields" class="collection-list two-columns">
+            <h2>{{guiMessages.selected.admin.editButton}}: {{entry.id}}</h2>
+            <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
+                <input class="collection-input" type="text" v-model="entry.title" :placeholder="guiMessages.selected.collection.empty">
+                  <br>
+            <strong>{{guiMessages.selected.collection.collDesc}}:</strong>
+                <input class="collection-input" type="text" v-model="entry.description" :placeholder="guiMessages.selected.collection.empty">
+                  <br>
+            <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
+                <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.collection.empty">
+                  <br>
+            <strong>Gold:</strong>
+                <input class="collection-input" type="text" v-model="showGold.boo" :placeholder="guiMessages.selected.collection.empty" v-on:click="show_gold()" id="gold_field">
+                <textarea id="gold_expanded" v-on:click="show_gold(false)" style="height:104px; display:none">{{showGold.code}}</textarea>
+        </div>
 
-                <ul class="collection-users">
-                <h2>Assigned to Users</h2>
-                    <li class="listed-entry" v-for='name in allUsers' v-bind:id="name">
-                        <div class="entry-list-single-item-container">
-                            <div class="entry-info" v-on:click="clicked_entry(name)">
-                                <div class="entry-id">
-                                    <span>Username:</span> {{name}}
-                                </div>
+        <ul class="collection-user-list two-columns">
+            <h2>{{guiMessages.selected.admin.assignedTo}}</h2>
+            <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
+                <div class="entry-list-single-item-container">
+                    <input type="checkbox" class="user-checkbox" v-bind:id="'check_'+user.id" :value="user.id" v-model="checkedUsers">
+                    <div class="entry-info">
+                        <label :for="'check_'+user.id" class="listed-label" v-on:click="changesSaved = 'false'">
+                            <div class="entry-id">
+                                <span>Username:</span> {{user.id}}
                             </div>
+                            <div class="entry-annotated">
+                                <template v-if="user.role == 'administrator'">
+                                    Role: <span class="gold-true">Administrator</span>
+                                </template>
+                                <template v-else>
+                                    Role: <span class="gold-false">Annotator</span>
+                                </template>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="closing-list">
+            <button class="help-button btn btn-sm" @click="close_document_view()">
+                {{guiMessages.selected.admin.button_abort}}
+            </button>
+            <button class="help-button btn btn-sm btn-primary" @click="update()">
+                {{guiMessages.selected.annotation_app.save}}
+            </button>
+        </div>
+
+        <ul class="collection-list closing-list">
+            <h2>{{entry.documentLength}} {{guiMessages.selected.admin.dataItems}}</h2>
+            <li v-for='(content,name) in entry.document' v-bind:id="name" class="listed-entry">
+                <div class="dialogue-entry-list">
+                    <!-- <div class="del-dialogue-button" v-on:click="delete_entry(name)">
+                        {{guiMessages.selected.lida.button_delete}}
+                    </div> -->
+                    <div class="dialogue-entry-info" v-on:click="clicked_active()">
+                        <div class="entry-id">
+                            {{name}}
                         </div>
-                    </li>
-                </ul>
+                        <div class="entry-annotated">
+                            <span>{{guiMessages.selected.lida.turns}}</span>: {{content.length}}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+  `
+});
+
+Vue.component('collection-creation', {
+
+    props:["allUsers"],
+
+    data () {
+        return {
+            entry : {showDocument:""},
+            guiMessages,
+            role: mainApp.role,
+            checkedUsers:[],
+        }
+    },
+
+    mounted () {
+        this.init();
+    },
+
+    methods: {
+
+        init : function(){
+            //
+        },
+
+        close_document_view: function() {
+            databaseEventBus.$emit("creation_completed");
+        },
+
+        add_from_file(event) {
+            let file = event.target.files[0];
+            let jsonType = /application.json/;
+            if (file.type.match(jsonType)) {
+                console.log('---- HANDLING LOADED JSON FILE ----');
+                let reader = new FileReader();
+                reader.onload = (event) => {
+                console.log('THE READER VALUE', reader);
+                this.entry.showDocument = reader.result;
+                this.entry.document = reader.result;
+            }
+            reader.readAsText(file);
+            } else {
+                alert('Only .json files are supported.')
+            }
+        },
+
+        save() {
+            if (this.entry.document == undefined) {
+                "No document loaded, please import a json file";
+                return;
+            }
+            params = {
+               id: this.entry.id,
+               title:this.entry.title, 
+               description:this.entry.description,
+               annotationStyle:this.entry.annotationStyle,
+               assignedTo:this.checkedUsers,
+               gold:this.entry.gold,
+               errors:this.entry.errors,
+            }
+            if ((params.id == "") || (params.id == undefined)) {
+               params.id = "Collection"+Math.floor(Math.random() * 10001);
+            }
+            if (params.assignedTo.length == 0) {
+                params.assignedTo = ["admin"];
+            }
+            for (element in params) {
+               if (params[element] == undefined)
+                  params[element] = ""
+            }
+            backend.new_collection_async(this.entry.id, params, this.entry.document)
+               .then( (response) => {
+                  console.log();
+                  console.log("============== Dialogues-Collection Updated ==============");
+                  databaseEventBus.$emit('creation_completed');
+            });
+        }
+    },
+  template:
+  `
+    <div class="inner-wrap">
+            <div class="collection-dialogues">
+                <h2>{{guiMessages.selected.collection.create}}</h2>
+                <strong>ID:</strong>
+                  <input class="collection-input" type="text" v-model="entry.id" :placeholder="guiMessages.selected.coll_creation[0]">
+                  <br>
+                <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
+                  <input class="collection-input" type="text" v-model="entry.title" :placeholder="guiMessages.selected.coll_creation[1]">
+                  <br>
+                <strong>{{guiMessages.selected.collection.collDesc}}:</strong>
+                  <input class="collection-input" type="text" v-model="entry.description" :placeholder="guiMessages.selected.coll_creation[2]">
+                  <br>
+                <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
+                  <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
+                  <br><br>
+                {{guiMessages.selected.modal_document[0]}}
+                </strong>
+                <input type="file"
+                       id="fileInput"
+                       name="fileInput"
+                       accept=".txt, .json"
+                       v-on:change="add_from_file($event)">
+
+                <label for="fileInput"
+                       id="fileInputLabel_modal"
+                       class="help-button btn btn-sm btn-primary">
+                       {{ guiMessages.selected.collection.importCollfromFile }}
+                </label>
+                <textarea v-model="entry.showDocument">
+                </textarea>
             </div>
+
+            <ul class="collection-user-list two-columns">
+            <h2>{{guiMessages.selected.admin.assignedTo}}</h2>
+            <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
+                <div class="entry-list-single-item-container">
+                    <input type="checkbox" class="user-checkbox" v-bind:id="'check_'+user.id" :value="user.id" v-model="checkedUsers">
+                    <div class="entry-info">
+                        <label :for="'check_'+user.id" class="listed-label">
+                            <div class="entry-id">
+                                <span>Username:</span> {{user.id}}
+                            </div>
+                            <div class="entry-annotated">
+                                <template v-if="user.role == 'administrator'">
+                                    Role: <span class="gold-true">Administrator</span>
+                                </template>
+                                <template v-else>
+                                    Role: <span class="gold-false">Annotator</span>
+                                </template>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </li>
+            </ul>
+
+            <div class="closing-list">
+                <button class="help-button btn btn-sm" @click="close_document_view()">
+                    {{guiMessages.selected.admin.button_abort}}
+                </button>
+                <button class="help-button btn btn-sm btn-primary" @click="save()">
+                    {{guiMessages.selected.annotation_app.save}}
+                </button>
+            </div>
+            <br>
+    </div>
   `
 });

@@ -100,7 +100,8 @@ guiMessages = {
             save: "Save and Update Collection",
             done: "Annotations completed",
             freeze: "This operation will freeze the collection and notify your work is done and can be reviewed. Do it only when you finished",
-            freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator"
+            freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator",
+            empty:"Empty",
 
         },
         annotation_app: {
@@ -196,7 +197,7 @@ guiMessages = {
             "Insert an unique id for the collection or LIDA will generate one",
             "Insert a title",
             "Insert a short description of the content",
-            "Annotation style name. It must corrispond to a file in the server folder",
+            "Annotation style name",
             "You can assign this dialogues to an user, only them will be able to update it",
             "You can note down here the progress of the annotation work",
         ],
@@ -332,7 +333,8 @@ guiMessages = {
             save: "Save and Update Collection",
             done: "Annotazione completata",
             freeze: "Questa operazione bloccherà la collezione e notificherà che hai finito e che le annotazioni sono pronte per la revisione",
-            freezed: "L'annotazione è stata segnalata come completata e quindi non potrà essere modificata fino alla revisione e allo sblocco da parte di un amministratore."
+            freezed: "L'annotazione è stata segnalata come completata e quindi non potrà essere modificata fino alla revisione e allo sblocco da parte di un amministratore.",
+            empty:"Vuoto",
         },
         annotation_app: {
             turnId: "Id Turno",
@@ -426,7 +428,7 @@ guiMessages = {
             "Inserisci un ID univoco per la Collezione o LIDA ne genererà uno automaticamente",
             "Inserisci un titolo",
             "Inserisci una breve descrizione",
-            "Nome dell'annotation style utilizzato. Deve essere presente nella cartella server",
+            "Nome dell'annotation style utilizzato",
             "Puoi assegnare la collezione ad un utente, solo lui potrà modificarla e annotarla",
             "Puoi scrivere qui i progressi nel lavoro di annotazione",
         ],
@@ -442,7 +444,6 @@ guiMessages = {
         modal_collectionButtons:
         [
             "Questo pulsante permette di creare una collezione a partire da uno o più file json.",
-            "",
             "",
             "",
         ],

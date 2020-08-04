@@ -45,7 +45,7 @@ var mainApp = new Vue({
 
       //Database View Event Bus
       databaseEventBus.$on( "document_selected", this.load_document_view )
-      databaseEventBus.$on( "assignements_selected", this.load_collections_view )
+      databaseEventBus.$on( "assignments_selected", this.load_collections_view )
       databaseEventBus.$on( "collection_active", this.set_active_collection )
 
       //Check if already logged, restore session
@@ -63,7 +63,11 @@ var mainApp = new Vue({
                 if (response) {
                     console.log("File name updated");
                     this.set_cookie(newName,pass);
-                    this.status = "assignements-view";
+                    if (mainApp.role == "administrator") {
+                        this.status = "admin-panel";
+                    } else {
+                        this.status = "assignments-view";
+                    }
                 } else {
                     alert('Server error, name not changed.');
                 }
@@ -168,7 +172,7 @@ var mainApp = new Vue({
         backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate})
           .then((response) => {
               console.log("Collection Status % Updated");
-              this.status = 'assignements-view';
+              this.status = 'assignments-view';
         });
     },
 
@@ -234,7 +238,7 @@ var mainApp = new Vue({
                    v-bind:sourceFname="splittingTextSourceFile">
       </text-splitter>
 
-      <collection-view v-else-if="status === 'assignements-view'"
+      <collection-view v-else-if="status === 'assignments-view'"
                    v-bind:done="done">
       </collection-view>
 

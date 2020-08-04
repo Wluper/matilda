@@ -237,13 +237,10 @@ Vue.component('help-collection-modal', {
                   <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
                 </li>
                 <li>
-                  <strong>{{guiMessages.selected.lida.button_task}}:</strong><br>
+                  <strong>{{guiMessages.selected.collection.editColl}}:</strong><br>
                 </li>
                 <li>
                   <strong>{{guiMessages.selected.lida.button_delete}}:</strong><br>
-                </li>
-                <li>
-                  <strong>{{guiMessages.selected.collection.inspecting}}:</strong><br>
                 </li>
               </ul>
             </slot>

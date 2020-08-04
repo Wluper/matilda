@@ -59,12 +59,6 @@ Vue.component("users-view", {
           this.showCreation = true;
         },
 
-        show_password(event) {
-            event.stopPropagation();
-            event.target.setAttribute("type","text");
-            event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
-        },
-
         delete_user(event) {
             event.stopPropagation(); 
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
@@ -118,7 +112,7 @@ Vue.component("users-view", {
 
                                 <div class="user-password">
                                     <span class="user-span">Password</span>
-                                    <input v-on:click="show_password($event)" type="password" :value="name.password" autocomplete="off" readonly>
+                                    <input type="password" :value="name.password" autocomplete="off" readonly>
                                 </div>
 
                                 <div class="user-email">
@@ -201,6 +195,11 @@ Vue.component('users-creation-modal', {
                     this.close();
                     adminEventBus.$emit("users_updated");
                 })
+        },
+
+        show_password(event) {
+            event.target.setAttribute("type","text");
+            event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
         }, 
 
         close: function() {
@@ -230,7 +229,7 @@ Vue.component('users-creation-modal', {
                     <input class="user-creation" id="create_username" type="text">
                     <br>
                     <label for="create_password">Password:</label>
-                    <input class="user-creation" id="create_password" type="password">
+                    <input class="user-creation" id="create_password" type="password" v-on:click="show_password($event)">
                     <br>
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">
