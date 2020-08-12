@@ -183,7 +183,6 @@ def handle_name_resource(user):
 
 @LidaApp.route('/database', methods=['GET'])
 @LidaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
-@LidaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
 @LidaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
 def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None):
     """

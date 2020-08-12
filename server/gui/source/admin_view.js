@@ -102,7 +102,7 @@ Vue.component("main-admin-view", {
 
         <user-bar v-bind:userName="userName"></user-bar>
         <div class="help-button-container">
-              
+            <button class="help-button btn btn-sm btn-primary" @click="switchToAnnotation()">{{ guiMessages.selected.admin.annotation}}</button>
         </div>
       </div>
       <div class="inner-wrap">
@@ -111,12 +111,10 @@ Vue.component("main-admin-view", {
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.collection.title}}</button>
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToSupervision()">{{ guiMessages.selected.admin.supervision}}</button>
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToConflicts()">{{ guiMessages.selected.admin.interAnno }}</button>
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToAnnotation()">{{ guiMessages.selected.admin.annotation}}</button>
           <p>{{guiMessages.selected.admin_panel[1]}}</p>
           <p>{{guiMessages.selected.admin_panel[2]}}</p>
           <p>{{guiMessages.selected.admin_panel[3]}}</p>
           <p>{{guiMessages.selected.admin_panel[0]}}</p>
-          <p>{{guiMessages.selected.admin_panel[4]}}</p>
         </div>
       </div>
     </div>

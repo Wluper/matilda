@@ -116,9 +116,9 @@ Vue.component("annotation-app", {
                     this.metaTags = response[0];
                     console.log('---- END ----')
                     this.dTurns = response;
-                    //format collection meta-tag
-                    if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined))
-                    this.metaTags["collection"] = "";
+                    //format dialogue meta-tags
+                    if ((this.metaTags["status"] == null) || (this.metaTags["status"] == undefined))
+                    this.metaTags["status"] = "0%";
                     this.annotationRate = this.metaTags["status"];
                 })
 

@@ -299,18 +299,13 @@ class DialogueAnnotator(object):
             return {"status":"fail, server rebooted. New login is needed"}
 
         for dialogueID, dialogueTurnList in self.__dialogues[DialogueAnnotator.__SESSION_USER].items():
-            
-            try:
-                collection = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["collection"]
-            except:
-                collection = ""
 
             try:
                 status = self.__dialogues[DialogueAnnotator.__SESSION_USER][dialogueID][0]["status"]
             except:
                 status = "0%"
 
-            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "collection":collection, "status":status})
+            metadata.append({"id": dialogueID, "num_turns": len(dialogueTurnList), "status":status})
 
         return metadata
 
@@ -363,7 +358,7 @@ class DialogueAnnotator(object):
         del self.__dialogues[DialogueAnnotator.__SESSION_USER][id]
 
 
-    def add_new_dialogue(self, user, dialogue=None, id=None, collectionTag=None):
+    def add_new_dialogue(self, user, dialogue=None, id=None, statusTag=None):
         """
         creates a new dialogue with an optional name
         """
@@ -382,14 +377,13 @@ class DialogueAnnotator(object):
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = dialogue if dialogue else []
 
         #initialise meta-tags
-        if not collectionTag:
+        if not statusTag:
             try:
-                collectionTag = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+                statusTag = self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["status"]
             except:
-                collectionTag = ""
+                statusTag = "0%"
 
-        self.insert_meta_tags(user, id, "collection", collectionTag)
-        self.insert_meta_tags(user, id, "status", "0%")
+        self.insert_meta_tags(user, id, "status", statusTag)
 
         self.save( user )
 
@@ -405,7 +399,7 @@ class DialogueAnnotator(object):
 
         try:
             #verifiy if meta-tag header exists
-            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["collection"]
+            self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0]["status"]
             try:
                 #verify if specific tag already exists
                 self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ][0][tag]
