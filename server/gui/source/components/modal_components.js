@@ -106,8 +106,6 @@ Vue.component('agreement-modal', {
               <slot name="body">
                   {{guiMessages.selected.modal_agreementScores[1]}}
                   <br><br>
-                        {{guiMessages.selected.modal_agreementScores[2]}} [query_type, policy_funcs, hotel_belief_state ]
-                  <br><br>
                   <strong>
                     {{guiMessages.selected.modal_agreementScores[3]}}
                   </strong>

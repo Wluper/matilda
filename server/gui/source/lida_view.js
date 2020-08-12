@@ -51,6 +51,7 @@ var mainApp = new Vue({
       //Check if already logged, restore session
       this.check_login_cookie();
       this.check_collection_cookie();
+      this.prevent_back();
   },
 
   methods: {
@@ -169,11 +170,15 @@ var mainApp = new Vue({
     },
 
     load_collections_view: function (event) {
-        backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate})
-          .then((response) => {
-              console.log("Collection Status % Updated");
-              this.status = 'assignments-view';
-        });
+        if (mainApp.boot != true) {
+          backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate})
+            .then((response) => {
+                console.log("Collection Status % Updated");
+                this.status = 'assignments-view';
+          });
+        } else {
+            this.status = 'assignments-view';
+        }
     },
 
     show_message: function (message) {
@@ -219,6 +224,12 @@ var mainApp = new Vue({
     switch_to_admin_panel: function () {
         console.log(" ==== ADMIN PANEL ====");
         this.status = "admin-panel";
+    },
+
+    prevent_back: function() {
+        window.onbeforeunload = function() { 
+            return guiMessages.selected.lida.exiting
+        };
     },
 
 },
