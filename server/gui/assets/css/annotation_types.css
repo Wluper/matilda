@@ -127,9 +127,7 @@
 .txt-sel-button {
     vertical-align: bottom;
     background: white; 
-    border-width: 1px;
-    border-style:solid;
-    border-color:rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,.1); 
     line-height: 10px; 
     margin-bottom: 1px;
 }

@@ -370,7 +370,7 @@ Vue.component("interannotator-app", {
     },
 
     download_all_dialogues_from_server(event) {
-        backend.get_specific_collections("annotated_collections",{"id":this.displayingCollection},{"id":1,"document":1,"annotator":1})
+        backend.get_all_dialogues_async()
             .then( (response) => {
                 let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                 const url = window.URL.createObjectURL(blob)
@@ -379,34 +379,20 @@ Vue.component("interannotator-app", {
                 link.setAttribute('download', 'dialogues.json')
                 document.body.appendChild(link)
                 link.click();
-            }
-        );
+            });
     },
 
-    wipe_cache() {
-        if (confirm(guiMessages.selected.admin.wipeCache)) {
-            backend.update_collection_async(this.displayingCollection, "dialogues_collections", {"errors":{}})
+    clean_view() {
+        if (confirm(guiMessages.selected.admin.wipeConfirm)) {
+            backend.del_all_dialogues_async("admin")
                 .then( (response) => {
                     console.log(response);
-                    adminEventBus.$emit("conflicts_clicked");
+                    this.getAllDialogueIdsFromServer();
                 }
-            );
-        }
-    },
 
-    download_gold() {
-        backend.get_db_entry_async(this.displayingCollection,"dialogues_collections")
-            .then( (response) => {
-                let blob = new Blob([JSON.stringify(response[0]["gold"], null, 4)], {type: 'application/json'});
-                const url = window.URL.createObjectURL(blob)
-                const link = document.createElement('a')
-                link.href = url
-                link.setAttribute('download', 'gold_'+this.displayingCollection+'.json')
-                document.body.appendChild(link)
-                link.click();
-            }
-        );
-    },
+            )
+        }
+    }
 
   },
   template:
@@ -419,7 +405,7 @@ Vue.component("interannotator-app", {
 
     <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
 
-    <div class="dialogue-list-title-container" style="grid-template: [row1-start] 'title-zone name-zone help-button-zone' [row1-end] / 1.1fr 2fr 1.4fr;">
+    <div class="dialogue-list-title-container">
         <div v-if="!(dragging)" class="all-dialogues-list-title">
           <h2>{{displayingCollection}}: {{ alreadyVisited.length }}/{{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.visited_dialogues }}
           </h2>
@@ -452,8 +438,7 @@ Vue.component("interannotator-app", {
                    {{ guiMessages.selected.admin.button_upload }}
             </label></li>
             <li>
-                <button class="help-button btn btn-sm" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
-                <button class="help-button btn btn-sm" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
+                <!-- <button class="help-button btn btn-sm" @click="clean_view()">{{ guiMessages.selected.admin.button_wipeView}}</button> -->
             </li>
         </ul>
     <ul class="dialogue-list">

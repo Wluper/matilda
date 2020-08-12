@@ -100,7 +100,8 @@ Vue.component("collection-view", {
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
                     mainContainer.style.cursor = null;
-                    this.retrieveActiveCollection();
+                    if (mainApp.boot == true)
+                      this.retrieveActiveCollection();
             })
         },
 
@@ -110,22 +111,22 @@ Vue.component("collection-view", {
             projection = {"status":1,"done":1,"lastUpdate":1}
             backend.get_specific_collections("annotated_collections",search, projection)
                 .then( (response) => {
-                    if (response.length != 0) {
+                     if (response.length != 0) {
                         this.activeCollectionMeta = response[0]
                         console.log("Active Collection",this.activeCollectionMeta);
-                        console.log(response);
                         //storing data for persistence
                         mainApp.collectionRate = response[0].status;
                         mainApp.done = response[0].done;
-                        this.collectionRate = response[0].status;
-                    } else {
+                        collectionRate = response[0].status;
+                        //executed only once
+                        //mainApp.boot = false;
+                     } else {
                         //if active collection document doesn't exist anymore
                         mainApp.activeCollection = null;
                         this.activeCollection = null;
                         return
-                    }
-                mainApp.boot = false;
-            });
+                     }
+                });
         },
 
         clicked_entry(clickedEntry) {

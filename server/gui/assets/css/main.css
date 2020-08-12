@@ -277,7 +277,7 @@ input:focus {
 }
 
 .int-info {
-    grid-template: [row1-start] "id numTurns . visited" [row1-end] / 5fr 2fr 0fr 1fr !important;
+    grid-template: [row1-start] "id filler visited numTurns" [row1-end] / 5fr 2fr 1fr 3fr !important;
 }
 
 .int-dialogue-id {
@@ -344,7 +344,7 @@ input:focus {
 
 .admin-panel {
     display: grid;
-    grid-template: [row1-start] "1 2 3 4" [row1-end] / 1fr 1fr 1fr 1fr;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
     padding-top:20px;
 }
 

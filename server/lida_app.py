@@ -183,6 +183,7 @@ def handle_name_resource(user):
 
 @LidaApp.route('/database', methods=['GET'])
 @LidaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
+@LidaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
 @LidaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
 def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None):
     """
@@ -765,7 +766,7 @@ def __handle_post_of_new_dialogues(user, fileName=None):
 
     elif not stringListOrJsonDict:
         if fileName:
-            responseObject = dialogueFile.add_new_dialogue(user, None, None, fileName)
+            responseObject = dialogueFile.add_new_dialogue(user, None, None)
         else:
             responseObject = dialogueFile.add_new_dialogue(user)
 
@@ -800,7 +801,7 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
             currentResponseObject["status"] = "error"
             break
 
-        result = dialogueFile.add_new_dialogue(user, dialogue, dialogue_name, collectionTag)
+        result = dialogueFile.add_new_dialogue(user, dialogue, dialogue_name)
         added_dialogues.append(result["id"])
         if result["overwritten"] != "": 
             overwritten.append(result["overwritten"])
@@ -828,7 +829,7 @@ def __add_new_dialogues_from_string_lists(user, fileName, currentResponseObject,
     for string_list in dialogueList:
 
         string_list      = [x for x in string_list.split("\n") if x.strip()]
-        newId = dialogueFile.add_new_dialogue( user, Models.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ), collectionTag )
+        newId = dialogueFile.add_new_dialogue( user, Models.run_models_on_dialogue( convert_string_list_into_dialogue(string_list) ))
 
         currentResponseObject["message"].append("Added new dialogue: {}".format(newId["id"]))
         currentResponseObject["new_dialogue_id"].append(newId["id"])

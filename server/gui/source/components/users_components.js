@@ -99,11 +99,8 @@ Vue.component("users-view", {
           </div>
         </div>
             <div class="inner-wrap">
-                <div style="padding-bottom:10px;">
-                    <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createUserButton}}</button>
-                </div>
                 <ul class="user-list">
-                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
+                    <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName" @click="clicked_user(name.userName)">
 
                         <div class="user-list-single-item-container">
 
@@ -118,9 +115,10 @@ Vue.component("users-view", {
                                     <input type="password" :value="name.password" autocomplete="off" readonly>
                                 </div>
 
-                                <div class="user-email" v-if="name.email == ''">email not provided</div>
-                                <div class="user-email long-mail" v-else-if="name.email.length > 27">{{name.email}}</div>
-                                <div class="user-email" v-else>{{name.email}}</div>
+                                <div class="user-email">
+                                  <template v-if="name.email == ''">email not provided</template>
+                                  <template v-else>{{name.email}}</template>
+                                </div>
 
                                 <div class="user-role">
                                    <span class="user-span">Role</span>
@@ -129,17 +127,14 @@ Vue.component("users-view", {
                                 </div>
                             </div>
 
-                            <div class="edit-dialogue-button" v-on:click="clicked_user(name.userName)">
-                                {{guiMessages.selected.admin.editButton}}
-                            </div>
-
-                            <div class="del-dialogue-button" v-on:click="delete_user($event)">
+                            <div class=del-dialogue-button v-on:click="delete_user($event)">
                                 {{guiMessages.selected.lida.button_delete}}
                             </div>
                                 
                         </div>
                     </li>
                 </ul>
+                <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createUserButton}}</button>
                 <div>
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                 </div>
@@ -170,7 +165,7 @@ Vue.component('users-creation-modal', {
               this.get_active_user(this.activeUser);
         },
         get_active_user: function(user) {
-          if (this.activeUser.userName != "") {
+          if (this.activeUser.userName == "admin") {
             document.getElementById("create_username").setAttribute("readonly",true);
           }
           document.getElementById("create_username").value = this.activeUser.userName;
@@ -221,7 +216,7 @@ Vue.component('users-creation-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              <strong>{{guiMessages.selected.admin.userCreation}}</strong>
+              <strong>Creazione Utente</strong>
             </slot>
           </div>
 
@@ -246,7 +241,7 @@ Vue.component('users-creation-modal', {
                         <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
-                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
+                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.editButton}}</button>
                     <button v-else id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
                 </div>            
             </slot>

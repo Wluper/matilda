@@ -5,7 +5,7 @@
 guiMessages = {
     en: {
         admin: {
-            title:"Annotation conflicts",
+            title:"Conflicts Resover",
             titlePanel:"Administration Panel",
             interAnno:"Interannotator Resolution",
             dataItems: "Dialogues",
@@ -38,10 +38,6 @@ guiMessages = {
             button_freeze: "Freeze",
             button_unfreeze: "Unfreeze",
             button_abort: "Abort",
-            userCreation: "User Creation",
-            button_downloadGold:"Download Gold",
-            button_wipeCache:"Wipe errors' cache",
-            wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
         },
         lida: {
             button_fileFormatInfo: "File Format Info",
@@ -68,7 +64,6 @@ guiMessages = {
             activeColl:"Active collection",
             alert:"Alert",
             welcome:"Welcome",
-            exiting:"You are leaving Lida's session. Are you sure?",
         },
         collection: {
             title: "Collections Management",
@@ -243,7 +238,7 @@ guiMessages = {
     },
     it: {
         admin: {
-            title:"Conflitti annotazione",
+            title:"Conflitti di Annotazione",
             titlePanel:"Pannello di Amministrazione",
             interAnno:"Interannotator Resolution",
             dataItems: "Dialoghi",
@@ -276,10 +271,6 @@ guiMessages = {
             button_freeze:"Blocca",
             button_unfreeze:"Sblocca",
             button_abort:"Annulla",
-            button_downloadGold:"Scarica versione Gold",
-            button_wipeCache:"Resetta la cache degli errori",
-            userCreation:"Creazione Utente",
-            wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -306,7 +297,6 @@ guiMessages = {
             assignedColl:"Collezioni assegnate",
             alert:"Attenzione",
             welcome:"Benvenuto",
-            exiting:"Stai per uscire dalla sessione di Lida. Sei sicuro?",
         },
         collection: {
             title: "Gestione Collezioni",

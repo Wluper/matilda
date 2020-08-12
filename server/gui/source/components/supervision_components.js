@@ -11,7 +11,6 @@ Vue.component("supervision-view", {
          guiMessages,
          selectedCollection:'',
          selectedAnnotator:'',
-         allAnnotators:[],
          mode:'supervision-collections-list',
       }
    },
@@ -44,9 +43,8 @@ Vue.component("supervision-view", {
          }
       },
 
-      clicked_collection(id, assignedTo) {
+      clicked_collection(id) {
          this.selectedCollection = id;
-         this.allAnnotators = assignedTo;
          this.mode = "supervision-annotators-list";
       },
 
@@ -104,15 +102,15 @@ Vue.component("supervision-view", {
          <li class="listed-dialogue" v-for="(name) in allCollectionsMetadata">
             <div class="int-coll-list-single-item-container">
                <div class="int-coll-info">
-                  <div class="int-coll-id" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="int-coll-id" v-on:click="clicked_collection(name.id)">
                      {{name.id}}
                   </div>
 
-                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="errors-space" v-on:click="clicked_collection(name.id)">
                      {{guiMessages.selected.admin.dataItems}}:<span class="gold-false">{{name.documentLength}}</span>
                   </div>
 
-                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="gold-space" v-on:click="clicked_collection(name.id)">
                      Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
@@ -135,8 +133,7 @@ Vue.component("supervision-view", {
    </div>
 
    <supervision-collection v-else-if="mode == 'supervision-annotators-list' "
-      v-bind:selectedCollection="selectedCollection"
-      v-bind:allAnnotators="allAnnotators">
+      v-bind:selectedCollection="selectedCollection">
    </supervision-collection>
    
    <supervision-dialogues v-else-if="mode == 'supervision-dialogues-list' "
@@ -153,7 +150,7 @@ Vue.component("supervision-view", {
 
 Vue.component("supervision-collection", {
 
-   props: ["selectedCollection", "allAnnotators"],
+   props: ["selectedCollection"],
 
    data() {
       return {
@@ -177,10 +174,6 @@ Vue.component("supervision-collection", {
                mainContainer.style.cursor = null;
             }  
          );
-        console.log(this.allAnnotators);
-        // divide between produced annotations, 
-        // annotations from dis-assigned annotators,
-        // annotations not yet produced.
       },
 
       clicked_annotated: function(clickedAnnotator) {
@@ -446,8 +439,8 @@ Vue.component("supervision-annotation-app", {
                     console.log('---- END ----')
                     this.dTurns = response;
                     //format collection meta-tag
-                    if ((this.metaTags["status"] == null) || (this.metaTags["status"] == undefined)) {
-                        this.metaTags["status"] = "0%";
+                    if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined)) {
+                        this.metaTags["collection"] = "";
                     }
                     this.annotationRate = this.metaTags["status"];
                 })

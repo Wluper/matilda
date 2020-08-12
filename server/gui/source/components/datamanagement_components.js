@@ -219,7 +219,7 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
                                     </span>
 
-                                    <span v-else v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                    <span v-else v-on:click="toggle_user_list(collection.id)">
                                     Assigned: 
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
@@ -246,7 +246,7 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
                                     </span>
 
-                                    <span v-else v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                    <span v-else v-on:click="toggle_user_list(collection.id)">
                                     Assigned: 
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
