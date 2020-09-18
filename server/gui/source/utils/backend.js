@@ -727,10 +727,6 @@ async function remove_from_collection_async(DBcollection, id, fields) {
     }
 }
 
-/********************************
-*  ADMIN 
-********************************/
-
 async function new_collection_async(id, params, doc) {
 
     params["document"] = doc
@@ -788,6 +784,10 @@ async function update_multiple_collections_async(DBcollection, params) {
 
     return response
 }
+
+/*******************************************
+*  ADMIN
+********************************************/
 
 async function get_scores_async(){
 
@@ -962,7 +962,7 @@ async function get_all_users(){
     }
 }
 
-async function create_user(user,pass,role,email,update=false){
+async function create_user(parameters,update=false){
     
     const apiLink = API_BASE+`/users/create`;
 
@@ -971,9 +971,9 @@ async function create_user(user,pass,role,email,update=false){
     try {
 
         if (update == false) {
-            var response = await axios.post( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
+            var response = await axios.post( apiLink, parameters )
         } else {
-            var response = await axios.put( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
+            var response = await axios.put( apiLink, parameters )
         }
 
         return response

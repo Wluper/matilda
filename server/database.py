@@ -43,7 +43,7 @@ class DatabaseManagement(object):
 		# if field parameter is provided the search will be a projection of the id
 		# and the requested field only.
 		# if string is provided the search will be restricted to the string match
-		# last parameter allow to restrict response to desired fields
+		# last parameter allows to restrict response to desired fields
 
 		responseObject = []
 
@@ -99,10 +99,27 @@ class DatabaseManagement(object):
 
 		value = field["dialogue"]
 
-		newDocument = (DatabaseManagement.readDatabase(collection, {"id":doc_id}, {"document":1}))
-		del newDocument[0]["document"][value]
+		mainDocument = (DatabaseManagement.readDatabase("dialogues_collections", {"id":doc_id}, {"document":1}))
+		annotatedDocuments = (DatabaseManagement.readDatabase("annotated_collections", {"id":doc_id}, {"document":1}))
 
-		DatabaseManagement.selected(collection).update({ "id":doc_id }, { "$set": {"document":newDocument[0]["document"]} })
+		for i in range(len(annotatedDocuments)):
+			del annotatedDocuments[i]["document"][value]
+			DatabaseManagement.selected("annotated_collections").update(
+				{"_id":ObjectId(annotatedDocuments[i]["_id"])}, 
+				{ "$set": {
+					"document":annotatedDocuments[i]["document"], 
+					"documentLength":len(annotatedDocuments[i]["document"])
+				}
+			})
+
+		del mainDocument[0]["document"][value]
+		DatabaseManagement.selected("dialogues_collections").update(
+			{ "id":doc_id }, 
+			{ "$set": {
+				"document":mainDocument[0]["document"], 
+				"documentLength":len(mainDocument[0]["document"])
+				} 
+			})
 
 		return {"status":"success"}
 

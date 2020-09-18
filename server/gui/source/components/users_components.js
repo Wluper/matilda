@@ -173,6 +173,7 @@ Vue.component('users-creation-modal', {
         get_active_user: function(user) {
           if (this.activeUser.userName != "") {
             document.getElementById("create_username").setAttribute("readonly",true);
+
           }
           document.getElementById("create_username").value = this.activeUser.userName;
           document.getElementById("create_password").value = this.activeUser.password;
@@ -181,7 +182,7 @@ Vue.component('users-creation-modal', {
             document.getElementById("create_email").value = this.activeUser.mail;
         },
 
-        user_create: function() {
+        gather_parameters() {
             let newUser = document.getElementById("create_username").value;
             let newPassword = document.getElementById("create_password").value;
             let newMail = document.getElementById("create_email").value;
@@ -197,27 +198,41 @@ Vue.component('users-creation-modal', {
             if (newMail == undefined)
                 newMail = "";
 
-            // if no active user means you are creating a new user otherwise
-            // you are updating an existent one
-            if (this.activeUser == "") {
-                backend.create_user(newUser,newPassword,newRole,newMail) 
-                    .then( (response) => {
-                        console.log(response.data);
-                        if (response.data.status != "error") {
-                            this.close();
-                        } else {
-                            var overwrite = confirm(guiMessages.selected.admin.confirmOverwriteUser);
-                            if (overwrite == true) {
-                                backend.create_user(newUser,newPassword,newRole,newMail,true)
-                                    .then( (response) => { this.close() });
-                            }
+            var userParameters = { 
+                "id":newUser,
+                "userName":newUser,
+                "password":newPassword, 
+                "role":newRole, 
+                "email":newMail
+            }
+
+            return userParameters;
+        },
+
+        user_create: function() {
+            let userDetails =  this.gather_parameters();
+            backend.create_user(userDetails) 
+                .then( (response) => {
+                    console.log(response.data);
+                    if (response.data.status != "error") {
+                        this.close();
+                    } else {
+                        var overwrite = confirm(guiMessages.selected.admin.confirmOverwriteUser);
+                        if (overwrite == true) {
+                            backend.create_user(userDetails,true)
+                                .then( (response) => { this.close() });
                         }
                     }
-                )
-            } else {
-                backend.create_user(newUser,newPassword,newRole,newMail,true)
-                    .then( (response) => { this.close() });
-            }
+                }
+            );
+        },
+
+        user_update: function() {
+            backend.create_user(this.gather_parameters(),true)
+                .then( (response) => { 
+                    this.close() 
+                }
+            );
         },
 
         show_password(event) {
@@ -250,7 +265,8 @@ Vue.component('users-creation-modal', {
             <slot name="body">
                 <div class="inner-form">
                     <label for="create_username">Username:</label>
-                    <input class="user-creation" id="create_username" type="text">
+                    <input v-if="activeUser != ''" class="user-creation" id="create_username" type="text" readonly>
+                    <input v-else class="user-creation" id="create_username" type="text">
                     <br>
                     <label for="create_password">Password:</label>
                     <input class="user-creation" id="create_password" type="password" v-on:click="show_password($event)">
@@ -265,7 +281,10 @@ Vue.component('users-creation-modal', {
                         <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
-                    <button id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
+                    
+                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_update()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
+                    
+                    <button v-else id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
                 </div>
             </slot>
           </div>
