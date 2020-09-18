@@ -84,15 +84,27 @@ class DatabaseManagement(object):
 		return responseObject
 
 	def createDoc(document_id, collection, values):
+		
 		print(" * Creating document", document_id, "in",collection)
 		DatabaseManagement.selected(collection).save(values)
-		response = {"staus":"success"}
 		
+		response = {"staus":"success"}
 		return response 
 
 	def updateDoc(doc_id, collection, fields):
 
 		DatabaseManagement.selected(collection).update({ "id":doc_id }, { "$set": fields })
+
+	def pullFromDoc(doc_id, collection, field):
+
+		value = field["dialogue"]
+
+		newDocument = (DatabaseManagement.readDatabase(collection, {"id":doc_id}, {"document":1}))
+		del newDocument[0]["document"][value]
+
+		DatabaseManagement.selected(collection).update({ "id":doc_id }, { "$set": {"document":newDocument[0]["document"]} })
+
+		return {"status":"success"}
 
 
 ###############################################
@@ -150,18 +162,5 @@ class LoginFuncs(object):
 			if line["userName"] == userID:
 				if line["password"] == userPass:
 					response = { "status":"success", "role":line["role"] }
-
-		return response
-
-	def create(params):
-
-		response = { "status":"fail" }
-
-		if len(DatabaseManagement.readDatabase("users",{"userName":params["userName"]})) == 0:
-			DatabaseManagement.createDoc(params["userName"], "users", params)			
-		else:
-			DatabaseManagement.updateDoc(params["userName"], "users", params)
-
-		response = { "status": "success" }
 
 		return response

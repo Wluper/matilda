@@ -124,7 +124,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 @LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<id>', methods=['GET'])
 def handle_annotation_style_resource(user=None,id=None,supervisor=None):
     """
-    GET - Returns the annotation style
+    GET - Returns the annotation style for different workspace "global admin", "user specific" or "supervision"
     """
     if supervisor:
         dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
@@ -597,7 +597,7 @@ def handle_agreements_resource():
     return jsonify( responseObject )
 
 @LidaApp.route('/users', methods=['GET'])
-@LidaApp.route('/users/create', methods=['POST'])
+@LidaApp.route('/users/create', methods=['POST','PUT'])
 def handle_users(user=None, userPass=None, email=None): 
     """
     GET - all users, POST create a new user
@@ -612,7 +612,20 @@ def handle_users(user=None, userPass=None, email=None):
 
         params = request.get_json()
 
-        responseObject = LoginFuncs.create(params)
+        #check if user already exists
+
+        if len(DatabaseManagement.readDatabase("users",{"userName":params["userName"]})) != 0:
+            responseObject = {"status":"error","error":"user already existing"}          
+        else:
+            responseObject = DatabaseManagement.createDoc(params["userName"], "users", params)
+
+    if request.method == "PUT":
+
+        #forced update
+
+        params = request.get_json()
+
+        responseObject = DatabaseManagement.updateDoc(params["userName"], "users", params)
 
     return jsonify(responseObject)
 
@@ -696,7 +709,12 @@ def handle_post_of_collections(mode, destination, id=None):
         values["lastUpdate"] = datetime.datetime.utcnow()
         values["document"] = json.loads(values["document"])
 
-        response = DatabaseManagement.createDoc(id, destination, values)
+        check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })
+
+        if (len(check) == 0):
+            response = DatabaseManagement.createDoc(id, destination, values)
+        else:
+            response = {"status":"error","error":"collection id already exists"}
 
     elif mode == "update":
 
@@ -708,18 +726,24 @@ def handle_post_of_collections(mode, destination, id=None):
             DatabaseManagement.updateDoc(line, destination, {"assignedTo":values[line]})
             response.update({line:values[line]})
 
+    elif mode == "pull":
+
+        DatabaseManagement.pullFromDoc(id, destination, values)
+
     return jsonify ( response )
 
-
-@LidaApp.route('/login/<id>/<idPass>',methods=['POST','PUT'])
-def handle_login(id, idPass=None,role=None):
+@LidaApp.route('/login',methods=['POST'])
+@LidaApp.route('/login/<id>',methods=['PUT'])
+def handle_login(id=None):
     """
     Check if user login is permitted
     """
     responseObject = {}
 
+    values = request.get_json()
+
     if request.method == "POST":
-        responseObject = LoginFuncs.logIn( id, idPass)
+        responseObject = LoginFuncs.logIn( values["username"], values["password"])
 
     if request.method == "PUT":
         responseObject = LoginFuncs.create(id)
@@ -1117,4 +1141,4 @@ class Models:
 ##############
 
 if __name__ == "__main__":
-    LidaApp.run(host='0.0.0.0')
+    LidaApp.run(port=5000,host='0.0.0.0')

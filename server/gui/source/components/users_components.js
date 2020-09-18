@@ -164,10 +164,12 @@ Vue.component('users-creation-modal', {
     },
     methods:{
         init : function(){
-            console.log(this.activeUser);
-            if (this.activeUser != "")
-              this.get_active_user(this.activeUser);
+            if (this.activeUser != "") {
+                console.log(this.activeUser);
+                this.get_active_user(this.activeUser);
+            }
         },
+
         get_active_user: function(user) {
           if (this.activeUser.userName != "") {
             document.getElementById("create_username").setAttribute("readonly",true);
@@ -178,6 +180,7 @@ Vue.component('users-creation-modal', {
           if (this.activeUser.mail != undefined)
             document.getElementById("create_email").value = this.activeUser.mail;
         },
+
         user_create: function() {
             let newUser = document.getElementById("create_username").value;
             let newPassword = document.getElementById("create_password").value;
@@ -193,21 +196,38 @@ Vue.component('users-creation-modal', {
             }
             if (newMail == undefined)
                 newMail = "";
-            backend.create_user(newUser,newPassword,newRole,newMail) 
-                .then( (response) => {
-                    console.log();
-                    this.close();
-                    adminEventBus.$emit("users_updated");
-                })
+
+            // if no active user means you are creating a new user otherwise
+            // you are updating an existent one
+            if (this.activeUser == "") {
+                backend.create_user(newUser,newPassword,newRole,newMail) 
+                    .then( (response) => {
+                        console.log(response.data);
+                        if (response.data.status != "error") {
+                            this.close();
+                        } else {
+                            var overwrite = confirm(guiMessages.selected.admin.confirmOverwriteUser);
+                            if (overwrite == true) {
+                                backend.create_user(newUser,newPassword,newRole,newMail,true)
+                                    .then( (response) => { this.close() });
+                            }
+                        }
+                    }
+                )
+            } else {
+                backend.create_user(newUser,newPassword,newRole,newMail,true)
+                    .then( (response) => { this.close() });
+            }
         },
 
         show_password(event) {
             event.target.setAttribute("type","text");
-            event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
+            //event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
         }, 
 
         close: function() {
             adminEventBus.$emit("clean_active_user");
+            adminEventBus.$emit("users_updated");
             this.$emit('close');
         } 
     },  
@@ -245,9 +265,8 @@ Vue.component('users-creation-modal', {
                         <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
-                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.editButton}}</button>
-                    <button v-else id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
-                </div>            
+                    <button id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
+                </div>
             </slot>
           </div>
 

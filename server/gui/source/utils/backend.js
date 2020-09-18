@@ -67,8 +67,11 @@ async function get_annotation_style_async(id,supervision){
         var apiLink = API_BASE+"/dialogue_annotationstyle";
     } else {
         if (supervision != undefined) {
+
             var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+        
         } else { 
+
             var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
         }
     }
@@ -277,8 +280,7 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
 
         const response = await RESTdialogues("POST", null, stringLists );
 
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
+        console.log('RECEIVED RESPONSE TO POST DATA', response)
 
         return response
 
@@ -297,8 +299,7 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
 
         const response = await RESTdialogues( "POST", null, JSON.parse(jsonString), fileName );
 
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
+        console.log('RECEIVED RESPONSE TO POST DATA', response)
 
         return response
 
@@ -373,7 +374,7 @@ const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${id}`
 
     try {
 
-        var response = await axios.get(apiLink, id)
+        var response = await axios.get(apiLink)
 
         console.log("=========== RECOVERY DONE ===========")
         return response
@@ -393,7 +394,7 @@ async function load_dialogues(doc) {
 
     try {
 
-        var response = await axios.put(apiLink, doc)
+        var response = await axios.put(apiLink)
         return response
     
     } catch(error) {
@@ -539,7 +540,7 @@ async function del_db_entry_async(entryId, collection) {
 
         try {
 
-            var response = await axios.delete( apiLink, entryId );
+            var response = await axios.delete( apiLink );
             console.log('---- RESPONSE TO DEL ----', response);
 
         } catch(error) {
@@ -566,21 +567,22 @@ async function del_db_entry_async(entryId, collection) {
 
 async function get_db_entry_async(entryId,DBcollection) {
 
-    console.log("GETTING ID:",entryId, "in collection",DBcollection);
+    console.log("GETTING ID:",entryId, "in DBcollection",DBcollection);
 
     var apiLink = API_BASE+`/database/${entryId}/${DBcollection}`;
 
     try {
 
-        var response = await axios.get( apiLink, entryId );
+        var response = await axios.get( apiLink );
         console.log('---- DATABASE DOCUMENT ----', response.data);
+
+        return response.data
 
     } catch(error) {
 
         console.log(error);
-    }
 
-    return response.data
+    }
 }
 
 async function get_all_entries_async() {
@@ -611,11 +613,11 @@ async function login(loginName,loginPass) {
 
   console.log("Username inserted",loginName);
 
-  const apiLink = API_BASE+`/login/${loginName}/${loginPass}`;
+  const apiLink = API_BASE+`/login`;
 
   try {
 
-    var response = await axios.post(apiLink, loginName, loginPass);
+    var response = await axios.post(apiLink, {"username":loginName, "password":loginPass});
 
     console.log(response);
 
@@ -706,6 +708,23 @@ async function get_specific_collections(DBcollection,fields,projection) {
     alert(guiMessages.selected.lida.connectionError)
 
   }
+}
+
+async function remove_from_collection_async(DBcollection, id, fields) {
+
+    const apiLink = API_BASE+`/pull/collection/${DBcollection}/${id}`
+
+    try {
+
+        var response = await axios.post(apiLink, fields)
+
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+        alert(guiMessages.selected.lida.connectionError)
+    }
 }
 
 /********************************
@@ -943,16 +962,20 @@ async function get_all_users(){
     }
 }
 
-async function create_user(user,pass,role,email){
+async function create_user(user,pass,role,email,update=false){
     
     const apiLink = API_BASE+`/users/create`;
 
     var response = {}
 
     try {
-        var response = await axios.post( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
 
-        response = response.data
+        if (update == false) {
+            var response = await axios.post( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
+        } else {
+            var response = await axios.put( apiLink, { "id":user,"userName":user,"password":pass, "role":role, "email":email } )
+        }
+
         return response
 
     } catch(error) {
@@ -1003,6 +1026,8 @@ backend =
     new_collection_async                        : new_collection_async,
     update_collection_async                     : update_collection_async,
     update_multiple_collections_async           : update_multiple_collections_async,
+    remove_from_collection_async                : remove_from_collection_async, 
+
     get_collections_ids_async                   : get_collections_ids_async,
     get_collections_async                       : get_collections_async,
     get_specific_collections                    : get_specific_collections,

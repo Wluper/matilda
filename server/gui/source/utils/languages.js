@@ -42,6 +42,7 @@ guiMessages = {
             button_downloadGold:"Download Gold",
             button_wipeCache:"Wipe errors' cache",
             wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
+            confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
         },
         lida: {
             button_fileFormatInfo: "File Format Info",
@@ -94,6 +95,7 @@ guiMessages = {
             confirmImport: "This will load the selected collection and make it the active collection",
             confirmRevision: "This will load the selected collection in the Interannotator conflict resolver list, adding it to the current dialogues",
             confirmChangesLost: "There are unsaved changes to collections. Do you want to proceed without saving them?",
+            confirmDeleteDialogue: "This will immediately delete the selected dialogue from the collection. This cannot be undone.",
             collTitle: "Title",
             collDesc: "Description",
             collAnnot: "Annotation Style",
@@ -218,9 +220,8 @@ guiMessages = {
         modal_collectionButtons:
         [
             "This button allows to create a collection from one or more json files.",
-            "",
-            "",
-            "",
+            "With this function you can edit the information associated to a collection and remove one or more dialogues from it",
+            "This button permanently delete the collection from the database",
         ],
         database: {
             title: "Workspaces Management",
@@ -279,6 +280,7 @@ guiMessages = {
             button_downloadGold:"Scarica versione Gold",
             button_wipeCache:"Resetta la cache degli errori",
             userCreation:"Creazione Utente",
+            confirmOverwriteUser: "L'username scelto esiste già, vuoi sovrascrivere l'utente già esistente?",
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
         },
         lida: {
@@ -340,6 +342,7 @@ guiMessages = {
             confirmImport: "Importare la collezione cancellerà tutti i dialoghi attivi e cambierà la collezione attiva.",
             confirmRevision: "Questa operazione aggiungerà la collezione nella lista di revisione, confrontandola con eventuali collezioni già presenti",
             confirmChangesLost: "Ci sono cambiamenti non salvati alle collezioni. Vuoi precedere senza salvarli?",
+            confirmDeleteDialogue: "Questo eliminerà immediatamente e irreversibilmente il seguente dialogo dalla collezione. Confermi?",
             save: "Save and Update Collection",
             done: "Annotazione completata",
             freeze: "Questa operazione bloccherà la collezione e notificherà che hai finito e che le annotazioni sono pronte per la revisione",
@@ -454,8 +457,8 @@ guiMessages = {
         modal_collectionButtons:
         [
             "Questo pulsante permette di creare una collezione a partire da uno o più file json.",
-            "",
-            "",
+            "Da questo pulsante accedi alla modifica della collezione. Puoi modificare le informazioni associate ad essa e rimuovere uno o più dialoghi singolarmente.",
+            "Questo pulsante elimina permantentemente la collezione dal database",
         ],
         database: {
             title: "Gestione Workspaces",

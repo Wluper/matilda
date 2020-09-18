@@ -553,6 +553,18 @@ Vue.component('collection-entry-details', {
                   console.log("============== Dialogues-Collection Updated ==============");
                   databaseEventBus.$emit('creation_completed');
             });
+        },
+
+        delete_entry(clickedDialogue) {
+            let del = confirm(guiMessages.selected.collection.confirmDeleteDialogue);
+            if (del == true) { 
+                backend.remove_from_collection_async("dialogues_collections", this.entry.id, {"dialogue":clickedDialogue})
+                    .then( (response) => {
+                        console.log(response);
+                        this.init();
+                    }
+                )
+            }
         }
   },
   template:
@@ -612,9 +624,9 @@ Vue.component('collection-entry-details', {
             <h2>{{entry.documentLength}} {{guiMessages.selected.admin.dataItems}}</h2>
             <li v-for='(content,name) in entry.document' v-bind:id="name" class="listed-entry">
                 <div class="dialogue-entry-list">
-                    <!-- <div class="del-dialogue-button" v-on:click="delete_entry(name)">
+                    <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
-                    </div> -->
+                    </div>
                     <div class="dialogue-entry-info" v-on:click="clicked_active()">
                         <div class="entry-id">
                             {{name}}
@@ -702,7 +714,7 @@ Vue.component('collection-creation', {
             backend.new_collection_async(this.entry.id, params, this.entry.document)
                .then( (response) => {
                   console.log();
-                  console.log("============== Dialogues-Collection Updated ==============");
+                  console.log("============== Dialogues-Collection Created ==============");
                   databaseEventBus.$emit('creation_completed');
             });
         }
