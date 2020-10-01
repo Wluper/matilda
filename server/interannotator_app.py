@@ -491,10 +491,13 @@ class InterAnnotatorApp(object):
         newDialogue = []
 
         for turn in dialogue:
-
             userQuery = turn["usr"]
+            sysResponse = turn.get("sys")
+            processedTurn = LidaApp.run_models_on_query(userQuery)["turn"]
+            if sysResponse and "sys" in dontRun:
+                 processedTurn["sys"] = sysResponse
+            newDialogue.append( processedTurn )
 
-            newDialogue.append( InterAnnotatorApp.run_models_on_query(userQuery)["turn"] )
 
         return newDialogue
 
