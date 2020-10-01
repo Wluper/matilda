@@ -342,10 +342,12 @@ class LidaApp(object):
         newDialogue = []
 
         for turn in dialogue:
-
             userQuery = turn["usr"]
-
-            newDialogue.append( LidaApp.run_models_on_query(userQuery)["turn"] )
+            sysResponse = turn.get("sys")
+            processedTurn = LidaApp.run_models_on_query(userQuery)["turn"]
+            if sysResponse and "sys" in dontRun:
+                 processedTurn["sys"] = sysResponse
+            newDialogue.append( processedTurn )
 
         return newDialogue
 
