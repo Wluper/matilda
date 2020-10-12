@@ -213,7 +213,7 @@ Vue.component("error-element-body", {
 Vue.component("resolutions", {
 
     props: [
-      "error", "errorId"
+      "error", "errorId", "metaList"
     ],
 
     data () {
@@ -273,7 +273,7 @@ Vue.component("resolutions", {
             </annotation-component>
         </div>
 
-        <accept v-bind:metaData="{ id : errorId, turn: error.turn, name: error.name }">
+        <accept v-bind:metaData="{ id : errorId, turn: error.turn, name: error.name }" v-bind:metaList="metaList">
         </accept>
     </div>
     `
@@ -400,7 +400,7 @@ Vue.component("string-type-data", {
 
 Vue.component("accept", {
     props :[
-        "metaData"
+        "metaData","metaList"
     ],
 
     data() { 
@@ -412,6 +412,10 @@ Vue.component("accept", {
     methods:{
 
         accept : function(){
+            //feedback if trying to update an already solved conflict
+            if (this.metaList[(this.metaData.id-1)].accepted) {
+                alert(guiMessages.selected.resolution_app.updateAccepted)
+            }
             annotationAppEventBus.$emit("accept", { meta : this.metaData } )
         }
 

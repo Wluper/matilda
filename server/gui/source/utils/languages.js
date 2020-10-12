@@ -132,7 +132,8 @@ guiMessages = {
             review: "Review",
             fail: "FAIL!",
             accept:"Accept",
-            noConflicts:"No annotation conflicts found in this dialogue"
+            noConflicts:"No annotation conflicts found in this dialogue",
+            updateAccepted:"Value updated",
         },
         admin_panel: [
             "Confront annotations on the same collections and resolve their conflicts",
@@ -370,7 +371,8 @@ guiMessages = {
             review: "Revisiona",
             fail: "ERRORE!",
             accept:"Accetta",
-            noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo"
+            noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo",
+            updateAccepted:"Annotazione aggiornata",
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",

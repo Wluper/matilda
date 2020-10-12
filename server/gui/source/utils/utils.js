@@ -179,7 +179,7 @@ function update_turn(turn, turnData){
     update_dict1_from_dict2(turn,temp)
 }
 
-function annotation_increment(turnNumber, annotations, turnTot, turnList) {
+function annotation_rate_increment(turnNumber, annotations, turnTot, turnList) {
     // if turn is not already annotated return the dialogue relative % increment
     let unitRate = (100 / (turnTot-1));
 
@@ -211,5 +211,5 @@ utils =
     get_turn_data : get_turn_data,
     get_all_turns_data : get_all_turns_data,
     create_date  : create_date,
-    annotation_increment : annotation_increment
+    annotation_rate_increment : annotation_rate_increment
 }

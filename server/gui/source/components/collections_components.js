@@ -7,7 +7,7 @@ Vue.component("database-header", {
             showHelpColl:"",
             userName:mainApp.userName,
             role:mainApp.role,
-            activeColl: mainApp.activeCollection
+            activeColl: mainApp.activeCollection,
         }
     
     },
@@ -37,7 +37,7 @@ Vue.component("database-header", {
                 <div class="help-button-container">
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-if="role == 'administrator'" class="btn-mid btn btn-sm btn-primary" @click="admin_panel_clicked()">{{guiMessages.selected.admin.button_admin}}</button>
-                    <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.admin.annotation}}</button>
+                    <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.admin.annotation}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
@@ -61,7 +61,8 @@ Vue.component("collection-view", {
             userName: mainApp.userName,
             activeCollection: mainApp.activeCollection,
             activeCollectionMeta: {},
-            collectionRate: mainApp.collectionRate
+            collectionRate: mainApp.collectionRate,
+            lastUpdate: mainApp.lastUpdate,
         }
     },
 
@@ -118,6 +119,7 @@ Vue.component("collection-view", {
                         //storing data for persistence
                         mainApp.collectionRate = response[0].status;
                         mainApp.done = response[0].done;
+                        mainApp.lastUpdate = response[0].lastUpdate;
                         this.collectionRate = response[0].status;
                     } else {
                         //if active collection document doesn't exist anymore
@@ -156,7 +158,7 @@ Vue.component("collection-view", {
         },
 
         clicked_active() {
-            if (this.activeCollectionMeta.done == false)
+            if (this.activeCollectionMeta.done != true)
                 annotationAppEventBus.$emit("go_back");
             else
                 allDialoguesEventBus.$emit("show_message",guiMessages.selected.collection.freezed);
@@ -225,7 +227,13 @@ Vue.component("collection-view", {
                                     <span>Annotator: </span> {{userName}}
                             </div>
                             <div class="entry-date">
+                                <template v-if="lastUpdate == ''">
                                     {{activeCollectionMeta.lastUpdate}}
+                                </template>
+                                <template v-else>
+                                    {{lastUpdate}}
+                                </template>
+
                             </div>
                             <div></div>
                             <div class="entry-done">

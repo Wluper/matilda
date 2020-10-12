@@ -1030,7 +1030,7 @@ class InterannotatorMethods:
                         annotationType = Configuration.configDict[annotationName]["label_type"]
                         agreementFunc = agreementConfig[ annotationType ]
                     except:
-                        #in case of mismatched number in turn_id
+                        #in case of mismatched number in turn_id (example: a turn has been deleted)
                         if annotationName == "turn_id":
                             continue
 

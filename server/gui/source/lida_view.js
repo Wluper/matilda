@@ -19,6 +19,7 @@ var mainApp = new Vue({
       role:'annotator',
       activeCollection:localStorage["activeCollection"],
       collectionRate:'',
+      lastUpdate:'',
       done:false,
       boot:true,
       showMessage:false,
@@ -122,7 +123,7 @@ var mainApp = new Vue({
         if (!this.alreadyVisited.includes(event)) {
             this.alreadyVisited.push(event)
         }
-        setTimeout(this.cyclic_backup, 10000);
+        //setTimeout(this.cyclic_backup, 10000);
     },
 
     set_active_collection: function (event) {
@@ -188,10 +189,10 @@ var mainApp = new Vue({
     cyclic_backup: function() {
         /*
         user backup every two minutes
-        if windows is active and dialogue list not empty
+        if windows is active and annotating
         */
         console.log("======= CYCLIC BACKUP ======")
-        if (!document.hidden) {
+        if ((!document.hidden) && (this.status == "annotating")){
             fields = {"status":mainApp.collectionRate};
             backend.update_annotations(mainApp.activeCollection, fields, true)
             .then( (response) => {

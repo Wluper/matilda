@@ -75,9 +75,10 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
-                        # turn 0 stores meta-tags
-                        if i is 0:
-                            continue
+                        # turn 0 stores meta-tags and global slot
+                        if i == 0:
+                            if ("multilabel_global_string" != info["label_type"]):
+                                continue
 
                         if info["required"]:
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
@@ -146,6 +147,7 @@ class Configuration(object):
                 out[key] = query
 
             elif labelType == "multilabel_classification" or \
+                 labelType == "multilabel_global_string" or \
                  labelType == "multilabel_classification_string":
 
                 out[key] = []

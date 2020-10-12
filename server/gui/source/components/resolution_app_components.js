@@ -180,7 +180,8 @@ Vue.component("resolution-app", {
         v-bind:currentId="currentErrorId">
         </error-list>
 
-        <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId">
+        <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId"
+        v-bind:metaList="metaDataList">
         </resolutions>
     </div>
     `

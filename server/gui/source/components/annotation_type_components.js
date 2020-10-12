@@ -315,8 +315,9 @@ Vue.component('classification-string-annotation', {
            * something is appended to it.
            */
           this.$forceUpdate();
-
+  
           outEvent = {name: this.uniqueName, data: this.classification_strings}
+
           annotationAppEventBus.$emit('classification_string_updated', outEvent);
 
       },
@@ -325,8 +326,9 @@ Vue.component('classification-string-annotation', {
           annotationAppEventBus.$emit( "resume_annotation_tools");
 
           let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-          if (activeTurn != null)
+          if (activeTurn != null) {
             activeTurn.style.border = "3px solid #fafa69";
+          }
 
           event.target.title = labelName;
           event.target.id = "active_label";
@@ -417,7 +419,7 @@ Vue.component('classification-string-annotation', {
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
-                    <span v-if="checkedMethod(labelName)"> {{labelName}} || {{get_confidence(labelName)}} 
+                    <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
                       <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     

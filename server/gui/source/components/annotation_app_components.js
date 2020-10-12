@@ -196,8 +196,9 @@ Vue.component("annotation-app", {
             if (this.dCurrentId != 0) {
                 this.allDataSaved = false;
                 //update annotation rate, slots don't count
-                if (event.turn != undefined)
+                if (event.turn != undefined) {
                     this.update_annotation_rate(event, this.dTurns.length);
+                }
                 //update turn
                 utils.update_turn( this.dTurns[this.dCurrentId], event);
                 console.log("-----> Turn Updated", this.dCurrentTurn);
@@ -214,7 +215,7 @@ Vue.component("annotation-app", {
 
         update_annotation_rate: function(annotations, turnTot) {
             let oldValue = Number(this.dTurns[0]["status"].slice(0,-1));
-            let increment = Number(utils.annotation_increment(annotations.turn, annotations, turnTot, this.annotatedTurns));
+            let increment = Number(utils.annotation_rate_increment(annotations.turn, annotations, turnTot, this.annotatedTurns));
             let newValue = ( Number(oldValue) + Number(increment) ).toFixed(1);
             //small adjustments due to decimals removal and exceptions
             if (newValue >= 98) newValue = 100;

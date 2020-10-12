@@ -54,11 +54,11 @@ Vue.component("login-view", {
         <div id="login-view">
             <div class="login_block">
                 <img src="assets/images/lida_favicon.png" class="login_logo"> <h1> 2.0</h1>
-                <div class="login_form">
-                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null">
-                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null" v-on:keyup.enter="login()">
+                <form class="login_form">
+                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null" autocomplete="username">
+                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null" v-on:keyup.enter="login()" autocomplete="current-password">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
-                </div>
+                </form>
             </div>
         </div>
     `

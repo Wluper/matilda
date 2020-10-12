@@ -43,8 +43,8 @@
     grid-template: [row1-start] "checkboxZone labelZone" 1fr [row1-end]
                    [row2-start] ". inputZone" 1fr [row2-end]
                    / 1fr 9fr;
-    padding: 10px;
-    padding-bottom:0;
+    padding: 0px;
+    padding-bottom:5px;
 }
 
 .multilabel-string-checkbox-container {
@@ -52,7 +52,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-right: 10px;
+    padding-right: 5px;
 }
 
 .multilabel-string-label {
