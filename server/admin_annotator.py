@@ -159,7 +159,8 @@ class AdminAnnotator(object):
         """
         Save the dialogues dictionary
         """
-        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, "int_"+self.__fileName+".json" ) )
+        #deactivated but working
+        #save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, "INTER_"+self.__fileName+".json" ) )
 
 
 
@@ -170,9 +171,6 @@ class AdminAnnotator(object):
         newId = "Dialogue" + str(self.addedDialogues)
 
         return newId
-
-
-
 
         # save_json_file( obj=self.__dialogues, path=self.__filePath )
 

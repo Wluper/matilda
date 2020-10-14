@@ -90,6 +90,7 @@ Vue.component("user-bar", {
             localStorage.removeItem("remember");
             localStorage.removeItem("activeCollection");
             localStorage.removeItem("role");
+            window.onbeforeunload = null;
             location.reload();
          }
     },

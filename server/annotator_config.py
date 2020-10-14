@@ -58,7 +58,7 @@ class Configuration(object):
             if "()" in str(sub_value):
                 configDict[key][sub_key] = eval(sub_value)
 
-    #accepted metaTags, can be customized
+    #accepted metaTags, this list can be customized
     metaTags = ["collection","status","ID"]
 
     @staticmethod
@@ -77,8 +77,9 @@ class Configuration(object):
 
                         # turn 0 stores meta-tags and global slot
                         if i == 0:
-                            if ("multilabel_global_string" != info["label_type"]):
-                                continue
+                            continue
+                            #if ("multilabel_global_string" != info["label_type"]):
+                            #    continue
 
                         if info["required"]:
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \

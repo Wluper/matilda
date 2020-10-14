@@ -432,7 +432,8 @@ class DialogueAnnotator(object):
         """
         DialogueAnnotator.__SESSION_USER = user
 
-        save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, user+".json" ) )
+        #deactivated but working
+        #save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, "USER_"+user+".json" ) )
 
 
     def __get_new_dialogue_id(self,user):

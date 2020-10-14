@@ -98,6 +98,22 @@ Vue.component("resolution-app", {
             .then( (response) => {
                 this.errorList = response.errors
                 this.metaDataList = response.meta;
+                if (response.errors.length > 0) {
+                    //adminEventBus.$emit("conflicts_on_dialogue",this.dialogueId);
+                    let errorsToSave = [];
+                    for (i=0;i<response.errors.length;i++) {
+                        let params = {
+                            errorObject : this.errorList[i],
+                            meta : this.metaDataList[i],
+                            errorId : i,
+                            dialogueId : this.dialogueId,
+                            collectionId : this.collectionId
+                        }
+                        errorsToSave.push(params);
+                    }
+                    console.log("saving new errors",errorsToSave);
+                    backend.put_error_async(errorsToSave)
+                }
             });
 
         },
@@ -131,8 +147,16 @@ Vue.component("resolution-app", {
 
         accept: function(event) {
             this.metaDataList[this.currentErrorId-1].accepted=true;
-
-            backend.put_error_async(this.errorList[this.currentErrorId-1],this.metaDataList[this.currentErrorId-1], this.currentErrorId-1,this.dialogueId, this.collectionId )
+            let errorsToSave = [];
+            params = {
+                errorObject : this.errorList[this.currentErrorId-1],
+                meta : this.metaDataList[this.currentErrorId-1],
+                errorId : this.currentErrorId-1,
+                dialogueId : this.dialogueId,
+                collectionId : this.collectionId
+            }
+            errorsToSave.push(params);
+            backend.put_error_async(errorsToSave);
 
             this.change_turn( {key:"ArrowRight"})
         },

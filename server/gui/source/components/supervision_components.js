@@ -426,12 +426,18 @@ Vue.component("supervision-annotation-app", {
         console.log("I am being destroyed");
         console.log(this.dialogueId);
     },
+
+    created () {
+        annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
+    },
+
     // METHODS
     methods:{
         go_back : function(){
             console.log("==================================");
             console.log("==================================");
             console.log("==================================");
+            annotationAppEventBus.$off( "update_turn_id", this.id_updated_from_ids_list );
             adminEventBus.$emit("supervision_go_back_to_dialogues");
         },
 

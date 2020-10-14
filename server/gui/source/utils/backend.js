@@ -845,18 +845,11 @@ async function get_collection_errors_async(collectionId){
     }
 }
 
-async function put_error_async(error, meta, errorId, dialogueId, collectionId){
+async function put_error_async(listOfErrors){
 
-    params = {
-        errorObject : error,
-        meta : meta,
-        errorId : errorId,
-        dialogueId : dialogueId,
-        collectionId : collectionId
-    }
     const apiLink = API_BASE+"/errors"
     try {
-        var response = await axios.put( apiLink, params );
+        var response = await axios.put( apiLink, listOfErrors );
 
 
         console.log("=============ERRORS==============")

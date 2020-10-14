@@ -270,7 +270,7 @@ Vue.component("annotation-app", {
             if (document.getElementById("active_label") != undefined) {
                 let activeLabel = document.getElementById("active_label");
                 let labelName = activeLabel.title;
-                activeLabel.removeAttribute("id");
+                activeLabel.id = labelName+"_input";
                 activeLabel.removeAttribute("title");
             }
             //resuming turn

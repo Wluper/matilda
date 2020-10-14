@@ -466,18 +466,19 @@ def handle_errors_resource(id=None):
 
         data = request.get_json()
 
-        meta = data["meta"]
-        error = data["errorObject"]
-        dialogueId = data["dialogueId"]
-        errorId = data["errorId"]
-        collectionId = data["collectionId"]
+        for i in range(len(data)):
+            meta = data[i]["meta"]
+            error = data[i]["errorObject"]
+            dialogueId = data[i]["dialogueId"]
+            errorId = data[i]["errorId"]
+            collectionId = data[i]["collectionId"]
 
-        __update_gold_from_error_id(dialogueId, error, collectionId)
+            __update_gold_from_error_id(dialogueId, error, collectionId)
 
-        annotationFiles.annotatorErrors[dialogueId][errorId] = error
-        annotationFiles.annotatorErrorsMeta[dialogueId][errorId] = meta
+            annotationFiles.annotatorErrors[dialogueId][errorId] = error
+            annotationFiles.annotatorErrorsMeta[dialogueId][errorId] = meta
 
-        DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
+            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
 
     else:
 

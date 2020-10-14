@@ -322,37 +322,51 @@ Vue.component('classification-string-annotation', {
 
       },
 
-      select_word: function(event,labelName) {
-          annotationAppEventBus.$emit( "resume_annotation_tools");
+      clear_value: function(event,labelName) {
+          event.stopPropagation();
+          let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
+          if (stringField.value == "") {
+              console.log("empty");
+              event.target.checked = false;
+              return;
+          } else {
+              console.log("cleaning");
+              stringField.value = "";
+              this.updateClassAndString(stringField, labelName);
+          }
+      },
 
+      select_word: function(event,labelName) {
+          annotationAppEventBus.$emit("resume_annotation_tools");
+          let inputField = document.getElementById(labelName+"_input");
           let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
           if (activeTurn != null) {
             activeTurn.style.border = "3px solid #fafa69";
           }
 
-          event.target.title = labelName;
-          event.target.id = "active_label";
+          inputField.title = labelName;
+          inputField.id = "active_label";
 
           document.getElementById("usr").onmouseup = this.update_slot;
           document.getElementById("sys").onmouseup = this.update_slot;
       },
 
       update_slot: function(event) {
-         console.log("=== Gathering text ===");
-         let activeLabel = document.getElementById("active_label"); 
-         let labelName = activeLabel.title;
-         let context = event.target.id;
-         let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
-
-         //updating
-         if ((text == undefined) || (text == "")) {
-            annotationAppEventBus.$emit("resume_annotation_tools");
-            return
-         }
-         activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
-         this.updateClassAndString(activeLabel, labelName);
-         //put all back in place
-         annotationAppEventBus.$emit("resume_annotation_tools");
+          console.log("=== Gathering text ===");
+          let activeLabel = document.getElementById("active_label"); 
+          let labelName = activeLabel.title;
+          let context = event.target.id;
+          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+          //checking
+          if ((text == undefined) || (text == "")) {
+              annotationAppEventBus.$emit("resume_annotation_tools");
+              return
+          }  
+          //updating
+          activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
+          this.updateClassAndString(activeLabel, labelName);
+          //put all back in place
+          annotationAppEventBus.$emit("resume_annotation_tools");
       },
     },
 
@@ -415,7 +429,7 @@ Vue.component('classification-string-annotation', {
                          v-bind:id="labelName"
                          v-bind:value="labelName"
                          v-bind:checked="checkedMethod(labelName)"
-                         disabled>
+                         v-on:click="clear_value($event,labelName)">
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
@@ -428,7 +442,7 @@ Vue.component('classification-string-annotation', {
                     </span>
                 </label>
 
-                <input class="multilabel-string-input"
+                <input v-bind:id="labelName+'_input'" class="multilabel-string-input"
                        v-bind:value="getStringPart(labelName)"
                        v-on:input="updateClassAndString($event, labelName)">
                 </input>
