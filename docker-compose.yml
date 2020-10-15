@@ -1,0 +1,27 @@
+version: '3'
+services:
+  lida:
+    image: davivcu/lida2:latest
+    volumes: 
+      - ./matilda_conf:/app/matilda_conf
+    network_mode: "host"
+    restart: always
+    logging:
+      driver: "syslog"
+  mongodb:
+    image: mongo:bionic
+    volumes:
+      - ./configdb:/data/configdb
+      - ./db:/data/db
+    network_mode: "host"
+    restart: always
+    logging:
+      driver: "syslog"
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+    restart: always
+    network_mode: "host"
+    logging:
+      driver: "syslog"
