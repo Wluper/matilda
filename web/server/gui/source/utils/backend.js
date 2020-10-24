@@ -554,7 +554,7 @@ async function del_db_entry_async(entryId, collection) {
 
         try {
 
-            var response = await axios.delete( apiLink, entryId, collection );
+            var response = await axios.delete( apiLink );
             console.log('---- RESPONSE TO DEL ----', response);
             return response
 

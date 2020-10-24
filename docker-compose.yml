@@ -1,13 +1,13 @@
 version: '3'
 services:
   lida:
-    image: davivcu/lida2:latest
+    image: davivcu/lida2:docker
     volumes: 
       - ./matilda_conf:/app/matilda_conf
     network_mode: "host"
     restart: always
     logging:
-      driver: "syslog"
+      driver: "json-file"
   mongodb:
     image: mongo:bionic
     volumes:
@@ -16,7 +16,7 @@ services:
     network_mode: "host"
     restart: always
     logging:
-      driver: "syslog"
+      driver: "json-file"
   nginx:
     image: nginx
     volumes:
@@ -24,4 +24,4 @@ services:
     restart: always
     network_mode: "host"
     logging:
-      driver: "syslog"
+      driver: "json-file"
