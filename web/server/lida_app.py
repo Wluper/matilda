@@ -69,7 +69,7 @@ def handle_dialogues_metadata_resource(user, id=None):
 
         responseObject = dialogueFile.update_dialogue_name( user, id, data["id"])
 
-    dialogueFile.save(user)
+    #dialogueFile.save(user)
     return jsonify( responseObject )
 
 
@@ -93,7 +93,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
     if fileName:
         if request.method == "POST":
             responseObject = __handle_post_of_new_dialogues(user, fileName)
-            dialogueFile.save(user)
+            #dialogueFile.save(user)
 
     elif id:
 
@@ -115,7 +115,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
         if request.method == "POST":
             responseObject = __handle_post_of_new_dialogues(user)
-            dialogueFile.save(user)
+            #dialogueFile.save(user)
 
     return jsonify( responseObject )
 

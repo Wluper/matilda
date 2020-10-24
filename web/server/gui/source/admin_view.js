@@ -108,7 +108,7 @@ Vue.component("main-admin-view", {
       <div class="inner-wrap">
         <div class="admin-panel">
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToUsersManagement()">{{ guiMessages.selected.admin.userButton }}</button>
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.collection.title}}</button>
+          <button class="help-button btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.admin.dataManagement}}</button>
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToSupervision()">{{ guiMessages.selected.admin.supervision}}</button>
           <button class="help-button btn btn-sm btn-primary panel" @click="switchToConflicts()">{{ guiMessages.selected.admin.interAnno }}</button>
           <p>{{guiMessages.selected.admin_panel[1]}}</p>

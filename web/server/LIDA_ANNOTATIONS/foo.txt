@@ -1,1 +1,1 @@
-In this folder are stored dump of your annotations and gold files
+This folder is used to store dumps of your annotations and gold files

@@ -96,7 +96,7 @@ Vue.component('agreement-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              {{guiMessages.selected.modal_agreementScores[0]}}
+              <strong>{{guiMessages.selected.modal_agreementScores[0]}}</strong>
             </slot>
           </div>
 
@@ -232,13 +232,16 @@ Vue.component('help-collection-modal', {
             {{guiMessages.selected.modal_collectionInfo[5]}}
               <ul>
                 <li> 
-                  <strong>{{guiMessages.selected.collection.create}}:</strong><br> {{guiMessages.selected.modal_collectionButtons[0]}}
+                  <strong>{{guiMessages.selected.collection.create}}:</strong><br> 
+                  {{guiMessages.selected.modal_collectionButtons[0]}}
                 </li>
                 <li>
                   <strong>{{guiMessages.selected.collection.editColl}}:</strong><br>
+                  {{guiMessages.selected.modal_collectionButtons[1]}}
                 </li>
                 <li>
                   <strong>{{guiMessages.selected.lida.button_delete}}:</strong><br>
+                  {{guiMessages.selected.modal_collectionButtons[2]}}
                 </li>
               </ul>
             </slot>

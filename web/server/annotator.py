@@ -232,7 +232,7 @@ class DialogueAnnotator(object):
         oldFileName = self.__fileName
         self.__fileName = newName
 
-        self.save(newName)
+        #self.save(newName)
 
         #if remove:
         #    os.remove( os.path.join( self.__filePath, oldFileName ) )
@@ -262,11 +262,10 @@ class DialogueAnnotator(object):
 
         if fileName:
             self.__fileName = fileName
-            try:
-                self.__dialogues[DialogueAnnotator.__SESSION_USER] = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
-            except FileNotFoundError:
-                save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, self.__fileName ) )
-
+            #try:
+            #    self.__dialogues[DialogueAnnotator.__SESSION_USER] = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
+            #except FileNotFoundError:
+            #    save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, self.__fileName ) )
         else:
             self.__fileName = DialogueAnnotator.__DEFAULT_FILENAME
 
@@ -322,7 +321,7 @@ class DialogueAnnotator(object):
 
         self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ] = newDialogue
 
-        self.save(user)
+        #self.save(user)
 
         return {"status" : "success"}
 
@@ -390,7 +389,7 @@ class DialogueAnnotator(object):
         self.insert_meta_tags(user, id, "collection", collectionTag)
         self.insert_meta_tags(user, id, "status", "0%")
 
-        self.save( user )
+        #self.save( user )
 
         return {"id":id, "overwritten":overwritten}
 
@@ -423,7 +422,7 @@ class DialogueAnnotator(object):
 
         del self.__dialogues[DialogueAnnotator.__SESSION_USER][ id ]
 
-        self.save(user)
+        #self.save(user)
 
 
     def save(self, user):
@@ -452,7 +451,7 @@ class DialogueAnnotator(object):
 
         self.set_dialogues( user )
 
-        self.save( user )
+        #self.save( user )
 
         return { "status": "wiped" }
 

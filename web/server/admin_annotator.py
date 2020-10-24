@@ -70,7 +70,7 @@ class AdminAnnotator(object):
             try:
                 self.__dialogues = load_json_file( os.path.join( self.__filePath, self.__fileName ) )
             except FileNotFoundError:
-                save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName ) )
+                save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName) )
 
         else:
             self.__fileName = AdminAnnotator.__DEFAULT_FILENAME
