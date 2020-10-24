@@ -1,7 +1,7 @@
 version: '3'
 services:
   lida:
-    image: davivcu/lida2:docker
+    image: davivcu/lida2:latest
     volumes: 
       - ./matilda_conf:/app/matilda_conf
     network_mode: "host"
@@ -15,13 +15,5 @@ services:
       - ./db:/data/db
     network_mode: "host"
     restart: always
-    logging:
-      driver: "json-file"
-  nginx:
-    image: nginx
-    volumes:
-      - ./nginx_conf:/etc/nginx/conf.d
-    restart: always
-    network_mode: "host"
     logging:
       driver: "json-file"
