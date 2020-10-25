@@ -6,5 +6,5 @@ users = db["users"]
 values = {"id":"admin","userName":"admin","password":"admin","email":"","role":"administrator"}
 if db.users.find({"id":"admin"}):
     print("Admin account exists already")
-db.users.save(values)
+db.users.insert_one(values)
 print("Success! log with username 'admin' and password 'admin'")
