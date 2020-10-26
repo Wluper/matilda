@@ -53,5 +53,7 @@ class DatabaseConfiguration:
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
 	annotatedCollections = db["annotated_collections"]
-#>>>>>>> master
+
+	administratorDefault = {"id":"admin","userName":"admin","password":"admin","email":"","role":"administrator"}
+
 

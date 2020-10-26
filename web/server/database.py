@@ -167,17 +167,24 @@ class DatabaseManagement(object):
 
 class LoginFuncs(object):
 	"""
-	Here all the username accepted by the server
+	Login function and admin account restoring
 	"""
+	if DatabaseConfiguration.users.count_documents({"id":"admin"}) == 0:
+		DatabaseConfiguration.users.insert_one(DatabaseConfiguration.administratorDefault)
+		print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+
+
 	def logIn(userID, userPass):
 
 		response = { "status":"fail" }
 
-		userDetails = DatabaseManagement.readDatabase("users")
+		query = {"userName":userID,"password":userPass}
 
-		for line in userDetails:
-			if line["userName"] == userID:
-				if line["password"] == userPass:
-					response = { "status":"success", "role":line["role"] }
+		userDetails = DatabaseConfiguration.users.find_one(query)
+
+		if userDetails != None:
+			if userDetails["userName"] == userID:
+				if userDetails["password"] == userPass:
+					response = { "status":"success", "role":userDetails["role"] }
 
 		return response
