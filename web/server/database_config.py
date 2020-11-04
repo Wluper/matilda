@@ -22,33 +22,36 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+# == Local ==
+import utils
+
 
 ##############################################
 #  CONFIGURATION VALUES
 ##############################################
-# Config with your database
+# Config with your database parameters
+# This setting is default for local databases
 
 class DatabaseConfiguration:
 
-#<<<<<<< HEAD
-	databaseURL="mongodb://localhost"
-#	databaseURL="mongodb+srv://<user>:<passwd>@cluster0-wyaud.mongodb.net/lida?retryWrites=true&w=majority"
+	print(" * Connecting to DB")
 
-	db = MongoClient(databaseURL)["lida"]
-	print(" * Connecting to DB");
-#	client = MongoClient("mongodb+srv://augusto:asterix@cluster0-wyaud.mongodb.net/<dbname>?retryWrites=true&w=majority")
-#	db = client.mymongodb
-#	serverStatusResult=db.command("serverStatus")
-#	pprint(serverStatusResult)
-#	collection = db.lida_database
-#	users = db.lida_users
-#	dialogues = db.lida_dialogues
-#=======
-#	databaseLocation = "localhost" 
-#	databasePort = 27017
+# 	Leave None if not user is used, 
+#	if username is given a password is required too
+	username = None
+	password = None
 
-#	client = MongoClient(databaseLocation,databasePort)
-#	db = client["lida"]
+#   Can be local or remote, 27017 is default mongoDB port
+	server = "localhost"
+	port = 27017
+
+#	You can also replace this with your external database uri
+	databaseURI = utils.database_uri_compose(server,username,password)
+
+	client = MongoClient(databaseURI,port)
+	db = client["lida"]
+
+	print(" * Connected")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
