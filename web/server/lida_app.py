@@ -1141,5 +1141,11 @@ class Models:
 # INIT
 ##############
 
+with open('../../configuration/conf.json') as json_file:
+    netConf = json.load(json_file)
+
+netConf = netConf["app"]
+
 if __name__ == "__main__":
-    LidaApp.run(port=5000,host='0.0.0.0')
+    LidaApp.run(port=netConf["port"],host=netConf["address"])
+

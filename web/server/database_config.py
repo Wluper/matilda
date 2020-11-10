@@ -6,21 +6,9 @@
 import os
 import sys
 import json
-import copy
-import json
-import datetime
-from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
-from pprint import pprint
-import functools
-import ast
-
-# == Flask ==
-from flask import Flask
-from flask_cors import CORS
 
 # == Pymongo ==
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 
 # == Local ==
 import utils
@@ -34,29 +22,20 @@ import utils
 
 class DatabaseConfiguration:
 
-	print(" * Connecting to DB")
+	with open('../../configuration/conf.json') as json_file:
+		conf = json.load(json_file)
 
-# 	Leave None if not user is used, 
-#	if username is given a password is required too
-	username = None
-	password = None
+	databaseURI = utils.database_uri_compose(conf["database"])
 
-#   Can be local or remote, 27017 is default mongoDB port
-	server = "localhost"
-	port = 27017
+	client = MongoClient(databaseURI)
 
-#	You can also replace this with your external database uri
-	databaseURI = utils.database_uri_compose(server,username,password)
+	print(" * Connected to database")
 
-	client = MongoClient(databaseURI,port)
 	db = client["lida"]
-
-	print(" * Connected")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
 	annotatedCollections = db["annotated_collections"]
 
-	administratorDefault = {"id":"admin","userName":"admin","password":"admin","email":"","role":"administrator"}
 
 

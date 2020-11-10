@@ -169,8 +169,17 @@ class LoginFuncs(object):
 	"""
 	Login function and admin account restoring
 	"""
+
+	administratorDefault = {
+		"id":"admin",
+		"userName":"admin",
+		"password":"admin",
+		"email":"",
+		"role":"administrator"
+	}
+
 	if DatabaseConfiguration.users.count_documents({"id":"admin"}) == 0:
-		DatabaseConfiguration.users.insert_one(DatabaseConfiguration.administratorDefault)
+		DatabaseConfiguration.users.insert_one(administratorDefault)
 		print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
 
 

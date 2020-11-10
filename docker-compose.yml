@@ -3,7 +3,7 @@ services:
   lida:
     image: davivcu/lida2:latest
     volumes: 
-      - ./matilda_conf:/app/matilda_conf
+      - ./lida2_conf:/app/configuration
     network_mode: "host"
     restart: always
     logging:

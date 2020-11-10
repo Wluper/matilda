@@ -30,22 +30,30 @@ def save_json_file(obj: Any, path: str) -> None:
     with open(path, "w") as f:
         json.dump(obj, f, indent=4)
 
-def database_uri_compose(server, username, password):
+def database_uri_compose(config):
 	"""Forms correct URI for database connection"""
 
 	options = "retryWrites=true&w=majority"
+
+	# if a mongoDB uri is provided
+	if ((config["optional_uri"] != None) and (config["optional_uri"] != "")):
+
+		databaseURL = config["optional_uri"]
+	
+	else:
+
+		config = config["legacy_configuration"]
 		
-	if (username == "") or (username == None):
-		auth = ""
-	else:
-		auth = username+":"+password+"@"
+		if ((config["username"] == "") or (config["username"] == None)):
+			auth = ""
+		else:
+			auth = config["username"]+":"+config["password"]+"@"
 
-	if ((server == "localhost") or (server == "127.0.0.1")):
-		databaseURL = "mongodb://"+auth+server
-	else:
-		databaseURL = "mongodb+srv://"+auth+server+"?"+options
+		if ((config["address"] == "localhost") or (config["address"] == "127.0.0.1")):
+			databaseURL = "mongodb://"+auth+config["address"]
+		else:
+			databaseURL = "mongodb+srv://"+auth+config["address"]+"?"+options
 
-	print(databaseURL)
 	return databaseURL
 
 # EOF

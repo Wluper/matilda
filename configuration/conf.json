@@ -1,0 +1,16 @@
+{
+	"app": {
+		"address":"0.0.0.0",
+		"port":5000
+	},
+	"database": {
+		"legacy_configuration": {
+			"address": "localhost",
+			"port": 27017,
+			"username": null,
+			"password": null,
+	  		"name": "lida"
+		},
+		"optional_uri": null
+	}
+}
