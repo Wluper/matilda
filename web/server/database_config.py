@@ -31,7 +31,7 @@ class DatabaseConfiguration:
 
 	print(" * Connected to database")
 
-	db = client["lida"]
+	db = client[conf["database"]["name"]]
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]

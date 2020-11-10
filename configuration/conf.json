@@ -4,12 +4,12 @@
 		"port":5000
 	},
 	"database": {
+		"name": "lida",
 		"legacy_configuration": {
 			"address": "localhost",
 			"port": 27017,
 			"username": null,
-			"password": null,
-	  		"name": "lida"
+			"password": null
 		},
 		"optional_uri": null
 	}
