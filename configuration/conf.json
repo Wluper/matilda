@@ -1,6 +1,6 @@
 {
 	"app": {
-		"address":"0.0.0.0",
+		"address":"localhost",
 		"port":5000
 	},
 	"database": {
