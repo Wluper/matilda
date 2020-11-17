@@ -5,14 +5,9 @@
 API_LINK_BASE = `http://127.0.0.1:5000`
 
 
-
 /********************************
 * FILE NAME FUNCTIONS
 ********************************/
-
-
-
-
 
 async function get_name(){
 

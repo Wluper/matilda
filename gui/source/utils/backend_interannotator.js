@@ -2,11 +2,14 @@
 * AGREEMENT SCORES
 ********************************/
 
+API_LINK_BASE = "127.0.0.1:5001"
+
+
 async function get_scores_async(){
 
     var dialogues = {}
 
-    const apiLink = `http://127.0.0.1:5000/agreements`
+    const apiLink = API_LINK_BASE+"/agreements"
     try {
         var response = await axios.get( apiLink );
 
@@ -32,7 +35,7 @@ async function get_errors_async(dialogueId){
 
     var dialogues = {}
 
-    const apiLink = `http://127.0.0.1:5000/errors/${dialogueId}`
+    const apiLink = API_LINK_BASE+"/errors/${dialogueId}"
     try {
         var response = await axios.get( apiLink );
 
@@ -58,7 +61,7 @@ async function put_error_async(error, meta, errorId, dialogueId){
         errorId : errorId,
         dialogueId : dialogueId
     }
-    const apiLink = `http://127.0.0.1:5000/errors`
+    const apiLink = API_LINK_BASE+"/errors"
     try {
         var response = await axios.put( apiLink, params );
 
@@ -84,7 +87,7 @@ async function annotate_query(query){
 
     var dialogues = {}
 
-    const apiLink = 'http://127.0.0.1:5000/turns'
+    const apiLink = API_LINK_BASE+"/turns"
     try {
         var response = await axios.post( apiLink, { query: query}  );
         console.log(response.data)
@@ -112,7 +115,7 @@ async function get_annotation_style_async(){
 
     var dialogues = {}
 
-    const apiLink = 'http://127.0.0.1:5000/dialogue_annotationstyle'
+    const apiLink = API_LINK_BASE+"/dialogue_annotationstyle"
 
     try {
         var response = await axios.get(apiLink)
@@ -140,7 +143,7 @@ async function get_all_dialogue_ids_async() {
 
   var dialogues = {}
 
-  const apiLink = 'http://127.0.0.1:5000/dialogues_metadata'
+  const apiLink = API_LINK_BASE+"/dialogues_metadata"
 
   try {
 
@@ -165,7 +168,7 @@ async function get_all_dialogue_ids_async() {
 
 async function change_dialogue_name_async(oldName, newName) {
 
-    const apiLink = `http://127.0.0.1:5000/dialogues_metadata/${oldName}`
+    const apiLink = API_LINK_BASE+"/dialogues_metadata/${oldName}"
 
     try {
 
@@ -307,8 +310,8 @@ async function RESTdialogues(method, id, params){
     console.log("PARAMS "+params)
 
     //
-    if (id==null) {var apiLink = `http://127.0.0.1:5000/dialogues`;}
-    else {var apiLink = `http://127.0.0.1:5000/dialogues/${id}`;}
+    if (id==null) {var apiLink = API_LINK_BASE+"/dialogues";}
+    else {var apiLink = API_LINK_BASE+"/dialogues/${id}";}
 
     //
     if (method=="DELETE") {

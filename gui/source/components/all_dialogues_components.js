@@ -15,7 +15,9 @@ Vue.component("all-dialogues", {
           allDialogueMetadata: [],
           dragging: false,
           showModal: false,
-          userName : ''
+          userName : '',
+          // Reference to the language item
+          guiMessages
       }
   },
   // computed : {
@@ -237,7 +239,7 @@ Vue.component("all-dialogues", {
 
           <div class="all-dialogues-list-title">
               <h2 v-if="!(dragging)" >
-                  {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited
+                  {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
               </h2>
 
               <h2 v-else>
@@ -258,8 +260,8 @@ Vue.component("all-dialogues", {
           </div>
 
           <div class="help-button-container">
-              <button class="help-button btn btn-sm" @click="showModal = true">File Format Info</button>
-              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">Download All Data</button>
+              <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
+              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
               
           </div>
       </div>
@@ -279,7 +281,7 @@ Vue.component("all-dialogues", {
             <div class="dialogue-list-single-item-container">
 
               <div class="del-dialogue-button" v-on:click="delete_dialogue($event)">
-                Delete
+                {{ guiMessages.selected.lida.button_delete }}
               </div>
 
 
@@ -290,10 +292,10 @@ Vue.component("all-dialogues", {
 
                   <div v-if="dialogue_already_visited(dat.id)"
                        class="visited-indicator">
-                       Visited
+                       {{ guiMessages.selected.admin.visited }}
                   </div>
 
-                  <div class="dialogue-num-turns" >{{dat.num_turns}} Turns</div>
+                  <div class="dialogue-num-turns" >{{dat.num_turns}} {{ guiMessages.selected.lida.turns }}</div>
               </div>
 
             </div>
@@ -303,7 +305,7 @@ Vue.component("all-dialogues", {
       </ul>
       
       <ul class="btn-set">
-        <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">Add a New Dialogue</button></li>
+        <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">{{ guiMessages.selected.lida.button_newDialogue }}</button></li>
         <li>
           
               <input type="file"
@@ -315,7 +317,7 @@ Vue.component("all-dialogues", {
               <label for="fileInput"
                      id="fileInputLabel"
                      class="btn btn-sm">
-                     Upload File or Drag and Drop
+                     {{ guiMessages.selected.admin.button_upload}}
               </label>
         </li>
       </ul>

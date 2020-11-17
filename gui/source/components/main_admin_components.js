@@ -2,12 +2,10 @@
 * All Dialgoues View "aka MAIN LIDA VIEW"
 *************************************/
 
-
-
 Vue.component("main-admin", {
 
   props: [
-      "alreadyVisited"
+      "alreadyVisited",
   ],
 
   data () {
@@ -26,7 +24,10 @@ Vue.component("main-admin", {
           showAgreement: false,
 
           // A list of dialogue IDs for which annotator names should be displayed
-          showAnnotatorNamesForIds: []
+          showAnnotatorNamesForIds: [],
+
+          //Reference to the language data
+          guiMessages,
       }
   },
 
@@ -157,10 +158,9 @@ Vue.component("main-admin", {
                 document.body.appendChild(link)
                 link.click();
             });
-    }
+    },
 
   },
-
   template:
   `
   <div class="all-dialogues-container"
@@ -173,7 +173,7 @@ Vue.component("main-admin", {
 
     <div class="dialogue-list-title-container">
         <h2 v-if="!(dragging)" class="all-dialogues-list-title">
-            {{ allDialogueMetadata.length }} Data Items, {{ alreadyVisited.length }} Visited:
+            {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
         </h2>
 
         <h2 v-else class="all-dialogues-list-title">
@@ -181,8 +181,8 @@ Vue.component("main-admin", {
         </h2>
 
         <div class="help-button-container">
-            <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">Download All Data</button>
-            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">Inter-annotator Agreement</button>
+            <button class="help-button btn btn-sm" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+            <button class="help-button btn btn-sm btn-primary" @click="showAgreement = true">{{ guiMessages.selected.admin.button_interAgreement }}</button>
 
         </div>
     </div>
@@ -208,19 +208,19 @@ Vue.component("main-admin", {
                 <div v-if="dialogue_already_visited(dat[0])"
                      class="visited-indicator"
                      v-on:click="clicked_dialogue(dat[0])">
-                     Visited
+                     {{ guiMessages.selected.admin.visited }}
                 </div>
 
                 <div v-if="show_annotators(dat[0])"
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    Annotators: {{ dat[1] }}
+                    {{ guiMessages.selected.admin.annotators }}: {{ dat[1] }}
                 </div>
 
                 <div v-else
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    Annotators: {{ dat[1].length }}
+                    {{ guiMessages.selected.admin.annotators }}: {{ dat[1].length }}
                 </div>
 
             </div>
@@ -240,7 +240,7 @@ Vue.component("main-admin", {
             <label for="fileInput"
                    id="fileInputLabel"
                    class="btn btn-sm">
-                   Upload File or Drag and Drop
+                   {{ guiMessages.selected.admin.button_upload }}
             </label></li>
     </ul>
     </div>

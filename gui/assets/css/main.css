@@ -198,4 +198,19 @@ input:focus {
     background-color: #0e181e;
 }
 
+.language-list-title-container {
+    text-align:center;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    padding: 10px 24px;
+    vertical-align:bottom;
+}
+
+.droplist_language_selector {
+    font-family:CoreSansNR35Light;
+    font-size:14px;
+    border:0;
+    outline:none;
+}
+
 /* EOF */
