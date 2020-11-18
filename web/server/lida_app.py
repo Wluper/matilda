@@ -18,9 +18,8 @@ from flask_cors import CORS
 # == Local ==
 from annotator_config import *
 from annotator import DialogueAnnotator, MultiAnnotator
-from text_splitter import convert_string_list_into_dialogue
 from database import DatabaseManagement, LoginFuncs
-
+from text_splitter import convert_string_list_into_dialogue
 
 ##############################################
 #  MAIN
@@ -42,6 +41,7 @@ CORS(LidaApp)
 #set_main_path(path)
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
+netConf = DatabaseManagement.conf["app"]
 
 @LidaApp.route('/')
 def welcome():
@@ -1140,17 +1140,6 @@ class Models:
 ##############
 # INIT
 ##############
-
-try: 
-    #docker
-    with open('lida2_conf/conf.json') as json_file:
-        netConf = json.load(json_file)
-except:
-    #standalone
-    with open('../../configuration/conf.json') as json_file:
-        netConf = json.load(json_file)
-
-netConf = netConf["app"]
 
 if __name__ == "__main__":
     LidaApp.run(port=netConf["port"],host=netConf["address"])

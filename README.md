@@ -50,13 +50,17 @@ LIDA was designed with three use cases in mind:
 
 LIDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue js and communicates
-with the back end via a RESTful API. To run LIDA, you will need to first run the
-Flask server on your local machine / wherever you want the back end to run.
+with the back end via a RESTful API. 
+
+To run LIDA, you will need to first run the Flask server on your 
+local machine / wherever you want the back end to run.
 You will need to have Python 3.6 or above installed on your machine for the
-server to run. 
+server to run.
+
 On top of that LIDA2 is also relying on a mongoDB database, either online or local
 is fine. In case of a online database you will need to set the database address in
 server/database_config.py.
+
 
 ### Installing a MongoDB local database
 
@@ -95,17 +99,27 @@ Assuming you have just followed the steps to Download and Install Requirements:
 (LIDA)$ pwd
 ~/LIDA/lida
 (LIDA)$ cd server/
+
 (LIDA)$ python lida_app.py
 ```
 
 You should see the Flask server running in the Terminal now on port 5000.
 
+Alternatively you may use gunicorn to run the server app:
+gunicorn --bind localhost:5000 lida_app:LidaApp
 
 ### Running the Front End
 
 Simply navigate to localhost:5000 if you installed the server locally or insert the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
-You may also have to set the backend address for your http requests in web/server/gui/source/utils/backend.js.
+You may also have to set the backend remote address for your http requests in 
+LIDA's file /web/server/gui/source/utils/backend.js.
+
+### Username and password
+
+On its first start LIDA creates an administrator account with username "admin" and password "admin".
+You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
+to change the admin password from the graphical interface.
 
 
 ## Adding Custom Labels

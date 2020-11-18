@@ -22,22 +22,48 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 # == Local ==
-from utils import load_json_file, save_json_file
-from database_config import DatabaseConfiguration
+from utils import load_json_file, save_json_file, database_uri_compose
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 
 class DatabaseManagement(object):
 
-	__DEFAULT_PATH = "LIDA_ANNOTATIONS"
+##############################################
+#  INIT
+##############################################
+
+	try: 
+		#docker
+		with open('lida2_conf/conf.json') as json_file:
+			conf = json.load(json_file)
+	except:
+		#standalone
+		with open('../../configuration/conf.json') as json_file:
+			conf = json.load(json_file)
+
+	databaseURI = database_uri_compose(conf["database"])
+
+	client = MongoClient(databaseURI)
+
+	print(" * Connected to database")
+
+	db = client[conf["database"]["name"]]
+
+	users = db["users"]
+	dialogueCollections = db["dialogues_collections"]
+	annotatedCollections = db["annotated_collections"]
+
+##############################################
+#  METHODS
+##############################################
 
 	def selected(collection):
 		if collection == "dialogues_collections":
-			return DatabaseConfiguration.dialogueCollections
+			return DatabaseManagement.dialogueCollections
 		elif collection == "annotated_collections":
-			return DatabaseConfiguration.annotatedCollections
+			return DatabaseManagement.annotatedCollections
 		else:
-			return DatabaseConfiguration.users
+			return DatabaseManagement.users
 	
 	def readDatabase(coll,pairs=None, projection=None):
 		# if field parameter is provided the search will be a projection of the id
@@ -49,7 +75,7 @@ class DatabaseManagement(object):
 
 		selected_collection = DatabaseManagement.selected(coll)
 
-		print(" * Searching in:",coll,"for key '",pairs)
+		#print(" * Searching in:",coll,"for key '",pairs)
 
 		entries = {}
 
@@ -85,7 +111,7 @@ class DatabaseManagement(object):
 
 	def createDoc(document_id, collection, values):
 		
-		print(" * Creating document", document_id, "in",collection)
+		#print(" * Creating document", document_id, "in",collection)
 		DatabaseManagement.selected(collection).save(values)
 		
 		response = {"staus":"success"}
@@ -150,10 +176,10 @@ class DatabaseManagement(object):
 				"document":annotations,
 				"lastUpdate":datetime.datetime.utcnow()
 			}
-			print(" * Creating document", destination, "in annotated_collections")
+			#print(" * Creating document", destination, "in annotated_collections")
 			DatabaseManagement.createDoc(destination, "annotated_collections", values)
 		else:
-			print(" * Updating document", destination, "in annotated_collections")
+			#print(" * Updating document", destination, "in annotated_collections")
 			values = { "status":fields["status"], "document":annotations, "lastUpdate":datetime.datetime.utcnow() }
 			DatabaseManagement.updateAnnotations(username, destination, values)
 		
@@ -166,9 +192,10 @@ class DatabaseManagement(object):
 
 
 class LoginFuncs(object):
-	"""
-	Login function and admin account restoring
-	"""
+
+##############################################
+#  INIT
+##############################################
 
 	administratorDefault = {
 		"id":"admin",
@@ -178,10 +205,13 @@ class LoginFuncs(object):
 		"role":"administrator"
 	}
 
-	if DatabaseConfiguration.users.count_documents({"id":"admin"}) == 0:
-		DatabaseConfiguration.users.insert_one(administratorDefault)
-		print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+	if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
+		DatabaseManagement.users.insert_one(administratorDefault)
+		#print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
 
+##############################################
+#  LOGIN FUNCTION
+##############################################
 
 	def logIn(userID, userPass):
 
@@ -189,7 +219,7 @@ class LoginFuncs(object):
 
 		query = {"userName":userID,"password":userPass}
 
-		userDetails = DatabaseConfiguration.users.find_one(query)
+		userDetails = DatabaseManagement.users.find_one(query)
 
 		if userDetails != None:
 			if userDetails["userName"] == userID:

@@ -252,7 +252,7 @@ class DialogueAnnotator(object):
             self.addedDialogues = {}
             self.addedDialogues[newName] = 0
 
-        print("\n * New session for",newName,self.__dialogues[DialogueAnnotator.__SESSION_USER])
+        print(" * New session for",newName)
 
     def set_file( self, filePath, fileName=None ):
         """
@@ -347,7 +347,7 @@ class DialogueAnnotator(object):
 
         self.activeCollection[user] = fileName
 
-        print("* ",user,"started working on collection",fileName)
+        print("* ",user,"is working on collection",fileName)
 
 
     def update_dialogue_name(self, user, id, newName):
@@ -431,7 +431,7 @@ class DialogueAnnotator(object):
         """
         DialogueAnnotator.__SESSION_USER = user
 
-        #deactivated but working
+        #dumping
         #save_json_file( obj=self.__dialogues[DialogueAnnotator.__SESSION_USER], path=os.path.join( self.__filePath, "USER_"+user+".json" ) )
 
 
