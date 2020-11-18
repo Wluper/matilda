@@ -30,6 +30,7 @@ def save_json_file(obj: Any, path: str) -> None:
     with open(path, "w") as f:
         json.dump(obj, f, indent=4)
 
+
 def database_uri_compose(config):
 	"""Forms correct URI for database connection"""
 

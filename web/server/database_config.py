@@ -28,7 +28,7 @@ class DatabaseConfiguration:
 			conf = json.load(json_file)
 	except:
 		#standalone
-		with open('../../lida2_conf/conf.json') as json_file:
+		with open('../../configuration/conf.json') as json_file:
 			conf = json.load(json_file)
 
 	databaseURI = utils.database_uri_compose(conf["database"])
