@@ -1143,7 +1143,7 @@ class Models:
 
 try: 
     #docker
-    with open('/app/lida2_conf/conf.json') as json_file:
+    with open('lida2_conf/conf.json') as json_file:
         netConf = json.load(json_file)
 except:
     #standalone
