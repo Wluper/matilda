@@ -528,7 +528,12 @@ def restore_errorsList(collectionId):
                 __update_gold_from_error_id(dialogue, error)
 
             DatabaseManagement.updateDoc(collectionId, "dialogues_collections", 
-                { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
+                { "errors": { 
+                    "errorsList":annotationFiles.annotatorErrors, 
+                    "errorsMeta":annotationFiles.annotatorErrorsMeta
+                    } 
+                }
+            )
 
 
     return jsonify (responseObject)
@@ -1047,6 +1052,14 @@ class InterannotatorMethods:
                     error["name"] = annotationName
                     error["predictions"] = predictions
                     error["counts"] = temp.get("counts")
+
+                    #Slot needs more details to be evaluted
+                    if error["type"] == "multilabel_classification_string":
+                        optionList = []
+                        print(turnsData[turnId])
+                        for option in turnsData[turnId][error["name"]]:
+                            optionList.append(option) 
+                        error["options"] = optionList
 
                     meta["name"] = annotationName
                     meta["annotateBy"] = len(listOfAnnotations)

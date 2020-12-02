@@ -182,7 +182,7 @@ Vue.component('classification-annotation',{
 
 Vue.component('classification-string-annotation', {
 
-    props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId"],
+    props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions"],
 
     data () {
 
@@ -368,6 +368,15 @@ Vue.component('classification-string-annotation', {
           //put all back in place
           annotationAppEventBus.$emit("resume_annotation_tools");
       },
+
+      switchSlotValue(option) {
+          //azzerrare slot 
+          fieldList = document.getElementById("annotation-component").querySelectorAll("input");
+          fieldList.forEach( field => field.value = "");
+          for (var i=0; i<option.length;i++) {
+            document.getElementById(option[i][0]+"_input").value = option[i][1];
+          }
+      }
     },
 
     template:
@@ -392,6 +401,13 @@ Vue.component('classification-string-annotation', {
             <div class="single-annotation-header">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
+                </div>
+
+                <div v-if="multilabelStringOptions" class="annotator-switch">
+                  <template v-for="option,index in multilabelStringOptions">
+                      <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(classification_strings)">GOLD</button>
+                      <button v-else class="switch-button" v-on:click="switchSlotValue(option)">Option {{index}}</button>
+                  </template>
                 </div>
 
                 <div class="info-button-container">

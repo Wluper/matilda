@@ -231,7 +231,7 @@ Vue.component("resolutions", {
             }
 
             console.log("+++++ Annotation Format +++++");
-            console.log(temp)
+            //console.log(temp)
 
             return temp;
         }
@@ -267,9 +267,8 @@ Vue.component("resolutions", {
                 v-bind:predictions="error.predictions"
                 v-bind:uniqueName="error.name"
                 v-bind:annotationFormat="annotationFormat"
-                v-bind:confidences="error.counts">
-
-
+                v-bind:confidences="error.counts"
+                v-bind:multilabelStringOptions="error.options">
             </annotation-component>
         </div>
 
@@ -287,7 +286,8 @@ Vue.component("annotation-component", {
       "predictions",
       "annotationFormat",
       "uniqueName",
-      "confidences"
+      "confidences",
+      "multilabelStringOptions"
     ],
 
     data() { 
@@ -333,7 +333,9 @@ Vue.component("annotation-component", {
             v-bind:classification_strings="predictions"
             v-bind:uniqueName="uniqueName"
             v-bind:classes="annotationFormat"
-            v-bind:confidences="confidences">
+            v-bind:confidences="confidences"
+            v-bind:multilabelStringOptions="multilabelStringOptions"
+            >
 
         </classification-string-annotation>
 

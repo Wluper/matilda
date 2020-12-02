@@ -35,19 +35,19 @@
             "labels"      : [
 
                 "job_description",
-		"contract",
-		"duties",
-		"skill",
-		"past_experience",
-		"degree",
-		"age",
-		"languages",
-		"area",
-		"company_name",
-		"company_size",
-		"location",
-		"contact",
-		"other"
+        		"contract",
+        		"duties",
+        		"skill",
+        		"past_experience",
+        		"degree",
+        		"age",
+        		"languages",
+        		"area",
+        		"company_name",
+        		"company_size",
+        		"location",
+        		"contact",
+        		"other"
             ]
 
         },
