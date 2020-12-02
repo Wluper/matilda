@@ -1,5 +1,10 @@
 [![Wluper](https://wluper.com/content/themes/main/static/gfx/wluperlogo.png)](https://wluper.com/)     
 
+**What's new in V2.0:** 
+1. Full support for more than one annotator
+2. Database MongoDB for data delivery and consistency
+3. Production ready server with Gunicorn and nginx
+
 # LIDA: Lightweight Interactive Dialogue Annotator
 
 **Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
