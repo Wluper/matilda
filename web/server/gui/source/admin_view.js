@@ -19,10 +19,6 @@ Vue.component("main-admin-view", {
       }
   },
 
-  mounted () {
-     //
-  },
-
   created () {
       adminEventBus.$on("go_back", this.switchToMain);
       adminEventBus.$on("collection_clicked", this.switchToCollection);

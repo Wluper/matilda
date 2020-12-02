@@ -460,9 +460,7 @@ def handle_errors_resource(id=None):
 
     elif request.method == "PUT":
 
-        responseObject = {
-            "status" : "success",
-        }
+        responseObject = {"status":"success"}
 
         data = request.get_json()
 
@@ -505,10 +503,7 @@ def restore_errorsList(collectionId):
         }
 
     else:
-        responseObject = {
-            "status": "nothing to restore, performed error scan"
-        }
-
+        #nothing to restore, performs new error scan
         for dialogue in search[0]["document"]:
 
             listOfDialogue = annotationFiles.get_all_files( dialogueId = dialogue )
@@ -527,16 +522,16 @@ def restore_errorsList(collectionId):
             for error in errorMetaDict["errors"]:
                 __update_gold_from_error_id(dialogue, error)
 
-            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", 
-                { "errors": { 
+            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { 
+                "errors": { 
                     "errorsList":annotationFiles.annotatorErrors, 
                     "errorsMeta":annotationFiles.annotatorErrorsMeta
-                    } 
-                }
-            )
+                } 
+            })
+        
+        responseObject = {"errors":annotationFiles.annotatorErrors}
 
-
-    return jsonify (responseObject)
+    return jsonify(responseObject)
 
 
 
@@ -1055,8 +1050,8 @@ class InterannotatorMethods:
 
                     #Slot needs more details to be evaluted
                     if error["type"] == "multilabel_classification_string":
+                        
                         optionList = []
-                        print(turnsData[turnId])
                         for option in turnsData[turnId][error["name"]]:
                             optionList.append(option) 
                         error["options"] = optionList

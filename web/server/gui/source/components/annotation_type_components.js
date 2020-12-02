@@ -365,12 +365,16 @@ Vue.component('classification-string-annotation', {
           //updating
           activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
           this.updateClassAndString(activeLabel, labelName);
-          //put all back in place
-          annotationAppEventBus.$emit("resume_annotation_tools");
+          //put all back in place. Two possible parent view: interannotator and annotation
+          if (this.multilabelStringOptions != undefined) {
+            document.getElementById("active_label").id = labelName+"_input";
+          } else {
+            annotationAppEventBus.$emit("resume_annotation_tools");
+          }
       },
 
       switchSlotValue(option) {
-          //azzerrare slot 
+          //switch annotated version
           fieldList = document.getElementById("annotation-component").querySelectorAll("input");
           fieldList.forEach( field => field.value = "");
           for (var i=0; i<option.length;i++) {

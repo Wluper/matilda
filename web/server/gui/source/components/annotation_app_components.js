@@ -674,7 +674,7 @@ Vue.component('input-box',{
     },
     template:
     `
-    <div id="input-box">
+    <div id="input-box" style="display:none">
         <ul>
             <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" :placeholder="guiMessages.selected.annotation_app.enterQuery">
         </input></li>
