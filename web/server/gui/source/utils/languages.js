@@ -15,10 +15,10 @@ guiMessages = {
             supervision:"Supervision",
             notVisited: "Not visited",
             button_downloadAll:"Download Data",
-            button_interAgreement:"Inter-annotator Agreement", 
+            button_interAgreement:"Inter-annotator Agreement",
             assignedTo:"Assigned to",
             annotator:"Annotator",
-            annotators:"Annotators", 
+            annotators:"Annotators",
             actualAnnotators:"Sources",
             button_upload:"Upload File or Drag and Drop",
             button_admin:"Admin Panel",
@@ -144,7 +144,7 @@ guiMessages = {
             "Annotate collections assigned to you",
         ],
         modal_formatInfo:
-        [ 
+        [
             `
             Dialoque File Format
             `,
@@ -188,14 +188,14 @@ guiMessages = {
             `
         ],
         modal_agreementScores:
-        [ 
+        [
             "Inter-annotator Agreement Scores",
             "This represents a report for your data.",
             "Available Annotations:",
             "Overall"
         ],
         modal_document:
-        [ 
+        [
             "Document",
             "Tags",
             "JSON",
@@ -255,9 +255,9 @@ guiMessages = {
             visited: "Visitato",
             notVisited: "Non visitato",
             button_downloadAll:"Scarica i dati",
-            button_interAgreement:"Indice di concordanza", 
+            button_interAgreement:"Indice di concordanza",
             annotator:"Annotatore",
-            annotators:"Annotatori", 
+            annotators:"Annotatori",
             assignedTo: "Assegnato a",
             actualAnnotators:"Fonti",
             button_upload:"Carica o trascina un file",
@@ -384,9 +384,9 @@ guiMessages = {
             "Annota le collezioni assegnate a te",
         ],
         modal_formatInfo:
-        [ 
+        [
             `
-            Formato dei File Dialogo 
+            Formato dei File Dialogo
             `,
             `
             I file possono essere caricati nel sistema in uno dei due formati:
@@ -397,27 +397,27 @@ guiMessages = {
             e si aprirà una schermata per processarlo in un dialogo.
             `,
             `
-            Se carichi un file JSON, deve essere nel formato corretto. 
+            Se carichi un file JSON, deve essere nel formato corretto.
             Il formato richiesto è il seguente:
             `
         ],
         modal_formatInfo_list:
         [
             `
-            Un file dizionario con chiavi come nomi dei dialoghi 
-            e valori come liste. 
+            Un file dizionario con chiavi come nomi dei dialoghi
+            e valori come liste.
             `,
             `
-            Ogni valore è una lista di dizionari, dove ogni 
+            Ogni valore è una lista di dizionari, dove ogni
             dizionario contiene un numero di coppie chiave-valore
             usate per mostrare i dati del dialogo da annotare.
             `,
             `
-            Alcune coppie chiave-valore sono obbligatorie per 
+            Alcune coppie chiave-valore sono obbligatorie per
             mostrare correttamente il dialogo.
             `,
             `
-            Le coppie obbligatorie sono definite nel file 
+            Le coppie obbligatorie sono definite nel file
             annotator_config.py nella cartella "server".
             `,
             `
@@ -427,14 +427,14 @@ guiMessages = {
             `
         ],
         modal_agreementScores:
-        [ 
+        [
             "Indice di Concordanza tra gli annotatori",
             "Questo è un rapporto sui tuoi dati.",
             "Annotazioni disponibili:",
             "Riepilogo"
         ],
         modal_document:
-        [ 
+        [
             "Documento",
             "Tags",
             "JSON",
@@ -485,33 +485,33 @@ guiMessages = {
     },
     de: {
         admin: {
-            title:"Conflicts Resover",
-            titlePanel:"Administration Panel",
-            interAnno:"Interannotator Resolution",
-            dataItems: "Dialogues",
-            dataManagement: "Data Management",
-            visited: "Visited",
-            visited_dialogues: "Visited Dialogues",
-            supervision:"Supervision",
-            notVisited: "Not visited",
-            button_downloadAll:"Download Data",
-            button_interAgreement:"Inter-annotator Agreement",
-            assignedTo:"Assigned to",
-            annotator:"Annotator",
-            annotators:"Annotators",
-            actualAnnotators:"Sources",
-            button_upload:"Upload File or Drag and Drop",
-            button_admin:"Admin Panel",
-            dropAnywhere: "Drop Files Anywhere to Upload!",
-            userButton: "Users Management",
-            users:"Users",
-            createButton: "Add",
-            editButton:"Edit",
-            createUserButton: "Add a new user",
-            deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
-            wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
-            button_wipeView:"Clean dialogues view",
-            annotation:"Annotation",
+            title: "Konflikt Löser",
+            titlePanel: "Administrationsbereich",
+            interAnno: "Interannotator Resolution",
+            dataItems: "Dialoge",
+            dataManagement: "Datenverwaltung",
+            visited: "Besucht",
+            visited_dialogues: "Besuchte Dialoge",
+            supervision: "Aufsicht",
+            notVisited: "Nicht besucht",
+            button_downloadAll: "Daten herunterladen",
+            button_interAgreement: "Inter-Annotator-Vereinbarung",
+            assignedTo: "Zugewiesen an",
+            annotator: "Annotator",
+            annotators: "Annotatoren",
+            actualAnnotators: "Sources",
+            button_upload: "Datei hochladen oder per Drag & Drop",
+            button_admin: "Admin Panel",
+            dropAnywhere: "Dateien überall zum Hochladen ablegen!",
+            userButton: "Benutzerverwaltung",
+            users: "Benutzer",
+            createButton: "Hinzufügen",
+            editButton: "Bearbeiten",
+            createUserButton: "Neuen Benutzer hinzufügen",
+            deleteConfirm: "Möchten Sie diesen Eintrag wirklich dauerhaft löschen? Dies kann nicht rückgängig gemacht werden!",
+            wipeConfirm: "Sind Sie sicher, die Dialogliste zu bereinigen? Die tatsächlichen Dialogdateien werden nicht gelöscht",
+            button_wipeView: "Dialogansicht bereinigen",
+            annotation: "Annotation",
             backToColl:"Back",
             importConflictsResult:"Nothing to import, no annotated versions have been produced yet",
             cantDeleteAdmin:"Sorry, default admin account can't be deleted",
