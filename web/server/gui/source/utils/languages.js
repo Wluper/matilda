@@ -609,101 +609,101 @@ guiMessages = {
         resolution_app: {
             errorId: "Error Id:",
             name: "Name:",
-            accepted: "Accepted",
-            review: "Review",
-            fail: "FAIL!",
-            accept:"Accept",
-            noConflicts:"No annotation conflicts found in this dialogue",
-            updateAccepted:"Value updated",
+            accepted: "Akkzeptiert",
+            review: "Revision",
+            fail: "Gescheitert!",
+            accept:"Akkzeptieren",
+            noConflicts:"In diesem Dialog wurden keine Anmerkungskonflikte gefunden",
+            updateAccepted:"Wert aktualisiert",
         },
         admin_panel: [
-            "Confront annotations on the same collections and resolve their conflicts",
-            "Add, remove and edit annotator and administrator accounts",
-            "Create, edit and assign dialogues collections",
-            "Inspect how annotations are progressing",
-            "Annotate collections assigned to you",
+            "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",
+            "Hinzufügen, Entfernen und Bearbeiten von Annotator- und Administratorkonten",
+            "Dialogsammlungen erstellen, bearbeiten und zuweisen",
+            "Überprüfen Sie, wie die Anmerkungen fortschreiten",
+            "Ihnen zugewiesene Sammlungen kommentieren",
         ],
         modal_formatInfo:
         [
             `
-            Dialoque File Format
+            Dialoque-Dateiformat
             `,
             `
-            Files can be uploaded to the annotation system in one of two
-            formats: either as a raw .txt file or as a JSON file in the
-            correct format.
+            Dateien können in einer von zwei Schritten in das Anmerkungssystem hochgeladen werden
+            Formate: entweder als rohe TXT-Datei oder als JSON-Datei in der
+            korrektes Format.
             `,
             `
-            If you upload a .txt file, there are no format restrictions and
-            you will be taken to a screen to process it into a dialogue.
+            Wenn Sie eine TXT-Datei hochladen, gibt es keine Formatbeschränkungen und
+            Sie werden zu einem Bildschirm weitergeleitet, um ihn zu einem Dialog zu verarbeiten.
             `,
             `
-            If you upload a JSON file, it must be in the correct format. This
-            format is as follows:
+            Wenn Sie eine JSON-Datei hochladen, muss diese im richtigen Format vorliegen. Dies
+            Format ist wie folgt:
             `
         ],
         modal_formatInfo_list:
         [
             `
-            File is a dict with keys as the names of each dialogue
-            and values as lists.
+            Datei ist ein Diktat mit Schlüsseln als Namen für jeden Dialog
+            und Werte als Listen.
             `,
             `
-            Each value is a list of dictionaries, where each
-            dictionary contains a number of key-value pairs which
-            are used to display the dialogue data for annotation.
+            Jeder Wert ist eine Liste von Wörterbüchern, wobei jedes
+            Wörterbuch enthält eine Reihe von Schlüssel-Wert-Paaren, die
+            werden verwendet, um die Dialogdaten für Anmerkungen anzuzeigen.
             `,
             `
-            Some key-value pairs are compulsory in order to correctly
-            display the dialogue.
+            Einige Schlüssel-Wert-Paare sind obligatorisch, um korrekt zu sein
+            Zeigen Sie den Dialog an.
             `,
             `
-            The key-value pairs which are compulsory are defined in
-            the annotator_config.py file in the "server" folder.
+            Die obligatorischen Schlüssel-Wert-Paare sind in definiert
+            die Datei annotator_config.py im Ordner "server".
             `,
             `
-            By default, the only required key-value pair in each turn
-            is called "usr" and should be the user's query as
-            a string.
+            Standardmäßig das einzige erforderliche Schlüssel-Wert-Paar in jeder Runde
+            heißt "usr" und sollte die Abfrage des Benutzers sein als
+            ein Faden.
             `
         ],
         modal_agreementScores:
         [
-            "Inter-annotator Agreement Scores",
-            "This represents a report for your data.",
-            "Available Annotations:",
-            "Overall"
+            "Inter-Annotator Agreement Scores",
+            "Dies ist ein Bericht für Ihre Daten.",
+            "Verfügbare Anmerkungen:",
+            "Insgesamt"
         ],
         modal_document:
         [
-            "Document",
-            "Tags",
+            "Dokument",
+            "Tag",
             "JSON",
             "lastUpdate"
         ],
         coll_creation:
         [
-            "Insert an unique id for the collection or LIDA will generate one",
-            "Insert a title",
-            "Insert a short description of the content",
-            "Annotation style name",
-            "You can assign this dialogues to an user, only them will be able to update it",
-            "You can note down here the progress of the annotation work",
+            "Geben Sie eine eindeutige ID für die Sammlung ein, oder LIDA generiert eine",
+            "Titel einfügen",
+            "Fügen Sie eine kurze Beschreibung des Inhalts ein",
+            "Name des Anmerkungsstils",
+            "Sie können diese Dialoge einem Benutzer zuweisen, nur dieser kann sie aktualisieren",
+            "Hier können Sie den Fortschritt der Anmerkungsarbeit notieren",
         ],
         modal_collectionInfo:
         [
-            "Collections",
-            "Collections are group of dialogues linked for easy handling and assignment.",
-            "To preserve them and avoid mixtures you can work on one collection at a time.",
-            "A backup of in-use collections is performed automatically every two minutes.",
-            "When an annotator is satisfied with their work is able to send the annotations and update the collection document",
-            "stored in the database. Anyway, the editings performed on collections are saved periodically even without pressing that button.",
+            "Sammlungen",
+            "Sammlungen sind eine Gruppe von Dialogen, die zur einfachen Handhabung und Zuordnung verknüpft sind.",
+            "Um sie zu konservieren und Mischungen zu vermeiden, können Sie jeweils an einer Sammlung arbeiten.",
+            "Eine Sicherung der verwendeten Sammlungen wird automatisch alle zwei Minuten durchgeführt.",
+            "Wenn ein Annotator mit seiner Arbeit zufrieden ist, kann er die Annotationen senden und das Sammlungsdokument aktualisieren",
+            "in der Datenbank gespeichert. Wie auch immer, die an Sammlungen vorgenommenen Änderungen werden regelmäßig gespeichert, auch ohne diese Taste zu drücken.",
         ],
         modal_collectionButtons:
         [
-            "This button allows to create a collection from one or more json files.",
-            "With this function you can edit the information associated to a collection and remove one or more dialogues from it",
-            "This button permanently delete the collection from the database",
+            "Mit dieser Schaltfläche können Sie eine Sammlung aus einer oder mehreren JSON-Dateien erstellen.",
+            "Mit dieser Funktion können Sie die einer Sammlung zugeordneten Informationen bearbeiten und einen oder mehrere Dialoge daraus entfernen",
+            "Diese Schaltfläche löscht die Sammlung dauerhaft aus der Datenbank",
         ],
         database: {
             title: "Workspaces Management",
