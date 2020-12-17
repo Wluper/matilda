@@ -707,21 +707,21 @@ guiMessages = {
         ],
         database: {
             title: "Workspaces Management",
-            location:"Database Location",
-            port:"Port",
-            saved: "Database updated",
-            update: "Update database",
-            importDb: "Synchronize from Database",
-            confirmImport:"This will wipe your dialogue list and load the dialogues that are in your database document",
-            confirmUpdate:"This will update your user-backup in the database",
-            importDoc: "Import this document",
-            showHelp: "Help"
+            location: "Datenbankspeicherort",
+            port: "Port",
+            saved: "Datenbank aktualisiert",
+            update: "Datenbank aktualisieren",
+            importDb: "Aus Datenbank synchronisieren",
+            confirmImport: "Dadurch wird Ihre Dialogliste gelöscht und die in Ihrem Datenbankdokument enthaltenen Dialoge geladen."
+            confirmUpdate: "Dadurch wird Ihre Benutzersicherung in der Datenbank aktualisiert",
+            importDoc: "Dieses Dokument importieren",
+            showHelp: "Hilfe"
         },
         login: {
-            welcome: "Welcome",
-            send: "Log in",
-            warning:"A username and a password are required!",
-            fail:"Username and password combinatio invalid"
+            welcome: "Wilkommen",
+            send: "Anmelden",
+            warning: "Ein Benutzername und ein Passwort sind erforderlich!",
+            fail: "Kombination aus Benutzername und Passwort ungültig"
         }
     },
 }
