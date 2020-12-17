@@ -483,4 +483,245 @@ guiMessages = {
             fail:"Combinazione di nome utente e password non valida",
         }
     },
+    de: {
+        admin: {
+            title:"Conflicts Resover",
+            titlePanel:"Administration Panel",
+            interAnno:"Interannotator Resolution",
+            dataItems: "Dialogues",
+            dataManagement: "Data Management",
+            visited: "Visited",
+            visited_dialogues: "Visited Dialogues",
+            supervision:"Supervision",
+            notVisited: "Not visited",
+            button_downloadAll:"Download Data",
+            button_interAgreement:"Inter-annotator Agreement",
+            assignedTo:"Assigned to",
+            annotator:"Annotator",
+            annotators:"Annotators",
+            actualAnnotators:"Sources",
+            button_upload:"Upload File or Drag and Drop",
+            button_admin:"Admin Panel",
+            dropAnywhere: "Drop Files Anywhere to Upload!",
+            userButton: "Users Management",
+            users:"Users",
+            createButton: "Add",
+            editButton:"Edit",
+            createUserButton: "Add a new user",
+            deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
+            wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
+            button_wipeView:"Clean dialogues view",
+            annotation:"Annotation",
+            backToColl:"Back",
+            importConflictsResult:"Nothing to import, no annotated versions have been produced yet",
+            cantDeleteAdmin:"Sorry, default admin account can't be deleted",
+            annotationInProgress:"Annotations in progress for collection",
+            button_freeze: "Freeze",
+            button_unfreeze: "Unfreeze",
+            button_abort: "Cancel",
+            userCreation: "User Creation",
+            button_downloadGold:"Download Gold",
+            button_wipeCache:"Wipe errors' cache",
+            wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
+            confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
+        },
+        lida: {
+            button_fileFormatInfo: "Format Info",
+            button_delete: "Delete",
+            button_switch: "Switch view",
+            turns: "Turns",
+            button_newDialogue: "Add a New Dialogue",
+            button_wipeDialogues: "Delete dialogues",
+            interfaceLanguage: "Interface Language:",
+            confirmWipe:"Do you wish to wipe your current list? The active collection will be deactivated but it stays available in the database",
+            drop:"Drop Files Anywhere to Upload!",
+            buttonCollections:"Collections",
+            connectionError: "Couldn't connect to server, check that it's running or the address in backend_config",
+            backupDone:"Backup done.",
+            backupPost:"Backup postponed: nothing to save.",
+            backupFailed:"Backup failed.",
+            backupNext:"Next scheduled in two mintues...",
+            annotated: "Annotated",
+            annotatedBy: "by",
+            logOut:"logout",
+            confirmLogout: "Do you want to log out?",
+            load:"Load collection",
+            assignedColl:"Assigned collections",
+            activeColl:"Active collection",
+            alert:"Alert",
+            welcome:"Welcome",
+            exiting:"You are leaving Lida's session. Are you sure?",
+        },
+        collection: {
+            title: "Collections Management",
+            create: "Create collection",
+            update: "Update annotations manually",
+            updateConfirm1: "You are updating Collection",
+            updateConfirm2: "with your annotations. This will edit the database document.",
+            noCollection: "You have no active collection now. Your editings are only saved in your workspace",
+            noAssignement: "You can't update this collection. It's not assigned to you",
+            add: "Add from those users",
+            nothing: "Default action: overwrite",
+            keep: "Dialogue ID Conflit in your workspace. Please choose which dialogues to keep",
+            addToColl: "Add to your collection one or more document",
+            editColl:"Edit a collection",
+            importColl: "Import this collection",
+            importCollfromView: "Add from dialogues list",
+            importCollfromFile: "Add from file",
+            importCollfromUser: "Add from users' list",
+            inspecting:"Inspecting a collection",
+            importResult: "Import",
+            importSuccess: "Success! Dialogues correctly loaded in your list.",
+            importSuccessAddendum: "They are available in your dialogue list.",
+            confirmImport: "This will load the selected collection and make it the active collection",
+            confirmRevision: "This will load the selected collection in the Interannotator conflict resolver list, adding it to the current dialogues",
+            confirmChangesLost: "There are unsaved changes to collections. Do you want to proceed without saving them?",
+            confirmDeleteDialogue: "This will immediately delete the selected dialogue from the collection. This cannot be undone.",
+            collTitle: "Title",
+            collDesc: "Description",
+            collAnnot: "Annotation Style",
+            collAssi: "Assigned to",
+            collUpda: "Last update",
+            collStatus: "Status",
+            new: "Imported",
+            old: "Previous",
+            save: "Save and Update Collection",
+            done: "Annotations completed",
+            freeze: "This operation will freeze the collection and notify your work is done and can be reviewed. Do it only when you finished",
+            freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator",
+            empty:"Empty",
+
+        },
+        annotation_app: {
+            turnId: "Turn Id",
+            enter: "Enter",
+            save: "Save",
+            enterQuery:"Enter New Query",
+            allSaved: "All Changes Saved",
+            unsaved: "Unsaved Changes",
+            backToAll: "Back",
+            close: "Close",
+            select: "Select or write text from turn",
+            expand: "Click to Expand",
+            noTurn: "No turn selected. Please select one to annotate",
+            rate: "Annotation rate",
+        },
+        resolution_app: {
+            errorId: "Error Id:",
+            name: "Name:",
+            accepted: "Accepted",
+            review: "Review",
+            fail: "FAIL!",
+            accept:"Accept",
+            noConflicts:"No annotation conflicts found in this dialogue",
+            updateAccepted:"Value updated",
+        },
+        admin_panel: [
+            "Confront annotations on the same collections and resolve their conflicts",
+            "Add, remove and edit annotator and administrator accounts",
+            "Create, edit and assign dialogues collections",
+            "Inspect how annotations are progressing",
+            "Annotate collections assigned to you",
+        ],
+        modal_formatInfo:
+        [
+            `
+            Dialoque File Format
+            `,
+            `
+            Files can be uploaded to the annotation system in one of two
+            formats: either as a raw .txt file or as a JSON file in the
+            correct format.
+            `,
+            `
+            If you upload a .txt file, there are no format restrictions and
+            you will be taken to a screen to process it into a dialogue.
+            `,
+            `
+            If you upload a JSON file, it must be in the correct format. This
+            format is as follows:
+            `
+        ],
+        modal_formatInfo_list:
+        [
+            `
+            File is a dict with keys as the names of each dialogue
+            and values as lists.
+            `,
+            `
+            Each value is a list of dictionaries, where each
+            dictionary contains a number of key-value pairs which
+            are used to display the dialogue data for annotation.
+            `,
+            `
+            Some key-value pairs are compulsory in order to correctly
+            display the dialogue.
+            `,
+            `
+            The key-value pairs which are compulsory are defined in
+            the annotator_config.py file in the "server" folder.
+            `,
+            `
+            By default, the only required key-value pair in each turn
+            is called "usr" and should be the user's query as
+            a string.
+            `
+        ],
+        modal_agreementScores:
+        [
+            "Inter-annotator Agreement Scores",
+            "This represents a report for your data.",
+            "Available Annotations:",
+            "Overall"
+        ],
+        modal_document:
+        [
+            "Document",
+            "Tags",
+            "JSON",
+            "lastUpdate"
+        ],
+        coll_creation:
+        [
+            "Insert an unique id for the collection or LIDA will generate one",
+            "Insert a title",
+            "Insert a short description of the content",
+            "Annotation style name",
+            "You can assign this dialogues to an user, only them will be able to update it",
+            "You can note down here the progress of the annotation work",
+        ],
+        modal_collectionInfo:
+        [
+            "Collections",
+            "Collections are group of dialogues linked for easy handling and assignment.",
+            "To preserve them and avoid mixtures you can work on one collection at a time.",
+            "A backup of in-use collections is performed automatically every two minutes.",
+            "When an annotator is satisfied with their work is able to send the annotations and update the collection document",
+            "stored in the database. Anyway, the editings performed on collections are saved periodically even without pressing that button.",
+        ],
+        modal_collectionButtons:
+        [
+            "This button allows to create a collection from one or more json files.",
+            "With this function you can edit the information associated to a collection and remove one or more dialogues from it",
+            "This button permanently delete the collection from the database",
+        ],
+        database: {
+            title: "Workspaces Management",
+            location:"Database Location",
+            port:"Port",
+            saved: "Database updated",
+            update: "Update database",
+            importDb: "Synchronize from Database",
+            confirmImport:"This will wipe your dialogue list and load the dialogues that are in your database document",
+            confirmUpdate:"This will update your user-backup in the database",
+            importDoc: "Import this document",
+            showHelp: "Help"
+        },
+        login: {
+            welcome: "Welcome",
+            send: "Log in",
+            warning:"A username and a password are required!",
+            fail:"Username and password combinatio invalid"
+        }
+    },
 }
