@@ -1,0 +1,507 @@
+
+/********************************
+* ANNOTATION GRID
+********************************/
+#annotation-app {
+    background-color: #f1f1f3;
+    height: 100%;
+    display: grid !important;
+    grid-template-columns: minmax(0,0.8fr) minmax(0,3.2fr);
+    grid-template-rows: minmax(0, 1.4fr) minmax(0, 2.4fr) minmax(0,12fr);
+    min-height: 0;
+    min-width: 0;
+}
+
+
+
+
+/********************************
+* DIALOGUE MENU
+********************************/
+#dialogue-menu {
+    grid-column-start: 2;
+    grid-column-end: -1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+
+    height: 100%;
+
+    color: #222;
+
+    overflow: auto;
+    padding: 5px 24px;
+    display: grid;
+    grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
+                   [row2-start] ". button-section . title-section rate-section status-section" 5fr [row2-end]
+                   [row3-start] ". . . . . ." 1fr [row3-end]
+                   / 0.0fr 0.9fr 0.05fr 1fr 2fr 1fr;
+
+
+}
+
+
+.dialogue-name {
+    grid-area: title-section;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dialogue-name-edit {
+    display: none;
+}
+
+.dialogue-title-span {
+
+}
+
+.annotation-rate {
+    grid-area: rate-section;
+    align-self: center;
+    font-family: CoreSansNR35Light;
+}
+
+.saved-status {
+    grid-area: status-section;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+}
+
+.is-saved {
+    color: green;
+    display: block;
+    text-align: right;
+    width: 100%;
+}
+
+.is-not-saved {
+    color:red;
+}
+
+#dialogue-turns{
+    grid-column-start: -1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    padding: 50px 0;
+    overflow-y: scroll;
+}
+
+
+
+
+
+/********************************
+* ANNOTATIONS
+********************************/
+
+#annotations {
+    grid-column-start: -2;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 5;
+    overflow-y: scroll;
+    /*padding: 14px 8px;*/
+    position:relative;
+    z-index: 10;
+    background:white;
+    overflow-x: hidden;
+}
+
+input:disabled {
+    color:white
+}
+
+/********************************
+* INPUT BOX
+********************************/
+textarea {
+    font-family: CoreSansNR35Light;
+    font-size: 16px;
+    resize: none;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    display: inline-block;
+    justify-self: center;
+    margin: 0;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 1px 15px;
+    border-left:none;
+}
+textarea:focus {
+    background-color:#f9f9a291
+}
+
+#input-box {
+    grid-column-start: -1;
+    grid-column-end: 2;
+    grid-row-start: -1;
+    grid-row-end: -1;
+    background-color: white;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+    z-index: 9;
+}
+
+/*
+Nice: 15232d
+
+Ok: 1c2f3d
+
+Standard: 293e4c
+
+Light: d5e3ed
+
+WluperDark: 0e181e
+ */
+
+
+
+/********************************
+* Dialogue Turn
+********************************/
+
+.turn-header {
+    margin-bottom:20px;
+    display: grid;
+    grid-template: [row1-start] ". . . ." 0px [row1-end]
+                   [row2-start] ". turn-id del-turn-button ." 8fr [row2-end]
+                   [row3-start] ". . . ." 0px [row3-end] / 0px 9fr 1fr 0px;
+}
+
+.active-turn-id {
+    grid-area: turn-id;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight:600;
+    color:#222;
+}
+
+.turn-deleter {
+    grid-area: del-turn-button;
+    border: 3px solid white;
+    cursor: pointer;
+    border: 1px solid red;
+    color: red;
+    padding: 5px 0;
+}
+
+.turn-deleter:hover {
+    background-color: red;
+
+    color: white;
+}
+
+.turn-deleter:active {
+    transition: 0s;
+    background-color: inherit;
+    border: 3px solid red;
+    color: red;
+}
+
+.user-string-type-name{
+    background-color: #ececee !important;
+    /* width: 100%; */
+    height: 100%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    text-align: center;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.user-string-type-text{
+    background-color: #ffffff!important;
+ 
+    overflow:hidden;
+    height: 100%;
+    margin:0;
+
+    grid-column-start: 2;
+    grid-column-end: -1;
+
+}
+
+
+.user-string-type-text input{
+   /*background-color: #1c2f3d!important; */
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin: 0;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
+    border-left:none;
+}
+
+
+.user-string-type{
+    background-color: #ffffff !important;
+    height: 45px;
+    margin: 0 0 10px;
+    border-radius: 3px;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) minmax(0,9fr);
+
+    min-height: 0;  /* NEW */
+    min-width: 0;   /* NEW; needed for Firefox */
+    overflow: hidden;
+}
+
+.user-string-type:last-of-type {
+    margin:0;
+}
+
+
+
+.dialogue-turn-selected > .user-string-type{
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+
+}
+
+.dialogue-turn > .user-string-type{
+    color: #666666;
+    background-color: #eaeff2 !important;
+    opacity:0.4;
+
+}
+
+.dialogue-turn:hover > .user-string-type{
+    color: #888888;
+    background-color: #5c99c4 !important;
+
+}
+
+.dialogue-turn,
+.dialogue-turn-selected {
+    max-width: 75%;
+    margin: 0 auto 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff !important;
+    color: #666;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 1px;
+    transition: 0.3s;
+    overflow: hidden;
+    height: auto;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: #d1d1d3;
+    cursor:pointer;
+}
+
+.dialogue-turn-selected{
+
+    border-left-color:#259af7;
+
+}
+
+.dialogue-turn{
+   
+    
+}
+
+.dialogue-turn:hover{
+
+}
+
+.dialogue-turn .sticky {
+    padding:0;
+    margin:0 0 20px;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes expand {
+  50% {margin: 0.5em 15em;}
+}
+
+/* Standard syntax */
+@keyframes expand {
+    to {margin: 0.5em 15em;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes adjust_size {
+  to {margin: 0.5em 20em;}
+}
+
+/* Standard syntax */
+@keyframes adjust_size {
+    to {margin: 0.5em 20em;}
+}
+
+
+/********************************
+* Input Box
+********************************/
+
+#input-box{
+    text-align: center;
+    padding:20px 20px 20px 10px;
+}
+
+#input-box:focus{
+
+}
+
+#input-box ul {
+     padding:0;
+     margin:0;
+     list-style:none;
+     font-size:0;
+}
+
+#input-box ul li {
+    font-size:16px;
+    width:25%;
+    display:inline-block;
+    vertical-align: top;
+    padding:0 10px;
+}
+
+#input-box ul li:first-of-type {
+    width:50%;
+}
+
+#input-box button {
+    height: 43px;
+    background:#f1f1f3;
+    width:100%;
+    margin:0;
+    transition:.5s;
+}
+#input-box button:hover {
+    background-color:#a7a7af;
+}
+
+.new-input{
+    margin: 0;
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    border-style: hidden;
+    width: 100%;
+    height: 43px;
+    border: 1px solid #e1e1e3;
+    text-align: left;
+    padding: 0 15px;
+}
+
+.input-button {
+
+    border-style: hidden;
+    border-radius: 1px;
+
+    height: 3em;
+    width: 8em;
+    margin: auto;
+    margin-left: 1em;
+    margin-right: 1em;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/********************************
+* Dialogue Turn ID
+********************************/
+
+.dialogue-turn-id{
+    background-color: magenta !important;
+
+    height: 10%;
+    margin: 1em;
+}
+
+.dialogue-turn-id-selected{
+    background-color: #12ff12 !important;
+
+    height: 10%;
+    margin: 1em;
+}
+
+.meta-turn-container {
+    max-width: 75%;
+    margin: 0 auto 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff !important;
+    color: #666;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 1px;
+    transition: 0.3s;
+    overflow: hidden;
+    height: auto;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: #d1d1d3;
+    cursor:pointer;
+    border-left-color:grey;
+}
+
+.meta-turn {
+    grid-area: turn-id;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight:600;
+    color:#222;
+}
+
+.meta-tags {
+    background-color: #3d6582 !important;
+    color: #aaaaaa;
+    display: grid !important;
+    grid-template: [row1-start] "type string" [row1-end] /1fr 4fr;
+    margin-bottom:2px;
+}
+
+.meta-type {
+    background-color: #ececee !important;
+    width: 100%;
+    height: 100%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    text-align: center;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: type;
+}
+
+.meta-value {
+    background-color: #ffffff!important;
+    height: 100%;
+    margin: 0;
+    grid-column-start: 2;
+    grid-column-end: -1;
+    grid-area: string;
+}
+
+.meta-value input {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin: 0;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 0 15px;
+    border-left: none
+}

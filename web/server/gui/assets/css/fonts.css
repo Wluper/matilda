@@ -1,0 +1,35 @@
+/********************************
+* FONTS
+********************************/
+
+@font-face {
+    font-family: 'CoreSansNR35Light';
+    src: url('../fonts/coresansnr35light-webfont.eot');
+    src: url('../fonts/coresansnr35light-webfont.eot?#iefix') format('embedded-opentype'),url('../fonts/coresansnr35light-webfont.woff') format('woff'), url('../fonts/coresansnr35light-webfont.ttf') format('truetype'), url('../fonts/coresansnr35light-webfont.svg#core_sans_nr_35_lightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'CoreSansNR55Medium';
+    src: url('../fonts/coresansnr55medium-webfont.eot');
+    src: url('../fonts/coresansnr55medium-webfont.eot?#iefix') format('embedded-opentype'), url('https://data.wluper.comcontent/themes/main/static/webfonts/coresansnr55medium-webfont.woff') format('woff'), url('../fonts/coresansnr55medium-webfont.ttf') format('truetype'), url('../fonts/coresansnr55medium-webfont.svg#core_sans_nr_55_mediumregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Montserrat-Bold';
+    src: url('../fonts/Montserrat-Bold.otf');
+}
+
+@font-face {
+    font-family: 'Asap';
+    src: url('../fonts/Asap-Symbol.otf');
+}
+
+
+
+
+/* EOF */

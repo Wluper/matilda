@@ -1,0 +1,85 @@
+{
+
+        "usr": {
+            "description" : "The user's query",
+            "label_type"  : "string",
+            "required"    : true
+        },
+
+        "Dialogue_act": {
+
+            "description" : "Type of dialogue act",
+            "label_type"  : "multilabel_classification",
+            "required"    : false,
+            "labels"      :[ 
+		        "sys_greet",
+                "sys_inform_basic",
+		        "sys_inform_proactive",
+		        "sys_request",
+		        "sys_select",
+		        "sys_deny",
+		        "usr_greet",
+                "usr_inform_basic",
+                "usr_inform_proactive",
+                "usr_request",
+                "usr_select",
+                "usr_deny"
+            ]
+        },
+
+        "Slot": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "job_description",
+        		"contract",
+        		"duties",
+        		"skill",
+        		"past_experience",
+        		"degree",
+        		"age",
+        		"languages",
+        		"area",
+        		"company_name",
+        		"company_size",
+        		"location",
+        		"contact",
+        		"other"
+            ]
+
+        },
+
+        "Async": {
+
+            "description": "To annotate async messages",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+		"turn_ref"
+
+            ]
+
+        },
+
+        "global_slot": {
+
+            "description" : "General info related to the dialogue",
+            "label_type"  : "multilabel_global_string",
+            "required"    : false,
+            "labels"      : [
+                "result"
+            ]
+
+        },
+
+
+        "sys": {
+            "description" : "The system's response",
+            "label_type"  : "string",
+            "required"    : true
+        }
+
+    }

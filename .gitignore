@@ -2,7 +2,6 @@ __pycache__
 .DS_Store
 labelled_data.json
 .idea
-LIDA_ANNOTATIONS
 GOLD*
 John.json
 /lib

@@ -1,0 +1,178 @@
+/********************************
+* MODAL
+********************************/
+
+#collection-review {
+  font-size:14px;
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 60%;
+  margin: 0px auto;
+  padding:50px;
+  max-height:90vh;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+  overflow: scroll;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-body li {
+    padding: 5px;
+}
+
+.modal-footer {
+    font-style: italic;
+    color: #777;
+    clear:both;
+}
+
+.modal-default-button {
+    float: right;
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    background-color: #ddd;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: .5s
+}
+
+.modal-default-button:hover {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.modal-default-button:active {
+    transition: 0s;
+    color:black;
+    background-color: inherit;
+    box-shadow: 0px 0px 10px #a1c45c;
+}
+
+.modal-big-button {
+  font-size: 12px;
+  line-height: 33px;
+  padding: 0 17px;
+  background: #259af7;
+  font-family: "Montserrat";
+  font-weight:700;
+  border:none;
+  border-radius:1px;
+  color: white;
+  box-shadow:0 2px #1675c1;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.modal-big-button:hover {
+  color:black;
+}
+
+.modal-right-button {
+    color:black;
+    float:right;
+    border:1px solid #e1e1e3;
+    box-shadow: 0 1px #d1d1d3 !important;
+    background-color:white;
+    box-shadow:none;
+}
+
+.modal-right-button:hover {
+    color: #259af7 !important;
+}
+
+.modal-save-button {
+    float: left;
+    font-size: 12px;
+    line-height: 33px;
+    padding: 0 17px;
+}
+
+.modal-body textarea {
+    width: 100%;
+    resize: none;
+    min-height:150px;
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 5px;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.modal-select {
+    font-size: 16px;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    /* line-height: 2em; */
+    width: 100%;
+    font-family: CoreSansNR35Light;
+    color: grey;
+    padding: 1px;
+}
+
+.user-creation {
+  width:100%;
+  margin-bottom:7px !important;
+}
+
+.modal-user-creation {
+  overflow:auto;
+  border: 1px solid #259af7
+}
+
+
+
+/* EOF */

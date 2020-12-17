@@ -60,7 +60,7 @@ if __name__ == '__main__':
     print( json.dumps( agreementConfig["multilabel_classification_string"](clsStringList3) , indent=4 ) )
 
 
-    # print( json.dumps(lida.LidaApp.run_models_on_query("Hi"), indent=4 ) )
+    # print( json.dumps(lida.Models.run_models_on_query("Hi"), indent=4 ) )
 
     # print( json.dumps(Configuration.create_annotation_dict(), indent=4 ) )
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- =============================================
+HEAD
+============================================= -->
+    <head>
+        <!-- META -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+        <title> LIDA </title>
+
+        <!-- LINKS -->
+        <link rel="shortcut icon" href="assets/images/lida_favicon.png">
+
+        <!--------------------------------------------------------------
+        CSS
+        --------------------------------------------------------------->
+        <!-- MAIN + FONT -->
+        <link rel="stylesheet" href="assets/css/main.css?v=2">
+        <link rel="stylesheet" href="assets/css/fonts.css?v=2">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700,900&display=swap" rel="stylesheet">
+
+        <!-- APP SPECIFIC -->
+        <link rel="stylesheet" href="assets/css/lida.css?v=2">
+
+        <link rel="stylesheet" href="assets/css/modal.css?v=2">
+        <link rel="stylesheet" href="assets/css/all_dialogues.css?v=2">
+        <link rel="stylesheet" href="assets/css/annotation_types.css?v=2">
+        <link rel="stylesheet" href="assets/css/annotation_app.css?v=2">        
+        <link rel="stylesheet" href="assets/css/text_splitter.css?v=2">
+        <link rel="stylesheet" href="assets/css/database.css?v=2">
+        <link rel="stylesheet" href="assets/css/users.css?v=2">
+        <link rel="stylesheet" href="assets/css/resolutions_app.css?v=2">
+
+        <!-- SCRIPTS -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+
+
+
+<!-- =============================================
+BODY
+============================================= -->
+    <body>
+        <div id=mainContainer>
+
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <a  href="https://github.com/Wluper/lida">
+                    <!-- <a  href="./admin.html"> -->
+                         <img src="assets/images/LidaLogo.svg" style="width:auto; height:100%;">
+                    </a>
+                </div>
+            </div>
+
+
+
+            <!-- MAIN APP -->
+            <div id="main-app">
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="foot-bar">
+                <span class="copyright">LIDA v2.0 MultiUser &#xB7; <span class="rights">Copyright © 2019 <a href="https://wluper.com" style="text-decoration:none;color:inherit;" target="_new">Wluper Ltd.</a></span>
+                </span>
+                <!-- Language Selector -->
+                <div id="language-selector">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =============================================
+        TEMPLATES
+        ============================================= -->
+        <!-- <script type="text/x-template" src="main_app.html" id="main-app-template"></script> -->
+
+        <!-- =============================================
+        SCRIPTS
+        ============================================= -->
+        <!-- UTILS -->
+        <script src="source/utils/utils.js?v=2"></script>
+        <script src="source/utils/backend.js?v=2"></script>
+        <script src="source/utils/event_buses.js?v=2"></script>
+        <script src="source/utils/data.js?v=2"></script>
+        <script src="source/utils/languages.js?v=2"></script>
+
+        <!-- COMPONENTS -->
+        <script src="source/components/login_components.js?v=2"></script>
+        <script src="source/components/helper_components.js?v=2"></script>
+        <script src="source/components/modal_components.js?v=2"></script>
+        <script src="source/components/all_dialogues_components.js?v=2"></script>
+        <script src="source/components/annotation_type_components.js?v=2"></script>
+        <script src="source/components/annotation_app_components.js?v=2"></script>
+        <script src="source/components/text_splitter_components.js?v=2"></script>
+        <script src="source/components/language_components.js?v=2"></script>
+        <script src="source/components/collections_components.js?v=2"></script>
+        <script src="source/components/datamanagement_components.js?v=2"></script>
+        <!-- MAIN COMPONENT -->
+        <script src="source/lida_view.js?v=2"></script>
+
+        <!-- ADMIN COMPONENT -->
+        <script src="source/admin_view.js?v=2"></script>
+        <script src="source/components/users_components.js?v=2"></script>
+        <script src="source/components/interannotator_components.js?v=2"></script>
+        <script src="source/components/resolution_app_helper_components.js?v=2"></script>
+        <script src="source/components/resolution_app_components.js?v=2"></script>
+        <script src="source/components/supervision_components.js?v=2"></script>
+
+
+    </body>
+
+</html>

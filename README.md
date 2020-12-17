@@ -1,5 +1,10 @@
 [![Wluper](https://wluper.com/content/themes/main/static/gfx/wluperlogo.png)](https://wluper.com/)     
 
+**What's new in V2.0:** 
+1. Full support for more than one annotator
+2. Database MongoDB for data delivery and consistency
+3. Production ready server with Gunicorn and nginx
+
 # LIDA: Lightweight Interactive Dialogue Annotator
 
 **Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
@@ -50,12 +55,35 @@ LIDA was designed with three use cases in mind:
 
 LIDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue js and communicates
-with the back end via a RESTful API. To run LIDA, you will need to first run the
-Flask server on your local machine / wherever you want the back end to run.
+with the back end via a RESTful API. 
+
+To run LIDA, you will need to first run the Flask server on your 
+local machine / wherever you want the back end to run.
 You will need to have Python 3.6 or above installed on your machine for the
 server to run.
 
-### Downloading & Installing Requirements
+On top of that LIDA2 is also relying on a mongoDB database, either online or local
+is fine. In case of a online database you will need to set the database address in
+server/database_config.py.
+
+
+### Installing a MongoDB local database
+
+If you don't plan to use a local database but you prefer a online one, feel free to skip this step.
+
+mongoDB requires Homebrew to install on OSX.
+Update instructions are on its official website: https://brew.sh/#install
+
+Instructions for a working local mongoDB database are here:
+https://docs.mongodb.com/manual/administration/install-community/
+
+Testing:
+
+You can test it's running by:
+
+`ps aux | grep -v grep | grep mongod`
+
+### Downloading & Installing LIDA Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -68,7 +96,7 @@ $ cd LIDA/ && source bin/activate
 (LIDA)$ pip3 install -r requirements.txt
 ```
 
-### Running the Main Server
+### Option A) Running the Server with flask (WSGI) or gunicorn
 
 Assuming you have just followed the steps to Download and Install Requirements:
 
@@ -82,23 +110,36 @@ Assuming you have just followed the steps to Download and Install Requirements:
 You should see the Flask server running in the Terminal now on port 5000.
 
 
-### Running the Inter-Annotator Disagreement Resolution Server
-
-Assuming you have just followed the steps to Download and Install Requirements:
+Alternatively you may use gunicorn to run the server app:
 
 ```bash
 (LIDA)$ pwd
 ~/LIDA/lida
 (LIDA)$ cd server/
-(LIDA)$ python interannotator_app.py
+gunicorn --bind localhost:5000 lida_app:LidaApp
 ```
 
-You should see the Flask server running in the Terminal now on port 5000.
+### Option B) Running the Server with Docker
+
+LIDA also comes with a docker container you may want to use for a fast and clean installation.
+
+For these steps, please see the docker_readme.md
+
 
 ### Running the Front End
 
-Simply double click on `gui/index.html` for the main LIDA app, and on `gui/admin.html`
-for the inter-annotator disagreement resolution page.
+Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
+or navigate to the remote server address.
+Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
+
+HTTP Requests from your client may not reach your server in some configuration environment, 
+in those few cases please see and edit the backend address in LIDA's file /web/server/gui/source/utils/backend.js.
+
+### Username and password
+
+On its first start LIDA creates an administrator account with username "admin" and password "admin".
+You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
+to change the admin password from the graphical interface.
 
 
 ## Adding Custom Labels
