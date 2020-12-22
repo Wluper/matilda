@@ -35,7 +35,6 @@ Vue.component("database-header", {
                 <h2 class="database-title">{{guiMessages.selected.collection.title}}</h2>
                 <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
-                    <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-if="role == 'administrator'" class="btn-mid btn btn-sm btn-primary" @click="admin_panel_clicked()">{{guiMessages.selected.admin.button_admin}}</button>
                     <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.admin.annotation}}</button>
                 </div>

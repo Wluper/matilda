@@ -467,6 +467,13 @@ input:not(:checked) + div {
     grid-template: [row1-start] "info edit del" [row1-end] / 21fr 3fr 3fr;
 }
 
+.collection-list .del-dialogue-button {
+    width:auto;
+    font-size:11px;
+    margin-right:13px;
+    padding:0px 3px;
+}
+
 .edit-dialogue-button {
     grid-area: edit;
     border: 1px solid #259af7;
@@ -476,10 +483,11 @@ input:not(:checked) + div {
     align-items: center;
     background: white;
     font-weight: bold;
-    font-size: 13px;
-    width: 87%;
+    font-size: 11px;
     height: 50%;
     margin-top: 13px;
+    margin-right:6px;
+    padding: 0px 2px;
 }
 
 .edit-dialogue-button:hover {
@@ -508,7 +516,7 @@ input:not(:checked) + div {
 }
 
 #collection-view .entry-info { 
-    grid-template: [row1-start] "id status" [row1-end] / 2.3fr .7fr;
+    grid-template: [row1-start] "id status" [row1-end] / 3fr 1fr;
 }
 
 .collection-list .listed-label {

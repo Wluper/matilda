@@ -15,10 +15,10 @@ guiMessages = {
             supervision:"Supervision",
             notVisited: "Not visited",
             button_downloadAll:"Download Data",
-            button_interAgreement:"Inter-annotator Agreement", 
+            button_interAgreement:"Inter-annotator Agreement",
             assignedTo:"Assigned to",
             annotator:"Annotator",
-            annotators:"Annotators", 
+            annotators:"Annotators",
             actualAnnotators:"Sources",
             button_upload:"Upload File or Drag and Drop",
             button_admin:"Admin Panel",
@@ -144,7 +144,7 @@ guiMessages = {
             "Annotate collections assigned to you",
         ],
         modal_formatInfo:
-        [ 
+        [
             `
             Dialoque File Format
             `,
@@ -188,14 +188,14 @@ guiMessages = {
             `
         ],
         modal_agreementScores:
-        [ 
+        [
             "Inter-annotator Agreement Scores",
             "This represents a report for your data.",
             "Available Annotations:",
             "Overall"
         ],
         modal_document:
-        [ 
+        [
             "Document",
             "Tags",
             "JSON",
@@ -255,9 +255,9 @@ guiMessages = {
             visited: "Visitato",
             notVisited: "Non visitato",
             button_downloadAll:"Scarica i dati",
-            button_interAgreement:"Indice di concordanza", 
+            button_interAgreement:"Indice di concordanza",
             annotator:"Annotatore",
-            annotators:"Annotatori", 
+            annotators:"Annotatori",
             assignedTo: "Assegnato a",
             actualAnnotators:"Fonti",
             button_upload:"Carica o trascina un file",
@@ -384,9 +384,9 @@ guiMessages = {
             "Annota le collezioni assegnate a te",
         ],
         modal_formatInfo:
-        [ 
+        [
             `
-            Formato dei File Dialogo 
+            Formato dei File Dialogo
             `,
             `
             I file possono essere caricati nel sistema in uno dei due formati:
@@ -397,27 +397,27 @@ guiMessages = {
             e si aprirà una schermata per processarlo in un dialogo.
             `,
             `
-            Se carichi un file JSON, deve essere nel formato corretto. 
+            Se carichi un file JSON, deve essere nel formato corretto.
             Il formato richiesto è il seguente:
             `
         ],
         modal_formatInfo_list:
         [
             `
-            Un file dizionario con chiavi come nomi dei dialoghi 
-            e valori come liste. 
+            Un file dizionario con chiavi come nomi dei dialoghi
+            e valori come liste.
             `,
             `
-            Ogni valore è una lista di dizionari, dove ogni 
+            Ogni valore è una lista di dizionari, dove ogni
             dizionario contiene un numero di coppie chiave-valore
             usate per mostrare i dati del dialogo da annotare.
             `,
             `
-            Alcune coppie chiave-valore sono obbligatorie per 
+            Alcune coppie chiave-valore sono obbligatorie per
             mostrare correttamente il dialogo.
             `,
             `
-            Le coppie obbligatorie sono definite nel file 
+            Le coppie obbligatorie sono definite nel file
             annotator_config.py nella cartella "server".
             `,
             `
@@ -427,14 +427,14 @@ guiMessages = {
             `
         ],
         modal_agreementScores:
-        [ 
+        [
             "Indice di Concordanza tra gli annotatori",
             "Questo è un rapporto sui tuoi dati.",
             "Annotazioni disponibili:",
             "Riepilogo"
         ],
         modal_document:
-        [ 
+        [
             "Documento",
             "Tags",
             "JSON",
@@ -481,6 +481,247 @@ guiMessages = {
             send:"Accedi",
             warning:"Sono richiesti sia un username sia una password!",
             fail:"Combinazione di nome utente e password non valida",
+        }
+    },
+    de: {
+        admin: {
+            title: "Konflikt Löser",
+            titlePanel: "Administrationsbereich",
+            interAnno: "Interannotator Resolution",
+            dataItems: "Dialoge",
+            dataManagement: "Datenverwaltung",
+            visited: "Besucht",
+            visited_dialogues: "Besuchte Dialoge",
+            supervision: "Aufsicht",
+            notVisited: "Nicht besucht",
+            button_downloadAll: "Daten herunterladen",
+            button_interAgreement: "Inter-Annotator-Vereinbarung",
+            assignedTo: "Zugewiesen an",
+            annotator: "Annotator",
+            annotators: "Annotatoren",
+            actualAnnotators: "Sources",
+            button_upload: "Datei hochladen oder per Drag & Drop",
+            button_admin: "Admin Panel",
+            dropAnywhere: "Dateien überall zum Hochladen ablegen!",
+            userButton: "Benutzerverwaltung",
+            users: "Benutzer",
+            createButton: "Hinzufügen",
+            editButton: "Bearbeiten",
+            createUserButton: "Neuen Benutzer hinzufügen",
+            deleteConfirm: "Möchten Sie diesen Eintrag wirklich dauerhaft löschen? Dies kann nicht rückgängig gemacht werden!",
+            wipeConfirm: "Sind Sie sicher, die Dialogliste zu bereinigen? Die tatsächlichen Dialogdateien werden nicht gelöscht",
+            button_wipeView: "Dialogansicht bereinigen",
+            annotation: "Annotation",
+            backToColl: "Zurück",
+            importConflictsResult: "Es wurde nichts importiert, es wurden noch keine kommentierten Versionen erstellt",
+            cantDeleteAdmin: "Das Standard-Administratorkonto kann leider nicht gelöscht werden",
+            annotationInProgress: "Anmerkungen zur Sammlung werden ausgeführt",
+            button_freeze: "Einfrieren",
+            button_unfreeze: "Unfreeze",
+            button_abort: "Abbrechen",
+            userCreation: "Benutzererstellung",
+            button_downloadGold: "Gold herunterladen",
+            button_wipeCache: "Fehlercache löschen",
+            wipeCacheConfirm: "Dadurch wird die Konfliktdatei gelöscht, sodass die Konfliktlösung erneut gestartet werden kann.",
+            confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
+        },
+        lida: {
+            button_fileFormatInfo: "Info formatieren",
+            button_delete: "Löschen",
+            button_switch: "Ansicht wechseln",
+            dreht: "dreht",
+            button_newDialogue: "Neuen Dialog hinzufügen",
+            button_wipeDialogues: "Dialoge löschen",
+            interfaceLanguage: "System Sprache:",
+            confirmWipe: "Möchten Sie Ihre aktuelle Liste löschen? Die aktive Sammlung wird deaktiviert, bleibt jedoch in der Datenbank verfügbar.",
+            drop: "Dateien überall zum Hochladen ablegen!",
+            buttonCollections: "Sammlungen",
+            connectionError: "Es konnte keine Verbindung zum Server hergestellt werden. Überprüfen Sie, ob der Server ausgeführt wird, oder die Adresse in backend_config.",
+            backupDone: "Sicherung abgeschlossen.",
+            backupPost: "Backup verschoben: nichts zu speichern.",
+            backupFailed: "Sicherung fehlgeschlagen.",
+            backupNext: "Nächster Termin in zwei Minuten ...",
+            annotated: "annotiert",
+            annotatedBy: "bei",
+            logOut: "logout",
+            confirmLogout: "Möchten Sie sich abmelden?",
+            load: "Sammlung laden",
+            assignedColl: "Zugewiesene Sammlungen",
+            activeColl: "Aktive Sammlung",
+            alert: "Warnung",
+            welcome: "wilkommen",
+            exiting: "Sie verlassen Lidas Sitzung. Sind Sie sicher?",
+        },
+        collection: {
+            title: "Sammlungsverwaltung",
+            create: "Sammlung erstellen",
+            update: "Anmerkungen manuell aktualisieren",
+            updateConfirm1: "Sie aktualisieren die Sammlung",
+            updateConfirm2: "mit Ihren Anmerkungen. Dadurch wird das Datenbankdokument bearbeitet.",
+            noCollection: "Sie haben jetzt keine aktive Sammlung. Ihre Bearbeitungen werden nur in Ihrem Arbeitsbereich gespeichert",
+            noAssignement: "Sie können diese Sammlung nicht aktualisieren. Sie ist Ihnen nicht zugewiesen",
+            add: "Von diesen Benutzern hinzufügen",
+            nothing: "Standardaktion: überschreiben",
+            keep: "Dialog-ID-Konflikt in Ihrem Arbeitsbereich. Bitte wählen Sie aus, welche Dialoge beibehalten werden sollen",
+            addToColl: "Fügen Sie Ihrer Sammlung ein oder mehrere Dokumente hinzu",
+            editColl: "Sammlung bearbeiten",
+            importColl: "Diese Sammlung importieren",
+            importCollfromView: "Aus Dialogliste hinzufügen",
+            importCollfromFile: "Aus Datei hinzufügen",
+            importCollfromUser: "Aus Benutzerliste hinzufügen",
+            inspecting: "Inspektion einer Sammlung",
+            importResult: "Importieren",
+            importSuccess: "Erfolg! Dialoge korrekt in Ihre Liste geladen.",
+            importSuccessAddendum: "Sie sind in Ihrer Dialogliste verfügbar.",
+            confirmImport: "Dadurch wird die ausgewählte Sammlung geladen und zur aktiven Sammlung",
+            confirmRevision: "Dadurch wird die ausgewählte Sammlung in die Interannotator-Konfliktlösungsliste geladen und zu den aktuellen Dialogen hinzugefügt.",
+            confirmChangesLost: "Es gibt nicht gespeicherte Änderungen an Sammlungen. Möchten Sie fortfahren, ohne sie zu speichern?",
+            confirmDeleteDialogue: "Dadurch wird der ausgewählte Dialog sofort aus der Sammlung gelöscht. Dies kann nicht rückgängig gemacht werden.",
+            collTitle: "Titel",
+            collDesc: "Beschreibung",
+            collAnnot: "Annotation Style",
+            collAssi: "Zugewiesen an",
+            collUpda: "Letztes Update",
+            collStatus: "Status",
+            new: "Importiert",
+            old: "Zurück",
+            save: "Sammlung speichern und aktualisieren",
+            done: "Anmerkungen abgeschlossen",
+            freeze: "Dieser Vorgang friert die Sammlung ein und benachrichtigt Sie, dass Ihre Arbeit erledigt ist und überprüft werden kann. Führen Sie sie erst aus, wenn Sie fertig sind.",
+            freezed: "Diese Anmerkungen sind eingefroren und können erst bearbeitet werden, wenn sie von einem Administrator überprüft und entsperrt wurden",
+            empty: "leer",
+
+        },
+        annotation_app: {
+            turnId: "Dialogueschritt",
+            enter: "Eintretten",
+            save: "Speichern",
+            enterQuery: "Neue Abfrage eingeben",
+            allSaved: "Alle Änderungen gespeichert",
+            unsaved: "Nicht gespeicherte Änderungen",
+            backToAll: "Zurück",
+            close: "Schließen",
+            select: "Text aus der Runde auswählen oder schreiben",
+            expand: "Klicken zum Erweitern",
+            noTurn: "Keine Runde ausgewählt. Bitte wählen Sie eine zum Kommentieren aus",
+            rate: "Annotation Rate",
+        },
+        resolution_app: {
+            errorId: "Error Id:",
+            name: "Name:",
+            accepted: "Akkzeptiert",
+            review: "Revision",
+            fail: "Gescheitert!",
+            accept:"Akkzeptieren",
+            noConflicts:"In diesem Dialog wurden keine Anmerkungskonflikte gefunden",
+            updateAccepted:"Wert aktualisiert",
+        },
+        admin_panel: [
+            "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",
+            "Hinzufügen, Entfernen und Bearbeiten von Annotator- und Administratorkonten",
+            "Dialogsammlungen erstellen, bearbeiten und zuweisen",
+            "Überprüfen Sie, wie die Anmerkungen fortschreiten",
+            "Ihnen zugewiesene Sammlungen kommentieren",
+        ],
+        modal_formatInfo:
+        [
+            `
+            Dialoque-Dateiformat
+            `,
+            `
+            Dateien können in einer von zwei Schritten in das Anmerkungssystem hochgeladen werden
+            Formate: entweder als rohe TXT-Datei oder als JSON-Datei in der
+            korrektes Format.
+            `,
+            `
+            Wenn Sie eine TXT-Datei hochladen, gibt es keine Formatbeschränkungen und
+            Sie werden zu einem Bildschirm weitergeleitet, um ihn zu einem Dialog zu verarbeiten.
+            `,
+            `
+            Wenn Sie eine JSON-Datei hochladen, muss diese im richtigen Format vorliegen. Dies
+            Format ist wie folgt:
+            `
+        ],
+        modal_formatInfo_list:
+        [
+            `
+            Datei ist ein Diktat mit Schlüsseln als Namen für jeden Dialog
+            und Werte als Listen.
+            `,
+            `
+            Jeder Wert ist eine Liste von Wörterbüchern, wobei jedes
+            Wörterbuch enthält eine Reihe von Schlüssel-Wert-Paaren, die
+            werden verwendet, um die Dialogdaten für Anmerkungen anzuzeigen.
+            `,
+            `
+            Einige Schlüssel-Wert-Paare sind obligatorisch, um korrekt zu sein
+            Zeigen Sie den Dialog an.
+            `,
+            `
+            Die obligatorischen Schlüssel-Wert-Paare sind in definiert
+            die Datei annotator_config.py im Ordner "server".
+            `,
+            `
+            Standardmäßig das einzige erforderliche Schlüssel-Wert-Paar in jeder Runde
+            heißt "usr" und sollte die Abfrage des Benutzers sein als
+            ein Faden.
+            `
+        ],
+        modal_agreementScores:
+        [
+            "Inter-Annotator Agreement Scores",
+            "Dies ist ein Bericht für Ihre Daten.",
+            "Verfügbare Anmerkungen:",
+            "Insgesamt"
+        ],
+        modal_document:
+        [
+            "Dokument",
+            "Tag",
+            "JSON",
+            "lastUpdate"
+        ],
+        coll_creation:
+        [
+            "Geben Sie eine eindeutige ID für die Sammlung ein, oder LIDA generiert eine",
+            "Titel einfügen",
+            "Fügen Sie eine kurze Beschreibung des Inhalts ein",
+            "Name des Anmerkungsstils",
+            "Sie können diese Dialoge einem Benutzer zuweisen, nur dieser kann sie aktualisieren",
+            "Hier können Sie den Fortschritt der Anmerkungsarbeit notieren",
+        ],
+        modal_collectionInfo:
+        [
+            "Sammlungen",
+            "Sammlungen sind eine Gruppe von Dialogen, die zur einfachen Handhabung und Zuordnung verknüpft sind.",
+            "Um sie zu konservieren und Mischungen zu vermeiden, können Sie jeweils an einer Sammlung arbeiten.",
+            "Eine Sicherung der verwendeten Sammlungen wird automatisch alle zwei Minuten durchgeführt.",
+            "Wenn ein Annotator mit seiner Arbeit zufrieden ist, kann er die Annotationen senden und das Sammlungsdokument aktualisieren",
+            "in der Datenbank gespeichert. Wie auch immer, die an Sammlungen vorgenommenen Änderungen werden regelmäßig gespeichert, auch ohne diese Taste zu drücken.",
+        ],
+        modal_collectionButtons:
+        [
+            "Mit dieser Schaltfläche können Sie eine Sammlung aus einer oder mehreren JSON-Dateien erstellen.",
+            "Mit dieser Funktion können Sie die einer Sammlung zugeordneten Informationen bearbeiten und einen oder mehrere Dialoge daraus entfernen",
+            "Diese Schaltfläche löscht die Sammlung dauerhaft aus der Datenbank",
+        ],
+        database: {
+            title: "Workspaces Management",
+            location: "Datenbankspeicherort",
+            port: "Port",
+            saved: "Datenbank aktualisiert",
+            update: "Datenbank aktualisieren",
+            importDb: "Aus Datenbank synchronisieren",
+            confirmImport: "Dadurch wird Ihre Dialogliste gelöscht und die in Ihrem Datenbankdokument enthaltenen Dialoge geladen.",
+            confirmUpdate: "Dadurch wird Ihre Benutzersicherung in der Datenbank aktualisiert",
+            importDoc: "Dieses Dokument importieren",
+            showHelp: "Hilfe"
+        },
+        login: {
+            welcome: "Wilkommen",
+            send: "Anmelden",
+            warning: "Ein Benutzername und ein Passwort sind erforderlich!",
+            fail: "Kombination aus Benutzername und Passwort ungültig"
         }
     },
 }

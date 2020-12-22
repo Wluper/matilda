@@ -292,7 +292,7 @@ Vue.component("interannotator-app", {
               this.allDialogueMetadata = response;
               backend.get_collection_errors_async(this.displayingCollection)
                 .then( (response) => {
-                    console.log(response)
+                    console.log(response);
                     this.get_dialogues_with_errors(response);
                     //this.errorList = response.errors
                     //this.metaDataList = response.meta;
@@ -304,10 +304,12 @@ Vue.component("interannotator-app", {
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
                 this.dialoguesWithErrors.push(dialogue);
-                this.dialoguesWithErrors.forEach( element => document.getElementById(element).setAttribute("class","int-listed-dialogue relevant"));
-                console.log("Errors found in",this.dialoguesWithErrors);
+                this.dialoguesWithErrors.forEach( element => 
+                    document.getElementById(element).setAttribute("class","int-listed-dialogue relevant")
+                );
             }
         }
+        console.log("Errors found in",this.dialoguesWithErrors);
     },
 
     fill_list(id) {

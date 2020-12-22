@@ -676,17 +676,18 @@ Vue.component('input-box',{
     `
     <div id="input-box">
         <ul>
-            <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" :placeholder="guiMessages.selected.annotation_app.enterQuery">
-        </input></li>
-            <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">{{guiMessages.selected.annotation_app.enter}}</button></li>
-            <li><button class="input-button" v-on:click="save()">{{guiMessages.selected.annotation_app.save}}</button></li>
+
+            <!--
+            <li><input id="new-query-entry-box" v-on:keyup.enter="new_turn($event)" v-model="input" class="new-input" :placeholder="guiMessages.selected.annotation_app.enterQuery"></input>
+            </li>
+            <li><button v-on:click="new_turn({target:{value:input}})" class="input-button">{{guiMessages.selected.annotation_app.enter}}</button>
+            </li>
+            -->
+
+
+            <li><button class="input-button" v-on:click="save()">{{guiMessages.selected.annotation_app.save}}</button>
+            </li>
         </ul>
-
-
-
-
-
-
     </div>
     `
 })
