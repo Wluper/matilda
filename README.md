@@ -91,7 +91,7 @@ $ cd LIDA/ && source bin/activate
 (LIDA)$ pip3 install -r requirements.txt
 ```
 
-### Running the Server
+### Option A) Running the Server with flask (WSGI) or gunicorn
 
 Assuming you have just followed the steps to Download and Install Requirements:
 
@@ -99,21 +99,36 @@ Assuming you have just followed the steps to Download and Install Requirements:
 (LIDA)$ pwd
 ~/LIDA/lida
 (LIDA)$ cd server/
-
 (LIDA)$ python lida_app.py
 ```
 
 You should see the Flask server running in the Terminal now on port 5000.
 
+
 Alternatively you may use gunicorn to run the server app:
+
+```bash
+(LIDA)$ pwd
+~/LIDA/lida
+(LIDA)$ cd server/
 gunicorn --bind localhost:5000 lida_app:LidaApp
+```
+
+### Option B) Running the Server with Docker
+
+LIDA also comes with a docker container you may want to use for a fast and clean installation.
+
+For these steps, please see the docker_readme.md
+
 
 ### Running the Front End
 
-Simply navigate to localhost:5000 if you installed the server locally or insert the remote server address.
+Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
+or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
-You may also have to set the backend remote address for your http requests in 
-LIDA's file /web/server/gui/source/utils/backend.js.
+
+HTTP Requests from your client may not reach your server in some configuration environment, 
+in those few cases please see and edit the backend address in LIDA's file /web/server/gui/source/utils/backend.js.
 
 ### Username and password
 
