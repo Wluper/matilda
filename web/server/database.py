@@ -34,7 +34,7 @@ class DatabaseManagement(object):
 
 	try: 
 		#docker
-		with open('lida2_conf/conf.json') as json_file:
+		with open('configuration/conf.json') as json_file:
 			conf = json.load(json_file)
 	except:
 		#standalone
