@@ -37,7 +37,7 @@ Go back to the root and run Matilda with the new composition by the *docker-comp
     
 Unless you manually stop the service for some reason, it will be automatically started at the next boot. So the server cab be switched off/on without intervention of the administrator.
 
-## STOPPING THE SERVICE
+## Stopping the service
 
 To manually stop the service use the command:
 
