@@ -10,7 +10,7 @@ async function put_name(name){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+"/"+name+'/name'
+    const apiLink = API_BASE+'/'+name+'/name'
     try {
         var response = await axios.put( apiLink, {name : name} )
         return true;
@@ -760,8 +760,9 @@ async function update_collection_async(id, DBcollection, params) {
     } catch(error) {
 
         console.log(error);
-        alert("Error. This could be caused by a server error or a wrong character in your collection file")
-        response = error 
+        var message = "Error. This could be caused by a server error or a wrong character in your collection file. For example, dots are not allowed in dialogues' names";
+        alert(message);
+        response = {"error":message};
     }
 
     return response
@@ -778,8 +779,9 @@ async function update_multiple_collections_async(DBcollection, params) {
     } catch(error) {
 
         console.log(error);
-        alert("Error. This could be caused by a server error or a wrong character in your collection file")
-        response = error 
+        var message = "Error. This could be caused by a server error or a wrong character in your collection file. For example, dots are not allowed in dialogues' names";
+        alert(message);
+        response = {"error":message};
     }
 
     return response

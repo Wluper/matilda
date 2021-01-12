@@ -533,10 +533,10 @@ guiMessages = {
             button_newDialogue: "Neuen Dialog hinzufügen",
             button_wipeDialogues: "Dialoge löschen",
             interfaceLanguage: "System Sprache:",
-            confirmWipe: "Möchten Sie Ihre aktuelle Liste löschen? Die aktive Sammlung wird deaktiviert, bleibt jedoch in der Datenbank verfügbar."
+            confirmWipe: "Möchten Sie Ihre aktuelle Liste löschen? Die aktive Sammlung wird deaktiviert, bleibt jedoch in der Datenbank verfügbar.",
             drop: "Dateien überall zum Hochladen ablegen!",
             buttonCollections: "Sammlungen",
-            connectionError: "Es konnte keine Verbindung zum Server hergestellt werden. Überprüfen Sie, ob der Server ausgeführt wird, oder die Adresse in backend_config."
+            connectionError: "Es konnte keine Verbindung zum Server hergestellt werden. Überprüfen Sie, ob der Server ausgeführt wird, oder die Adresse in backend_config.",
             backupDone: "Sicherung abgeschlossen.",
             backupPost: "Backup verschoben: nichts zu speichern.",
             backupFailed: "Sicherung fehlgeschlagen.",
@@ -574,7 +574,7 @@ guiMessages = {
             importSuccess: "Erfolg! Dialoge korrekt in Ihre Liste geladen.",
             importSuccessAddendum: "Sie sind in Ihrer Dialogliste verfügbar.",
             confirmImport: "Dadurch wird die ausgewählte Sammlung geladen und zur aktiven Sammlung",
-            confirmRevision: "Dadurch wird die ausgewählte Sammlung in die Interannotator-Konfliktlösungsliste geladen und zu den aktuellen Dialogen hinzugefügt."
+            confirmRevision: "Dadurch wird die ausgewählte Sammlung in die Interannotator-Konfliktlösungsliste geladen und zu den aktuellen Dialogen hinzugefügt.",
             confirmChangesLost: "Es gibt nicht gespeicherte Änderungen an Sammlungen. Möchten Sie fortfahren, ohne sie zu speichern?",
             confirmDeleteDialogue: "Dadurch wird der ausgewählte Dialog sofort aus der Sammlung gelöscht. Dies kann nicht rückgängig gemacht werden.",
             collTitle: "Titel",
@@ -587,7 +587,7 @@ guiMessages = {
             old: "Zurück",
             save: "Sammlung speichern und aktualisieren",
             done: "Anmerkungen abgeschlossen",
-            freeze: "Dieser Vorgang friert die Sammlung ein und benachrichtigt Sie, dass Ihre Arbeit erledigt ist und überprüft werden kann. Führen Sie sie erst aus, wenn Sie fertig sind."
+            freeze: "Dieser Vorgang friert die Sammlung ein und benachrichtigt Sie, dass Ihre Arbeit erledigt ist und überprüft werden kann. Führen Sie sie erst aus, wenn Sie fertig sind.",
             freezed: "Diese Anmerkungen sind eingefroren und können erst bearbeitet werden, wenn sie von einem Administrator überprüft und entsperrt wurden",
             empty: "leer",
 
@@ -712,7 +712,7 @@ guiMessages = {
             saved: "Datenbank aktualisiert",
             update: "Datenbank aktualisieren",
             importDb: "Aus Datenbank synchronisieren",
-            confirmImport: "Dadurch wird Ihre Dialogliste gelöscht und die in Ihrem Datenbankdokument enthaltenen Dialoge geladen."
+            confirmImport: "Dadurch wird Ihre Dialogliste gelöscht und die in Ihrem Datenbankdokument enthaltenen Dialoge geladen.",
             confirmUpdate: "Dadurch wird Ihre Benutzersicherung in der Datenbank aktualisiert",
             importDoc: "Dieses Dokument importieren",
             showHelp: "Hilfe"
