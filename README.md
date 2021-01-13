@@ -1,9 +1,10 @@
 [![Wluper](https://wluper.com/content/themes/main/static/gfx/wluperlogo.png)](https://wluper.com/)     
 
-**What's new in V2.0:** 
-1. Full support for more than one annotator
+**What's new in MATILDA:** 
+1. Full support for more than one annotator and project management
 2. Database MongoDB for data delivery and consistency
 3. Production ready server with Gunicorn and nginx
+4. New annotation functions
 
 # LIDA: Lightweight Interactive Dialogue Annotator
 
