@@ -400,13 +400,13 @@ input:focus {
 
 .logo img {
     width: 100%;
-    vertical-align: top;
+    margin-top: -3%;
 }
 
 .copyright {
-    font-size: .7em;
+    font-size: .8em;
     line-height: 4em;
-    color: #636b74;
+    color: #8a95a0;
     margin-left: 20px;
 }
 .foot-bar {
@@ -418,8 +418,8 @@ input:focus {
     text-align:center;
     padding: 13px 24px;
     vertical-align:bottom;
-    color:#636b74;
-    font-size:13px;
+    color:#8a95a0;
+    font-size:.8em;
 }
 
 .language-list-title-container label {

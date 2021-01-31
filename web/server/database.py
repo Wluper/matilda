@@ -45,9 +45,9 @@ class DatabaseManagement(object):
 
 	client = MongoClient(databaseURI)
 
-	print(" * Connected to database")
-
 	db = client[conf["database"]["name"]]
+
+	print(" * Connected to database '"+conf["database"]["name"]+"'")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
