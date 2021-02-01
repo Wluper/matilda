@@ -391,6 +391,7 @@ Vue.component("supervision-annotation-app", {
             metaTags: [],
             annotatedTurns: [],
             annotationRate: '0%',
+            readOnly: true,
         }
     },
 
@@ -569,7 +570,8 @@ Vue.component("supervision-annotation-app", {
                      v-bind:currentId="dCurrentId"
                      v-bind:dialogueNonEmpty="dialogueNonEmpty"
                      v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId">
+                     v-bind:dialogueId="dialogueId"
+                     v-bind:readOnly="readOnly">
         </annotations>
 
         <input-box>

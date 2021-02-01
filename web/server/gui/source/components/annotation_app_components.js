@@ -21,6 +21,7 @@ Vue.component("annotation-app", {
             metaTags: [],
             annotatedTurns: [],
             annotationRate: '0%',
+            readOnly:false,
         }
     },
 
@@ -240,7 +241,7 @@ Vue.component("annotation-app", {
         focus_on_new_query_box: function() {
             console.log('FOCUSING ON THE INPUT BOX')
             const toFocus = document.getElementById('new-query-entry-box')
-            toFocus.focus()
+            if (toFocus != null) toFocus.focus()
         },
 
         save_dialogue: function(event) {
@@ -312,7 +313,8 @@ Vue.component("annotation-app", {
                      v-bind:currentId="dCurrentId"
                      v-bind:dialogueNonEmpty="dialogueNonEmpty"
                      v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId">
+                     v-bind:dialogueId="dialogueId"
+                     v-bind:readOnly="readOnly">
         </annotations>
 
         <input-box>
@@ -607,11 +609,11 @@ Vue.component('dialogue-turn',{
 ********************************/
 
 Vue.component('annotations',{
-    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId"],
+    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId", "readOnly"],
 
     template:
     `
-    <div id="annotations">
+    <div id="annotations" v-bind:class = "{ supervision_readonly : readOnly }">
         <div class="annotation-header sticky">
         Current Turn: {{currentId}}
         </div>
