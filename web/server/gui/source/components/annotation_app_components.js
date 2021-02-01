@@ -240,8 +240,8 @@ Vue.component("annotation-app", {
 
         focus_on_new_query_box: function() {
             console.log('FOCUSING ON THE INPUT BOX')
-            const toFocus = document.getElementById('new-query-entry-box')
-            if (toFocus != null) toFocus.focus()
+            const toFocus = document.getElementById('new-query-entry-box');
+            if (toFocus != null) toFocus.focus();
         },
 
         save_dialogue: function(event) {
