@@ -85,13 +85,13 @@ class Configuration(object):
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \
                                     "dialogue in turn {}.".format(labelName, i))
-                            print(message)
+                            print(message, turn)
                             return message
 
                         if info["required"] and not turn[labelName]:
                             message = ("ERROR2: Required label, \'{}\', does not have a value " \
                                 "provided in the dialogue in turn {}".format(labelName, i))
-                            print(message)
+                            print(message, turn)
                             return message
 
                         if info["required"] and ("multilabel_classification" == info["label_type"]):
@@ -102,7 +102,7 @@ class Configuration(object):
                                 message = "ERROR3: One of the provided labels in the list: " \
                                    "\'{}\' is not in allowed list according to " \
                                    "config.py in turn {}".format(providedLabels, i)
-                                print(message)
+                                print(message, turn)
                                 return message
         except:
             print("dialogue",i,"in list couldn't validate with the current annotation style model")

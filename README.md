@@ -122,9 +122,9 @@ gunicorn --bind localhost:5000 lida_app:LidaApp
 
 ### Option B) Running the Server with Docker
 
-LIDA also comes with a docker container you may want to use for a fast and clean installation.
+MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
 
-For these steps, please see the docker_readme.md
+For these steps, please see the docker_readme.md.
 
 
 ### Running the Front End

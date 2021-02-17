@@ -714,8 +714,11 @@ Vue.component('collection-creation', {
             backend.new_collection_async(this.entry.id, params, this.entry.document)
                .then( (response) => {
                     console.log(response);
-                    if (!response["error"]) {
+                    if (!response["data"]["error"]) {
                         console.log("============== Dialogues-Collection Created ==============");
+                    } else {
+                        console.log("============== Dialogues-Collection Error ==============");
+                        alert(response["data"]["error"]);
                     }
                     databaseEventBus.$emit('creation_completed');
             });

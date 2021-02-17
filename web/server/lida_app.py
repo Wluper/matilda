@@ -710,6 +710,20 @@ def handle_post_of_collections(mode, destination, id=None):
         values["lastUpdate"] = datetime.datetime.utcnow()
         values["document"] = json.loads(values["document"])
 
+        #here we could check if another annotation style is needed
+        #reading from the value inserted by the user in "annotationStyle"
+        #at the moment the system is validating with the only loaded 
+        #model in annotator_config
+
+        #validation
+        for dialogueName, dialogue in values["document"].items():
+            validation = Configuration.validate_dialogue(dialogue) 
+            if ((type(validation) is str) and (validation.startswith("ERROR"))):
+                print("Validation for",dialogueName," failed.")
+                response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
+                return jsonify( response )
+
+        #check for same id    
         check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })
 
         if (len(check) == 0):
