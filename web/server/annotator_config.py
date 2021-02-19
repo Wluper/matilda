@@ -48,18 +48,22 @@ class Configuration(object):
 
     # Here the annotation model file name
     annotation_style = "unipi_model.json"
-    
-    with open(annotation_style) as style_file:
-        configDict = json.load(style_file)
 
-    #convert back functions and classes from string 
-    for key,value in configDict.items():
-        for sub_key,sub_value in value.items():
-            if "()" in str(sub_value):
-                configDict[key][sub_key] = eval(sub_value)
+    # Dict where classifications are stored
+    configDict = {}
 
     #accepted metaTags, this list can be customized
     metaTags = ["collection","status","ID"]
+
+    def loadConfig():
+        with open(Configuration.annotation_style) as style_file:
+            Configuration.configDict = json.load(style_file)
+
+        #convert back functions and classes from string 
+        for key,value in Configuration.configDict.items():
+            for sub_key,sub_value in value.items():
+                if "()" in str(sub_value):
+                    Configuration.configDict[key][sub_key] = eval(sub_value)
 
     @staticmethod
     def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:

@@ -39,6 +39,7 @@ LidaApp = Flask(__name__,
 LidaApp.config.from_object(__name__)
 CORS(LidaApp)
 #set_main_path(path)
+Configuration.loadConfig()
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
 netConf = DatabaseManagement.conf["app"]
@@ -714,14 +715,19 @@ def handle_post_of_collections(mode, destination, id=None):
         #reading from the value inserted by the user in "annotationStyle"
         #at the moment the system is validating with the only loaded 
         #model in annotator_config
+        if values["annotationStyle"] != "":
+            Configuration.annotation_style = values["annotationStyle"]
+            print(Configuration.annotation_style)
 
         #validation
         for dialogueName, dialogue in values["document"].items():
             validation = Configuration.validate_dialogue(dialogue) 
             if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                print("Validation for",dialogueName," failed.")
+                print("Validation for",dialogueName," failed with "+Configuration.annotation_style)
                 response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
                 return jsonify( response )
+            #validated
+            values["annotationStyle"] = Configuration.annotation_style
 
         #check for same id    
         check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })
