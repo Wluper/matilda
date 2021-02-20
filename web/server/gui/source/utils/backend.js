@@ -835,7 +835,7 @@ async function get_collection_errors_async(collectionId){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+`/errors/collection/${collectionId}`
+    const apiLink = API_BASE+`/errors/restore/${collectionId}`
     try {
         var response = await axios.get( apiLink );
 

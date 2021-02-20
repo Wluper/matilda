@@ -152,7 +152,7 @@ Vue.component("all-dialogues", {
 
           <div class="help-button-container">
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
-              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.lida.button_downloadAll }}</button>
               <button class="help-button btn btn-sm" @click="clicked_collections_button()">{{guiMessages.selected.annotation_app.backToAll}}</button> 
           </div>
       </div>

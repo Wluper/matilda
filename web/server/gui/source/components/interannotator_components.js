@@ -85,7 +85,6 @@ Vue.component("interannotator-view", {
 
     clicked_collection(clickedCollection) {
         //load in interannotator all the annotated versions of the same collection
-        this.selectedCollection = clickedCollection;
         mainContainer.style.cursor = "progress";
         backend.del_all_dialogues_async("admin")
             .then( (response) => {
@@ -133,8 +132,7 @@ Vue.component("interannotator-view", {
         v-on:dragleave="handleDragOut($event)"
         v-on:drop="handleDrop($event)">
 
-    <agreement-modal 
-        v-bind:selectedCollection="selectedCollection" 
+    <agreement-modal
         v-if="showAgreement" @close="showAgreement = false">
     </agreement-modal>
 
@@ -244,7 +242,7 @@ Vue.component("interannotator-app", {
 
   created: function() {
       adminEventBus.$on("conflicts_on_dialogue", this.fill_list);
-      backend.get_collection_errors_async(this.displayingCollection);
+      //backend.get_collection_errors_async(this.displayingCollection);
   },
 
   methods: { 
@@ -295,6 +293,7 @@ Vue.component("interannotator-app", {
     getAllDialogueIdsFromServer() {
         backend.get_all_dialogue_ids_async("admin")
           .then( (response) => {
+              console.log(response);
               this.allDialogueMetadata = response;
               backend.get_collection_errors_async(this.displayingCollection)
                 .then( (response) => {

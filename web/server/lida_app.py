@@ -500,7 +500,7 @@ def handle_errors_resource(id=None, collection=None):
 
     return jsonify( responseObject )
 
-@LidaApp.route('/errors/collection/<collectionId>', methods=['GET'])
+@LidaApp.route('/errors/restore/<collectionId>', methods=['GET'])
 def restore_errorsList(collectionId):
 
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"document","errors", "gold"})
@@ -797,7 +797,7 @@ def handle_annotations_import(collection_id):
     if collections != []:
         if collections[0]["document"]:
             for collection in collections:
-                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection_id)
+                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection_id, collection["annotator"])
 
             responseObject = {"status":"success", "imported":collections}
             
@@ -912,12 +912,15 @@ def __check_if_gold(collectionNames):
 #   ADMIN FUNCTIONS
 #######################################################
 
-def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict, fileName=None):
+def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict, fileName=None, annotator=None):
     """
     Takes a dictionary of dialogues, checks their in the correct format and adds them to the main dialogues dict.
     """
     if not fileName:
         fileName = ""
+
+    if not annotator:
+        annotator = fileName
 
     annotationStyle = retrieveAnnotationRef(fileName)
 
@@ -938,7 +941,7 @@ def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict,
 
 
         if "error" not in currentResponseObject:
-            annotationFiles.add_dialogue_file(dialogueDict, fileName=fileName)
+            annotationFiles.add_dialogue_file(dialogueDict, fileName=annotator)
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
 
         return currentResponseObject
@@ -1100,9 +1103,8 @@ class InterannotatorMethods:
                     error["predictions"] = predictions
                     error["counts"] = temp.get("counts")
 
-                    #Slot needs more details to be evaluted
+                    #Slot needs more details to be evaluted from user
                     if error["type"] == "multilabel_classification_string":
-                        
                         optionList = []
                         for option in turnsData[turnId][error["name"]]:
                             optionList.append(option) 
