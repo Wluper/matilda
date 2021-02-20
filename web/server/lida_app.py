@@ -120,13 +120,20 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
     return jsonify( responseObject )
 
-@LidaApp.route('/dialogue_annotationstyle', methods=['GET'])
-@LidaApp.route('/<user>/dialogue_annotationstyle/<id>',methods=['GET'])
-@LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<id>', methods=['GET'])
-def handle_annotation_style_resource(user=None,id=None,supervisor=None):
+@LidaApp.route('/dialogue_annotationstyle/<collection>', methods=['GET'])
+@LidaApp.route('/<user>/dialogue_annotationstyle/<collection>/<id>',methods=['GET'])
+@LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>', methods=['GET'])
+def handle_annotation_style_resource(collection,user=None,id=None,supervisor=None):
     """
     GET - Returns the annotation style for different workspace "global admin", "user specific" or "supervision"
     """
+
+    #retrieve and load correct annotation style
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
+    Configuration.annotation_style = search[0]["annotationStyle"]
+    Configuration.loadConfig()
+
+    #return data for the right view
     if supervisor:
         dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
         Configuration.validate_dialogue(dialogue["dialogue"])
@@ -137,7 +144,6 @@ def handle_annotation_style_resource(user=None,id=None,supervisor=None):
 
     else:
         dialogue = dialogueFile.get_dialogue(user, id = id)
-        #test for correct annotation style
         Configuration.validate_dialogue(dialogue["dialogue"])
         return jsonify( Configuration.create_annotation_dict() )
 
@@ -281,7 +287,7 @@ def handle_switch_collection_request(user, doc):
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
-            print("No annotated version for user, creating...")
+            print("No annotated version for user ",user," creating...")
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
             #create document 
             values = {
@@ -667,7 +673,7 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
             projection = request.get_json()
             projection = json.loads(projection["projection"])
         except:
-            projection = {"id":1,"assignedTo":1,"lastUpdate":1, "status":1, "done":1 }
+            projection = {"id":1,"assignedTo":1,"lastUpdate":1, "status":1, "done":1, "annotationStyle":1 }
         
         collectionNames = DatabaseManagement.readDatabase(DBcollection, fields, projection)
 
@@ -711,23 +717,24 @@ def handle_post_of_collections(mode, destination, id=None):
         values["lastUpdate"] = datetime.datetime.utcnow()
         values["document"] = json.loads(values["document"])
 
-        #here we could check if another annotation style is needed
-        #reading from the value inserted by the user in "annotationStyle"
-        #at the moment the system is validating with the only loaded 
-        #model in annotator_config
+        #validation
         if values["annotationStyle"] != "":
             Configuration.annotation_style = values["annotationStyle"]
-            print(Configuration.annotation_style)
+            try: 
+                Configuration.loadConfig()
+            except:
+                response = {"status":"error","error":"Impossible to load provided annotation style"}
+                return jsonify ( response )
 
-        #validation
         for dialogueName, dialogue in values["document"].items():
             validation = Configuration.validate_dialogue(dialogue) 
             if ((type(validation) is str) and (validation.startswith("ERROR"))):
                 print("Validation for",dialogueName," failed with "+Configuration.annotation_style)
                 response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
                 return jsonify( response )
-            #validated
-            values["annotationStyle"] = Configuration.annotation_style
+            
+        #validated
+        values["annotationStyle"] = Configuration.annotation_style
 
         #check for same id    
         check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })

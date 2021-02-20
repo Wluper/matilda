@@ -244,7 +244,7 @@ Vue.component("resolutions", {
     methods : {
         init : function(){
             // Step One :: Get the Annotation Styles
-            backend.get_annotation_style_async()
+            backend.get_annotation_style_async(mainApp.activeCollection)
                 .then( (response) => {
                     this.annotationStyle = response;
                 });

@@ -224,7 +224,9 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                                <div class="entry-date">
+
+                                <div class="entry-data">
+                                    {{collection.annotationStyle.split(".")[0]}}
                                     {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                 </div>
                             </div>
@@ -435,7 +437,8 @@ Vue.component('collection-users-reverse', {
                                     <div class="entry-assigned">
                                         <span>Assigned: <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> </span>
                                     </div>
-                                    <div class="entry-date">
+                                    <div class="entry-data">
+                                        {{collection.annotationStyle.split(".")[0]}}
                                         {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                     </div>
                                 </label>

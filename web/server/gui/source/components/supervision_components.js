@@ -145,6 +145,7 @@ Vue.component("supervision-view", {
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
+                    v-bind:selectedCollection="selectedCollection"
                     v-bind:dialogueId="displayingDialogue">
    </supervision-annotation-app>
 </div>
@@ -375,7 +376,7 @@ Vue.component("supervision-dialogues", {
 Vue.component("supervision-annotation-app", {
 
     props: [
-      "dialogueId"
+      "dialogueId","selectedCollection"
     ],
 
     data () {
@@ -460,10 +461,12 @@ Vue.component("supervision-annotation-app", {
                 })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(this.dialogueId, "supervision")
+          backend.get_annotation_style_async(this.selectedCollection, this.dialogueId, "supervision")
               .then( (response) => {
                   this.annotationFormat = response;
-                  this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  if (this.annotationFormat.global_slot != undefined) {
+                    this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  }
               });
 
         },

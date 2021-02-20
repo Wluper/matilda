@@ -15,14 +15,10 @@ Vue.component("database-header", {
     methods: {
         go_back : function(){
             console.log("==================================");
-            console.log("==================================");
-            console.log("==================================");
             annotationAppEventBus.$emit("go_back", event);
         },
 
         admin_panel_clicked() {
-            console.log("==================================");
-            console.log("==================================");
             console.log("==================================");
             annotationAppEventBus.$emit("admin_panel_clicked");
         }
@@ -138,20 +134,22 @@ Vue.component("collection-view", {
                 del = true;
             }
             if (del == true) {
-               mainContainer.style.cursor = "progress";
-               backend.del_all_dialogues_async()
-               .then( (response) => {
-                  console.log(response);
-                     backend.load_dialogues(clickedEntry)
-                     .then( (response) => {
-                        console.log("==== DIALOGUES IMPORT ====");
-                        console.log(response);
-                        if (response.data.created == true)
-                           console.log("=== CREATED NEW DOCUMENT ====")
-                        databaseEventBus.$emit("collection_active", clickedEntry);
-                        mainContainer.style.cursor = null;
-                        annotationAppEventBus.$emit("go_back");
-                    });
+                mainContainer.style.cursor = "progress";
+                backend.del_all_dialogues_async()
+                .then( (response) => {
+                    console.log(response);
+                        backend.load_dialogues(clickedEntry)
+                        .then( (response) => {
+                            console.log("==== DIALOGUES IMPORT ====");
+                            console.log(response);
+                            if (response.data.created == true) {
+                                console.log("=== CREATED NEW DOCUMENT ====")
+                            }
+                            databaseEventBus.$emit("collection_active", clickedEntry);
+                            mainContainer.style.cursor = null;
+                            annotationAppEventBus.$emit("go_back");
+                        }
+                    );
                 })   
             }
         },
@@ -223,7 +221,7 @@ Vue.component("collection-view", {
                             </div>
 
                             <div class="entry-assigned">
-                                    <span>Annotator: </span> {{userName}}
+                                    <span>Annotation style: </span>
                             </div>
                             <div class="entry-date">
                                 <template v-if="lastUpdate == ''">
@@ -246,6 +244,7 @@ Vue.component("collection-view", {
                 <ul class="annotation-list">
                 <h2>{{guiMessages.selected.lida.assignedColl}}</h2>
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
+                        
                         <div v-if="name.id == activeCollection" class="entry-list-single-item-container" style="opacity:0.3">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
@@ -259,9 +258,11 @@ Vue.component("collection-view", {
                                 </div>
                                 <div class="entry-date">
                                     {{name.lastUpdate.slice(0,-3)}}
+                                    {{name.annotationStyle.split(".")[0]}}
                                 </div>
                             </div>
                         </div>
+
                         <div v-else class="entry-list-single-item-container">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
@@ -273,8 +274,9 @@ Vue.component("collection-view", {
                                 <div class="entry-assigned">
                                     <span>Assigned to:</span> {{name.assignedTo}}
                                 </div>
-                                <div class="entry-date">
+                                <div class="load-entry-date">
                                     {{name.lastUpdate.slice(0,-3)}}
+                                    {{name.annotationStyle.split(".")[0]}}
                                 </div>
                             </div>
                         </div>

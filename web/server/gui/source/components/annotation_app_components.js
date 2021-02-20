@@ -125,7 +125,7 @@ Vue.component("annotation-app", {
                 })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(this.dialogueId)
+          backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
               .then( (response) => {
                   this.annotationFormat = response;
                   this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;

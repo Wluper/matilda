@@ -59,20 +59,20 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
-async function get_annotation_style_async(id,supervision){
+async function get_annotation_style_async(collection,id,supervision){
 
     var dialogues = {}
 
     if (id == undefined) {
-        var apiLink = API_BASE+"/dialogue_annotationstyle";
+        var apiLink = API_BASE+`/dialogue_annotationstyle/${collection}`;
     } else {
         if (supervision != undefined) {
 
-            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         
         } else { 
 
-            var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+            var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         }
     }
 

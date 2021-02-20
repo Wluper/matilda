@@ -88,7 +88,7 @@ Vue.component("resolution-app", {
         init: function() {
             //console.log(this.metaDataList)
             // Step One :: Get the Annotation Styles
-            backend.get_annotation_style_async()
+            backend.get_annotation_style_async(mainApp.activeCollection)
             .then( (response) => {
                 this.annotationFormat = response;
             });
