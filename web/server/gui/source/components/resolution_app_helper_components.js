@@ -213,7 +213,7 @@ Vue.component("error-element-body", {
 Vue.component("resolutions", {
 
     props: [
-      "error", "errorId", "metaList"
+      "error", "errorId", "metaList", "collectionId"
     ],
 
     data () {
@@ -244,7 +244,7 @@ Vue.component("resolutions", {
     methods : {
         init : function(){
             // Step One :: Get the Annotation Styles
-            backend.get_annotation_style_async(mainApp.activeCollection)
+            backend.get_annotation_style_async(this.collectionId)
                 .then( (response) => {
                     this.annotationStyle = response;
                 });

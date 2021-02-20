@@ -5,7 +5,7 @@
 Vue.component("interannotator-view", {
 
   props: [
-      "alreadyVisited", "userName"
+      "displayingCollection", "alreadyVisited", "userName"
   ],
 
   data () {
@@ -23,12 +23,14 @@ Vue.component("interannotator-view", {
           allConfrontMetadata:[],
           dragging: false,
           showAgreement: false,
+          selectedCollection: this.displayingCollection,
 
           // A list of dialogue IDs for which annotator names should be displayed
           showAnnotatorNamesForIds: [],
 
           //Reference to the language data
           guiMessages,
+
       }
   },
 
@@ -83,6 +85,7 @@ Vue.component("interannotator-view", {
 
     clicked_collection(clickedCollection) {
         //load in interannotator all the annotated versions of the same collection
+        this.selectedCollection = clickedCollection;
         mainContainer.style.cursor = "progress";
         backend.del_all_dialogues_async("admin")
             .then( (response) => {
@@ -125,12 +128,15 @@ Vue.component("interannotator-view", {
   template:
   `
   <div class="all-dialogues-container"
-       id="listedDialoguesContainer"
-       v-on:dragover="handleDragOver($event)"
-       v-on:dragleave="handleDragOut($event)"
-       v-on:drop="handleDrop($event)">
+        id="listedDialoguesContainer"
+        v-on:dragover="handleDragOver($event)"
+        v-on:dragleave="handleDragOut($event)"
+        v-on:drop="handleDrop($event)">
 
-    <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
+    <agreement-modal 
+        v-bind:selectedCollection="selectedCollection" 
+        v-if="showAgreement" @close="showAgreement = false">
+    </agreement-modal>
 
     <div class="dialogue-list-title-container">
         <div v-if="!(dragging)" class="all-dialogues-list-title">
@@ -443,7 +449,7 @@ Vue.component("interannotator-app", {
 
         <div class="dialogue-list-title-container" style="grid-template: [row1-start] 'title-zone name-zone help-button-zone' [row1-end] / 1.1fr 2fr 1.4fr;">
         <div v-if="!(dragging)" class="all-dialogues-list-title">
-          <h2>{{displayingCollection}}: {{ alreadyVisited.length }}/{{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.visited_dialogues }}
+          <h2><span id="displaying-collection">{{displayingCollection}}</span>: {{ alreadyVisited.length }}/{{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.visited_dialogues }}
           </h2>
         </div>
 

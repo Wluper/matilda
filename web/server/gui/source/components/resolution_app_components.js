@@ -88,13 +88,13 @@ Vue.component("resolution-app", {
         init: function() {
             //console.log(this.metaDataList)
             // Step One :: Get the Annotation Styles
-            backend.get_annotation_style_async(mainApp.activeCollection)
+            backend.get_annotation_style_async(this.collectionId)
             .then( (response) => {
                 this.annotationFormat = response;
             });
 
             // Step TWO :: Get the ERRORS
-            backend.get_errors_async(this.dialogueId)
+            backend.get_errors_async(this.collectionId,this.dialogueId)
             .then( (response) => {
                 this.errorList = response.errors
                 this.metaDataList = response.meta;
@@ -201,11 +201,14 @@ Vue.component("resolution-app", {
         </resolution-menu>
 
         <error-list v-if="metaDataList" v-bind:metaList="metaDataList"
-        v-bind:currentId="currentErrorId">
+            v-bind:currentId="currentErrorId">
         </error-list>
 
-        <resolutions v-if="currentError" v-bind:error="currentError" v-bind:errorId="currentErrorId"
-        v-bind:metaList="metaDataList">
+        <resolutions v-if="currentError"
+            v-bind:collectionId="collectionId" 
+            v-bind:error="currentError" 
+            v-bind:errorId="currentErrorId"
+            v-bind:metaList="metaDataList">
         </resolutions>
     </div>
     `

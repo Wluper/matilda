@@ -312,11 +312,11 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
 }
 
 
-async function put_single_dialogue_async(event, dialogueId, dTurns) {
+async function put_single_dialogue_async(event, dialogueId, dTurns, collection) {
 
     try {
 
-        const response = await RESTdialogues( "PUT", dialogueId, dTurns )
+        const response = await RESTdialogues( "PUT", dialogueId, dTurns, collection )
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
@@ -345,6 +345,7 @@ async function del_single_dialogue_async(dialogueId) {
     }
 
 };
+
 
 async function del_all_dialogues_async(admin) {
 
@@ -438,7 +439,8 @@ async function RESTdialogues(method, id, params, fileName){
         var response = await axios.delete( apiLink );
     }
     else if (method=="PUT") {
-        var response = await axios.put( apiLink, params );
+        //override
+        var response = await axios.put( API_BASE+`/${mainApp.userName}/dialogues/${fileName}/${id}`, params );
     }
     else if (method=="POST") {
         var response = await axios.post( apiLink, params );
@@ -791,11 +793,11 @@ async function update_multiple_collections_async(DBcollection, params) {
 *  ADMIN
 ********************************************/
 
-async function get_scores_async(){
+async function get_scores_async(collection){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+"/agreements"
+    const apiLink = API_BASE+"/agreements/"+collection
     try {
         var response = await axios.get( apiLink );
 
@@ -810,11 +812,11 @@ async function get_scores_async(){
     }
 }
 
-async function get_errors_async(dialogueId){
+async function get_errors_async(collection,dialogueId){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+`/errors/${dialogueId}`
+    const apiLink = API_BASE+`/errors/${collection}/${dialogueId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -865,6 +867,7 @@ async function put_error_async(listOfErrors){
     }
 }
 
+/*
 async function admin_post_empty_dialogue() {
 
     const apiLink = API_BASE+"/dialogues";
@@ -881,6 +884,7 @@ async function admin_post_empty_dialogue() {
         console.log(error)
     }
 }
+*/
 
 async function admin_import_all_annotations(collection) {
 
@@ -1034,7 +1038,6 @@ backend =
 
     supervision                                  : supervision,
     admin_import_all_annotations                 : admin_import_all_annotations,
-    admin_post_empty_dialogue                    : admin_post_empty_dialogue,
     import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,
     import_new_dialogue_from_json_string_async   : import_new_dialogue_from_json_string_async
 }

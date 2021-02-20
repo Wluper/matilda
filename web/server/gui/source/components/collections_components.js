@@ -58,6 +58,7 @@ Vue.component("collection-view", {
             activeCollectionMeta: {},
             collectionRate: mainApp.collectionRate,
             lastUpdate: mainApp.lastUpdate,
+            annotationStyle: mainApp.annotationStyle
         }
     },
 
@@ -96,8 +97,7 @@ Vue.component("collection-view", {
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
                     mainContainer.style.cursor = null;
-                    if (mainApp.boot == true)
-                      this.retrieveActiveCollection();
+                    this.retrieveActiveCollection();
                 }
             )
         },
@@ -116,6 +116,8 @@ Vue.component("collection-view", {
                         mainApp.done = response[0].done;
                         mainApp.lastUpdate = response[0].lastUpdate;
                         this.collectionRate = response[0].status;
+                        mainApp.annotationStyle = document.getElementById("activeAnnotationStyle").textContent;
+                        document.getElementById("showAnnotationStyle").textContent = mainApp.annotationStyle;
                     } else {
                         //if active collection document doesn't exist anymore
                         mainApp.activeCollection = null;
@@ -213,6 +215,7 @@ Vue.component("collection-view", {
                                     <div class="annotated-fill" v-bind:style="{ width: collectionRate }"></div>
                                 </div>
                             </div>
+
                             <div v-else class="entry-annotated">
                                 <span>Status: {{activeCollectionMeta.status}}</span>
                                 <div class="annotated-bar">
@@ -220,8 +223,8 @@ Vue.component("collection-view", {
                                 </div>
                             </div>
 
-                            <div class="entry-assigned">
-                                    <span>Annotation style: </span>
+                            <div class="entry-annotation-style">
+                                    Annotation style: <span id="showAnnotationStyle">{{annotationStyle}}</span>
                             </div>
                             <div class="entry-date">
                                 <template v-if="lastUpdate == ''">
@@ -258,7 +261,7 @@ Vue.component("collection-view", {
                                 </div>
                                 <div class="entry-date">
                                     {{name.lastUpdate.slice(0,-3)}}
-                                    {{name.annotationStyle.split(".")[0]}}
+                                    <span id="activeAnnotationStyle" style="display: contents;">{{name.annotationStyle.split(".")[0]}}</span>
                                 </div>
                             </div>
                         </div>
@@ -317,10 +320,11 @@ Vue.component('database-entry-modal', {
 
          init : function(){
             this.view = mainApp.status;
-            if (mainApp.role != "administrator")
+            if (mainApp.role != "administrator") {
                 collection = "annotated_collections";
-            else 
+            } else {
                 collection = "dialogues_collections";
+            }
             backend.get_db_entry_async(mainApp.displayingDocument,collection)
                   .then( (response) => {
                      console.log();

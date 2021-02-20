@@ -200,6 +200,20 @@
     padding-bottom:8px;
 }
 
+.entry-annotation-style {
+    justify-content: start;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.entry-annotation-style span {
+    font-weight: 100;
+}
 
 .entry-done {
     display: flex;

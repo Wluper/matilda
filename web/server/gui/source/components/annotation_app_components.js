@@ -128,7 +128,9 @@ Vue.component("annotation-app", {
           backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
               .then( (response) => {
                   this.annotationFormat = response;
-                  this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  if (this.annotationFormat.global_slot != undefined) {
+                    this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  }
               });
 
         },
@@ -248,7 +250,7 @@ Vue.component("annotation-app", {
             console.log("DIALOGUE ID BEING SENT");
             console.log(this.dialogueId);
 
-            backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns)
+            backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns, mainApp.activeCollection)
                 .then( (status) => {
 
                     if (status == "success") {

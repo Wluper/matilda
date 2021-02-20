@@ -63,6 +63,9 @@ Vue.component('modal', {
 * MODAL COMPONENT
 *************************************/
 Vue.component('agreement-modal', {
+    
+    props: ["selectedCollection"],
+    
     data () {
         return {
             scores : {},
@@ -76,9 +79,11 @@ Vue.component('agreement-modal', {
     methods: {
 
           init : function(){
-
+              // to do:
+              // the prop like this doesnt work
+              let selectedCollection = document.getElementById("displaying-collection").textContent;
               // Step ONE: Get FILE NAME
-              backend.get_scores_async()
+              backend.get_scores_async(selectedCollection)
                   .then( (response) => {
                       console.log();
                       this.scores = response;

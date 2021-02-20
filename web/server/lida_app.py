@@ -39,7 +39,6 @@ LidaApp = Flask(__name__,
 LidaApp.config.from_object(__name__)
 CORS(LidaApp)
 #set_main_path(path)
-Configuration.loadConfig()
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
 netConf = DatabaseManagement.conf["app"]
@@ -75,7 +74,8 @@ def handle_dialogues_metadata_resource(user, id=None):
 
 
 @LidaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
-@LidaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','PUT','DELETE'])
+@LidaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','DELETE'])
+@LidaApp.route('/<user>/dialogues/<fileName>/<id>',methods=['PUT'])
 @LidaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
 @LidaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
 def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None):
@@ -86,10 +86,20 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
     PUT - change specific dialogue with a dialogue
     """
+
+    if request.method == "PUT":
+        data = request.get_json()
+        #fileName = (data[0]["collection"])
+
+        search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
+        annotationStyle = search[0]["annotationStyle"]
+
+        Configuration.validate_dialogue( annotationStyle, data )
+        responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
+
     if supervisor:
-        if request.method == "GET":
-            responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
-            return jsonify(responseObject)
+        responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        return jsonify(responseObject)
 
     if fileName:
         if request.method == "POST":
@@ -100,11 +110,6 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
         if request.method == "GET":
             responseObject = dialogueFile.get_dialogue(user, id = id)
-
-        if request.method == "PUT":
-            data = request.get_json()
-            Configuration.validate_dialogue( data )
-            responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
 
         if request.method == "DELETE":
             responseObject = dialogueFile.delete_dialogue(user, id=id)
@@ -130,22 +135,21 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
 
     #retrieve and load correct annotation style
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
-    Configuration.annotation_style = search[0]["annotationStyle"]
-    Configuration.loadConfig()
+    annotationStyle = search[0]["annotationStyle"]
 
     #return data for the right view
     if supervisor:
         dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
-        Configuration.validate_dialogue(dialogue["dialogue"])
-        return jsonify( Configuration.create_annotation_dict() )
+        Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
+        return jsonify( Configuration.create_annotation_dict(annotationStyle) )
     
     if not user and not id:
-        return jsonify( Configuration.create_annotation_dict() )
+        return jsonify( Configuration.create_annotation_dict(annotationStyle) )
 
     else:
         dialogue = dialogueFile.get_dialogue(user, id = id)
-        Configuration.validate_dialogue(dialogue["dialogue"])
-        return jsonify( Configuration.create_annotation_dict() )
+        Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
+        return jsonify( Configuration.create_annotation_dict(annotationStyle) )
 
 @LidaApp.route('/turns',methods=['POST'])
 def handle_turns_resource():
@@ -362,8 +366,8 @@ def admin_dialogues_metadata_resource(id=None):
     return jsonify( responseObject )
 
 @LidaApp.route('/dialogues', methods=['GET','POST','DELETE'])
-@LidaApp.route('/dialogues/<id>', methods=['GET','POST','PUT','DELETE'])
-def admin_dialogues_resource(id=None):
+@LidaApp.route('/dialogues/<collection>/<id>', methods=['GET','POST','PUT','DELETE'])
+def admin_dialogues_resource(id=None, collection=None):
     """
     GET - All dialogues
 
@@ -381,8 +385,14 @@ def admin_dialogues_resource(id=None):
                 responseObject = annotationFiles.get_dialogues()
 
         if request.method == "PUT":
+
+            #    
+            search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
+            annotationStyle = search[0]["annotationStyle"]
+            print(annotationStyle)
+
             data = request.get_json()
-            data = Configuration.validate_dialogue( data )
+            data = Configuration.validate_dialogue( annotationStyle, data )
 
             if isinstance(dialogue, str):
                 currentResponseObject["error"] = data
@@ -434,8 +444,8 @@ def admin_post_of_new_dialogues():
     return responseObject
 
 @LidaApp.route('/errors', methods=['PUT'])
-@LidaApp.route('/errors/<id>', methods=['GET'])
-def handle_errors_resource(id=None):
+@LidaApp.route('/errors/<collection>/<id>', methods=['GET'])
+def handle_errors_resource(id=None, collection=None):
     """
     POST - Returns the annotation style
     """
@@ -455,7 +465,7 @@ def handle_errors_resource(id=None):
             errorMetaDict = {"errors": errorList, "meta": metaList}
 
         else:
-            errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+            errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( collection,listOfDialogue )
             annotationFiles.annotatorErrors[id] = errorMetaDict["errors"]
             annotationFiles.annotatorErrorsMeta[id] = errorMetaDict["meta"]
 
@@ -522,7 +532,7 @@ def restore_errorsList(collectionId):
                 errorMetaDict = {"errors": errorList, "meta": metaList}
 
             else:
-                errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+                errorMetaDict = InterannotatorMethods.find_errors_in_list_of_dialogue( collectionId, listOfDialogue )
                 annotationFiles.annotatorErrors[dialogue] = errorMetaDict["errors"]
                 annotationFiles.annotatorErrorsMeta[dialogue] = errorMetaDict["meta"]
 
@@ -542,8 +552,8 @@ def restore_errorsList(collectionId):
 
 
 
-@LidaApp.route('/agreements', methods=['GET'])
-def handle_agreements_resource():
+@LidaApp.route('/agreements/<collection>', methods=['GET'])
+def handle_agreements_resource(collection):
     """
     GET - Returns the interannotator agreement
     """
@@ -552,6 +562,10 @@ def handle_agreements_resource():
         responseObject = {
             "status" : "success",
         }
+
+        search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
+        annotationStyle = search[0]["annotationStyle"]
+
         totalTurns = 0
 
         totalAnnotations = 0
@@ -576,12 +590,12 @@ def handle_agreements_resource():
 
                     if annotationName not in Configuration.metaTags:
  
-                        annotationType = Configuration.configDict[annotationName]["label_type"]
+                        annotationType = Configuration.configDict[annotationStyle][annotationName]["label_type"]
 
                         agreementScoreFunc = agreementScoreConfig[ annotationType ]
 
                         if agreementScoreFunc:
-                            totalLabels = len( Configuration.configDict[annotationName]["labels"] )
+                            totalLabels = len( Configuration.configDict[annotationStyle][annotationName]["labels"] )
                             temp = agreementScoreFunc( listOfAnnotations, totalLabels )
 
                             errors += temp.get("errors")
@@ -719,22 +733,22 @@ def handle_post_of_collections(mode, destination, id=None):
 
         #validation
         if values["annotationStyle"] != "":
-            Configuration.annotation_style = values["annotationStyle"]
             try: 
-                Configuration.loadConfig()
+                Configuration.configDict[values["annotationStyle"]]
+                annotationStyle = values["annotationStyle"]
             except:
                 response = {"status":"error","error":"Impossible to load provided annotation style"}
                 return jsonify ( response )
+        else:
+            annotationStyle = Configuration.annotation_styles[0]
+            values["annotationStyle"] = annotationStyle
 
         for dialogueName, dialogue in values["document"].items():
-            validation = Configuration.validate_dialogue(dialogue) 
+            validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
             if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                print("Validation for",dialogueName," failed with "+Configuration.annotation_style)
+                print("Validation for",dialogueName," failed with "+annotationStyle)
                 response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
                 return jsonify( response )
-            
-        #validated
-        values["annotationStyle"] = Configuration.annotation_style
 
         #check for same id    
         check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })
@@ -788,7 +802,7 @@ def handle_annotations_import(collection_id):
     if collections != []:
         if collections[0]["document"]:
             for collection in collections:
-                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection["annotator"])
+                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection_id)
 
             responseObject = {"status":"success", "imported":collections}
             
@@ -843,9 +857,12 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
     added_dialogues = []
     overwritten = []
 
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
+    annotationStyle = search[0]["annotationStyle"]
+
     for dialogue_name, dialogue in dialogueDict.items():
 
-        dialogue = Configuration.validate_dialogue(dialogue)
+        dialogue = Configuration.validate_dialogue(annotationStyle,dialogue)
 
         if isinstance(dialogue, str):
             currentResponseObject["error"] = dialogue
@@ -908,13 +925,16 @@ def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict,
     if not fileName:
         fileName = ""
 
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
+    annotationStyle = search[0]["annotationStyle"]
+
     addedDialogues = []
 
     if dialogueDict:
 
         for dialogueName, dialogue in dialogueDict.items():
 
-            dialogue = Configuration.validate_dialogue(dialogue)
+            dialogue = Configuration.validate_dialogue(annotationStyle,dialogue)
 
             if isinstance(dialogue, str):
                 currentResponseObject["error"] = dialogue
@@ -959,7 +979,7 @@ def mock_handle_errors_resource(id=None):
 
         listOfDialogue = annotationFiles.get_all_files( dialogueId = id )
 
-        responseObject.update( InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue ) )
+        responseObject.update( InterannotatorMethods.find_errors_in_list_of_dialogue( None,listOfDialogue ) )
 
         return responseObject
 
@@ -977,7 +997,7 @@ def mock_analyse_interannotator_agreement(dialogueIdCap=None):
         for x in range(dialogueIdCap+1):
             dialogueId = "Dialogue"+str(x)
             listOfDialogue = annotationFiles.get_all_files( dialogueId = dialogueId )
-            responseObject = InterannotatorMethods.find_errors_in_list_of_dialogue( listOfDialogue )
+            responseObject = InterannotatorMethods.find_errors_in_list_of_dialogue( None,listOfDialogue )
             totalCount += len( responseObject["errors"] )
 
         report["totalCount"] = totalCount
@@ -1005,7 +1025,7 @@ def __update_gold_from_error_id(dialogueId, error, collectionId=None):
 class InterannotatorMethods:
 
     @staticmethod
-    def find_errors_in_list_of_dialogue(listOfDialogue):
+    def find_errors_in_list_of_dialogue(collection, listOfDialogue):
         """
         finds errors in the list of dialogues
 
@@ -1028,6 +1048,14 @@ class InterannotatorMethods:
                     ],
                 },...
         """
+
+        #exception and compatibility for lida mock model
+        if collection is not None:
+            search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
+            annotationStyle = search[0]["annotationStyle"]
+        else:
+            annotationStyle = "lida_model.json"
+
         errorList = []
         metaList = []
 
@@ -1055,7 +1083,7 @@ class InterannotatorMethods:
                 if annotationName not in Configuration.metaTags:
                     try:
                         #confront
-                        annotationType = Configuration.configDict[annotationName]["label_type"]
+                        annotationType = Configuration.configDict[annotationStyle][annotationName]["label_type"]
                         agreementFunc = agreementConfig[ annotationType ]
                     except:
                         #in case of mismatched number in turn_id (example: a turn has been deleted)

@@ -46,8 +46,8 @@ class Configuration(object):
     # Folder where annotation models are stored
     __DEFAULT_PATH = "annotation_styles"
 
-    # Here the annotation model file name
-    annotation_style = "unipi_model.json"
+    # Here the annotation model file names
+    annotation_styles = ["unipi_model.json","lida_model.json"]
 
     # Dict where classifications are stored
     configDict = {}
@@ -55,25 +55,30 @@ class Configuration(object):
     #accepted metaTags, this list can be customized
     metaTags = ["collection","status","ID"]
 
-    def loadConfig():
-        with open(Configuration.annotation_style) as style_file:
-            Configuration.configDict = json.load(style_file)
-
-        #convert back functions and classes from string 
-        for key,value in Configuration.configDict.items():
-            for sub_key,sub_value in value.items():
-                if "()" in str(sub_value):
-                    Configuration.configDict[key][sub_key] = eval(sub_value)
+    for model in annotation_styles:
+        with open(model) as style_file:
+            configDict[model] = json.load(style_file)
+            #convert back functions and classes from string 
+            for key,value in configDict[model].items():
+                for sub_key,sub_value in value.items():
+                    if "()" in str(sub_value):
+                        configDict[model][key][sub_key] = eval(sub_value)
 
     @staticmethod
-    def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
+    def validate_dialogue(annotation_style, dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
         """
         validates the dialogue and makes sure it conforms to the configDict
         """
+
+        #print(dialogue[0])
+        #if dialogue[0]["collection"]:
+        #    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":dialogue[0]["collection"]}, {"_id":0,"annotationStyle":1})
+        #    annotation_style = search[0]["annotationStyle"]
+
         try:
             for i, turn in enumerate(dialogue):
 
-                for labelName, info in Configuration.configDict.items():
+                for labelName, info in Configuration.configDict[annotation_style].items():
 
                     try:
                         turn[labelName]
@@ -117,14 +122,14 @@ class Configuration(object):
 
 
     @staticmethod
-    def create_annotation_dict():
+    def create_annotation_dict(annotation_style):
         """
         Generates a dictionary mapping label names to a dictionary of their description, label types
         and, if applicable, the possible values the label can take.
         """
         out = {}
 
-        for key,value in Configuration.configDict.items():
+        for key,value in Configuration.configDict[annotation_style].items():
 
             temp = list(value["labels"]) if value.get("labels") else ""
 
@@ -167,6 +172,7 @@ class Configuration(object):
                                  .format(labelType))
 
         return out
+
 
 
 ##############################################
