@@ -91,8 +91,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
         data = request.get_json()
         #fileName = (data[0]["collection"])
 
-        search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
-        annotationStyle = search[0]["annotationStyle"]
+        annotationStyle = retrieveAnnotationRef(fileName)
 
         Configuration.validate_dialogue( annotationStyle, data )
         responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
@@ -134,8 +133,7 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
     """
 
     #retrieve and load correct annotation style
-    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
-    annotationStyle = search[0]["annotationStyle"]
+    annotationStyle = retrieveAnnotationRef(collection)
 
     #return data for the right view
     if supervisor:
@@ -387,9 +385,7 @@ def admin_dialogues_resource(id=None, collection=None):
         if request.method == "PUT":
 
             #    
-            search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
-            annotationStyle = search[0]["annotationStyle"]
-            print(annotationStyle)
+            annotationStyle = retrieveAnnotationRef(collection)
 
             data = request.get_json()
             data = Configuration.validate_dialogue( annotationStyle, data )
@@ -563,8 +559,7 @@ def handle_agreements_resource(collection):
             "status" : "success",
         }
 
-        search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
-        annotationStyle = search[0]["annotationStyle"]
+        annotationStyle = retrieveAnnotationRef(collection)
 
         totalTurns = 0
 
@@ -857,8 +852,7 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
     added_dialogues = []
     overwritten = []
 
-    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
-    annotationStyle = search[0]["annotationStyle"]
+    annotationStyle = retrieveAnnotationRef(fileName)
 
     for dialogue_name, dialogue in dialogueDict.items():
 
@@ -925,8 +919,7 @@ def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict,
     if not fileName:
         fileName = ""
 
-    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":fileName}, {"_id":0,"annotationStyle":1})
-    annotationStyle = search[0]["annotationStyle"]
+    annotationStyle = retrieveAnnotationRef(fileName)
 
     addedDialogues = []
 
@@ -1019,6 +1012,11 @@ def __update_gold_from_error_id(dialogueId, error, collectionId=None):
         DatabaseManagement.updateDoc(collectionId, "dialogues_collections", {"gold":annotationFiles.get_dialogues()})
 
 
+def retrieveAnnotationRef(collection):
+    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
+    annotationStyle = search[0]["annotationStyle"]
+    return annotationStyle
+
 ################################
 # STATIC METHODS
 ################################
@@ -1051,8 +1049,7 @@ class InterannotatorMethods:
 
         #exception and compatibility for lida mock model
         if collection is not None:
-            search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
-            annotationStyle = search[0]["annotationStyle"]
+            annotationStyle = retrieveAnnotationRef(collection)
         else:
             annotationStyle = "lida_model.json"
 

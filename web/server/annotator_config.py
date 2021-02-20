@@ -174,7 +174,6 @@ class Configuration(object):
         return out
 
 
-
 ##############################################
 # FUNCTIONS FOR FINDING THE ERRORS
 ##############################################
