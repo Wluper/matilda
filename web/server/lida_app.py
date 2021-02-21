@@ -41,7 +41,7 @@ CORS(LidaApp)
 #set_main_path(path)
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
-netConf = DatabaseManagement.conf["app"]
+jsonConf = Configuration.conf["app"]
 
 @LidaApp.route('/')
 def welcome():
@@ -1018,6 +1018,11 @@ def __update_gold_from_error_id(dialogueId, error, collectionId=None):
 def retrieveAnnotationRef(collection):
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
     annotationStyle = search[0]["annotationStyle"]
+
+    #if annotation model name not valid or empty fall back to default model
+    if len(annotationStyle) <= 1:
+        annotationStyle = Configuration.annotation_styles[0]
+
     return annotationStyle
 
 ################################
@@ -1204,5 +1209,5 @@ class Models:
 ##############
 
 if __name__ == "__main__":
-    LidaApp.run(port=netConf["port"],host=netConf["address"])
+    LidaApp.run(port=jsonConf["port"],host=jsonConf["address"])
 

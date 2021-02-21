@@ -1,10 +1,11 @@
 {
 	"app": {
 		"address":"localhost",
-		"port":5000
+		"port":5000,
+		"annotation_models":["unipi_model.json","lida_model.json"]
 	},
 	"database": {
-		"name": "lida",
+		"name": "matilda",
 		"legacy_configuration": {
 			"address": "localhost",
 			"port": 27017,

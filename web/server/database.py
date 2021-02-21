@@ -32,14 +32,8 @@ class DatabaseManagement(object):
 #  INIT
 ##############################################
 
-	try: 
-		#docker
-		with open('configuration/conf.json') as json_file:
-			conf = json.load(json_file)
-	except:
-		#standalone
-		with open('../../configuration/conf.json') as json_file:
-			conf = json.load(json_file)
+	#importing json configuration file
+	conf = Configuration.conf
 
 	databaseURI = database_uri_compose(conf["database"])
 
@@ -47,7 +41,7 @@ class DatabaseManagement(object):
 
 	db = client[conf["database"]["name"]]
 
-	print(" * Connected to database '"+conf["database"]["name"]+"'")
+	print(" * Connecting to database '"+conf["database"]["name"]+"'")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]

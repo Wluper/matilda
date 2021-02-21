@@ -250,7 +250,7 @@ have the following properties:
 * By default, the only required key-value pair in each turn is called
   `usr` and should be the user's query as a string.
 
-An example of data in the correct form can be seen in `server/dummy_data.json`.
+An example of data in the correct form can be seen in `server/LIDA_ANNOTATIONS/dummy_data.json`.
 
 ### JSON Format Example
 ![JSON format](images/ann_conf.png)

@@ -275,7 +275,8 @@ Vue.component("collection-view", {
                                     <span class="load">{{guiMessages.selected.lida.load}}</span>
                               </div>
                                 <div class="entry-assigned">
-                                    <span style="font-weight:bold">Assigned to:</span> {{name.assignedTo.join(", ")}}
+                                    <span style="font-weight:bold">Assigned to:</span> 
+                                    <span style="color: #087fdd; font-weight: 100;">{{name.assignedTo.join(", ")}}</span>
                                 </div>
                                 <div class="load-entry-date">
                                     {{name.lastUpdate.slice(0,-3)}}

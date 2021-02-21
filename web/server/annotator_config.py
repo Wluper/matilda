@@ -43,11 +43,21 @@ class Configuration(object):
     class responsible for configuration and valid annotation structure
     """
 
+    #importing json configuration file
+    try: 
+        #docker
+        with open('configuration/conf.json') as json_file:
+            conf = json.load(json_file)
+    except:
+        #standalone
+        with open('../../configuration/conf.json') as json_file:
+            conf = json.load(json_file)
+
     # Folder where annotation models are stored
     __DEFAULT_PATH = "annotation_styles"
 
     # Here the annotation model file names
-    annotation_styles = ["unipi_model.json","lida_model.json"]
+    annotation_styles = conf["app"]["annotation_models"]
 
     # Dict where classifications are stored
     configDict = {}

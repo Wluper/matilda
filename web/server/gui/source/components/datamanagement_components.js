@@ -632,7 +632,7 @@ Vue.component('collection-entry-details', {
                     <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
                     </div>
-                    <div class="dialogue-entry-info" v-on:click="clicked_active()">
+                    <div class="dialogue-entry-info">
                         <div class="entry-id">
                             {{name}}
                         </div>
