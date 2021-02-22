@@ -15,8 +15,7 @@ sys.path.append(path + "/../server")
 
 # == Local ==
 import app
-import lida_app as lida
-import interannotator_app as lida2
+import matilda_app as matilda
 
 from annotator_config import Configuration
 from interannotator_config import agreementConfig
@@ -32,7 +31,7 @@ from interannotator_config import agreementConfig
 
 if __name__ == '__main__':
 
-    app = lida2.InterAnnotatorApp("TEST_DATA")
+    app = matilda.InterAnnotatorApp("TEST_DATA")
 
     app.run()
 

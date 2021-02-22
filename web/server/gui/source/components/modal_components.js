@@ -42,7 +42,7 @@ Vue.component('modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="$emit('close')">
                 OK
               </button>
@@ -127,7 +127,7 @@ Vue.component('agreement-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="$emit('close')">
                 OK
               </button>
@@ -184,7 +184,7 @@ Vue.component('help-database-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="$emit('close')">
                 OK
               </button>
@@ -256,7 +256,7 @@ Vue.component('help-collection-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="$emit('close')">
                 OK
               </button>
@@ -308,7 +308,7 @@ Vue.component('message-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="close_message">
                 OK
               </button>

@@ -452,7 +452,7 @@ Vue.component('database-entry-modal', {
                         OK
                      </button>
                   </slot>
-                  LIDA
+                  MATILDA
                </div>
             </div>    
 

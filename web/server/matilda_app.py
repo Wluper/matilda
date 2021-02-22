@@ -32,18 +32,18 @@ __DEFAULT_PATH = "LIDA_ANNOTATIONS"
 path = __DEFAULT_PATH
 multiAnnotator=False
 
-LidaApp = Flask(__name__,
+MatildaApp = Flask(__name__,
     static_url_path='',
     static_folder='gui',
     template_folder='gui')
-LidaApp.config.from_object(__name__)
-CORS(LidaApp)
+MatildaApp.config.from_object(__name__)
+CORS(MatildaApp)
 #set_main_path(path)
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
 jsonConf = Configuration.conf["app"]
 
-@LidaApp.route('/')
+@MatildaApp.route('/')
 def welcome():
     return render_template("index.html")
 
@@ -51,8 +51,8 @@ def welcome():
 #  FUNCTION HANDLERS
 ##############################################
 
-@LidaApp.route('/<user>/dialogues_metadata',methods=['GET'])
-@LidaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
+@MatildaApp.route('/<user>/dialogues_metadata',methods=['GET'])
+@MatildaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
 def handle_dialogues_metadata_resource(user, id=None):
     """
     GET - All dialogues metadata
@@ -73,11 +73,11 @@ def handle_dialogues_metadata_resource(user, id=None):
     return jsonify( responseObject )
 
 
-@LidaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
-@LidaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','DELETE'])
-@LidaApp.route('/<user>/dialogues/<fileName>/<id>',methods=['PUT'])
-@LidaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
-@LidaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
+@MatildaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
+@MatildaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','DELETE'])
+@MatildaApp.route('/<user>/dialogues/<fileName>/<id>',methods=['PUT'])
+@MatildaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
+@MatildaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
 def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None):
     """
     GET - All dialogues
@@ -124,7 +124,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
     return jsonify( responseObject )
 
-@LidaApp.route('/registered_annotationstyles', methods=['GET'])
+@MatildaApp.route('/registered_annotationstyles', methods=['GET'])
 def retrieve_and_return_annotation_styles():
     """
     Returns the annotation styles registered in configuration json
@@ -133,9 +133,9 @@ def retrieve_and_return_annotation_styles():
 
     return jsonify( responseObject )
 
-@LidaApp.route('/dialogue_annotationstyle/<collection>', methods=['GET'])
-@LidaApp.route('/<user>/dialogue_annotationstyle/<collection>/<id>',methods=['GET'])
-@LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>', methods=['GET'])
+@MatildaApp.route('/dialogue_annotationstyle/<collection>', methods=['GET'])
+@MatildaApp.route('/<user>/dialogue_annotationstyle/<collection>/<id>',methods=['GET'])
+@MatildaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>', methods=['GET'])
 def handle_annotation_style_resource(collection,user=None,id=None,supervisor=None):
     """
     GET - Returns the annotation style for different workspace "global admin", "user specific" or "supervision"
@@ -158,7 +158,7 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
         Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
         return jsonify( Configuration.create_annotation_dict(annotationStyle) )
 
-@LidaApp.route('/turns',methods=['POST'])
+@MatildaApp.route('/turns',methods=['POST'])
 def handle_turns_resource():
     """
     POST - Returns the annotation style
@@ -181,7 +181,7 @@ def handle_turns_resource():
 
     return jsonify( responseObject )
 
-@LidaApp.route('/<user>/name',methods=['GET','PUT'])  
+@MatildaApp.route('/<user>/name',methods=['GET','PUT'])  
 def handle_name_resource(user):
     """
     GET - Gets the fileName
@@ -199,9 +199,9 @@ def handle_name_resource(user):
 
     return jsonify(responseObject)
 
-@LidaApp.route('/database', methods=['GET'])
-@LidaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
-@LidaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
+@MatildaApp.route('/database', methods=['GET'])
+@MatildaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
+@MatildaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
 def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None):
     """
     GET - Gets the dialogues id in the database collection for the user
@@ -249,7 +249,7 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
     return jsonify(responseObject)    
 
 
-@LidaApp.route('/<user>/dialogue/<id>/<tag>/<value>',methods=['GET','PUT']) 
+@MatildaApp.route('/<user>/dialogue/<id>/<tag>/<value>',methods=['GET','PUT']) 
 def handle_dialogues_tag(user, id, tag, value):
 
     responseObject = {
@@ -261,8 +261,8 @@ def handle_dialogues_tag(user, id, tag, value):
 
     return responseObject
 
-@LidaApp.route('/<supervisor>/supervision',methods=['GET'])
-@LidaApp.route('/<supervisor>/supervision/<annotator>/<doc>',methods=['PUT'])
+@MatildaApp.route('/<supervisor>/supervision',methods=['GET'])
+@MatildaApp.route('/<supervisor>/supervision/<annotator>/<doc>',methods=['PUT'])
 def handle_supervision_mode(supervisor,annotator=None,doc=None):
 
     responseObject = {"status":"pending"}
@@ -286,8 +286,8 @@ def handle_supervision_mode(supervisor,annotator=None,doc=None):
 
     return jsonify(responseObject)
 
-@LidaApp.route('/<user>/annotations_load/<doc>',methods=['PUT'])
-@LidaApp.route('/<user>/annotations_recover/<doc>',methods=['GET'])
+@MatildaApp.route('/<user>/annotations_load/<doc>',methods=['PUT'])
+@MatildaApp.route('/<user>/annotations_recover/<doc>',methods=['GET'])
 def handle_switch_collection_request(user, doc):
 
     responseObject = {"status":"fail", "created":False}
@@ -324,7 +324,7 @@ def handle_switch_collection_request(user, doc):
     else:
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc, "annotator":user})
 
-    #update lida dialogue source
+    #update dialogue source
     for docCollection in docRetrieved:
         dialogueFile.update_dialogues(user, docCollection["document"])
 
@@ -334,7 +334,7 @@ def handle_switch_collection_request(user, doc):
 
     return responseObject
 
-@LidaApp.route('/<user>/backup/<activecollection>',methods=['PUT'])
+@MatildaApp.route('/<user>/backup/<activecollection>',methods=['PUT'])
 def handle_backup_resource(user, activecollection):
     """
     GET - Gets the database collection
@@ -352,8 +352,8 @@ def handle_backup_resource(user, activecollection):
 # ADMIN ROUTES
 #################################################
 
-@LidaApp.route('/dialogues_metadata',methods=['GET'])
-@LidaApp.route('/dialogues_metadata/<id>', methods=['PUT'])
+@MatildaApp.route('/dialogues_metadata',methods=['GET'])
+@MatildaApp.route('/dialogues_metadata/<id>', methods=['PUT'])
 def admin_dialogues_metadata_resource(id=None):
     """
     GET - All dialogues metadata
@@ -372,8 +372,8 @@ def admin_dialogues_metadata_resource(id=None):
     annotationFiles.save()
     return jsonify( responseObject )
 
-@LidaApp.route('/dialogues', methods=['GET','POST','DELETE'])
-@LidaApp.route('/dialogues/<collection>/<id>', methods=['GET','POST','PUT','DELETE'])
+@MatildaApp.route('/dialogues', methods=['GET','POST','DELETE'])
+@MatildaApp.route('/dialogues/<collection>/<id>', methods=['GET','POST','PUT','DELETE'])
 def admin_dialogues_resource(id=None, collection=None):
     """
     GET - All dialogues
@@ -420,7 +420,7 @@ def admin_dialogues_resource(id=None, collection=None):
     annotationFiles.save()
     return jsonify( responseObject )
 
-@LidaApp.route('/dialogues_import', methods=['POST'])
+@MatildaApp.route('/dialogues_import', methods=['POST'])
 def admin_post_of_new_dialogues():
     """
     takes care of posting new dialogues
@@ -448,8 +448,8 @@ def admin_post_of_new_dialogues():
 
     return responseObject
 
-@LidaApp.route('/errors', methods=['PUT'])
-@LidaApp.route('/errors/<collection>/<id>', methods=['GET'])
+@MatildaApp.route('/errors', methods=['PUT'])
+@MatildaApp.route('/errors/<collection>/<id>', methods=['GET'])
 def handle_errors_resource(id=None, collection=None):
     """
     POST - Returns the annotation style
@@ -509,7 +509,7 @@ def handle_errors_resource(id=None, collection=None):
 
     return jsonify( responseObject )
 
-@LidaApp.route('/errors/restore/<collectionId>', methods=['GET'])
+@MatildaApp.route('/errors/restore/<collectionId>', methods=['GET'])
 def restore_errorsList(collectionId):
 
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"document","errors", "gold"})
@@ -557,7 +557,7 @@ def restore_errorsList(collectionId):
 
 
 
-@LidaApp.route('/agreements/<collection>', methods=['GET'])
+@MatildaApp.route('/agreements/<collection>', methods=['GET'])
 def handle_agreements_resource(collection):
     """
     GET - Returns the interannotator agreement
@@ -622,8 +622,8 @@ def handle_agreements_resource(collection):
 
     return jsonify( responseObject )
 
-@LidaApp.route('/users', methods=['GET'])
-@LidaApp.route('/users/create', methods=['POST','PUT'])
+@MatildaApp.route('/users', methods=['GET'])
+@MatildaApp.route('/users/create', methods=['POST','PUT'])
 def handle_users(user=None, userPass=None, email=None): 
     """
     GET - all users, POST create a new user
@@ -659,8 +659,8 @@ def handle_users(user=None, userPass=None, email=None):
 # COMMON ROUTES
 #################################################
 
-@LidaApp.route('/dialogues_wipe', methods=['DELETE']) #admin
-@LidaApp.route('/<user>/dialogues_wipe',methods=['DELETE'])
+@MatildaApp.route('/dialogues_wipe', methods=['DELETE']) #admin
+@MatildaApp.route('/<user>/dialogues_wipe',methods=['DELETE'])
 def handle_wipe_request(user=None):
 
     responseObject = {}
@@ -675,9 +675,9 @@ def handle_wipe_request(user=None):
 
     return responseObject
 
-@LidaApp.route('/collections/<DBcollection>',methods=['POST','GET'])
-@LidaApp.route('/collections/<DBcollection>/<id>',methods=['GET','POST'])
-@LidaApp.route('/collections/<id>/<user>',methods=['PUT'])
+@MatildaApp.route('/collections/<DBcollection>',methods=['POST','GET'])
+@MatildaApp.route('/collections/<DBcollection>/<id>',methods=['GET','POST'])
+@MatildaApp.route('/collections/<id>/<user>',methods=['PUT'])
 def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
     try:
@@ -719,8 +719,8 @@ def handle_collections(id=None, DBcollection=None, user=None, fields=None):
 
     return jsonify ( collectionNames )
 
-@LidaApp.route('/<mode>/collection/<destination>',methods=['POST'])
-@LidaApp.route('/<mode>/collection/<destination>/<id>',methods=['POST'])
+@MatildaApp.route('/<mode>/collection/<destination>',methods=['POST'])
+@MatildaApp.route('/<mode>/collection/<destination>/<id>',methods=['POST'])
 def handle_post_of_collections(mode, destination, id=None):
 
     response = {"status":"success"}
@@ -778,8 +778,8 @@ def handle_post_of_collections(mode, destination, id=None):
 
     return jsonify ( response )
 
-@LidaApp.route('/login',methods=['POST'])
-@LidaApp.route('/login/<id>',methods=['PUT'])
+@MatildaApp.route('/login',methods=['POST'])
+@MatildaApp.route('/login/<id>',methods=['PUT'])
 def handle_login(id=None):
     """
     Check if user login is permitted
@@ -796,7 +796,7 @@ def handle_login(id=None):
 
     return jsonify(responseObject)
 
-@LidaApp.route('/annotations_import/<collection_id>',methods=['GET'])
+@MatildaApp.route('/annotations_import/<collection_id>',methods=['GET'])
 def handle_annotations_import(collection_id):
 
     responseObject = {"status":"fail"}
@@ -1218,5 +1218,5 @@ class Models:
 ##############
 
 if __name__ == "__main__":
-    LidaApp.run(port=jsonConf["port"],host=jsonConf["address"])
+    MatildaApp.run(port=jsonConf["port"],host=jsonConf["address"])
 

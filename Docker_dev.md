@@ -4,10 +4,10 @@ Building a docker container depends on a deployment script, the Dockerfile, whic
 
 To build a new docker, use the command:
 
-$ sudo docker build -t flask/lida .
+$ sudo docker build -t flask/matildaDev .
 
 To run the docker, use the command:
 
-$ sudo docker run -p 5000:5000 flask/lida
+$ sudo docker run -p 5000:5000 flask/matildaDev
 
 To push the container on a shared repository you need to first tag the container using your username on Dockerhub, next login, and finally push. Look on Google for precise instructions.

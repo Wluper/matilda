@@ -299,7 +299,7 @@ guiMessages = {
             drop:"Rilascia i file per caricarli!",
             buttonCollections: "Collezioni",
             button_downloadAll: "Scarica i dati",
-            connectionError:"Impossibile connettersi al server, controlla che sia in funzione o l'indirizzo in backend_config",
+            connectionError:"Impossibile connettersi al server, controlla che sia in funzione o verifica l'indirizzo in backend_config",
             backupDone:"Backup completato.",
             backupPost:"Backup postposto: niente da salvare.",
             backupFailed:"Backup fallito.",

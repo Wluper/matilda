@@ -1,5 +1,5 @@
 /************************************
-* All Dialgoues View "aka MAIN LIDA VIEW"
+* All Dialgoues View "aka MAIN MATILDA VIEW"
 *************************************/
 
 Vue.component("all-dialogues", {

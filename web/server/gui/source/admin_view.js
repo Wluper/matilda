@@ -1,5 +1,5 @@
 /************************************
-* MAIN ADMIN LIDA VIEW
+* MAIN ADMIN MATILDA VIEW
 *************************************/
 
 Vue.component("main-admin-view", {

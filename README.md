@@ -6,7 +6,7 @@
 3. Production ready server with Gunicorn and nginx
 4. New annotation functions
 
-# LIDA: Lightweight Interactive Dialogue Annotator
+# MATILDA: Multi-AnnoTator multi-language Interactive Lightweight Dialogue Annotator
 
 **Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
 
@@ -14,34 +14,34 @@
 
 **Paper:** Link will Follow for the 2019 EMNLP Paper (together with citation)
 
-LIDA is an open source dialogue annotation system which supports the full
+MATILDA is an open source dialogue annotation system which supports the full
 pipeline of dialogue annotation from dialogue / turn segmentation from raw
 text (as may be output by a transcription service) to labeling of structured
-conversation data to inter-annotator disagreement resolution. LIDA supports
+conversation data to inter-annotator disagreement resolution. MATILDA supports
 integration of arbitrary machine learning (ML) models as annotation recommenders
 to speed up annotation, and more generally any system which conforms to the
 required API.
 
-LIDA was designed with three use cases in mind:
+MATILDA was designed with three use cases in mind:
 
 1. **Experimenting With Dialogue Systems:** users can integrate a dialogue
-   system to LIDA's back end and then use LIDA's front end to talk to the
+   system to MATILDA's back end and then use MATILDA's front end to talk to the
    dialogue system and relabel the things it gets wrong. Users can then download
    these interactions as a JSON file to use a test case in future versions of
    the system.
 
 2. **Creating New Dialogue Datasets:** users can create a blank dialogue in
-   LIDA's front end then enter and label queries. They can specify arbitrary
+   MATILDA's front end then enter and label queries. They can specify arbitrary
    ML models in the back end, and the entered query will automatically be
    run through all of these.
 
 3. **Labeling Existing Dialogue Datasets:** users can upload either raw .txt or
-   .json files by dragging and dropping to LIDA's home screen. If the file is
+   .json files by dragging and dropping to MATILDA's home screen. If the file is
    a .txt file, the user will be taken to the turn and dialogue segmentation
    screen to split the text file into turns and dialogues. If the file is a
    .json file, it must be in the correct format (described below). Users will
-   then be able to label their uploaded data using LIDA's front end. Once
-   annotations have been obatined, LIDA's inter-annotator disagreement resolution
+   then be able to label their uploaded data using MATILDA's front end. Once
+   annotations have been obatined, MATILDA's inter-annotator disagreement resolution
    screen can be used to solve conflicts between annotators.
 
 ### The annotator screen
@@ -54,16 +54,16 @@ LIDA was designed with three use cases in mind:
 
 ## Installation
 
-LIDA is a client-server app. The server is written in Python with the Flask
+MATILDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue js and communicates
 with the back end via a RESTful API. 
 
-To run LIDA, you will need to first run the Flask server on your 
+To run MATILDA, you will need to first run the Flask server on your 
 local machine / wherever you want the back end to run.
 You will need to have Python 3.6 or above installed on your machine for the
 server to run.
 
-On top of that LIDA2 is also relying on a mongoDB database, either online or local
+On top of that MATILDA is also relying on a mongoDB database, either online or local
 is fine. In case of a online database you will need to set the database address in
 server/database_config.py.
 
@@ -84,17 +84,17 @@ You can test it's running by:
 
 `ps aux | grep -v grep | grep mongod`
 
-### Downloading & Installing LIDA Requirements
+### Downloading & Installing MATILDA Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
 ```bash
-$ mkdir LIDA/
-$ python3 -m venv LIDA/
-$ cd LIDA/ && source bin/activate
-(LIDA)$ git clone https://github.com/Wluper/lida.git
-(LIDA)$ cd lida/
-(LIDA)$ pip3 install -r requirements.txt
+$ mkdir MATILDA/
+$ python3 -m venv MATILDA/
+$ cd MATILDA/ && source bin/activate
+(MATILDA)$ git clone https://github.com/davivcu/matilda
+(MATILDA)$ cd matilda/web
+(MATILDA)$ pip3 install -r requirements.txt
 ```
 
 ### Option A) Running the Server with flask (WSGI) or gunicorn
@@ -102,10 +102,10 @@ $ cd LIDA/ && source bin/activate
 Assuming you have just followed the steps to Download and Install Requirements:
 
 ```bash
-(LIDA)$ pwd
-~/LIDA/lida
-(LIDA)$ cd server/
-(LIDA)$ python lida_app.py
+(MATILDA)$ pwd
+~/MATILDA/matilda/web
+(MATILDA)$ cd server/
+(MATILDA)$ python matilda_app.py
 ```
 
 You should see the Flask server running in the Terminal now on port 5000.
@@ -114,10 +114,10 @@ You should see the Flask server running in the Terminal now on port 5000.
 Alternatively you may use gunicorn to run the server app:
 
 ```bash
-(LIDA)$ pwd
-~/LIDA/lida
-(LIDA)$ cd server/
-gunicorn --bind localhost:5000 lida_app:LidaApp
+(MATILDA)$ pwd
+~/MATILDA/matilda/web
+(MATILDA)$ cd server/
+gunicorn --bind localhost:5000 matilda_app:MatildaApp
 ```
 
 ### Option B) Running the Server with Docker
@@ -134,22 +134,22 @@ or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
 
 HTTP Requests from your client may not reach your server in some configuration environment, 
-in those few cases please see and edit the backend address in LIDA's file /web/server/gui/source/utils/backend.js.
+in those few cases please see and edit the backend address in MATILDA's file /web/server/gui/source/utils/backend.js.
 
 ### Username and password
 
-On its first start LIDA creates an administrator account with username "admin" and password "admin".
+On its first start MATILDA creates an administrator account with username "admin" and password "admin".
 You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
 to change the admin password from the graphical interface.
 
 
 ## Adding Custom Labels
 
-### LIDA Main Tool
-All configuration changes that you may wish to make to LIDA can be done in the
-file `server/annotator_config.py`. This script contains a configuration dictionary that describes which labels will appear in LIDA's front end.
+### MATILDA Main Tool
+All configuration changes that you may wish to make to MATILDA can be done in the
+file `server/annotator_config.py`. This script contains a configuration dictionary that describes which labels will appear in MATILDA's front end.
 
-You can currently add three different types of new labels to LIDA:
+You can currently add three different types of new labels to MATILDA:
 
 1. `multilabel_classification` :: will display as checkboxes which you can
    select one or more of.
@@ -177,7 +177,7 @@ see examples of all label types in `server/annotator_config.py`.
 ### The Annotator Config file
 ![Annotator Config](images/ann_conf.png)
 
-### LIDA Interannotator Tool
+### MATILDA Interannotator Tool
 
 All configuration changes that you would like to add to the Interannotator tool can be done in `server/interannotator_config.py`.
 
@@ -189,15 +189,15 @@ It currently allows you to modify the following:
 
 ## Adding ML Models As Recommenders
 
-All configuration changes that you may wish to make to LIDA can be done in the
+All configuration changes that you may wish to make to MATILDA can be done in the
 file `server/annotator_config.py`. This script contains a configuration
-dictionary that describes which labels will appear in LIDA's front end.
+dictionary that describes which labels will appear in MATILDA's front end.
 
 To add a recommender, simply add a field called `"model"` to the element of the
 config dict that you want to add a recommender for. The value of this field
 needs to be a Python object that conforms to the interface defined below.
 
-Any recommender you add to LIDA must conform to the following API: each
+Any recommender you add to MATILDA must conform to the following API: each
 recommender is a **Python object** that has a method called `transform`:
 
 `transform(sent: str) -> List[str] or List[Tuple[str, str]] or str`
@@ -221,13 +221,13 @@ need to conform to the `label_type`. What this means is:
   `predictor.transform("I want a hotel for 5 people") -> [("hotel-book people", "5")]`
 
 * If the element's `label_type` is `string`, then the `transform()` method needs
-  to also return a string. For example, you could add a dialogue system to LIDA
+  to also return a string. For example, you could add a dialogue system to MATILDA
   using this label type:
 
   `dialogue_system.transform("I want a hotel") -> "What area of town?"`
 
 You can see more examples of this in `server/dummy_models.py` and see how they
-are integrated to LIDA's back end in the current `server/annotator_config.py`
+are integrated to MATILDA's back end in the current `server/annotator_config.py`
 script.
 
 ### Dummy Models

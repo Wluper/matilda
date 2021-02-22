@@ -1,7 +1,7 @@
 version: '3'
 services:
-  lida:
-    image: davivcu/lida2:latest
+  matilda:
+    image: davivcu/matilda:latest
     volumes: 
       - ./configuration:/configuration
     network_mode: "host"
