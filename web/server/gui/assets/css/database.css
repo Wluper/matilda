@@ -371,6 +371,12 @@ input:not(:checked) + div {
     border-left-color:red !important;
 }
 
+.creation-list {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.64);
+    margin-top: 1%;
+}
+
 .collection-list .entry-info:hover {
     border-left:5px solid #3a9dd6;
 }

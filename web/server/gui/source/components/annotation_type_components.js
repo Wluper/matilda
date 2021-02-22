@@ -410,7 +410,7 @@ Vue.component('classification-string-annotation', {
                 <div v-if="multilabelStringOptions" class="annotator-switch">
                   <template v-for="option,index in multilabelStringOptions">
                       <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(classification_strings)">GOLD</button>
-                      <button v-else class="switch-button" v-on:click="switchSlotValue(option)">Option {{index}}</button>
+                      <button v-else class="switch-button" v-on:click="switchSlotValue(option)">{{guiMessages.selected.resolution_app.option}} {{index}}</button>
                   </template>
                 </div>
 

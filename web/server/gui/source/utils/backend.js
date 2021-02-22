@@ -20,7 +20,6 @@ async function put_name(name){
         return false;
     }
 
-
 };
 
 
@@ -91,6 +90,26 @@ async function get_annotation_style_async(collection,id,supervision){
 
     }
 
+};
+
+async function get_registered_annotation_styles(){
+
+    const apiLink = API_BASE+"/registered_annotationstyles";
+
+    try {
+        var response = await axios.get(apiLink)
+
+
+        annotationStyles = response.data
+        console.log("============= REGISTERED ANNOTATION STYLES ==============")
+        console.log(annotationStyles)
+        return annotationStyles
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
 
 };
 
@@ -994,6 +1013,7 @@ backend =
     annotate_query                              : annotate_query,
     write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,
+    get_registered_annotation_styles            : get_registered_annotation_styles,
 
     get_all_dialogues_async                     : get_all_dialogues_async,
     put_single_dialogue_async                   : put_single_dialogue_async,

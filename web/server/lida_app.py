@@ -124,6 +124,15 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
     return jsonify( responseObject )
 
+@LidaApp.route('/registered_annotationstyles', methods=['GET'])
+def retrieve_and_return_annotation_styles():
+    """
+    Returns the annotation styles registered in configuration json
+    """
+    responseObject = {"registered_models": Configuration.annotation_styles}
+
+    return jsonify( responseObject )
+
 @LidaApp.route('/dialogue_annotationstyle/<collection>', methods=['GET'])
 @LidaApp.route('/<user>/dialogue_annotationstyle/<collection>/<id>',methods=['GET'])
 @LidaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>', methods=['GET'])

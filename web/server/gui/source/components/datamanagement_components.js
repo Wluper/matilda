@@ -658,6 +658,7 @@ Vue.component('collection-creation', {
             guiMessages,
             role: mainApp.role,
             checkedUsers:[],
+            registeredAnnotationStyles:[]
         }
     },
 
@@ -668,7 +669,16 @@ Vue.component('collection-creation', {
     methods: {
 
         init : function(){
-            //
+            this.request_annotation_styles()
+        },
+
+        request_annotation_styles: function() {
+            backend.get_registered_annotation_styles()
+                .then( (response) => {
+                    this.registeredAnnotationStyles = response["registered_models"];
+                    this.entry.annotationStyle = response["registered_models"][0]
+                }
+            );
         },
 
         close_document_view: function() {
@@ -744,7 +754,18 @@ Vue.component('collection-creation', {
                   <input class="collection-input" type="text" v-model="entry.description" :placeholder="guiMessages.selected.coll_creation[2]">
                   <br>
                 <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
+
+                  <select class="collection-input creation-list" v-model="entry.annotationStyle">
+                    <template v-for="annotationStyle,index in registeredAnnotationStyles">
+                        <option v-if="index == 0" v-bind:value="annotationStyle" selected="true">
+                            {{annotationStyle}}
+                        </option>
+                        <option v-else v-bind:value="annotationStyle">
+                            {{annotationStyle}}
+                        </option>
+                    </template>
+                  </select>
+
                   <br><br>
                 {{guiMessages.selected.modal_document[0]}}
                 </strong>
