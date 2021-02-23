@@ -1,7 +1,7 @@
 {
 	"app": {
-		"address":"localhost",
-		"port":5000,
+		"address":"0.0.0.0",
+		"port":8080,
 		"annotation_models":["unipi_model.json","lida_model.json"]
 	},
 	"database": {
