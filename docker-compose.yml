@@ -1,19 +1,28 @@
-version: '3'
+version: '3.6'
 services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./configdb:/data/configdb
+      - ./db:/data/db
+    restart: always
+    logging:
+      driver: "json-file"
+    networks:
+      - mongo_net
+    ports:
+      - 27017:27017
   matilda:
     image: davivcu/matilda:beta
     volumes: 
       - ./configuration:/configuration
-    network_mode: "host"
     restart: always
     logging:
       driver: "json-file"
-  mongodb:
-    image: mongo:bionic
-    volumes:
-      - ./configdb:/data/configdb
-      - ./db:/data/db
-    network_mode: "host"
-    restart: always
-    logging:
-      driver: "json-file"
+    ports:
+      - 5000:5000
+    networks:
+      - mongo_net
+networks:
+  mongo_net:
+    driver: bridge

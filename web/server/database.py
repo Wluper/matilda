@@ -35,6 +35,7 @@ class DatabaseManagement(object):
 	#importing json configuration file
 	conf = Configuration.conf
 
+	#the uri, if present, will override the legacy configuration
 	databaseURI = database_uri_compose(conf["database"])
 
 	client = MongoClient(databaseURI)
