@@ -146,8 +146,9 @@ to change the admin password from the graphical interface.
 ## Adding Custom Labels
 
 ### MATILDA Main Tool
-All configuration changes that you may wish to make to MATILDA can be done in the
-file `server/annotator_config.py`. This script contains a configuration dictionary that describes which labels will appear in MATILDA's front end.
+All configuration changes that you may wish to make to MATILDA's annotation model can be done in the
+file `web/server/lida_model.json`. This script contains a configuration dictionary that describes which labels will appear in MATILDA's front end. 
+You can also add an entire new annotation model file and put a reference to it in the `configuration/conf.json` file.
 
 You can currently add three different types of new labels to MATILDA:
 
@@ -244,8 +245,8 @@ have the following properties:
   of key-value pairs which are used to display the dialogue data for annotation.
 
 * Some key-value pairs are compulsory in order to correctly display the
-  dialogue. The key-value pairs which are compulsory are defined in the
-  `annotator_config.py` file in the `server` folder.
+  dialogue. The key-value pairs which are compulsory are defined in the 
+  `annotation model json file` read by `annotator_config.py` in the `web\server` folder.
 
 * By default, the only required key-value pair in each turn is called
   `usr` and should be the user's query as a string.
