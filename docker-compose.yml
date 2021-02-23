@@ -1,7 +1,7 @@
 version: '3'
 services:
   matilda:
-    image: davivcu/matilda:latest
+    image: davivcu/matilda:beta
     volumes: 
       - ./configuration:/configuration
     network_mode: "host"
