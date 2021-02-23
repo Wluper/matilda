@@ -48,15 +48,14 @@ class Configuration(object):
         #docker
         with open('configuration/conf.json') as json_file:
             conf = json.load(json_file)
+            __DEFAULT_PATH = "configuration/"
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:
             conf = json.load(json_file)
+            __DEFAULT_PATH = "../../configuration/"
 
-    # Folder where annotation models are stored
-    __DEFAULT_PATH = "annotation_styles"
-
-    # Here the annotation model file names
+    # Here the list of annotation model file names
     annotation_styles = conf["app"]["annotation_models"]
 
     # Dict where classifications are stored
@@ -66,7 +65,7 @@ class Configuration(object):
     metaTags = ["collection","status","ID"]
 
     for model in annotation_styles:
-        with open(model) as style_file:
+        with open(__DEFAULT_PATH+model) as style_file:
             configDict[model] = json.load(style_file)
             #convert back functions and classes from string 
             for key,value in configDict[model].items():
