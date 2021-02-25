@@ -6,53 +6,6 @@
 3. Production ready server with Gunicorn and nginx
 4. New annotation functions
 
-# LIDA: Lightweight Interactive Dialogue Annotator
-
-**Authors:** Ed Collins, Nikolai Rozanov, Bingbing Zhang,
-
-**Contact:** contact@wluper.com
-
-**Paper:** Link will Follow for the 2019 EMNLP Paper (together with citation)
-
-LIDA is an open source dialogue annotation system which supports the full
-pipeline of dialogue annotation from dialogue / turn segmentation from raw
-text (as may be output by a transcription service) to labeling of structured
-conversation data to inter-annotator disagreement resolution. LIDA supports
-integration of arbitrary machine learning (ML) models as annotation recommenders
-to speed up annotation, and more generally any system which conforms to the
-required API.
-
-LIDA was designed with three use cases in mind:
-
-1. **Experimenting With Dialogue Systems:** users can integrate a dialogue
-   system to LIDA's back end and then use LIDA's front end to talk to the
-   dialogue system and relabel the things it gets wrong. Users can then download
-   these interactions as a JSON file to use a test case in future versions of
-   the system.
-
-2. **Creating New Dialogue Datasets:** users can create a blank dialogue in
-   LIDA's front end then enter and label queries. They can specify arbitrary
-   ML models in the back end, and the entered query will automatically be
-   run through all of these.
-
-3. **Labeling Existing Dialogue Datasets:** users can upload either raw .txt or
-   .json files by dragging and dropping to LIDA's home screen. If the file is
-   a .txt file, the user will be taken to the turn and dialogue segmentation
-   screen to split the text file into turns and dialogues. If the file is a
-   .json file, it must be in the correct format (described below). Users will
-   then be able to label their uploaded data using LIDA's front end. Once
-   annotations have been obatined, LIDA's inter-annotator disagreement resolution
-   screen can be used to solve conflicts between annotators.
-
-
-### The annotator screen
-
-![Annotator Screen](images/ann.png)
-
-
-### The inter-annotator screen
-![Inter-annotator Screen](images/inn.png)
-
 ## Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
@@ -64,10 +17,9 @@ local machine / wherever you want the back end to run.
 You will need to have Python 3.6 or above installed on your machine for the
 server to run.
 
-On top of that MATILDA is also relying on a mongoDB database, either online or local. 
-In case of a online database you will need to set the database address in
+MATILDA is also relying on a mongoDB database, either online or local. 
+If you are using an online database you will need to set the database address in
 configuration/conf.json
-
 
 ### Installing a MongoDB local database
 
