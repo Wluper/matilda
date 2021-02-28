@@ -88,8 +88,8 @@ or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
 
 HTTP Requests from your client may not reach your server in some configuration environment, 
-in those few cases please see and edit the backend address in MATILDA's file /web/server/gui/source/utils/backend.js.
-Other configuration options are exposed in Configuration/conf.json.
+in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
+Other configuration options are exposed in `/Configuration/conf.json`.
 
 ### Username and password
 
@@ -102,9 +102,9 @@ to change the admin password from the graphical interface.
 
 ### MATILDA Main Tool
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
-`Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
+`/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
 which labels will appear in MATILDA's front end. You can also add an entire new annotation model file and put a reference 
-to it in the `configuration/conf.json` file.
+to it in the `/Configuration/conf.json` file.
 
 You can currently add three different types of new labels to MATILDA:
 
@@ -121,7 +121,7 @@ You can currently add three different types of new labels to MATILDA:
    user's query.
 
 To add a new label, simply specify a new entry in the `configDict` in
-`web/server/annotator_config.py`.  The key should be the name of the label, and the
+`/web/server/annotator_config.py`.  The key should be the name of the label, and the
 value a dictionary which has a field specifying the `label_type`, a boolean
 field `required` which defines whether the label is required or not and a field
 called `labels` which specify what label values there are for this label (not
@@ -129,14 +129,14 @@ applicable to labels of type `string`).
 
 You can optionally add a `description` field and a `model` field which provides
 a recommender for the label (see below for details on API requirement). You can
-see examples of all label types in `server/annotator_config.py`.
+see examples of all label types in `/web/server/annotator_config.py`.
 
 ### The Annotator Config file
 ![Annotator Config](images/ann_conf.png)
 
 ### MATILDA Interannotator Tool
 
-All configuration changes that you would like to add to the Interannotator tool can be done in `web/server/annotator_config.py`.
+All configuration changes that you would like to add to the Interannotator tool can be done in `/web/server/annotator_config.py`.
 
 It currently allows you to modify the following:
 
@@ -147,7 +147,7 @@ It currently allows you to modify the following:
 ## Adding ML Models As Recommenders
 
 All configuration changes that you may wish to make to MATILDA can be done in the
-file `server/annotator_config.py`. This script contains a configuration
+file `/web/server/annotator_config.py`. This script contains a configuration
 dictionary that describes which labels will appear in MATILDA's front end.
 
 To add a recommender, simply add a field called `"model"` to the element of the
@@ -183,8 +183,8 @@ need to conform to the `label_type`. What this means is:
 
   `dialogue_system.transform("I want a hotel") -> "What area of town?"`
 
-You can see more examples of this in `server/dummy_models.py` and see how they
-are integrated to MATILDA's back end in the current `server/annotator_config.py`
+You can see more examples of this in `/web/server/dummy_models.py` and see how they
+are integrated to MATILDA's back end in the current `web/server/annotator_config.py`
 script.
 
 ### Dummy Models
@@ -202,12 +202,12 @@ have the following properties:
 
 * Some key-value pairs are compulsory in order to correctly display the
   dialogue. The key-value pairs which are compulsory are defined in the 
-  `annotation model json file` read by `annotator_config.py` in the `/Configuration` folder.
+  annotation model json file in the `/Configuration` folder read by `/web/gui/server/annotator_config.py` module. 
 
 * By default, the only required key-value pair in each turn is called
   `usr` and should be the user's query as a string.
 
-An example of data in the correct form can be seen in `web/server/LIDA_ANNOTATIONS/dummy_data.json`.
+An example of data in the correct form can be seen in `/web/server/LIDA_ANNOTATIONS/dummy_data.json`.
 
 ### JSON Format Example
 ![JSON format](images/ann_conf.png)
