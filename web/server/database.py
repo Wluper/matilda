@@ -22,7 +22,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 # == Local ==
-from utils import load_json_file, save_json_file, database_uri_compose
+from utils import database_uri_compose
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 
