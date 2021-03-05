@@ -458,7 +458,7 @@ class AdminAnnotator(object):
     """
     class that handles everything which relates to managing the administrator global dialogues space
     """
-    __DEFAULT_FILENAME="admin.json"
+    __DEFAULT_FILENAME = "admin.json"
 
     def __init__( self, filePath, fileName=None, dialogues=None ):
         """
@@ -500,7 +500,6 @@ class AdminAnnotator(object):
                 self.__dialogues = load_json_file( os.path.join( self.__filePath, self.__fileName+".json" ) )
             except FileNotFoundError:
                 save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName+".json") )
-
         else:
             self.__fileName = AdminAnnotator.__DEFAULT_FILENAME
 
@@ -588,8 +587,7 @@ class AdminAnnotator(object):
         """
         Save the dialogues dictionary
         """
-        #deactivated but working
-        #save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, "INTER_"+self.__fileName+".json" ) )
+        save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName+".json" ) )
 
 
     def __get_new_dialogue_id(self):
@@ -600,11 +598,5 @@ class AdminAnnotator(object):
         return newId
 
         # save_json_file( obj=self.__dialogues, path=self.__filePath )
-
-
-
-
-
-
 
 # EOF

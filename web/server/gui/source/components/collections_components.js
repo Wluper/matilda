@@ -116,8 +116,12 @@ Vue.component("collection-view", {
                         mainApp.done = response[0].done;
                         mainApp.lastUpdate = response[0].lastUpdate;
                         this.collectionRate = response[0].status;
-                        mainApp.annotationStyle = document.getElementById("activeAnnotationStyle").textContent;
-                        document.getElementById("showAnnotationStyle").textContent = mainApp.annotationStyle;
+                        //updating annotation style view
+                        activeAnnotationStyleNode = document.getElementById("activeAnnotationStyle");
+                        if (activeAnnotationStyleNode != null) {
+                            mainApp.annotationStyle = activeAnnotationStyleNode.textContent;
+                            activeAnnotationStyleNode.textContent = mainApp.annotationStyle;
+                        }
                     } else {
                         //if active collection document doesn't exist anymore
                         mainApp.activeCollection = null;

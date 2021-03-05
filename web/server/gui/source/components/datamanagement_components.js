@@ -731,11 +731,11 @@ Vue.component('collection-creation', {
                     console.log(response);
                     if (!response["data"]["error"]) {
                         console.log("============== Dialogues-Collection Created ==============");
+                        databaseEventBus.$emit('creation_completed');
                     } else {
                         console.log("============== Dialogues-Collection Error ==============");
                         alert(response["data"]["error"]);
                     }
-                    databaseEventBus.$emit('creation_completed');
             });
         }
     },

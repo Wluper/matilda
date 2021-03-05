@@ -42,7 +42,7 @@ class DatabaseManagement(object):
 
 	db = client[conf["database"]["name"]]
 
-	print(" * Connecting to database '"+conf["database"]["name"]+"'")
+	print(" * Connecting to database '"+conf["database"]["name"]+"'...")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
@@ -59,11 +59,11 @@ class DatabaseManagement(object):
 			return DatabaseManagement.annotatedCollections
 		else:
 			return DatabaseManagement.users
-	
+
 	def readDatabase(coll,pairs=None, projection=None):
-		# if field parameter is provided the search will be a projection of the id
-		# and the requested field only.
-		# if string is provided the search will be restricted to the string match
+		# if pairs parameter is provided the search will be a projection of the id
+		# and the requested fields.
+		# if string is provided the search will be restricted to the string match.
 		# last parameter allows to restrict response to desired fields
 
 		responseObject = []
@@ -187,10 +187,6 @@ class DatabaseManagement(object):
 
 
 class LoginFuncs(object):
-
-##############################################
-#  INIT
-##############################################
 
 	administratorDefault = {
 		"id":"admin",

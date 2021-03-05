@@ -191,6 +191,7 @@ Vue.component('classification-string-annotation', {
             collapsed: false,
             showInfo: false,
             guiMessages,
+            savedOptions: this.multilabelStringOptions,
         }
 
     },
@@ -374,11 +375,26 @@ Vue.component('classification-string-annotation', {
       },
 
       switchSlotValue(option) {
+          console.log(option)
           //switch annotated version
-          fieldList = document.getElementById("annotation-component").querySelectorAll("input");
+          console.log("gold",this.classification_strings);
+          console.log("optiosn",this.multilabelStringOptions);
+          let fieldList = document.getElementById("annotation-component").querySelectorAll("input");
           fieldList.forEach( field => field.value = "");
           for (var i=0; i<option.length;i++) {
             document.getElementById(option[i][0]+"_input").value = option[i][1];
+            console.log(option);
+            console.log(fieldList);
+            if (option[i][1] == undefined) {
+              var nuovoValore = "";
+            } else {
+              var nuovoValore = option[i][1];
+            }
+            console.log(nuovoValore);
+            console.log(option[i][0]);
+            console.log(nodoInput);
+            nodoInput = document.getElementById(option[i][0]+"_input");
+            this.updateClassAndString(nodoInput,option[i][0]);
           }
       }
     },
@@ -409,7 +425,7 @@ Vue.component('classification-string-annotation', {
 
                 <div v-if="multilabelStringOptions" class="annotator-switch">
                   <template v-for="option,index in multilabelStringOptions">
-                      <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(classification_strings)">GOLD</button>
+                      <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(option)">GOLD</button>
                       <button v-else class="switch-button" v-on:click="switchSlotValue(option)">{{guiMessages.selected.resolution_app.option}} {{index}}</button>
                   </template>
                 </div>

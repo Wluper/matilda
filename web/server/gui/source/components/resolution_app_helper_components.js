@@ -256,6 +256,7 @@ Vue.component("resolutions", {
     template:
     `
     <div id="resolutions">
+    
         <div class="left">
             <string-type-data v-bind:usr="error.usr" v-bind:sys="error.sys">
             </string-type-data>
@@ -334,9 +335,7 @@ Vue.component("annotation-component", {
             v-bind:uniqueName="uniqueName"
             v-bind:classes="annotationFormat"
             v-bind:confidences="confidences"
-            v-bind:multilabelStringOptions="multilabelStringOptions"
-            >
-
+            v-bind:multilabelStringOptions="multilabelStringOptions">
         </classification-string-annotation>
 
         <div v-else >
