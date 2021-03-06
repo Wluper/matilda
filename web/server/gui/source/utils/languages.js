@@ -135,7 +135,8 @@ guiMessages = {
             accept:"Accept",
             noConflicts:"No annotation conflicts found in this dialogue",
             updateAccepted:"Value updated",
-            option: "Fill with option"
+            option: "Fill with option",
+            prediction: "Prediction",
         },
         admin_panel: [
             "Compare annotations on the same collection and resolve its conflicts",
@@ -377,7 +378,8 @@ guiMessages = {
             accept:"Accetta",
             noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo",
             updateAccepted:"Annotazione aggiornata",
-            option: "Riempi da opzione"
+            option: "Riempi da opzione",
+            prediction: "Predizione"
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
@@ -620,6 +622,7 @@ guiMessages = {
             noConflicts:"In diesem Dialog wurden keine Anmerkungskonflikte gefunden",
             updateAccepted:"Wert aktualisiert",
             option: "Fill with option",
+            prediction: "Prediction",
         },
         admin_panel: [
             "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",

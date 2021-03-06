@@ -211,9 +211,9 @@
     height: 100%;
     width: 100%;
     display: grid !important;
-    grid-template:  [row1-start] "input-title annotation-title" 6fr [row1-end]
-                    [row2-start] "input-data annotation-data" 6fr [row2-end]
-                    [row3-start] "accept-area annotation-data" 1.5fr [row3-end] / 3fr 2fr
+    grid-template:  [row1-start] "input-data annotation-data" 6fr [row1-end]
+                    [row2-start] "accept-area annotation-data" 1.5fr [row2-end]
+                    / 3fr 2fr;
     background: white;
     border-top: 1px solid #e1e1e3;
     box-shadow: 0 -1px 3px rgba(0,0,0,0.06);

@@ -182,7 +182,7 @@ Vue.component('classification-annotation',{
 
 Vue.component('classification-string-annotation', {
 
-    props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions"],
+    props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions","accepted"],
 
     data () {
 
@@ -191,7 +191,8 @@ Vue.component('classification-string-annotation', {
             collapsed: false,
             showInfo: false,
             guiMessages,
-            savedOptions: this.multilabelStringOptions,
+            backup_classification_strings: this.classification_strings,
+            saved_classification_strings: this.classification_strings,
         }
 
     },
@@ -241,9 +242,9 @@ Vue.component('classification-string-annotation', {
 
       checkedMethod : function(labelName){
 
-          for (classStringTuple in this.classification_strings) {
+          for (classStringTuple in this.saved_classification_strings) {
 
-              if (this.classification_strings[classStringTuple][0] == labelName) {
+              if (this.saved_classification_strings[classStringTuple][0] == labelName) {
                   return true;
               }
 
@@ -254,11 +255,11 @@ Vue.component('classification-string-annotation', {
 
       getStringPart: function(labelName) {
 
-          for (classStringTuple in this.classification_strings) {
+          for (classStringTuple in this.saved_classification_strings) {
 
-              if (this.classification_strings[classStringTuple][0] == labelName) {
-                  console.log(this.classification_strings[classStringTuple][0]);
-                  return this.classification_strings[classStringTuple][1]
+              if (this.saved_classification_strings[classStringTuple][0] == labelName) {
+                  console.log(this.saved_classification_strings[classStringTuple][0]);
+                  return this.saved_classification_strings[classStringTuple][1]
 
               }
 
@@ -274,17 +275,17 @@ Vue.component('classification-string-annotation', {
           if (event.target) { slotValue = event.target.value }
             else { slotValue = event.value }
 
-          for (idx in this.classification_strings) {
+          for (idx in this.saved_classification_strings) {
 
-              if (this.classification_strings[idx][0] == labelName && slotValue !== '') {
-
-                  present = true;
-                  this.classification_strings[idx][1] = slotValue
-
-              } else if (this.classification_strings[idx][0] == labelName && slotValue == '') {
+              if (this.saved_classification_strings[idx][0] == labelName && slotValue !== '') {
 
                   present = true;
-                  this.classification_strings.splice(idx, 1)
+                  this.saved_classification_strings[idx][1] = slotValue
+
+              } else if (this.saved_classification_strings[idx][0] == labelName && slotValue == '') {
+
+                  present = true;
+                  this.saved_classification_strings.splice(idx, 1)
 
               }
 
@@ -295,12 +296,12 @@ Vue.component('classification-string-annotation', {
           }
 
           if (!present) {
-              this.classification_strings.push([labelName, slotValue])
+              this.saved_classification_strings.push([labelName, slotValue])
           }
 
           /* TODO
            * I don't understand why this is necessary - for some reason if and
-           * only if `this.classification_strings` is empty, then pushing to it
+           * only if `this.saved_classification_strings` is empty, then pushing to it
            * will not update the display. However as soon as there is
            * *ANYTHING* in the list, then it suddenly becomes reactive. The
            * only way to make the view update when the list is empty is to call
@@ -308,7 +309,7 @@ Vue.component('classification-string-annotation', {
            * realise that there's something in the list and become reactive.
            *
            * I suspect this may be related to the fact that we set an empty
-           * list as the default value for `this.classification_strings` if the
+           * list as the default value for `this.saved_classification_strings` if the
            * server doesn't send over any data to populate the list. Something
            * about the way the empty list is assigned as default seems to mean
            * it's not reactive, but my Vue.js skill isn't good enough to know
@@ -317,13 +318,13 @@ Vue.component('classification-string-annotation', {
            */
           this.$forceUpdate();
   
-          outEvent = {name: this.uniqueName, data: this.classification_strings}
+          outEvent = {name: this.uniqueName, data: this.saved_classification_strings}
 
           annotationAppEventBus.$emit('classification_string_updated', outEvent);
 
       },
 
-      clear_value: function(event,labelName) {
+      clearValue: function(event,labelName) {
           event.stopPropagation();
           let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
           if (stringField.value == "") {
@@ -337,7 +338,7 @@ Vue.component('classification-string-annotation', {
           }
       },
 
-      select_word: function(event,labelName) {
+      selectWord: function(event,labelName) {
           annotationAppEventBus.$emit("resume_annotation_tools");
           let inputField = document.getElementById(labelName+"_input");
           let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
@@ -348,11 +349,11 @@ Vue.component('classification-string-annotation', {
           inputField.title = labelName;
           inputField.id = "active_label";
 
-          document.getElementById("usr").onmouseup = this.update_slot;
-          document.getElementById("sys").onmouseup = this.update_slot;
+          document.getElementById("usr").onmouseup = this.updateSlot;
+          document.getElementById("sys").onmouseup = this.updateSlot;
       },
 
-      update_slot: function(event) {
+      updateSlot: function(event) {
           console.log("=== Gathering text ===");
           let activeLabel = document.getElementById("active_label"); 
           let labelName = activeLabel.title;
@@ -374,27 +375,61 @@ Vue.component('classification-string-annotation', {
           }
       },
 
-      switchSlotValue(option) {
-          console.log(option)
-          //switch annotated version
-          console.log("gold",this.classification_strings);
-          console.log("optiosn",this.multilabelStringOptions);
-          let fieldList = document.getElementById("annotation-component").querySelectorAll("input");
-          fieldList.forEach( field => field.value = "");
-          for (var i=0; i<option.length;i++) {
-            document.getElementById(option[i][0]+"_input").value = option[i][1];
-            console.log(option);
-            console.log(fieldList);
-            if (option[i][1] == undefined) {
-              var nuovoValore = "";
-            } else {
-              var nuovoValore = option[i][1];
+      directUpdateClassAndString: function(slotValue,labelName) {
+
+          present = false;
+
+          for (idx in this.saved_classification_strings) {
+
+              if (this.saved_classification_strings[idx][0] == labelName && slotValue !== '') {
+
+                  present = true;
+                  this.saved_classification_strings[idx][1] = slotValue
+
+              } else if (this.saved_classification_strings[idx][0] == labelName && slotValue == '') {
+
+                  present = true;
+                  this.saved_classification_strings.splice(idx, 1)
+
+              }
+
+              if (present) {
+                  break;
+              }
+
+          }
+
+          if (!present) {
+              this.saved_classification_strings.push([labelName, slotValue])
+          }
+
+          this.$forceUpdate();
+  
+          outEvent = {name: this.uniqueName, data: this.saved_classification_strings}
+
+          annotationAppEventBus.$emit('classification_string_updated', outEvent);
+
+      },
+
+      switchSlotValue: function(option) {
+          //switch annotated options from different annotators
+          this.saved_classification_strings = option;
+          for (var i=0; i<option.length; i++) {
+            this.directUpdateClassAndString(option[i][1],option[i][0]);
+          }
+          this.showFilledFirst();
+
+      },
+      
+      showFilledFirst: function() {
+          let fieldList = document.getElementById("annotation-component").querySelectorAll("input:not([type='checkbox'])");
+          console.log(fieldList);
+          for(var i=0; i<fieldList.length; i++) {
+            if (fieldList[i].value.length > 0) {
+                let nodeToMove = fieldList[i].parentNode;
+                nodeToMove.parentNode.insertBefore(nodeToMove, nodeToMove.parentNode.firstChild);
+                //fieldList[i].parentNode.parentNode.insertBefore(fieldList[i], fieldList[i].parentNode.firstChild);
             }
-            console.log(nuovoValore);
-            console.log(option[i][0]);
-            console.log(nodoInput);
-            nodoInput = document.getElementById(option[i][0]+"_input");
-            this.updateClassAndString(nodoInput,option[i][0]);
           }
       }
     },
@@ -424,9 +459,10 @@ Vue.component('classification-string-annotation', {
                 </div>
 
                 <div v-if="multilabelStringOptions" class="annotator-switch">
+                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue(backup_classification_strings)">GOLD</button>
+                  <button v-else class="switch-button" v-on:click="switchSlotValue(backup_classification_strings)">{{guiMessages.selected.resolution_app.prediction}}</button>
                   <template v-for="option,index in multilabelStringOptions">
-                      <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(option)">GOLD</button>
-                      <button v-else class="switch-button" v-on:click="switchSlotValue(option)">{{guiMessages.selected.resolution_app.option}} {{index}}</button>
+                      <button class="switch-button" v-on:click="switchSlotValue(option)">{{guiMessages.selected.resolution_app.option}} {{index}}</button>
                   </template>
                 </div>
 
@@ -465,16 +501,16 @@ Vue.component('classification-string-annotation', {
                          v-bind:id="labelName"
                          v-bind:value="labelName"
                          v-bind:checked="checkedMethod(labelName)"
-                         v-on:click="clear_value($event,labelName)">
+                         v-on:click="clearValue($event,labelName)">
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
                     <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                      <button type="button" class="txt-sel-button" @click="selectWord($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     
                     <span v-else> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"></button>
+                      <button type="button" class="txt-sel-button" @click="selectWord($event,labelName)"><img src="assets/images/text_sel.svg"></button>
                     </span>
                 </label>
 
