@@ -136,7 +136,9 @@ guiMessages = {
             noConflicts:"No annotation conflicts found in this dialogue",
             updateAccepted:"Value updated",
             option: "Fill with option",
+            optionMin: "Fill with Opt",
             prediction: "Prediction",
+            instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
         },
         admin_panel: [
             "Compare annotations on the same collection and resolve its conflicts",
@@ -379,7 +381,9 @@ guiMessages = {
             noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo",
             updateAccepted:"Annotazione aggiornata",
             option: "Riempi da opzione",
-            prediction: "Predizione"
+            optionMin: "Riempi da Opz",
+            prediction: "Predizione",
+            instructions: "Confronta le diverse annotazioni prodotte dagli annatotatori e dal sistema così da produrre una versione definitiva per la collezione gold",
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
@@ -622,7 +626,9 @@ guiMessages = {
             noConflicts:"In diesem Dialog wurden keine Anmerkungskonflikte gefunden",
             updateAccepted:"Wert aktualisiert",
             option: "Fill with option",
+            optionMin: "Fill with Opt",
             prediction: "Prediction",
+            instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
         },
         admin_panel: [
             "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",

@@ -13,7 +13,9 @@ Vue.component("resolution-menu", {
 
     methods :{
         go_back_to_all_dialogues : function(){
-            annotationAppEventBus.$emit("clean_events")
+            adminEventBus.$off("switch_slot_values", this.switchSlotValue);
+            annotationAppEventBus.$emit("clean_events");
+
         }
     },
     template:
@@ -273,6 +275,14 @@ Vue.component("resolutions", {
             </annotation-component>
         </div>
 
+        <slot-resolution-header
+            v-bind:classification_strings="error.predictions"
+            v-bind:uniqueName="error.name"
+            v-bind:classes="annotationFormat"
+            v-bind:multilabelStringOptions="error.options"
+            v-bind:accepted="metaList[0].accepted">
+        </slot-resolution-header>
+
         <accept v-bind:metaData="{ id : errorId, turn: error.turn, name: error.name }" v-bind:metaList="metaList">
         </accept>
     </div>
@@ -395,11 +405,112 @@ Vue.component("string-type-data", {
     `
 });
 
-
-
 /************************************
 * Resolutions
 *************************************/
+
+Vue.component("slot-resolution-header", {
+    props :[
+        "multilabelStringOptions", "accepted", "uniqueName", "classification_strings", "classes"
+    ],
+
+    data() { 
+        return {
+            guiMessages,
+            collapsed: false,
+            showInfo: false,
+            backup_classification_strings: this.classification_strings,
+            saved_classification_strings: this.classification_strings,
+        }
+    },  
+
+    // METHODS
+    methods:{
+
+         toggleCollapse: function () {
+
+             if (this.collapsed) {
+                 this.collapsed = false;
+             } else {
+                 this.collapsed = true;
+             }
+
+         },
+
+         turnSeparatorWhite: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = 'white';
+
+         },
+
+         turnSeparatorGrey: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = '#aaa';
+
+         },
+
+         switchSlotValue: function(option) {
+            adminEventBus.$emit("switch_slot_values", option);
+         }
+
+    },
+
+    template:
+    `
+    <div class="slot-resolution-header">
+
+        <div v-if="collapsed"
+             class="classification-annotation">
+
+            <div class="sticky space collapsor"
+                 v-on:click="toggleCollapse()"
+                 v-on:mouseover="turnSeparatorWhite()"
+                 v-on:mouseout="turnSeparatorGrey()">
+                {{uniqueName}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+                <span class="soft-text">{{guiMessages.selected.resolution_app.instructions}}</span>
+            </div>
+
+        </div>
+
+        <div v-else class="classification-annotation">
+
+            <div class="single-annotation-header">
+                <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    {{uniqueName.replace(/_/g, ' ')}}
+                </div>
+
+                <div v-if="multilabelStringOptions" class="annotator-switch">
+                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue(backup_classification_strings)">GOLD</button>
+                  <template v-for="option,index in multilabelStringOptions">
+                      <button class="switch-button" v-on:click="switchSlotValue(option)">
+                        <template v-if="multilabelStringOptions.length > 2">{{guiMessages.selected.resolution_app.optionMin}}</template> 
+                        <template v-else>{{guiMessages.selected.resolution_app.option}}</template> 
+                        {{index+1}}</button>
+                  </template>
+                </div>
+
+            </div>
+
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ info }}
+                </div>
+
+                <hr>
+
+            </div>
+        
+        </div>
+
+    </div>
+    `
+});
+
 
 Vue.component("accept", {
     props :[
