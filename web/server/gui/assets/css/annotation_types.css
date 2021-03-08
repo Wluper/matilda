@@ -210,8 +210,8 @@
 }
 
 #resolutions .single-annotation-header {
-    grid-template: [row1-start] "name-zone switches info-button-zone" [row1-end]
-                 / 1fr 3fr 1fr
+    grid-template: [row1-start] "name-zone switches ." [row1-end]
+                 / 1fr 5fr 0.5fr
 }
 
 .single-annotation-header > div {

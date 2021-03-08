@@ -257,7 +257,7 @@
     margin-right: 10px;
 }
 
-.slot-resolution-header {
+.resolution-type-header {
     grid-area: annotation-title;
     padding-right: 1em;
     background-color: #f1f1f3;
@@ -265,8 +265,25 @@
     color: #393939;
 }
 
-.slot-resolution-header .classification-annotation {
+.resolution-type-header .classification-annotation {
     padding-bottom:0px !important;
+}
+
+.string-type-header {
+    grid-area : input-title;
+    padding-right: 1em;
+    background-color: white;
+    border-right:1px solid #e1e1e3;;
+    padding-left: 1em;
+    padding-top: 1.5em;
+    padding-left: 2em;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: #222;
+    border-radius: 3px;
+    height: 3em;
+    margin: 0 0 10px;
+    overflow: hidden;
 }
 
 

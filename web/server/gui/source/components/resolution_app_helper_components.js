@@ -220,7 +220,8 @@ Vue.component("resolutions", {
 
     data () {
         return {
-            annotationStyle : {}
+            annotationStyle : {},
+            guiMessages
         }
     },
 
@@ -258,10 +259,21 @@ Vue.component("resolutions", {
     template:
     `
     <div id="resolutions">
+
+        <div class="string-type-header">{{guiMessages.selected.annotation_app.turnId}}</div>
+
         <div class="left">
             <string-type-data v-bind:usr="error.usr" v-bind:sys="error.sys">
             </string-type-data>
         </div>
+
+        <resolution-type-header
+            v-bind:classification_strings="error.predictions"
+            v-bind:uniqueName="error.name"
+            v-bind:classes="annotationFormat"
+            v-bind:multilabelStringOptions="error.options"
+            v-bind:accepted="metaList[0].accepted">
+        </resolution-type-header>
 
         <div class="right">
             <annotation-component
@@ -274,14 +286,6 @@ Vue.component("resolutions", {
                 v-bind:metaList="metaList">
             </annotation-component>
         </div>
-
-        <slot-resolution-header
-            v-bind:classification_strings="error.predictions"
-            v-bind:uniqueName="error.name"
-            v-bind:classes="annotationFormat"
-            v-bind:multilabelStringOptions="error.options"
-            v-bind:accepted="metaList[0].accepted">
-        </slot-resolution-header>
 
         <accept v-bind:metaData="{ id : errorId, turn: error.turn, name: error.name }" v-bind:metaList="metaList">
         </accept>
@@ -304,7 +308,9 @@ Vue.component("annotation-component", {
 
     data() { 
         return {
-            guiMessages
+            guiMessages,
+            //parameter which identifies if child is called in interannotator or not
+            interannotatorView: true,
         }
     },
 
@@ -337,7 +343,8 @@ Vue.component("annotation-component", {
             v-bind:classification="predictions"
             v-bind:classFormat="annotationFormat"
             v-bind:uniqueName="uniqueName"
-            v-bind:confidences="confidences">
+            v-bind:confidences="confidences"
+            v-bind:interannotatorView="interannotatorView">
         </classification-annotation>
 
         <classification-string-annotation
@@ -409,7 +416,7 @@ Vue.component("string-type-data", {
 * Resolutions
 *************************************/
 
-Vue.component("slot-resolution-header", {
+Vue.component("resolution-type-header", {
     props :[
         "multilabelStringOptions", "accepted", "uniqueName", "classification_strings", "classes"
     ],
@@ -459,7 +466,7 @@ Vue.component("slot-resolution-header", {
 
     template:
     `
-    <div class="slot-resolution-header">
+    <div class="resolution-type-header">
 
         <div v-if="collapsed"
              class="classification-annotation">

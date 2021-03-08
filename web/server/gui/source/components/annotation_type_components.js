@@ -4,7 +4,7 @@
 
 Vue.component('classification-annotation',{
 
-    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences"],
+    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "interannotatorView"],
 
 
     data () {
@@ -129,7 +129,7 @@ Vue.component('classification-annotation',{
 
         <div v-else class="classification-annotation">
 
-            <div class="single-annotation-header">
+            <div class="single-annotation-header" v-if="!interannotatorView">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
                 </div>
