@@ -23,7 +23,7 @@ configuration/conf.json
 
 ### Installing a MongoDB local database
 
-#If you don't plan to use a local database but you prefer an online one, feel free to skip this step.#
+<strong>If you don't plan to use a local database but you prefer an online one, feel free to skip this step.</strong>
 
 mongoDB requires Homebrew to install on OSX.
 Update instructions are on its official website: https://brew.sh/#install
@@ -31,7 +31,7 @@ Update instructions are on its official website: https://brew.sh/#install
 Instructions for a working local mongoDB database are here:
 https://docs.mongodb.com/manual/administration/install-community/
 
-#Testing:#
+<strong>Testing:</strong>
 
 You can test it's running by:
 
@@ -65,7 +65,7 @@ and you have a mongoDB locally installed on your system:
 You should see the Flask server running in the Terminal now on port 5000.
 
 
-Alternatively you may use gunicorn to run the server app:
+<strong>Alternatively you may use gunicorn to run the server app:</strong>
 
 ```bash
 (MATILDA)$ pwd
