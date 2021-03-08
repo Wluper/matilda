@@ -23,7 +23,7 @@ configuration/conf.json
 
 ### Installing a MongoDB local database
 
-If you don't plan to use a local database but you prefer a online one, feel free to skip this step.
+#If you don't plan to use a local database but you prefer an online one, feel free to skip this step.#
 
 mongoDB requires Homebrew to install on OSX.
 Update instructions are on its official website: https://brew.sh/#install
@@ -31,7 +31,7 @@ Update instructions are on its official website: https://brew.sh/#install
 Instructions for a working local mongoDB database are here:
 https://docs.mongodb.com/manual/administration/install-community/
 
-Testing:
+#Testing:#
 
 You can test it's running by:
 
@@ -78,7 +78,7 @@ gunicorn --bind localhost:5000 matilda_app:MatildaApp
 
 MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
 
-For these steps, please see the docker_readme.md.
+#For these steps, please see the specific instructions in `docker_readme.md.`#
 
 
 ### Running the Front End
