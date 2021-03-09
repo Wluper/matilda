@@ -6,23 +6,23 @@
 3. Production ready server with Gunicorn and nginx
 4. New annotation functions
 
-## Structure
+## Document structure
 
-1. Installation
+1. <strong>Installation</strong>
 - Installing a MongoDB local database
 - Option A) Running the Server with flask (WSGI) or gunicorn
 - Option B) Running the Server with Docker
-2. Configuration
+2. <strong>Configuration</strong>
   - Network and database
   - Annotation Models
-  - Annotation Labels
-3. Advanced Configuration
+3. <strong>Advanced Configuration</strong>
+  - New Labels
   - Interannotator Tool
   - Adding ML Models As Recommenders
   - Dummy Models
-4. JSON Format Example 
+4. <strong>JSON Format Example</strong>
 
-## Installation
+## 1. Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue js and communicates
@@ -93,7 +93,7 @@ gunicorn --bind localhost:5000 matilda_app:MatildaApp
 
 MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
 
-#For these steps, please see the specific instructions in `docker_readme.md.`#
+<strong> For these steps, please see the specific instructions in `docker_readme.md.` </strong>
 
 
 #### Running the Front End
@@ -113,7 +113,7 @@ You need to use this credentials for your first login. Once you are allowed to e
 to change the admin password from the graphical interface.
 
 
-## Configuration
+## 2. Configuration
 
 ### Network and Database
 All configuration changes that you may wish to make to MATILDA network and database can be done by editing the json file
@@ -125,7 +125,7 @@ There you can change:
 
 If you are using the Docker version you can also perform additional configuration with `/Configuration/gunicorn_run.sh`.
 
-### Annotation Labels
+### Annotation Models
 
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
 `/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
@@ -147,6 +147,11 @@ You can currently add three different types of new labels to MATILDA:
    response. This is the label field that would be used for a response to the
    user's query.
 
+
+## 3. Advanced Configuration
+
+### New Labels
+
 To add a new label, simply specify a new entry in the `configDict` in
 `/web/server/annotator_config.py`.  The key should be the name of the label, and the
 value a dictionary which has a field specifying the `label_type`, a boolean
@@ -161,8 +166,6 @@ see examples of all label types in `/web/server/annotator_config.py`.
 ### The Annotator Config file
 ![Annotator Config](images/ann_conf.png)
 
-## Advanced Configuration
-
 ### Interannotator tool
 
 All configuration changes that you would like to add to the Interannotator tool can be done in `/web/server/annotator_config.py`.
@@ -170,7 +173,6 @@ All configuration changes that you would like to add to the Interannotator tool 
 It currently allows you to modify the following:
 
 1. How to treat disagreements etc.
-
 2. How to calculate scores.
 
 ### Adding ML Models As Recommenders
@@ -238,7 +240,7 @@ have the following properties:
 
 An example of data in the correct form can be seen in `/web/server/LIDA_ANNOTATIONS/dummy_data.json`.
 
-## JSON Format Example
+## 4. JSON Format Example
 ![JSON format](images/ann_conf.png)
 
 ## Citation
