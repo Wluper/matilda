@@ -11,7 +11,7 @@ You can also configure your installation by edting `/configuration/conf.json` an
    - 64bit
    - Docker and docker-compose
 2. <strong>How to run MATILDA</strong>
-3. <strong>Install and run MATILDA</strong>
+3. <strong>Installation</strong>
 4. <strong>Stopping and rebooting MATILDA</strong>
 5. <strong>HTTPS Support</strong><br>
    - SSL certificate
@@ -36,7 +36,7 @@ You can install Docker by following the instructions on <a href="https://docs.do
 
 This HOWTO refers to installing the Matilda inter-annotation service on a generic host, not dependent on the Operating System, provided it supports the *git* command and the Docker toolset. Both the *docker* and *docker-compose* commands must be available. See OS specific suggestions below.
 
-## Install and run the Matilda inter-annotator service
+## Installation
 
 Using the *git* command, clone this repository (or download and uncompress the zipfile), and enter the *matilda* directory.
 
