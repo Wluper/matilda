@@ -10,9 +10,9 @@
 
 1. <strong>Installation</strong>
    - Option A) Running the Server with Docker
-     - Downloading & Installing MATILDA Modules Requirements
-     - Run the server with flask or gunicorn
    - Option B) Running the Server with flask (WSGI) or gunicorn
+     - Downloading & Installing Modules Requirements
+     - Run the server 
    - Optional: Installing a MongoDB local database
    - Accessing the interface
    - First username and password
@@ -47,30 +47,14 @@ Further instructions are provided in the next paragraph.
 
 ### Option A) Running the Server with Docker
 
-MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
+MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux, OSX and Windows systems.
 
-<strong> For these steps, please see the specific instructions in `docker_readme.md.` </strong>
-
-### Optional: Installing a MongoDB local database
-
-<strong>If you don't plan to use a local database but you prefer an online one, feel free to skip this step.</strong>
-
-mongoDB requires Homebrew to install on OSX.
-Update instructions are on its official website: https://brew.sh/#install
-
-Instructions for a working local mongoDB database are here:
-https://docs.mongodb.com/manual/administration/install-community/
-
-<strong>Testing:</strong>
-
-You can test it's running by:
-
-`ps aux | grep -v grep | grep mongod`
-
+Simply install docker and docker-compose on your system and run the docker-compose.yml file.
+<strong> For a guide step by step, please see the specific instructions in `/docker_readme.md.` </strong>
 
 ### Option B) Running the Server with Flask (WSGI) or Gunicorn
 
-#### 1) Downloading & Installing MATILDA Modules Requirements
+#### 1) Downloading & Installing Modules Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -83,7 +67,7 @@ $ cd MATILDA/ && source bin/activate
 (MATILDA)$ pip3 install -r requirements.txt
 ```
 
-#### 2) Run the server with flask or gunicorn
+#### 2) Run the server with Flask or Gunicorn
 
 Assuming you have just followed the steps to "Downloading & Installing MATILDA Module Requirements"
 and you have a mongoDB locally installed on your system:
@@ -105,6 +89,23 @@ Alternatively you may use gunicorn to run the server app:
 (MATILDA)$ cd server/
 gunicorn --bind localhost:5000 matilda_app:MatildaApp
 ```
+
+### Optional: Installing a MongoDB local database
+
+<strong>If you don't plan to use a local database but you prefer an online one, feel free to skip this step.</strong>
+
+mongoDB requires Homebrew to install on OSX.
+Update instructions are on its official website: https://brew.sh/#install
+
+Instructions for a working local mongoDB database are here:
+https://docs.mongodb.com/manual/administration/install-community/
+
+<strong>Testing:</strong>
+
+You can test it's running by:
+
+`ps aux | grep -v grep | grep mongod`
+
 
 ### Accessing the interface
 
