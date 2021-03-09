@@ -10,6 +10,8 @@
 
 1. <strong>Installation</strong>
    - Option A) Running the Server with Docker
+     - Docker and docker-compose
+     - Basic start
    - Option B) Running the Server with flask (WSGI) or gunicorn
      - Downloading & Installing Modules Requirements
      - Run the server 
@@ -49,8 +51,22 @@ Further instructions are provided in the next paragraph.
 
 MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux, OSX and Windows systems.
 
-Simply install docker and docker-compose on your system and run the docker-compose.yml file.
-<strong> For a guide step by step, please see the specific instructions in `/docker_readme.md.` </strong>
+Simply install docker and docker-compose on your system and run the docker-compose.yml file in the repository.
+Using the *git* command, clone this repository (or download and uncompress the zipfile), and enter the *matilda* directory.
+
+    $ git clone https://github.com/davivcu/matilda
+    $ cd matilda
+    $ sudo docker-compose up -d
+
+## Stopping the service
+
+Unless you manually stop the service for some reason, it will be automatically started at the next boot. So the server cab be switched off/on without intervention of the administrator.
+
+To manually stop the service use the command:
+
+    $ sudo docker-compose kill
+
+<strong> For further details, please see the specific instructions in `/docker_readme.md.` </strong>
 
 ### Option B) Running the Server with Flask (WSGI) or Gunicorn
 
