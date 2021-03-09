@@ -75,7 +75,8 @@ Vue.component("resolution-app", {
             console.log("==================================");
             // GENERAL EVENT LISTENERS
             window.removeEventListener('keyup', this.resolve_keyboard_input);
-            annotationAppEventBus.$off("go_back", this.go_back)
+            annotationAppEventBus.$off("go_back", this.go_back);
+            annotationAppEventBus.$off("clean_events", this.go_back);
 
             // meta-error-list Listener
             annotationAppEventBus.$off("update_id", this.set_current_id );
@@ -83,7 +84,7 @@ Vue.component("resolution-app", {
 
             annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
-            
+
             adminEventBus.$emit("conflicts_on_collection", this.collectionId);
         },
         init: function() {
