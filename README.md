@@ -9,18 +9,18 @@
 ## Structure
 
 1. Installation
-  2.1 Installing a MongoDB local database
-  2.2 Option A) Running the Server with flask (WSGI) or gunicorn
-  2.3 Option B) Running the Server with Docker
+- Installing a MongoDB local database
+- Option A) Running the Server with flask (WSGI) or gunicorn
+- Option B) Running the Server with Docker
 2. Configuration
-  3.1 Network and database
-  3.2 Annotation Models
-  3.3 Annotation Labels
+  - Network and database
+  - Annotation Models
+  - Annotation Labels
 3. Advanced Configuration
-  4.1 Interannotator Tool
-  4.2 Adding ML Models As Recommenders
-  4.3 Dummy Models
-4. JSON Format Example
+  - Interannotator Tool
+  - Adding ML Models As Recommenders
+  - Dummy Models
+4. JSON Format Example 
 
 ## Installation
 
