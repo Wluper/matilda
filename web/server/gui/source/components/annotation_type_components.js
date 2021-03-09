@@ -352,7 +352,6 @@ Vue.component('classification-string-annotation', {
              if (activeTurn != null) {
                activeTurn.style.border = "3px solid #fafa69";
              }
-
              inputField.title = labelName;
              inputField.id = "active_label";
 
@@ -418,13 +417,18 @@ Vue.component('classification-string-annotation', {
 
          },
 
-         switchSlotValue: function(option) {
+         switchSlotValue: function(index) {
              //switch annotated options from different annotators
+             if (index == 'gold') {
+               option = this.backup_classification_strings;
+             } else {
+               option = this.multilabelStringOptions[index];
+             }
              this.saved_classification_strings = option;
              for (var i=0; i<option.length; i++) {
                this.directUpdateClassAndString(option[i][1],option[i][0]);
              }
-             //to do: filled labels showed first in the list?
+             //to do: filled labels showed higher in the list?
          },
       
       },

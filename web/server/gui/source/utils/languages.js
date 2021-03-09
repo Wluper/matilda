@@ -383,7 +383,7 @@ guiMessages = {
             option: "Riempi da opzione",
             optionMin: "Opzione",
             prediction: "Predizione",
-            instructions: "Confronta le diverse annotazioni prodotte dagli annatotatori e dal sistema così da produrre una versione definitiva per la collezione gold",
+            instructions: "Confronta le diverse annotazioni generate dal sistema e dagli annatotatori così da produrre una versione definitiva per la collezione gold",
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",

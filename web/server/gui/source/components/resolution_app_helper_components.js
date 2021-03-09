@@ -260,7 +260,7 @@ Vue.component("resolutions", {
     `
     <div id="resolutions">
 
-        <div class="string-type-header">{{guiMessages.selected.annotation_app.turnId}}</div>
+        <div class="string-type-header">{{guiMessages.selected.annotation_app.turnId}} {{error.turn}}</div>
 
         <div class="left">
             <string-type-data v-bind:usr="error.usr" v-bind:sys="error.sys">
@@ -381,8 +381,8 @@ Vue.component("string-type-data", {
             console.log(event)
             annotationAppEventBus.$emit("turn_updated_string", event )
         },
-    },
-
+    }
+,
 
     template:
     `
@@ -394,7 +394,8 @@ Vue.component("string-type-data", {
             </div>
 
             <div class="user-string-type-text">
-                <comm-input id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-if="sys.length < 95" id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" readonly> </comm-input>
+                <comm-textarea v-else id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" readonly> </comm-textarea>
             </div>
         </div>
 
@@ -404,9 +405,10 @@ Vue.component("string-type-data", {
             </div>
             
             <div class="user-string-type-text">
-                <comm-input id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr"> </comm-input>
+                <comm-input v-if="usr.length < 95" id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr" readonly> </comm-input>
+                <comm-textarea v-else id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr" readonly> </comm-textarea>
             </div>
-        </div>
+        </div> 
 
     </div>
     `
@@ -458,8 +460,8 @@ Vue.component("resolution-type-header", {
 
          },
 
-         switchSlotValue: function(option) {
-            adminEventBus.$emit("switch_slot_values", option);
+         switchSlotValue: function(optionIndex) {
+            adminEventBus.$emit("switch_slot_values", optionIndex);
          }
 
     },
@@ -489,9 +491,9 @@ Vue.component("resolution-type-header", {
                 </div>
 
                 <div v-if="multilabelStringOptions" class="annotator-switch">
-                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue(backup_classification_strings)">GOLD</button>
+                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
                   <template v-for="option,index in multilabelStringOptions">
-                      <button class="switch-button" v-on:click="switchSlotValue(option)">
+                      <button class="switch-button" v-on:click="switchSlotValue(index)">
                         <template v-if="multilabelStringOptions.length > 2">{{guiMessages.selected.resolution_app.optionMin}}</template> 
                         <template v-else>{{guiMessages.selected.resolution_app.option}}</template> 
                         {{index+1}}</button>
