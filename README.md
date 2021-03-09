@@ -6,6 +6,22 @@
 3. Production ready server with Gunicorn and nginx
 4. New annotation functions
 
+## Structure
+
+1. Installation
+  2.1 Installing a MongoDB local database
+  2.2 Option A) Running the Server with flask (WSGI) or gunicorn
+  2.3 Option B) Running the Server with Docker
+2. Configuration
+  3.1 Network and database
+  3.2 Annotation Models
+  3.3 Annotation Labels
+3. Advanced Configuration
+  4.1 Interannotator Tool
+  4.2 Adding ML Models As Recommenders
+  4.3 Dummy Models
+4. JSON Format Example
+
 ## Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
@@ -37,7 +53,7 @@ You can test it's running by:
 
 `ps aux | grep -v grep | grep mongod`
 
-### Downloading & Installing MATILDA Requirements
+### Downloading & Installing MATILDA Modules Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -50,9 +66,9 @@ $ cd MATILDA/ && source bin/activate
 (MATILDA)$ pip3 install -r requirements.txt
 ```
 
-### Option A) Running the Server with flask (WSGI) or gunicorn
+### Option A) Running the Server with Flask (WSGI) or Gunicorn
 
-Assuming you have just followed the steps to Download and Install Requirements 
+Assuming you have just followed the steps to "Downloading & Installing MATILDA Module Requirements"
 and you have a mongoDB locally installed on your system:
 
 ```bash
@@ -64,8 +80,7 @@ and you have a mongoDB locally installed on your system:
 
 You should see the Flask server running in the Terminal now on port 5000.
 
-
-<strong>Alternatively you may use gunicorn to run the server app:</strong>
+Alternatively you may use gunicorn to run the server app:
 
 ```bash
 (MATILDA)$ pwd
@@ -81,7 +96,7 @@ MATILDA also comes with a docker container you may want to use for a fast and cl
 #For these steps, please see the specific instructions in `docker_readme.md.`#
 
 
-### Running the Front End
+#### Running the Front End
 
 Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
 or navigate to the remote server address.
@@ -91,20 +106,32 @@ HTTP Requests from your client may not reach your server in some configuration e
 in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
 Other configuration options are exposed in `/Configuration/conf.json`.
 
-### Username and password
+#### Username and password
 
 On its first start MATILDA creates an administrator account with username "admin" and password "admin".
 You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
 to change the admin password from the graphical interface.
 
 
-## Adding Custom Labels
+## Configuration
 
-### MATILDA Main Tool
+### Network and Database
+All configuration changes that you may wish to make to MATILDA network and database can be done by editing the json file
+`/Configuration/conf.json`.
+There you can change:
+   - App ports (default 5000) and address (127.0.0.1)
+   - Database location with address:port combination (127.0.0.1:27017) or mongoDB URI (mongodb://mongo:27017/?retryWrites=true&w=majority)
+   - The annotation models you want to be available inside MATILDA. The json files you are referring to must be included in the Configuration folder.
+
+If you are using the Docker version you can also perform additional configuration with `/Configuration/gunicorn_run.sh`.
+
+### Annotation Labels
+
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
 `/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
-which labels will appear in MATILDA's front end. You can also add an entire new annotation model file and put a reference 
-to it in the `/Configuration/conf.json` file.
+which labels will appear in MATILDA's front end. 
+You can also add an entire new annotation model file and put a reference to it in the `/Configuration/conf.json` file in
+order to instruct the program to load it on start.
 
 You can currently add three different types of new labels to MATILDA:
 
@@ -134,7 +161,9 @@ see examples of all label types in `/web/server/annotator_config.py`.
 ### The Annotator Config file
 ![Annotator Config](images/ann_conf.png)
 
-### MATILDA Interannotator Tool
+## Advanced Configuration
+
+### Interannotator tool
 
 All configuration changes that you would like to add to the Interannotator tool can be done in `/web/server/annotator_config.py`.
 
@@ -144,7 +173,7 @@ It currently allows you to modify the following:
 
 2. How to calculate scores.
 
-## Adding ML Models As Recommenders
+### Adding ML Models As Recommenders
 
 All configuration changes that you may wish to make to MATILDA can be done in the
 file `/web/server/annotator_config.py`. This script contains a configuration
@@ -209,7 +238,7 @@ have the following properties:
 
 An example of data in the correct form can be seen in `/web/server/LIDA_ANNOTATIONS/dummy_data.json`.
 
-### JSON Format Example
+## JSON Format Example
 ![JSON format](images/ann_conf.png)
 
 ## Citation
