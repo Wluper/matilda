@@ -9,35 +9,49 @@
 ## Document structure
 
 1. <strong>Installation</strong>
-- Installing a MongoDB local database
-- Option A) Running the Server with flask (WSGI) or gunicorn
-- Option B) Running the Server with Docker
+   - Option A) Running the Server with Docker
+     - Downloading & Installing MATILDA Modules Requirements
+     - Run the server with flask or gunicorn
+   - Option B) Running the Server with flask (WSGI) or gunicorn
+   - Optional: Installing a MongoDB local database
+   - Accessing the interface
+   - First username and password
 2. <strong>Configuration</strong>
-  - Network and database
-  - Annotation Models
+   - Network and database
+   - Annotation Models
 3. <strong>Advanced Configuration</strong>
-  - New Labels
-  - Interannotator Tool
-  - Adding ML Models As Recommenders
-  - Dummy Models
+   - New Labels
+   - Interannotator Tool
+   - Adding ML Models As Recommenders
+   - Dummy Models
 4. <strong>JSON Format Example</strong>
 
 ## 1. Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
-web framework. The front end is written with HTML/CSS/Vue js and communicates
+web framework. The front end is written with HTML/CSS/Vue.js and communicates
 with the back end via a RESTful API. 
 
 To run MATILDA, you will need to first run the Flask server on your 
 local machine / wherever you want the back end to run.
-You will need to have Python 3.6 or above installed on your machine for the
-server to run.
 
-MATILDA is also relying on a mongoDB database, either online or local. 
+To do this you have two options:
+1) Using the provided docker-compose.yml file to run it
+in a docker container together with its database. This is probably faster and cleaner.
+2) Otherwise you will need to have Python 3.6 or above installed on your machine 
+and a mongoDB database, either online (there are many free services) or local. 
 If you are using an online database you will need to set the database address in
-configuration/conf.json
+configuration/conf.json.
 
-### Installing a MongoDB local database
+Further instructions are provided in the next paragraph.
+
+### Option A) Running the Server with Docker
+
+MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
+
+<strong> For these steps, please see the specific instructions in `docker_readme.md.` </strong>
+
+### Optional: Installing a MongoDB local database
 
 <strong>If you don't plan to use a local database but you prefer an online one, feel free to skip this step.</strong>
 
@@ -53,7 +67,10 @@ You can test it's running by:
 
 `ps aux | grep -v grep | grep mongod`
 
-### Downloading & Installing MATILDA Modules Requirements
+
+### Option B) Running the Server with Flask (WSGI) or Gunicorn
+
+#### 1) Downloading & Installing MATILDA Modules Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -66,7 +83,7 @@ $ cd MATILDA/ && source bin/activate
 (MATILDA)$ pip3 install -r requirements.txt
 ```
 
-### Option A) Running the Server with Flask (WSGI) or Gunicorn
+#### 2) Run the server with flask or gunicorn
 
 Assuming you have just followed the steps to "Downloading & Installing MATILDA Module Requirements"
 and you have a mongoDB locally installed on your system:
@@ -89,14 +106,7 @@ Alternatively you may use gunicorn to run the server app:
 gunicorn --bind localhost:5000 matilda_app:MatildaApp
 ```
 
-### Option B) Running the Server with Docker
-
-MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux systems. This type of deployment is not yet full supported on Mac and Windows systems.
-
-<strong> For these steps, please see the specific instructions in `docker_readme.md.` </strong>
-
-
-#### Running the Front End
+### Accessing the interface
 
 Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
 or navigate to the remote server address.
@@ -106,12 +116,11 @@ HTTP Requests from your client may not reach your server in some configuration e
 in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
 Other configuration options are exposed in `/Configuration/conf.json`.
 
-#### Username and password
+### First username and password
 
 On its first start MATILDA creates an administrator account with username "admin" and password "admin".
 You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
 to change the admin password from the graphical interface.
-
 
 ## 2. Configuration
 
