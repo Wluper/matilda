@@ -422,11 +422,11 @@ Vue.component('classification-string-annotation', {
              } else {
                option = this.multilabelStringOptions[index];
              }
-             //this.classification_strings = option;
+             this.classification_strings = option;
              for (var i=0; i<option.length; i++) {
                this.directUpdateClassAndString(option[i][1],option[i][0]);
              }
-             //to do: filled labels showed higher in the list?
+             //TODO: filled labels showed higher in the list?
          },
       
       },

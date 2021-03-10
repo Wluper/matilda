@@ -26,7 +26,8 @@ services:
   nginx:
     image: nginx
     volumes:
-      - ./nginx_conf:/etc/nginx/conf.d
+      - ./nginx_configuration/conf.d:/etc/nginx/conf.d
+      - ./nginx_configuration/make-ssl-certs.sh:/docker-entrypoint.d/40-make-ssl-certs.sh
     restart: always
     networks:
       - mongo_net

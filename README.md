@@ -1,4 +1,4 @@
-[![Wluper](https://wluper.com/content/themes/main/static/gfx/wluperlogo.png)](https://wluper.com/)     
+![WLUPER AND UNIPI](images/ResearchCollaborationMatilda.png)   
 
 **What's new in MATILDA:** 
 1. Full support for more than one annotator and project management
@@ -8,6 +8,7 @@
 
 ## Document structure
 
+0. <strong>Requirements</strong>
 1. <strong>Installation</strong>
    - Option A) Running the Server with Docker
      - Docker and docker-compose
@@ -26,6 +27,14 @@
    - Adding ML Models As Recommenders
    - Dummy Models
 4. <strong>JSON Format Example</strong>
+
+## 0. Requirements
+
+In order to run MATILDA on Docker you will need a 64bit system because that's the minimum requirements for Docker.
+The server needs 60MB on the hard disk, plus the space needed for the database.
+
+MATILDA is very light-weight. 
+Containerized with Docker MATILDA smoothly run on a system based on Intel Celeron J3355, a 2-core microprocessor dated 2016 created for entry level PCs, equipped with a 2GB RAM. During a significant processing peak induced with an upload the footprint did not exceed a few (2-3%) percent of hardware capacity.
 
 ## 1. Installation
 
@@ -52,12 +61,14 @@ MATILDA also comes with a docker container you may want to use for a fast and cl
 
 #### Docker and docker-compose
 
-Simply install docker and docker-compose on your system and run the docker-compose.yml file in the repository.
+Simply install docker and docker-compose on your system and run the docker-compose.yml file in the repository as shown above.
 Using the *git* command, clone this repository (or download and uncompress the zipfile), and enter the *matilda* directory.
 
     $ git clone https://github.com/davivcu/matilda
     $ cd matilda
     $ sudo docker-compose up -d
+
+And it's done!
 
 #### Stopping the service
 
