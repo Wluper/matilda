@@ -1,4 +1,4 @@
-![WLUPER AND UNIPI](images/ResearchCollaborationMatilda.png)   
+![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
 **What's new in MATILDA:** 
 1. Full support for more than one annotator and project management
