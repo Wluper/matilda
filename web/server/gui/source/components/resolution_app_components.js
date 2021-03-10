@@ -119,7 +119,6 @@ Vue.component("resolution-app", {
                     backend.put_error_async(errorsToSave)
                 }
             });
-
         },
 
         print : function(event){
@@ -189,11 +188,10 @@ Vue.component("resolution-app", {
             else if (temp==-1){
                 this.currentErrorId += temp;
             }
-
         },
 
         set_current_id : function(event){
-            this.currentErrorId = event
+            this.currentErrorId = event;
         },
 
         resume_interannotation_tools : function() {
