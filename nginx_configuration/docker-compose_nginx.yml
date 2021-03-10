@@ -9,7 +9,7 @@ services:
     logging:
       driver: "json-file"
     networks:
-      - mongo_net
+      - nginx_net
     ports:
       - 27017:27017
   matilda:
@@ -22,7 +22,7 @@ services:
     ports:
       - 5000:5000
     networks:
-      - mongo_net
+      - nginx_net
   nginx:
     image: nginx
     volumes:
@@ -30,12 +30,12 @@ services:
       - ./nginx_configuration/make-ssl-certs.sh:/docker-entrypoint.d/40-make-ssl-certs.sh
     restart: always
     networks:
-      - mongo_net
+      - nginx_net
     logging:
       driver: "json-file"
     ports:
       - 80:80
       - 443:443
 networks:
-  mongo_net:
+  nginx_net:
     driver: bridge
