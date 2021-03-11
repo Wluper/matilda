@@ -1,10 +1,11 @@
 ![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
 **What's new in MATILDA:** 
-1. Full support for more than one annotator and project management
-2. Database MongoDB for data delivery and consistency
-3. Production ready server with Gunicorn and nginx
-4. New annotation functions
+1. Full support for multiple annotators and project management
+2. Full support for multiple annotation models
+3. Database MongoDB for data delivery and consistency
+4. Production ready server with Gunicorn and nginx
+5. New annotation functions
 
 ## Document structure
 

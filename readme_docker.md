@@ -46,7 +46,7 @@ Using the *git* command, clone this repository (or download and uncompress the z
 
 ## Stopping the service
 
-Unless you manually stop the service for some reason, it will be automatically started at the next boot. So the server cab be switched off/on without intervention of the administrator.
+Unless you manually stop the service for some reason, it will be automatically started at the next boot. 
 
 To manually stop the service use the command:
 
@@ -113,4 +113,4 @@ The server has been tested with ubuntu 18.04 (Bionic Beaver). We advice using th
     # sudo apt upgrade
     # sudo apt install docker.io
     # sudo apt install docker-compose
-    
+   
