@@ -38,15 +38,23 @@ class DatabaseManagement(object):
 	#the uri, if present, will override the legacy configuration
 	databaseURI = database_uri_compose(conf["database"])
 
+	#connecting
 	client = MongoClient(databaseURI)
+	try:
+		print(" * \n * MATILDA: Connecting to database... \n * "+databaseURI)
+		client.server_info()
+	except Exception as e: 
+		print(" *",e, "\n * Connecting Errror. Trying again with legacy configuration...")
+		conf["database"]["optional_uri"] = None;
+		databaseURI = database_uri_compose(conf["database"])
+		client = MongoClient(databaseURI)
 
 	db = client[conf["database"]["name"]]
-
-	print(" * Connecting to database '"+conf["database"]["name"]+"'...")
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
 	annotatedCollections = db["annotated_collections"]
+
 
 ##############################################
 #  METHODS
@@ -196,14 +204,6 @@ class LoginFuncs(object):
 		"role":"administrator"
 	}
 
-	if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
-		DatabaseManagement.users.insert_one(administratorDefault)
-		#print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
-
-##############################################
-#  LOGIN FUNCTION
-##############################################
-
 	def logIn(userID, userPass):
 
 		response = { "status":"fail" }
@@ -218,3 +218,13 @@ class LoginFuncs(object):
 					response = { "status":"success", "role":userDetails["role"] }
 
 		return response
+
+	def start():
+		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
+			DatabaseManagement.users.insert_one(administratorDefault)
+			print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+		else:
+			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
+
+# DATABASE AND ADMIN ACCOUNT INIT
+LoginFuncs.start()

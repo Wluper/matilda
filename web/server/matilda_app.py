@@ -28,7 +28,6 @@ from text_splitter import convert_string_list_into_dialogue
 """
 Container Class that orchastrates the app.
 """
-print(" * Connected")
 
 __DEFAULT_PATH = "LIDA_ANNOTATIONS"
 path = __DEFAULT_PATH

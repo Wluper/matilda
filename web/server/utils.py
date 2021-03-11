@@ -42,7 +42,6 @@ def database_uri_compose(config):
 		databaseURL = config["optional_uri"]
 	
 	else:
-
 		config = config["legacy_configuration"]
 		
 		if ((config["username"] == "") or (config["username"] == None)):
