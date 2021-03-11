@@ -6,7 +6,9 @@
 
 **Contact:** contact@wluper.com
 
-**Paper:** Link will Follow for the 2019 EMNLP Paper (together with citation)
+**CITATION**: At the bottom of page
+
+**Paper LINK**: [LIDA Paper Link](https://www.aclweb.org/anthology/D19-3021/)
 
 LIDA is an open source dialogue annotation system which supports the full
 pipeline of dialogue annotation from dialogue / turn segmentation from raw
