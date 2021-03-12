@@ -145,6 +145,9 @@ Vue.component("all-dialogues", {
           <div class="all-dialogues-list-title">
               <h2>
                   <span>{{activeCollection}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
+                    <div class="annotated-bar" style="margin-top:1px;">
+                        <div class="annotated-fill" v-bind:style="{ width: collectionRate }"></div>
+                    </div>
               </h2>
           </div>
 

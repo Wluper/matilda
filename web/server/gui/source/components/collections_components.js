@@ -201,12 +201,11 @@ Vue.component("collection-view", {
     template:
     `
         <div id="annotation-view">
-            <database-header>
-            </database-header>
+            <database-header></database-header>
             <div class="inner-wrap">
 
                 <ul class="active-collection">
-                <h2>{{guiMessages.selected.lida.activeColl}}</h2>
+                <h2 class="list-title">{{guiMessages.selected.lida.activeColl}}</h2>
                     <div v-if="activeCollection != null" class="entry-list-single-item-container">
                         <div class="entry-info" v-on:click="clicked_active()">
                             <div class="entry-id">
@@ -249,7 +248,7 @@ Vue.component("collection-view", {
                 </ul>
 
                 <ul class="annotation-list">
-                <h2>{{guiMessages.selected.lida.assignedColl}}</h2>
+                <h2 class="list-title">{{guiMessages.selected.lida.assignedColl}}</h2>
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
                         
                         <div v-if="name.id == activeCollection" class="entry-list-single-item-container" style="opacity:0.3">

@@ -267,7 +267,8 @@ pre:first-line {
 }
 
 .modal-body input:read-only {
-    background-color:#8080801c;
+    background-color: #8080801c;
+    cursor: not-allowed;
 }
 
 .modal-footer button:last-of-type {

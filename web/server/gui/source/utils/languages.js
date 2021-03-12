@@ -44,6 +44,7 @@ guiMessages = {
             button_wipeCache:"Check again for errors",
             wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
             confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
+            role:"Role",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -207,7 +208,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Insert an unique id for the collection or LIDA will generate one",
+            "Insert an unique id for the collection or MATILDA will generate one",
             "Insert a title",
             "Insert a short description of the content",
             "If not provided the default one will be used.",
@@ -289,6 +290,7 @@ guiMessages = {
             userCreation:"Creazione Utente",
             confirmOverwriteUser: "L'username scelto esiste già, vuoi sovrascrivere l'utente già esistente?",
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
+            role:"Ruolo",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -316,7 +318,7 @@ guiMessages = {
             assignedColl:"Collezioni assegnate",
             alert:"Attenzione",
             welcome:"Benvenuto",
-            exiting:"Stai per uscire dalla sessione di Lida. Sei sicuro?",
+            exiting:"Stai per uscire dalla sessione di MATILDA. Sei sicuro?",
         },
         collection: {
             title: "Gestione Collezioni",
@@ -451,7 +453,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Inserisci un ID univoco per la Collezione o LIDA ne genererà uno automaticamente",
+            "Inserisci un ID univoco per la Collezione o MATILDA ne genererà uno automaticamente",
             "Inserisci un titolo",
             "Inserisci una breve descrizione",
             "Se non viene fornito verrà usato quello predefinito",
@@ -463,7 +465,7 @@ guiMessages = {
             "Collezioni",
             "Le collezioni sono gruppi di dialoghi uniti insieme per essere facilmente gestiti e assegnati.",
             "Gli amministratori creano le collezioni e le assegnano agli utenti perché le annotino.",
-            "LIDA crea un backup di ogni collezione in uso da almeno un utente, ogni due minuti.",
+            "MATILDA crea un backup di ogni collezione in uso da almeno un utente, ogni due minuti.",
             "Quando un annotatore è soddisfatto del proprio lavoro può segnalarlo come completato così che venga revisionato",
             "e gli siano assegnati nuovi compiti da svolgere.",
         ],
@@ -533,6 +535,7 @@ guiMessages = {
             button_wipeCache: "Fehlercache löschen",
             wipeCacheConfirm: "Dadurch wird die Konfliktdatei gelöscht, sodass die Konfliktlösung erneut gestartet werden kann.",
             confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
+            role:"Role",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -560,7 +563,7 @@ guiMessages = {
             activeColl: "Aktive Sammlung",
             alert: "Warnung",
             welcome: "wilkommen",
-            exiting: "Sie verlassen Lidas Sitzung. Sind Sie sicher?",
+            exiting: "Sie verlassen MATILDAs Sitzung. Sind Sie sicher?",
         },
         collection: {
             title: "Sammlungsverwaltung",
@@ -697,7 +700,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Geben Sie eine eindeutige ID für die Sammlung ein, oder LIDA generiert eine",
+            "Geben Sie eine eindeutige ID für die Sammlung ein, oder MATILDA generiert eine",
             "Titel einfügen",
             "Fügen Sie eine kurze Beschreibung des Inhalts ein",
             "Name des Anmerkungsstils",
