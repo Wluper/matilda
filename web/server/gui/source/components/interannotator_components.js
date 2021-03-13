@@ -173,7 +173,7 @@ Vue.component("interannotator-view", {
                 <div v-if="show_annotators(name.id)"
                      class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo }}
+                    {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
                 </div>
 
                 <div v-else
@@ -454,7 +454,7 @@ Vue.component("interannotator-app", {
                 <div v-if="show_annotators(dat[0])"
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1] }}
+                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
                 </div>
 
                 <div v-else
