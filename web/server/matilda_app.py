@@ -747,12 +747,25 @@ def handle_post_of_collections(mode, destination, id=None):
             annotationStyle = Configuration.annotation_styles[0]
             values["annotationStyle"] = annotationStyle
 
-        for dialogueName, dialogue in values["document"].items():
-            validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
-            if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                print("Validation for",dialogueName," failed with "+annotationStyle)
-                response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
-                return jsonify( response )
+        if (type(values["document"])) == list:
+            rebuiltDocument = {}
+            for document in values["document"]:
+                for dialogueName, dialogue in document.items():
+                    dialogue = convert_to_format(dialogue)
+                    validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
+                    if ((type(validation) is str) and (validation.startswith("ERROR"))):
+                        print("Validation for",dialogueName," failed with "+annotationStyle)
+                        #response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
+                    #return jsonify( response )
+                    rebuiltDocument[dialogueName] = dialogue
+            values["document"] = rebuiltDocument
+        else:
+            for dialogueName, dialogue in values["document"].items():
+                validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
+                if ((type(validation) is str) and (validation.startswith("ERROR"))):
+                    print("Validation for",dialogueName," failed with "+annotationStyle)
+                    response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
+                    return jsonify( response )
 
         #check for same id    
         check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })

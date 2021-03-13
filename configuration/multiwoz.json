@@ -1,28 +1,13 @@
 {
-
-        "global_slot": {
-
-            "description" : "General info related to the dialogue",
-            "label_type"  : "multilabel_global_string",
-            "required"    : false,
-            "labels"      : [
-                "result"
-            ]
-        },
-
-        "usr": {
+        
+        "text": {
             "description" : "The user's query",
             "label_type"  : "string",
             "required"    : true
         },
 
-        "sys": {
-            "description" : "The system's response",
-            "label_type"  : "string",
-            "required"    : true
-        },
 
-        "Dialogue_act": {
+        "dialog_act": {
 
             "description" : "Type of dialogue act",
             "label_type"  : "multilabel_classification",
@@ -43,7 +28,7 @@
             ]
         },
 
-        "Slot": {
+        "metadata": {
 
             "description" : "Entity's value",
             "label_type"  : "multilabel_classification_string",
@@ -68,14 +53,14 @@
 
         },
 
-        "Async": {
+        "global_slot": {
 
-            "description": "To annotate async messages",
-            "label_type"  : "multilabel_classification_string",
+            "description" : "General info related to the dialogue",
+            "label_type"  : "multilabel_global_string",
             "required"    : false,
             "labels"      : [
-		"turn_ref"
-
+                "result",
+                "goal"
             ]
 
         }

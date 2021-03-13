@@ -123,9 +123,9 @@ class Configuration(object):
                                 print(message, turn)
                                 return message
         except:
-            print("dialogue",i,"in list couldn't validate with the current annotation style model")
-            return
-
+            message = "ERROR4: dialogue "+str(i)+" in list couldn't validate with the current annotation style model"
+            print(message)
+            return message
         return dialogue
 
 
@@ -366,3 +366,16 @@ agreementScoreConfig = {
     "multilabel_classification_string" : None,
     "multilabel_global_string" : None
 }
+
+
+def convert_to_format(dialogue):
+    turnList = []
+    metaTags = {}
+    turnList.append(metaTags)
+    for element in dialogue:
+        if ((element == "log") and (type(dialogue[element]) == list)):
+            for turn in dialogue[element]:
+                turnList.append(turn)
+        else:
+            turnList[0][element] = dialogue[element]
+    return turnList
