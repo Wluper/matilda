@@ -221,7 +221,7 @@ class LoginFuncs(object):
 
 	def start():
 		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
-			DatabaseManagement.users.insert_one(administratorDefault)
+			DatabaseManagement.users.insert_one(LoginFuncs.administratorDefault)
 			print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
 		else:
 			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
