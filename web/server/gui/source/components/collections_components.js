@@ -102,6 +102,17 @@ Vue.component("collection-view", {
             )
         },
 
+        retrieveServerless() {
+            if (mainApp.activeCollection != "") {
+                for (var i=0; i<this.allEntryMetadata.length; i++) {
+                   if (mainApp.activeCollection == this.allEntryMetadata[i].id) {
+                      this.annotationStyle = this.allEntryMetadata[i].annotationStyle;
+                      mainApp.annotationStyle = this.allEntryMetadata[i].annotationStyle;
+                   }
+                }
+            }
+        },
+
         retrieveActiveCollection() {
             console.log("==== ACTIVE COLLECTION ====");
             search = {"id":mainApp.activeCollection,"annotator":mainApp.userName}
@@ -116,8 +127,8 @@ Vue.component("collection-view", {
                         mainApp.done = response[0].done;
                         mainApp.lastUpdate = response[0].lastUpdate;
                         this.collectionRate = response[0].status;
-                        mainApp.annotationStyle = document.getElementById("activeAnnotationStyle").textContent;
-                        document.getElementById("showAnnotationStyle").textContent = mainApp.annotationStyle;
+                        //updating annotation style view
+                        this.retrieveServerless();
                     } else {
                         //if active collection document doesn't exist anymore
                         mainApp.activeCollection = null;
@@ -197,12 +208,11 @@ Vue.component("collection-view", {
     template:
     `
         <div id="annotation-view">
-            <database-header>
-            </database-header>
+            <database-header></database-header>
             <div class="inner-wrap">
 
                 <ul class="active-collection">
-                <h2>{{guiMessages.selected.lida.activeColl}}</h2>
+                <h2 class="list-title">{{guiMessages.selected.lida.activeColl}}</h2>
                     <div v-if="activeCollection != null" class="entry-list-single-item-container">
                         <div class="entry-info" v-on:click="clicked_active()">
                             <div class="entry-id">
@@ -224,7 +234,7 @@ Vue.component("collection-view", {
                             </div>
 
                             <div class="entry-annotation-style">
-                                    Annotation style: <span id="showAnnotationStyle">{{annotationStyle}}</span>
+                                    Annotation style: <span id="showAnnotationStyle">{{annotationStyle.split(".")[0]}}</span>
                             </div>
                             <div class="entry-date">
                                 <template v-if="lastUpdate == ''">
@@ -245,19 +255,19 @@ Vue.component("collection-view", {
                 </ul>
 
                 <ul class="annotation-list">
-                <h2>{{guiMessages.selected.lida.assignedColl}}</h2>
+                <h2 class="list-title">{{guiMessages.selected.lida.assignedColl}}</h2>
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
                         
                         <div v-if="name.id == activeCollection" class="entry-list-single-item-container" style="opacity:0.3">
                             <div class="entry-info" v-on:click="clicked_entry(name.id)">
                                 <div class="entry-id">
-                                    <span>Collection:</span> {{name.id}}
+                                    <span>{{guiMessages.selected.collection.name}}:</span> {{name.id}}
                                 </div>
                               <div class="entry-annotated">
                                     <span class="load">{{guiMessages.selected.lida.load}}</span>
                               </div>
                                 <div class="entry-assigned">
-                                    <span>Assigned to:</span> {{name.assignedTo.join(", ")}}
+                                    <span>{{guiMessages.selected.collection.collAssi}}:</span> {{name.assignedTo.join(", ")}}
                                 </div>
                                 <div class="entry-date">
                                     {{name.lastUpdate.slice(0,-3)}}

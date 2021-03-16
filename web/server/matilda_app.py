@@ -28,6 +28,7 @@ from text_splitter import convert_string_list_into_dialogue
 """
 Container Class that orchastrates the app.
 """
+
 __DEFAULT_PATH = "LIDA_ANNOTATIONS"
 path = __DEFAULT_PATH
 multiAnnotator=False
@@ -91,7 +92,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
         data = request.get_json()
         #fileName = (data[0]["collection"])
 
-        annotationStyle = retrieveAnnotationRef(fileName)
+        annotationStyle = retrieve_annotation_style_name(fileName)
 
         Configuration.validate_dialogue( annotationStyle, data )
         responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
@@ -142,7 +143,7 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
     """
 
     #retrieve and load correct annotation style
-    annotationStyle = retrieveAnnotationRef(collection)
+    annotationStyle = retrieve_annotation_style_name(collection)
 
     #return data for the right view
     if supervisor:
@@ -394,7 +395,7 @@ def admin_dialogues_resource(id=None, collection=None):
         if request.method == "PUT":
 
             #    
-            annotationStyle = retrieveAnnotationRef(collection)
+            annotationStyle = retrieve_annotation_style_name(collection)
 
             data = request.get_json()
             data = Configuration.validate_dialogue( annotationStyle, data )
@@ -568,7 +569,7 @@ def handle_agreements_resource(collection):
             "status" : "success",
         }
 
-        annotationStyle = retrieveAnnotationRef(collection)
+        annotationStyle = retrieve_annotation_style_name(collection)
 
         totalTurns = 0
 
@@ -589,7 +590,7 @@ def handle_agreements_resource(collection):
                 totalTurns += 1
                 for annotationName, listOfAnnotations in turn.items():
 
-                    if annotationName=="turn_idx" or annotationName=="turn_id":
+                    if ((annotationName=="turn_idx") or (annotationName=="turn_id")):
                         continue
 
                     if annotationName not in Configuration.metaTags:
@@ -874,7 +875,7 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
     added_dialogues = []
     overwritten = []
 
-    annotationStyle = retrieveAnnotationRef(fileName)
+    annotationStyle = retrieve_annotation_style_name(fileName)
 
     for dialogue_name, dialogue in dialogueDict.items():
 
@@ -944,7 +945,7 @@ def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict,
     if not annotator:
         annotator = fileName
 
-    annotationStyle = retrieveAnnotationRef(fileName)
+    annotationStyle = retrieve_annotation_style_name(fileName)
 
     addedDialogues = []
 
@@ -1037,11 +1038,11 @@ def __update_gold_from_error_id(dialogueId, error, collectionId=None):
         DatabaseManagement.updateDoc(collectionId, "dialogues_collections", {"gold":annotationFiles.get_dialogues()})
 
 
-def retrieveAnnotationRef(collection):
+def retrieve_annotation_style_name(collection):
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collection}, {"_id":0,"annotationStyle":1})
     annotationStyle = search[0]["annotationStyle"]
 
-    #if annotation model name not valid or empty fall back to default model
+    #if annotation model name not valid or empty system falls back to default model
     if len(annotationStyle) <= 1:
         annotationStyle = Configuration.annotation_styles[0]
 
@@ -1079,9 +1080,9 @@ class InterannotatorMethods:
 
         #exception and compatibility for lida mock model
         if collection is not None:
-            annotationStyle = retrieveAnnotationRef(collection)
+            annotationStyle = retrieve_annotation_style_name(collection)
         else:
-            annotationStyle = "lida_model.json"
+            annotationStyle = Configuration.annotation_styles[0]
 
         errorList = []
         metaList = []
@@ -1130,7 +1131,7 @@ class InterannotatorMethods:
                     error["predictions"] = predictions
                     error["counts"] = temp.get("counts")
 
-                    #Slot needs more details to be evaluted from user
+                    #multilabel_classification_string needs more details to be evaluted by user
                     if error["type"] == "multilabel_classification_string":
                         optionList = []
                         for option in turnsData[turnId][error["name"]]:

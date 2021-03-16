@@ -190,7 +190,7 @@ Vue.component("datamanagement-view", {
                 </div>
 
                 <ul class="collection-list two-columns" v-if="showCollection == 'all' && showUser == 'all' ">
-                    <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
                     <li class="listed-entry" v-for='collection,index in allEntryMetadata' v-bind:id="collection.id" style="opacity:1;">
                         <div class="entry-list-single-item-container" v-on:click="switch_view(collection.id)">
                             <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
@@ -265,7 +265,7 @@ Vue.component("datamanagement-view", {
                 </ul>
 
                 <ul class="collection-user-list two-columns" v-if="showCollection == 'all' && showUser == 'all'">
-                    <h2>{{guiMessages.selected.admin.users}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
                     <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
                         <div class="entry-list-single-item-container" v-on:click="switch_view(user.id)">
                             <input type="checkbox" class="user-checkbox" v-bind:id="'check_'+user.id" :value="user.id" v-model="selectedCollection.assignedTo">
@@ -413,7 +413,7 @@ Vue.component('collection-users-reverse', {
     `
             <div id="collection-user-editing">
                 <ul class="collection-list two-columns">
-                    <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
                     <li class="listed-entry" v-for='collection in allEntryMetadata' v-bind:id="collection.id">
                         <div class="entry-list-single-item-container">
                             <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
@@ -450,7 +450,7 @@ Vue.component('collection-users-reverse', {
                 </ul>
 
                 <ul class="collection-user-list two-columns">
-                    <h2>{{guiMessages.selected.admin.users}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
                     <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id" v-on:click="clicked_user(user.id)">
                         <div class="entry-list-single-item-container">
                             <input type="radio" class="user-checkbox radio-primary" v-bind:id="'user_'+user.id" v-bind:value="user.id" v-model="selectedUser">
@@ -731,11 +731,11 @@ Vue.component('collection-creation', {
                     console.log(response);
                     if (!response["data"]["error"]) {
                         console.log("============== Dialogues-Collection Created ==============");
+                        databaseEventBus.$emit('creation_completed');
                     } else {
                         console.log("============== Dialogues-Collection Error ==============");
                         alert(response["data"]["error"]);
                     }
-                    databaseEventBus.$emit('creation_completed');
             });
         }
     },

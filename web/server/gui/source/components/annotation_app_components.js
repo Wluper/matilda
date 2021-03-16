@@ -100,6 +100,7 @@ Vue.component("annotation-app", {
             // ANNOTATION EVENTS
             annotationAppEventBus.$off( "update_classification", this.turn_update );
             annotationAppEventBus.$off( "classification_string_updated", this.turn_update );
+            annotationAppEventBus.$off( "resume_annotation_tools", this.resume_annotation_tools );
             annotationAppEventBus.$off( "turn_is_annotated", this.turn_is_annotated );
 
             // INPUT BOX EVENTS
@@ -270,15 +271,17 @@ Vue.component("annotation-app", {
             //resuming label
             document.getElementById("usr").onmouseup = null;
             document.getElementById("sys").onmouseup = null;
-            if (document.getElementById("active_label") != undefined) {
-                let activeLabel = document.getElementById("active_label");
-                let labelName = activeLabel.title;
-                activeLabel.id = labelName+"_input";
-                activeLabel.removeAttribute("title");
+            let active_label = document.getElementsByClassName("active_label")[0];
+            if (active_label != null) {
+                active_label.classList.remove("active_label");
+            }
+            let active_button = document.getElementsByClassName("active_button")[0];
+            if (active_button != null) {
+                active_button.classList.remove("active_button");
             }
             //resuming turn
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-            if (activeTurn != undefined) {
+            if (activeTurn != null) {
                 activeTurn.style = null;
             }
             //resuming annotation sections

@@ -57,6 +57,7 @@ Vue.component("resolution-app", {
         // GENERAL EVENT LISTENERS
         window.addEventListener('keyup', this.resolve_keyboard_input);
         annotationAppEventBus.$on("clean_events", this.go_back);
+        annotationAppEventBus.$on("resume_annotation_tools", this.resume_interannotation_tools);
 
         // meta-error-list Listener
         annotationAppEventBus.$on("update_id", this.set_current_id );
@@ -75,7 +76,9 @@ Vue.component("resolution-app", {
             console.log("==================================");
             // GENERAL EVENT LISTENERS
             window.removeEventListener('keyup', this.resolve_keyboard_input);
-            annotationAppEventBus.$off("go_back", this.go_back)
+            annotationAppEventBus.$off("go_back", this.go_back);
+            annotationAppEventBus.$off("clean_events", this.go_back);
+            annotationAppEventBus.$off("resume_annotation_tools", this.resume_interannotation_tools);
 
             // meta-error-list Listener
             annotationAppEventBus.$off("update_id", this.set_current_id );
@@ -83,6 +86,7 @@ Vue.component("resolution-app", {
 
             annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
+
             adminEventBus.$emit("conflicts_on_collection", this.collectionId);
         },
         init: function() {
@@ -115,7 +119,6 @@ Vue.component("resolution-app", {
                     backend.put_error_async(errorsToSave)
                 }
             });
-
         },
 
         print : function(event){
@@ -185,12 +188,39 @@ Vue.component("resolution-app", {
             else if (temp==-1){
                 this.currentErrorId += temp;
             }
-
         },
 
         set_current_id : function(event){
-            this.currentErrorId = event
+            this.currentErrorId = event;
         },
+
+        resume_interannotation_tools : function() {
+            console.log("Resuming inter-annotation tools");
+            //resuming label
+            document.getElementById("usr").onmouseup = null;
+            document.getElementById("sys").onmouseup = null;
+            let active_label = document.getElementsByClassName("active_label")[0];
+            if (active_label != null) {
+                active_label.classList.remove("active_label");
+            }
+            let active_button = document.getElementsByClassName("active_button")[0];
+            if (active_button != null) {
+                active_button.classList.remove("active_button");
+            }
+            //resuming turn
+            let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
+            if (activeTurn != null) {
+                activeTurn.style = null;
+            }
+            //resuming annotation sections
+            if (document.getElementById("annotations") != undefined) {
+                let annotations = document.getElementById("annotations").querySelectorAll("div.classification-annotation");
+                for (i=1;i < annotations.length; i++) {
+                    annotations[i].style.pointerEvents = null;
+                    annotations[i].style.color = null;
+                }
+            }
+        }
 
     },
 

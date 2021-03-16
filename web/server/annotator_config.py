@@ -344,9 +344,6 @@ def agreement_classification_score(listOfClassifications, totalLabels):
 
 
 
-
-
-
 ##############################################
 # API to the outside world
 ##############################################

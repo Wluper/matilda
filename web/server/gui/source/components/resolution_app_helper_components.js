@@ -13,7 +13,9 @@ Vue.component("resolution-menu", {
 
     methods :{
         go_back_to_all_dialogues : function(){
-            annotationAppEventBus.$emit("clean_events")
+            adminEventBus.$off("switch_slot_values", this.switchSlotValue);
+            annotationAppEventBus.$emit("clean_events");
+
         }
     },
     template:
@@ -218,7 +220,8 @@ Vue.component("resolutions", {
 
     data () {
         return {
-            annotationStyle : {}
+            annotationStyle : {},
+            guiMessages
         }
     },
 
@@ -256,10 +259,21 @@ Vue.component("resolutions", {
     template:
     `
     <div id="resolutions">
+
+        <div class="string-type-header">{{guiMessages.selected.annotation_app.turnId}} {{error.turn}}</div>
+
         <div class="left">
             <string-type-data v-bind:usr="error.usr" v-bind:sys="error.sys">
             </string-type-data>
         </div>
+
+        <resolution-type-header
+            v-bind:classification_strings="error.predictions"
+            v-bind:uniqueName="error.name"
+            v-bind:classes="annotationFormat"
+            v-bind:multilabelStringOptions="error.options"
+            v-bind:accepted="metaList[0].accepted">
+        </resolution-type-header>
 
         <div class="right">
             <annotation-component
@@ -268,7 +282,8 @@ Vue.component("resolutions", {
                 v-bind:uniqueName="error.name"
                 v-bind:annotationFormat="annotationFormat"
                 v-bind:confidences="error.counts"
-                v-bind:multilabelStringOptions="error.options">
+                v-bind:multilabelStringOptions="error.options"
+                v-bind:metaList="metaList">
             </annotation-component>
         </div>
 
@@ -287,12 +302,15 @@ Vue.component("annotation-component", {
       "annotationFormat",
       "uniqueName",
       "confidences",
-      "multilabelStringOptions"
+      "multilabelStringOptions",
+      "metaList"
     ],
 
     data() { 
         return {
-            guiMessages
+            guiMessages,
+            //parameter which identifies if child is called in interannotator or not
+            interannotatorView: true,
         }
     },
 
@@ -325,7 +343,8 @@ Vue.component("annotation-component", {
             v-bind:classification="predictions"
             v-bind:classFormat="annotationFormat"
             v-bind:uniqueName="uniqueName"
-            v-bind:confidences="confidences">
+            v-bind:confidences="confidences"
+            v-bind:interannotatorView="interannotatorView">
         </classification-annotation>
 
         <classification-string-annotation
@@ -335,8 +354,7 @@ Vue.component("annotation-component", {
             v-bind:classes="annotationFormat"
             v-bind:confidences="confidences"
             v-bind:multilabelStringOptions="multilabelStringOptions"
-            >
-
+            v-bind:accepted="metaList[0].accepted">
         </classification-string-annotation>
 
         <div v-else >
@@ -363,8 +381,8 @@ Vue.component("string-type-data", {
             console.log(event)
             annotationAppEventBus.$emit("turn_updated_string", event )
         },
-    },
-
+    }
+,
 
     template:
     `
@@ -376,7 +394,8 @@ Vue.component("string-type-data", {
             </div>
 
             <div class="user-string-type-text">
-                <comm-input id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" v-on:comm_input_update="turn_updated_string($event)"> </comm-input>
+                <comm-input v-if="sys.length < 95" id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" readonly> </comm-input>
+                <comm-textarea v-else id="sys" v-bind:inputClassName="'sys-output'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="sys" readonly> </comm-textarea>
             </div>
         </div>
 
@@ -386,19 +405,121 @@ Vue.component("string-type-data", {
             </div>
             
             <div class="user-string-type-text">
-                <comm-input id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr"> </comm-input>
+                <comm-input v-if="usr.length < 95" id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr" readonly> </comm-input>
+                <comm-textarea v-else id="usr" v-bind:inputClassName="'usr-input'" v-bind:placeholder=" 'edit me' " v-bind:inputValue="usr" readonly> </comm-textarea>
             </div>
+        </div> 
+
+    </div>
+    `
+});
+
+/************************************
+* Resolutions
+*************************************/
+
+Vue.component("resolution-type-header", {
+    props :[
+        "multilabelStringOptions", "accepted", "uniqueName", "classification_strings", "classes"
+    ],
+
+    data() { 
+        return {
+            guiMessages,
+            collapsed: false,
+            showInfo: false,
+            backup_classification_strings: this.classification_strings,
+            saved_classification_strings: this.classification_strings,
+        }
+    },  
+
+    // METHODS
+    methods:{
+
+         toggleCollapse: function () {
+
+             if (this.collapsed) {
+                 this.collapsed = false;
+             } else {
+                 this.collapsed = true;
+             }
+
+         },
+
+         turnSeparatorWhite: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = 'white';
+
+         },
+
+         turnSeparatorGrey: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = '#aaa';
+
+         },
+
+         switchSlotValue: function(optionIndex) {
+            adminEventBus.$emit("switch_slot_values", optionIndex);
+         }
+
+    },
+
+    template:
+    `
+    <div class="resolution-type-header">
+
+        <div v-if="collapsed"
+             class="classification-annotation">
+
+            <div class="sticky space collapsor"
+                 v-on:click="toggleCollapse()"
+                 v-on:mouseover="turnSeparatorWhite()"
+                 v-on:mouseout="turnSeparatorGrey()">
+                {{uniqueName}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+                <span class="soft-text">{{guiMessages.selected.resolution_app.instructions}}</span>
+            </div>
+
+        </div>
+
+        <div v-else class="classification-annotation">
+
+            <div class="single-annotation-header">
+                <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    {{uniqueName.replace(/_/g, ' ')}}
+                </div>
+
+                <div v-if="multilabelStringOptions" class="annotator-switch">
+                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
+                  <template v-for="option,index in multilabelStringOptions">
+                      <button class="switch-button" v-on:click="switchSlotValue(index)">
+                        <template v-if="multilabelStringOptions.length > 2">{{guiMessages.selected.resolution_app.optionMin}}</template> 
+                        <template v-else>{{guiMessages.selected.resolution_app.option}}</template> 
+                        {{index+1}}</button>
+                  </template>
+                </div>
+
+            </div>
+
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ info }}
+                </div>
+
+                <hr>
+
+            </div>
+        
         </div>
 
     </div>
     `
 });
 
-
-
-/************************************
-* Resolutions
-*************************************/
 
 Vue.component("accept", {
     props :[

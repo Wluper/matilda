@@ -162,6 +162,20 @@ input:focus {
 }
 
 
+.list-title {
+    color:rgba(0,0,0,0.62);
+    display: inline-block;
+}
+
+.list-title-left {
+    color:rgba(0,0,0,0.62);
+}
+
+.button-title {
+    float:right;
+    margin-top: 1.5em;
+}
+
 /*******************************************************************************
 ********************************************************************************
 * ADMIN SPECIFIC
@@ -277,7 +291,7 @@ input:focus {
 }
 
 .int-info {
-    grid-template: [row1-start] "id numTurns . visited" [row1-end] / 5fr 2fr 0fr 1fr !important;
+    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 6fr 0.1fr 1fr 2fr !important;
 }
 
 .int-dialogue-id {
@@ -350,7 +364,9 @@ input:focus {
 
 .panel {
     padding: 10px 17px !important;
-    box-shadow:0 2px #1675c1, 0px 4px 6px 0px #00000026;
+    box-shadow: 0 2px #1675c1, 0px 4px 6px 0px #00000026, 0px 15px 5px 0px rgb(0 0 0 / 10%);
+    font-size: 14px !important;
+    line-height: 40px !important;
 }
 
 .admin-panel p {

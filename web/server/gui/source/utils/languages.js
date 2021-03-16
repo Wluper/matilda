@@ -16,6 +16,7 @@ guiMessages = {
             notVisited: "Not visited",
             button_downloadAll:"Download Data",
             button_interAgreement:"Inter-annotator Agreement",
+            to:"to",
             assignedTo:"Assigned to",
             annotator:"Annotator",
             annotators:"Annotators",
@@ -44,6 +45,7 @@ guiMessages = {
             button_wipeCache:"Check again for errors",
             wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
             confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
+            role:"Role",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -73,6 +75,7 @@ guiMessages = {
             exiting:"You are leaving Matilda's session. Are you sure?",
         },
         collection: {
+            name: "Collection",
             title: "Collections Management",
             create: "Create collection",
             update: "Update annotations manually",
@@ -106,7 +109,7 @@ guiMessages = {
             new: "Imported",
             old: "Previous",
             save: "Save and Update Collection",
-            done: "Annotations completed",
+            done: "Report as Annotations completed",
             freeze: "This operation will freeze the collection and notify your work is done and can be reviewed. Do it only when you finished",
             freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator",
             empty:"Empty",
@@ -135,7 +138,10 @@ guiMessages = {
             accept:"Accept",
             noConflicts:"No annotation conflicts found in this dialogue",
             updateAccepted:"Value updated",
-            option: "Fill with option"
+            option: "Fill with option",
+            optionMin: "Option",
+            prediction: "Prediction",
+            instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
         },
         admin_panel: [
             "Compare annotations on the same collection and resolve its conflicts",
@@ -204,7 +210,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Insert an unique id for the collection or LIDA will generate one",
+            "Insert an unique id for the collection or MATILDA will generate one",
             "Insert a title",
             "Insert a short description of the content",
             "If not provided the default one will be used.",
@@ -255,10 +261,11 @@ guiMessages = {
             visited_dialogues: "Dialoghi visitati",
             visited: "Visitato",
             notVisited: "Non visitato",
-            button_downloadAll:"Scarica le annotazioni",
-            button_interAgreement:"Indice di concordanza",
+            button_downloadAll:"Scarica annotazioni",
+            button_interAgreement:"Statistiche",
             annotator:"Annotatore",
             annotators:"Annotatori",
+            to:"a",
             assignedTo: "Assegnato a",
             actualAnnotators:"Fonti",
             button_upload:"Carica o trascina un file",
@@ -286,6 +293,7 @@ guiMessages = {
             userCreation:"Creazione Utente",
             confirmOverwriteUser: "L'username scelto esiste già, vuoi sovrascrivere l'utente già esistente?",
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
+            role:"Ruolo",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -313,9 +321,10 @@ guiMessages = {
             assignedColl:"Collezioni assegnate",
             alert:"Attenzione",
             welcome:"Benvenuto",
-            exiting:"Stai per uscire dalla sessione di Lida. Sei sicuro?",
+            exiting:"Stai per uscire dalla sessione di MATILDA. Sei sicuro?",
         },
         collection: {
+            name: "Collection",
             title: "Gestione Collezioni",
             create: "Crea collezione",
             update: "Aggiorna annotazioni manualmente",
@@ -349,7 +358,7 @@ guiMessages = {
             confirmChangesLost: "Ci sono cambiamenti non salvati alle collezioni. Vuoi precedere senza salvarli?",
             confirmDeleteDialogue: "Questo eliminerà immediatamente e irreversibilmente il seguente dialogo dalla collezione. Confermi?",
             save: "Save and Update Collection",
-            done: "Annotazione completata",
+            done: "Segnala annotazione completata",
             freeze: "Questa operazione bloccherà la collezione e notificherà che hai finito e che le annotazioni sono pronte per la revisione",
             freezed: "L'annotazione è stata segnalata come completata e quindi non potrà essere modificata fino alla revisione e allo sblocco da parte di un amministratore.",
             empty:"Vuoto",
@@ -377,7 +386,10 @@ guiMessages = {
             accept:"Accetta",
             noConflicts:"Nessun conflitto di annotazione trovato in questo dialogo",
             updateAccepted:"Annotazione aggiornata",
-            option: "Riempi da opzione"
+            option: "Riempi da opzione",
+            optionMin: "Opzione",
+            prediction: "Predizione",
+            instructions: "Confronta le diverse annotazioni generate dal sistema e dagli annatotatori così da produrre una versione definitiva per la collezione gold",
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
@@ -445,7 +457,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Inserisci un ID univoco per la Collezione o LIDA ne genererà uno automaticamente",
+            "Inserisci un ID univoco per la Collezione o MATILDA ne genererà uno automaticamente",
             "Inserisci un titolo",
             "Inserisci una breve descrizione",
             "Se non viene fornito verrà usato quello predefinito",
@@ -457,7 +469,7 @@ guiMessages = {
             "Collezioni",
             "Le collezioni sono gruppi di dialoghi uniti insieme per essere facilmente gestiti e assegnati.",
             "Gli amministratori creano le collezioni e le assegnano agli utenti perché le annotino.",
-            "LIDA crea un backup di ogni collezione in uso da almeno un utente, ogni due minuti.",
+            "MATILDA crea un backup di ogni collezione in uso da almeno un utente, ogni due minuti.",
             "Quando un annotatore è soddisfatto del proprio lavoro può segnalarlo come completato così che venga revisionato",
             "e gli siano assegnati nuovi compiti da svolgere.",
         ],
@@ -499,6 +511,7 @@ guiMessages = {
             notVisited: "Nicht besucht",
             button_downloadAll: "Daten herunterladen",
             button_interAgreement: "Inter-Annotator-Vereinbarung",
+            to:"an",
             assignedTo: "Zugewiesen an",
             annotator: "Annotator",
             annotators: "Annotatoren",
@@ -527,6 +540,7 @@ guiMessages = {
             button_wipeCache: "Fehlercache löschen",
             wipeCacheConfirm: "Dadurch wird die Konfliktdatei gelöscht, sodass die Konfliktlösung erneut gestartet werden kann.",
             confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
+            role:"Role",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -554,9 +568,10 @@ guiMessages = {
             activeColl: "Aktive Sammlung",
             alert: "Warnung",
             welcome: "wilkommen",
-            exiting: "Sie verlassen Lidas Sitzung. Sind Sie sicher?",
+            exiting: "Sie verlassen MATILDAs Sitzung. Sind Sie sicher?",
         },
         collection: {
+            name: "Collection",
             title: "Sammlungsverwaltung",
             create: "Sammlung erstellen",
             update: "Anmerkungen manuell aktualisieren",
@@ -620,6 +635,9 @@ guiMessages = {
             noConflicts:"In diesem Dialog wurden keine Anmerkungskonflikte gefunden",
             updateAccepted:"Wert aktualisiert",
             option: "Fill with option",
+            optionMin: "Option",
+            prediction: "Prediction",
+            instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
         },
         admin_panel: [
             "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",
@@ -688,7 +706,7 @@ guiMessages = {
         ],
         coll_creation:
         [
-            "Geben Sie eine eindeutige ID für die Sammlung ein, oder LIDA generiert eine",
+            "Geben Sie eine eindeutige ID für die Sammlung ein, oder MATILDA generiert eine",
             "Titel einfügen",
             "Fügen Sie eine kurze Beschreibung des Inhalts ein",
             "Name des Anmerkungsstils",

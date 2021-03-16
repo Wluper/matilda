@@ -28,8 +28,7 @@
     display: grid !important;
     grid-template:  [row1-start] "resolution-menu" minmax(0,1fr) [row1-end]
                     [row2-start] "error-list" minmax(0,8fr) [row2-end]
-                    [row3-start] "resolutions" minmax(0,6.5fr) [row3-end]
-                                       / 1fr;
+                    [row3-start] "resolutions" minmax(0,9.5fr) [row3-end] / 1fr;
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
 
@@ -204,16 +203,16 @@
     margin-bottom: 0;
 }
 
-#resolutions{
+#resolutions {
     grid-area : resolutions;
     border-radius: 5px;
     color: white;
     height: 100%;
     width: 100%;
     display: grid !important;
-    grid-template:  [row1-start] "input-data annotation-data" 6fr [row1-end]
-                    [row2-start] "accept-area annotation-data" 1.5fr [row2-end]
-                    / 3fr 2fr;
+    grid-template:  [row1-start] "input-title annotation-title" 1fr [row1-end]
+        [row2-start] "input-data annotation-data" 7fr [row2-end]
+        [row3-start] "accept-area annotation-data" 2.5fr [row3-end] / 3fr 2fr;
     background: white;
     border-top: 1px solid #e1e1e3;
     box-shadow: 0 -1px 3px rgba(0,0,0,0.06);
@@ -225,8 +224,6 @@
     height: 100%;
 }
 
-
-
 .right {
     background: #f1f1f3;
     grid-area: annotation-data;
@@ -235,7 +232,7 @@
     overflow-y: scroll;
 }
 
-#accept{
+#accept {
 
     grid-area: accept-area;
 
@@ -259,7 +256,33 @@
     margin-right: 10px;
 }
 
+.resolution-type-header {
+    grid-area: annotation-title;
+    padding-right: 1em;
+    background-color: #f1f1f3;
+    padding-left: 1em;
+    color: #393939;
+}
 
+.resolution-type-header .classification-annotation {
+    padding-bottom:0px !important;
+}
+
+.string-type-header {
+    grid-area : input-title;
+    padding-right: 1em;
+    background-color: white;
+    padding-left: 1em;
+    padding-top: 1.5em;
+    padding-left: 2em;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: #222;
+    border-radius: 3px;
+    height: 3em;
+    margin: 0 0 10px;
+    overflow: hidden;
+}
 
 
 /*******************************************************************************

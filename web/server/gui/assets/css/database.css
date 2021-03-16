@@ -267,7 +267,8 @@ pre:first-line {
 }
 
 .modal-body input:read-only {
-    background-color:#8080801c;
+    background-color: #8080801c;
+    cursor: not-allowed;
 }
 
 .modal-footer button:last-of-type {
@@ -375,6 +376,7 @@ input:not(:checked) + div {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.64);
     margin-top: 1%;
+    border:1px solid #d1d1d3;
 }
 
 .collection-list .entry-info:hover {

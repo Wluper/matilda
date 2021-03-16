@@ -1,0 +1,41 @@
+version: '3.6'
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./configdb:/data/configdb
+      - ./db:/data/db
+    restart: always
+    logging:
+      driver: "json-file"
+    networks:
+      - nginx_net
+    ports:
+      - 27017:27017
+  matilda:
+    image: davivcu/matilda:beta
+    volumes: 
+      - ./configuration:/configuration
+    restart: always
+    logging:
+      driver: "json-file"
+    ports:
+      - 5000:5000
+    networks:
+      - nginx_net
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx_configuration/conf.d:/etc/nginx/conf.d
+      - ./nginx_configuration/make-ssl-certs.sh:/docker-entrypoint.d/40-make-ssl-certs.sh
+    restart: always
+    networks:
+      - nginx_net
+    logging:
+      driver: "json-file"
+    ports:
+      - 80:80
+      - 443:443
+networks:
+  nginx_net:
+    driver: bridge

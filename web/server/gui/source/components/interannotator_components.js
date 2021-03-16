@@ -126,24 +126,16 @@ Vue.component("interannotator-view", {
   },
   template:
   `
-  <div class="all-dialogues-container"
-        id="listedDialoguesContainer"
-        v-on:dragover="handleDragOver($event)"
-        v-on:dragleave="handleDragOut($event)"
-        v-on:drop="handleDrop($event)">
+  <div class="all-dialogues-container" id="listedDialoguesContainer">
 
     <agreement-modal
         v-if="showAgreement" @close="showAgreement = false">
     </agreement-modal>
 
     <div class="dialogue-list-title-container">
-        <div v-if="!(dragging)" class="all-dialogues-list-title">
+        <div class="all-dialogues-list-title">
           <h2>{{guiMessages.selected.admin.title}}: {{ allCollectionsMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{ alreadyVisited.length }} {{ guiMessages.selected.admin.visited }}
           </h2>
-        </div>
-
-        <div v-else class="all-dialogues-list-title">
-            <h2>{{guiMessages.selected.lida.drop}}</h2>
         </div>
 
         <user-bar v-bind:userName="userName"></user-bar>
@@ -154,6 +146,7 @@ Vue.component("interannotator-view", {
     </div>
     
     <div class="inner-wrap">
+    <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
     <ul class="dialogue-list">
 
       <li class="listed-dialogue"
@@ -180,7 +173,7 @@ Vue.component("interannotator-view", {
                 <div v-if="show_annotators(name.id)"
                      class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo }}
+                    {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
                 </div>
 
                 <div v-else
@@ -261,33 +254,6 @@ Vue.component("interannotator-app", {
     },
     clicked_collection_button() {
         adminEventBus.$emit("collection_clicked");
-    },
-
-    handleDragOver(event) {
-        event.stopPropagation();
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.transition = '0.3s'
-        elem.style.backgroundColor = '#c2c6c4';
-        event.dataTransfer.effectAllowed = 'copyMove';
-        event.dataTransfer.dropEffect = 'copy';
-        this.dragging = true;
-    },
-
-    handleDragOut(event) {
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.backgroundColor = 'inherit';
-        this.dragging = false;
-    },
-
-    handleDrop(event) {
-        event.preventDefault();
-        let elem = document.getElementById('listedDialoguesContainer');
-        elem.style.backgroundColor = 'inherit';
-        this.dragging = false;
-        let file     = event.dataTransfer.files[0]
-        this.handle_file(file);
     },
 
     getAllDialogueIdsFromServer() {
@@ -438,22 +404,14 @@ Vue.component("interannotator-app", {
   },
   template:
   `
-  <div class="all-dialogues-container"
-       id="listedDialoguesContainer"
-       v-on:dragover="handleDragOver($event)"
-       v-on:dragleave="handleDragOut($event)"
-       v-on:drop="handleDrop($event)">
+  <div class="all-dialogues-container" id="listedDialoguesContainer">
 
     <agreement-modal v-if="showAgreement" @close="showAgreement = false"></agreement-modal>
 
         <div class="dialogue-list-title-container" style="grid-template: [row1-start] 'title-zone name-zone help-button-zone' [row1-end] / 1.1fr 2fr 1.4fr;">
-        <div v-if="!(dragging)" class="all-dialogues-list-title">
+        <div class="all-dialogues-list-title">
           <h2><span id="displaying-collection">{{displayingCollection}}</span>: {{ alreadyVisited.length }}/{{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.visited_dialogues }}
           </h2>
-        </div>
-
-        <div v-else class="all-dialogues-list-title">
-            <h2>{{guiMessages.selected.lida.drop}}</h2>
         </div>
 
         <user-bar v-bind:userName="userName"></user-bar>
@@ -466,23 +424,9 @@ Vue.component("interannotator-app", {
     </div>
     
     <div class="inner-wrap">
-        <ul class="btn-set">
-            <li><input type="file"
-                   id="fileInput"
-                   name="fileInput"
-                   accept=".txt, .json"
-                   v-on:change="open_file($event)">
-
-            <label for="fileInput"
-                   id="fileInputLabel"
-                   class="btn btn-sm">
-                   {{ guiMessages.selected.admin.button_upload }}
-            </label></li>
-            <li>
-                <button class="help-button btn btn-sm" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
-                <button class="help-button btn btn-sm" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
-            </li>
-        </ul>
+        <h2 class="list-title">{{guiMessages.selected.admin.dataItems}}</h2>
+        <button class="btn btn-sm button-title" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
+        <button class="help-button btn btn-sm button-title" style="margin-right:5px;" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
     <ul class="dialogue-list">
 
       <li class="int-listed-dialogue"
@@ -510,7 +454,7 @@ Vue.component("interannotator-app", {
                 <div v-if="show_annotators(dat[0])"
                      class="dialogue-num-turns"
                      v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1] }}
+                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
                 </div>
 
                 <div v-else

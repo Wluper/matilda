@@ -4,7 +4,7 @@
 
 Vue.component('classification-annotation',{
 
-    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences"],
+    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "interannotatorView"],
 
 
     data () {
@@ -129,7 +129,7 @@ Vue.component('classification-annotation',{
 
         <div v-else class="classification-annotation">
 
-            <div class="single-annotation-header">
+            <div class="single-annotation-header" v-if="!interannotatorView">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
                 </div>
@@ -182,210 +182,258 @@ Vue.component('classification-annotation',{
 
 Vue.component('classification-string-annotation', {
 
-    props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions"],
+      props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions","accepted"],
 
-    data () {
+      data () {
 
-        return {
+         return {
 
             collapsed: false,
             showInfo: false,
             guiMessages,
-        }
-
-    },
-
-    methods: {
-        get_confidence : function (id){
-            if (this.confidences){
-
-                x = this.confidences[id];
-                if (x){
-                    return x;
-                }
-                else {
-                    return 0;
-                }
-            }
-            else{
-                return ''
-            }
-
-        },
-
-
-      toggleCollapse: function () {
-
-          if (this.collapsed) {
-              this.collapsed = false;
-          } else {
-              this.collapsed = true;
-          }
+            backup_classification_strings: this.classification_strings,
+         }
 
       },
 
-      turnSeparatorWhite: function() {
-
-          const element = document.getElementById(this.uniqueName + '-collapsed-separator')
-          element.style.borderColor = 'white';
-
+      created () {
+         if (this.multilabelStringOptions) {
+            adminEventBus.$on("switch_slot_values", this.switchSlotValue);
+         }
       },
 
-      turnSeparatorGrey: function() {
+      methods: {
 
-          const element = document.getElementById(this.uniqueName + '-collapsed-separator')
-          element.style.borderColor = '#aaa';
+           get_confidence : function (id){
+               if (this.confidences){
 
+                   x = this.confidences[id];
+                   if (x){
+                       return x;
+                   }
+                   else {
+                       return 0;
+                   }
+               }
+               else{
+                   return ''
+               }
+
+           },
+
+
+         toggleCollapse: function () {
+
+             if (this.collapsed) {
+                 this.collapsed = false;
+             } else {
+                 this.collapsed = true;
+             }
+
+         },
+
+         turnSeparatorWhite: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = 'white';
+
+         },
+
+         turnSeparatorGrey: function() {
+
+             const element = document.getElementById(this.uniqueName + '-collapsed-separator')
+             element.style.borderColor = '#aaa';
+
+         },
+
+         checkedMethod : function(labelName){
+
+             for (classStringTuple in this.classification_strings) {
+
+                 if (this.classification_strings[classStringTuple][0] == labelName) {
+                     return true;
+                 }
+
+             }
+
+             return false;
+         },
+
+         getStringPart: function(labelName) {
+
+             for (classStringTuple in this.classification_strings) {
+
+                 if (this.classification_strings[classStringTuple][0] == labelName) {
+                     console.log(this.classification_strings[classStringTuple][0]);
+                     return this.classification_strings[classStringTuple][1]
+
+                 }
+
+             }
+
+         },
+
+         updateClassAndString: function(event, labelName) {
+
+             console.log('---- UPDATING SLOT-VALUE ----')
+             present = false;
+
+             if (event.target) { slotValue = event.target.value }
+               else { slotValue = event.value }
+
+             for (idx in this.classification_strings) {
+
+                 if (this.classification_strings[idx][0] == labelName && slotValue !== '') {
+
+                     present = true;
+                     this.classification_strings[idx][1] = slotValue
+
+                 } else if (this.classification_strings[idx][0] == labelName && slotValue == '') {
+
+                     present = true;
+                     this.classification_strings.splice(idx, 1)
+
+                 }
+
+                 if (present) {
+                     break;
+                 }
+
+             }
+
+             if (!present) {
+                 this.classification_strings.push([labelName, slotValue])
+             }
+
+             /* TODO
+              * I don't understand why this is necessary - for some reason if and
+              * only if `this.classification_strings` is empty, then pushing to it
+              * will not update the display. However as soon as there is
+              * *ANYTHING* in the list, then it suddenly becomes reactive. The
+              * only way to make the view update when the list is empty is to call
+              * this `forceUpdate()` method, and once that is called Vue seems to
+              * realise that there's something in the list and become reactive.
+              *
+              * I suspect this may be related to the fact that we set an empty
+              * list as the default value for `this.classification_strings` if the
+              * server doesn't send over any data to populate the list. Something
+              * about the way the empty list is assigned as default seems to mean
+              * it's not reactive, but my Vue.js skill isn't good enough to know
+              * why that happens and then it suddenly becomes reactive once
+              * something is appended to it.
+              */
+             this.$forceUpdate();
+     
+             outEvent = {name: this.uniqueName, data: this.classification_strings}
+
+             annotationAppEventBus.$emit('classification_string_updated', outEvent);
+
+         },
+
+         clearValue: function(event,labelName) {
+             event.stopPropagation();
+             let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
+             if (stringField.value == "") {
+                 console.log("empty");
+                 event.target.checked = false;
+                 return;
+             } else {
+                 console.log("cleaning");
+                 stringField.value = "";
+                 this.updateClassAndString(stringField, labelName);
+             }
+         },
+
+         selectWords: function(event,labelName) {
+             annotationAppEventBus.$emit("resume_annotation_tools");
+             //display feedbacks
+             let inputField = document.getElementById(labelName+"_input");
+             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
+             if (activeTurn != null) {
+               activeTurn.style.border = "4px solid #259af7ad";
+             }
+             //memorize active slot field
+             event.target.classList.add("active_button");
+             inputField.classList.add("active_label");
+             //events
+             document.getElementById("usr").onmouseup = this.updateSlot;
+             document.getElementById("sys").onmouseup = this.updateSlot;
+         },
+
+         updateSlot: function(event) {
+             console.log("=== Gathering text ===");
+             let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+             //checking if no text has been selected
+             if ((text == undefined) || (text == "")) {
+                 annotationAppEventBus.$emit("resume_annotation_tools");
+                 return;
+             }  
+             let activeLabel = document.getElementsByClassName("active_label")[0];
+             let labelName = activeLabel.id.split("_input")[0];
+             let context = event.target.id;
+             //updating
+             activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
+             this.updateClassAndString(activeLabel, labelName);
+             //put all back in place. Two possible parent view: interannotator and annotation
+             annotationAppEventBus.$emit("resume_annotation_tools");
+         },
+
+         directUpdateClassAndString: function(slotValue,labelName) {
+
+             present = false;
+
+             for (idx in this.classification_strings) {
+
+                 if (this.classification_strings[idx][0] == labelName && slotValue !== '') {
+
+                     present = true;
+                     this.classification_strings[idx][1] = slotValue
+
+                 } else if (this.classification_strings[idx][0] == labelName && slotValue == '') {
+
+                     present = true;
+                     this.classification_strings.splice(idx, 1)
+
+                 }
+
+                 if (present) {
+                     break;
+                 }
+
+             }
+
+             if (!present) {
+                 this.classification_strings.push([labelName, slotValue])
+             }
+
+             this.$forceUpdate();
+     
+             outEvent = {name: this.uniqueName, data: this.classification_strings}
+
+             annotationAppEventBus.$emit('classification_string_updated', outEvent);
+
+         },
+
+         switchSlotValue: function(index) {
+             console.log("Loading annotated turn");
+             //switch annotated options from different annotators
+             if (index == 'gold') {
+               option = this.backup_classification_strings;
+             } else {
+               option = this.multilabelStringOptions[index];
+             }
+             this.classification_strings = option;
+             for (var i=0; i<option.length; i++) {
+               this.directUpdateClassAndString(option[i][1],option[i][0]);
+             }
+             //TODO: filled labels showed higher in the list?
+         },
+      
       },
 
-      checkedMethod : function(labelName){
-
-          for (classStringTuple in this.classification_strings) {
-
-              if (this.classification_strings[classStringTuple][0] == labelName) {
-                  return true;
-              }
-
-          }
-
-          return false;
-      },
-
-      getStringPart: function(labelName) {
-
-          for (classStringTuple in this.classification_strings) {
-
-              if (this.classification_strings[classStringTuple][0] == labelName) {
-                  console.log(this.classification_strings[classStringTuple][0]);
-                  return this.classification_strings[classStringTuple][1]
-
-              }
-
-          }
-
-      },
-
-      updateClassAndString: function(event, labelName) {
-
-          console.log('---- UPDATING SLOT-VALUE ----')
-          present = false;
-
-          if (event.target) { slotValue = event.target.value }
-            else { slotValue = event.value }
-
-          for (idx in this.classification_strings) {
-
-              if (this.classification_strings[idx][0] == labelName && slotValue !== '') {
-
-                  present = true;
-                  this.classification_strings[idx][1] = slotValue
-
-              } else if (this.classification_strings[idx][0] == labelName && slotValue == '') {
-
-                  present = true;
-                  this.classification_strings.splice(idx, 1)
-
-              }
-
-              if (present) {
-                  break;
-              }
-
-          }
-
-          if (!present) {
-              this.classification_strings.push([labelName, slotValue])
-          }
-
-          /* TODO
-           * I don't understand why this is necessary - for some reason if and
-           * only if `this.classification_strings` is empty, then pushing to it
-           * will not update the display. However as soon as there is
-           * *ANYTHING* in the list, then it suddenly becomes reactive. The
-           * only way to make the view update when the list is empty is to call
-           * this `forceUpdate()` method, and once that is called Vue seems to
-           * realise that there's something in the list and become reactive.
-           *
-           * I suspect this may be related to the fact that we set an empty
-           * list as the default value for `this.classification_strings` if the
-           * server doesn't send over any data to populate the list. Something
-           * about the way the empty list is assigned as default seems to mean
-           * it's not reactive, but my Vue.js skill isn't good enough to know
-           * why that happens and then it suddenly becomes reactive once
-           * something is appended to it.
-           */
-          this.$forceUpdate();
-  
-          outEvent = {name: this.uniqueName, data: this.classification_strings}
-
-          annotationAppEventBus.$emit('classification_string_updated', outEvent);
-
-      },
-
-      clear_value: function(event,labelName) {
-          event.stopPropagation();
-          let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
-          if (stringField.value == "") {
-              console.log("empty");
-              event.target.checked = false;
-              return;
-          } else {
-              console.log("cleaning");
-              stringField.value = "";
-              this.updateClassAndString(stringField, labelName);
-          }
-      },
-
-      select_word: function(event,labelName) {
-          annotationAppEventBus.$emit("resume_annotation_tools");
-          let inputField = document.getElementById(labelName+"_input");
-          let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-          if (activeTurn != null) {
-            activeTurn.style.border = "3px solid #fafa69";
-          }
-
-          inputField.title = labelName;
-          inputField.id = "active_label";
-
-          document.getElementById("usr").onmouseup = this.update_slot;
-          document.getElementById("sys").onmouseup = this.update_slot;
-      },
-
-      update_slot: function(event) {
-          console.log("=== Gathering text ===");
-          let activeLabel = document.getElementById("active_label"); 
-          let labelName = activeLabel.title;
-          let context = event.target.id;
-          let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
-          //checking
-          if ((text == undefined) || (text == "")) {
-              annotationAppEventBus.$emit("resume_annotation_tools");
-              return
-          }  
-          //updating
-          activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
-          this.updateClassAndString(activeLabel, labelName);
-          //put all back in place. Two possible parent view: interannotator and annotation
-          if (this.multilabelStringOptions != undefined) {
-            document.getElementById("active_label").id = labelName+"_input";
-          } else {
-            annotationAppEventBus.$emit("resume_annotation_tools");
-          }
-      },
-
-      switchSlotValue(option) {
-          //switch annotated version
-          fieldList = document.getElementById("annotation-component").querySelectorAll("input");
-          fieldList.forEach( field => field.value = "");
-          for (var i=0; i<option.length;i++) {
-            document.getElementById(option[i][0]+"_input").value = option[i][1];
-          }
-      }
-    },
-
-    template:
+      template:
     `
-    <div>
+    <div id="multilabel-string-header">
 
         <div v-if="collapsed"
              class="classification-annotation">
@@ -402,16 +450,9 @@ Vue.component('classification-string-annotation', {
 
         <div v-else class="classification-annotation">
 
-            <div class="single-annotation-header">
+            <div class="single-annotation-header" v-if="!multilabelStringOptions">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
-                </div>
-
-                <div v-if="multilabelStringOptions" class="annotator-switch">
-                  <template v-for="option,index in multilabelStringOptions">
-                      <button v-if="index === 0" class="switch-button" v-on:click="switchSlotValue(classification_strings)">GOLD</button>
-                      <button v-else class="switch-button" v-on:click="switchSlotValue(option)">{{guiMessages.selected.resolution_app.option}} {{index}}</button>
-                  </template>
                 </div>
 
                 <div class="info-button-container">
@@ -449,16 +490,16 @@ Vue.component('classification-string-annotation', {
                          v-bind:id="labelName"
                          v-bind:value="labelName"
                          v-bind:checked="checkedMethod(labelName)"
-                         v-on:click="clear_value($event,labelName)">
+                         v-on:click="clearValue($event,labelName)">
                 </div>
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
                     <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     
                     <span v-else> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="select_word($event,labelName)"><img src="assets/images/text_sel.svg"></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName)"><img src="assets/images/text_sel.svg"></button>
                     </span>
                 </label>
 
