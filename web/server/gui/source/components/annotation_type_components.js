@@ -119,7 +119,7 @@ Vue.component('classification-annotation',{
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
 
-                {{uniqueName}}
+                {{uniqueName.replace(/_/g, ' ')}}
                 <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
 
                 <span class="soft-text">{{guiMessages.selected.annotation_app.expand}}</span>
@@ -442,7 +442,7 @@ Vue.component('classification-string-annotation', {
                  v-on:click="toggleCollapse()"
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
-                {{uniqueName}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+                {{uniqueName.replace(/_/g, ' ')}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
                 <span class="soft-text">[Click to Expand]</span>
             </div>
 
@@ -604,7 +604,7 @@ Vue.component('classification-global-annotation',{
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
 
-                Global Slot
+                Global Slots
                 <br><hr id="Global Slot">
 
                 <span class="soft-text">{{guiMessages.selected.annotation_app.expand}}</span>

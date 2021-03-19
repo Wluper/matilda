@@ -34,8 +34,7 @@
 }
 
 .soft-text {
-    font-size: 14px;
-    font-style: italic;
+    font-size: 11px;
 }
 
 .multilabel-string-item-wrapper {
@@ -210,7 +209,7 @@
     margin:0 0 15px;
     display: grid;
     grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
-                 / 0fr 1fr 2fr
+                 / 2fr 0fr 2fr
 }
 
 #resolutions .single-annotation-header {
