@@ -108,21 +108,21 @@ input:focus {
 }
 
 
-.sticky{
+.sticky {
     position:sticky;
-
     top:0;
     height: auto;
     margin: 0.5em;
     margin-left: 1em;
     background-color: inherit;
-
+    font-size: 13px;
     font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
     font-weight:600;
+    text-transform: capitalize;
 }
 
 .space{
-    margin: 3%;
+    margin:0;
 }
 
 
