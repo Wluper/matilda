@@ -199,6 +199,10 @@ Vue.component('classification-string-annotation', {
       created () {
          if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
+         } else {
+            if (this.classes.length > 5) {
+               this.collapsed = true;
+            }
          }
       },
 
