@@ -19,7 +19,7 @@ Vue.component("all-dialogues", {
       }
    },
   created() {
-      allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer )
+      allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer );
   },
   mounted () {
       this.init();

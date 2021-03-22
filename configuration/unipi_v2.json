@@ -11,7 +11,17 @@
             "label_type"  : "string",
             "required"    : true
         },
+		
+        "greeting": {
 
+            "description" : "Type of dialogue act",
+            "label_type"  : "multilabel_classification",
+            "required"    : false,
+            "labels"      :[ 
+		        "sys_greet",
+                "usr_greet"
+			]
+		},	
 
         "sys_inform_basic": {
 
@@ -34,31 +44,6 @@
                 "location",
                 "contact",
                 "other"
-            ]
-
-        },
-
-        "sys_inform_basic": {
-
-            "description" : "Entity's value",
-            "label_type"  : "multilabel_classification_string",
-            "required"    : false,
-            "labels"      : [
-
-                "job_description",
-        		"contract",
-        		"duties",
-        		"skill",
-        		"past_experience",
-        		"degree",
-        		"age",
-        		"languages",
-        		"area",
-        		"company_name",
-        		"company_size",
-        		"location",
-        		"contact",
-        		"other"
             ]
 
         },
@@ -104,61 +89,8 @@
                 "age",
                 "languages",
                 "area",
-                "company_name",
                 "company_size",
-                "location",
-                "contact",
-                "other"
-            ]
-
-        },
-
-        "sys_select": {
-
-            "description" : "Entity's value",
-            "label_type"  : "multilabel_classification_string",
-            "required"    : false,
-            "labels"      : [
-
-                "job_description",
-                "contract",
-                "duties",
-                "skill",
-                "past_experience",
-                "degree",
-                "age",
-                "languages",
-                "area",
-                "company_name",
-                "company_size",
-                "location",
-                "contact",
-                "other"
-            ]
-
-        },
-
-        "usr_greet": {
-
-            "description" : "Entity's value",
-            "label_type"  : "multilabel_classification_string",
-            "required"    : false,
-            "labels"      : [
-
-                "job_description",
-                "contract",
-                "duties",
-                "skill",
-                "past_experience",
-                "degree",
-                "age",
-                "languages",
-                "area",
-                "company_name",
-                "company_size",
-                "location",
-                "contact",
-                "other"
+                "location"
             ]
 
         },
@@ -172,17 +104,14 @@
 
                 "job_description",
                 "contract",
-                "duties",
                 "skill",
                 "past_experience",
                 "degree",
                 "age",
                 "languages",
                 "area",
-                "company_name",
                 "company_size",
                 "location",
-                "contact",
                 "other"
             ]
 
@@ -197,18 +126,21 @@
 
                 "job_description",
                 "contract",
-                "duties",
-                "skill",
-                "past_experience",
-                "degree",
-                "age",
-                "languages",
                 "area",
-                "company_name",
                 "company_size",
-                "location",
-                "contact",
-                "other"
+                "location"
+            ]
+
+        },
+		
+		"sys_select": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "job_description"
             ]
 
         },
@@ -220,20 +152,7 @@
             "required"    : false,
             "labels"      : [
 
-                "job_description",
-                "contract",
-                "duties",
-                "skill",
-                "past_experience",
-                "degree",
-                "age",
-                "languages",
-                "area",
-                "company_name",
-                "company_size",
-                "location",
-                "contact",
-                "other"
+                "job_description"
             ]
 
         },
@@ -245,20 +164,7 @@
             "required"    : false,
             "labels"      : [
 
-                "job_description",
-                "contract",
-                "duties",
-                "skill",
-                "past_experience",
-                "degree",
-                "age",
-                "languages",
-                "area",
-                "company_name",
-                "company_size",
-                "location",
-                "contact",
-                "other"
+                "job_description"
             ]
 
         },
@@ -269,7 +175,7 @@
             "label_type"  : "multilabel_global_string",
             "required"    : false,
             "labels"      : [
-                "goal"
+                "result"
             ]
 
         }

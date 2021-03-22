@@ -168,6 +168,10 @@ Vue.component("datamanagement-view", {
                 <h2 class="database-title">{{guiMessages.selected.collection.title}}</h2>
                 <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
+                    <button type="button" v-on:click="status = 'creation'" 
+                            class="help-button btn btn-sm btn-primary">
+                            {{guiMessages.selected.collection.create}}
+                    </button> 
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-on:click="go_back()" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
@@ -176,15 +180,22 @@ Vue.component("datamanagement-view", {
 
             <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
-                    <button type="button" v-on:click="status = 'creation'" 
-                            class="help-button btn btn-sm btn-primary">
-                            {{guiMessages.selected.collection.create}}
-                    </button> 
+                    <h2 v-if="selectedCollection != ''" class="list-title">
+                        Assign annotators to selected collection
+                    </h2>
+
+                    <h2 v-else-if="showUser != 'all'" class="list-title">
+                        Assign collections to selected annotator
+                    </h2>
+
+                    <h2 v-else class="list-title">
+                        Select a user or a collection
+                    </h2>
 
                     <button v-if="selectedCollection != '' || showUser != 'all'" 
                         type="button" 
                         class="back-button btn btn-sm btn-primary" 
-                        v-on:click="reset_view()" style="float:right;">
+                        v-on:click="reset_view()" style="float:right; margin-top: 1em;">
                         {{guiMessages.selected.admin.button_abort}}
                     </button>
                 </div>

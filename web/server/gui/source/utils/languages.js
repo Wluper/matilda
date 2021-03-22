@@ -113,6 +113,9 @@ guiMessages = {
             freeze: "This operation will freeze the collection and notify your work is done and can be reviewed. Do it only when you finished",
             freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator",
             empty:"Empty",
+            dataManagementTitle:"Select a user or a collection",
+            collectionToAnnotator:"Assign collections to selected user",
+            annotatorToCollection:"Assign annotators to selected collection"
 
         },
         annotation_app: {
@@ -362,6 +365,9 @@ guiMessages = {
             freeze: "Questa operazione bloccherà la collezione e notificherà che hai finito e che le annotazioni sono pronte per la revisione",
             freezed: "L'annotazione è stata segnalata come completata e quindi non potrà essere modificata fino alla revisione e allo sblocco da parte di un amministratore.",
             empty:"Vuoto",
+            dataManagementTitle:"Seleziona un utente o una collezione",
+            collectionToAnnotator:"Assegna collezioni all'utente selezionato",
+            annotatorToCollection:"Assegna utenti alla collezione selezionata"
         },
         annotation_app: {
             turnId: "Id Turno",
@@ -609,6 +615,9 @@ guiMessages = {
             freeze: "Dieser Vorgang friert die Sammlung ein und benachrichtigt Sie, dass Ihre Arbeit erledigt ist und überprüft werden kann. Führen Sie sie erst aus, wenn Sie fertig sind.",
             freezed: "Diese Anmerkungen sind eingefroren und können erst bearbeitet werden, wenn sie von einem Administrator überprüft und entsperrt wurden",
             empty: "leer",
+            dataManagementTitle:"Select a user or a collection",
+            collectionToAnnotator:"Assign collections to selected annotator",
+            annotatorToCollection:"Assign users to selected collection"
 
         },
         annotation_app: {
