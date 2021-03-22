@@ -181,15 +181,15 @@ Vue.component("datamanagement-view", {
             <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
                     <h2 v-if="selectedCollection != ''" class="list-title">
-                        Assign annotators to selected collection
+                        {{guiMessages.selected.collection.annotatorToCollection}}
                     </h2>
 
                     <h2 v-else-if="showUser != 'all'" class="list-title">
-                        Assign collections to selected annotator
+                        {{guiMessages.selected.collection.collectionToAnnotator}}
                     </h2>
 
                     <h2 v-else class="list-title">
-                        Select a user or a collection
+                        {{guiMessages.selected.collection.dataManagementTitle}}
                     </h2>
 
                     <button v-if="selectedCollection != '' || showUser != 'all'" 
