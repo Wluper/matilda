@@ -123,9 +123,10 @@ class Configuration(object):
                                 print(message, turn)
                                 return message
         except:
-            message = "ERROR4: dialogue "+str(i)+" in list couldn't validate with the current annotation style model"
+            message = "ERROR4: dialogue in list couldn't validate with the current annotation style model"
             print(message)
             return message
+            
         return dialogue
 
 
