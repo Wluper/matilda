@@ -84,7 +84,7 @@ Vue.component("datamanagement-view", {
             console.log("Selected collection",this.selectedCollection);
             this.changesSaved = "";
             //refresh from database
-            this.init();
+            //this.init();
         },
 
         clicked_active() {
@@ -381,13 +381,13 @@ Vue.component('collection-users-reverse', {
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
-                            this.get_user_assignments();
+                            this.get_user_assignments(this.selectedUser);
                     });
             });
         },
 
-        get_user_assignments: function() {
-            search = {"assignedTo":this.selectedUser}
+        get_user_assignments: function(selectedUser) {
+            search = {"assignedTo":selectedUser}
             projection = {"id":1,"gold":1,"assignedTo":1,"lastUpdate":1}
             backend.get_specific_collections("dialogues_collections",search, projection)
                 .then( (response) => {
@@ -395,14 +395,15 @@ Vue.component('collection-users-reverse', {
                     for (collection in response) {
                         this.assignedCollections.push(response[collection].id)
                     }
-                    console.log("Asssigned to",this.selectedUser,this.assignedCollections)
+                    console.log("Asssigned to",selectedUser,this.assignedCollections)
                 }
             )
         },
 
         clicked_user: function(clickedUser) {
             this.selectedUser = clickedUser;
-            this.init();
+            this.assignedCollections = [];
+            this.get_user_assignments(clickedUser);
         },
 
         inspect_entry: function(clickedEntry) {
@@ -418,6 +419,18 @@ Vue.component('collection-users-reverse', {
             }
             this.saveTasks[clickedCollection] = this.allEntriesNamedMetadata[clickedCollection].assignedTo;
             console.log("Output array updated",this.allEntriesNamedMetadata[clickedCollection].assignedTo);
+        },
+
+        delete_entry(clickedDialogue) {
+            let del = confirm(guiMessages.selected.collection.confirmDeleteDialogue);
+            if (del == true) { 
+                backend.remove_from_collection_async("dialogues_collections", this.entry.id, {"dialogue":clickedDialogue})
+                    .then( (response) => {
+                        console.log(response);
+                        this.init();
+                    }
+                )
+            }
         },
 
         save: function() {
