@@ -180,24 +180,32 @@ Vue.component("datamanagement-view", {
 
             <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
-                    <h2 v-if="selectedCollection != ''" class="list-title">
-                        {{guiMessages.selected.collection.annotatorToCollection}}
-                    </h2>
+                    <template v-if="selectedCollection != ''">
+                        <h2 class="list-title">
+                            {{guiMessages.selected.collection.annotatorToCollection}}
+                        </h2>
+                        <button type="button" class="back-button btn btn-sm btn-primary" 
+                            v-on:click="reset_view()" style="float:right; margin-top: 1em;">
+                                {{guiMessages.selected.admin.button_abort}}
+                        </button>
+                    </template>
 
-                    <h2 v-else-if="showUser != 'all'" class="list-title">
-                        {{guiMessages.selected.collection.collectionToAnnotator}}
-                    </h2>
+                    <template v-else-if="showUser != 'all'">
+                        <h2 class="list-title">
+                            {{guiMessages.selected.collection.collectionToAnnotator}}
+                        </h2>
+                        <button type="button" class="back-button btn btn-sm btn-primary" 
+                            v-on:click="reset_view()" style="float:right; margin-top: 1em;">
+                                {{guiMessages.selected.admin.button_abort}}
+                        </button>
+                    </template>
 
-                    <h2 v-else class="list-title">
+                    <template v-else>
+                        <h2 class="list-title">
                         {{guiMessages.selected.collection.dataManagementTitle}}
                     </h2>
+                    </template>
 
-                    <button v-if="selectedCollection != '' || showUser != 'all'" 
-                        type="button" 
-                        class="back-button btn btn-sm btn-primary" 
-                        v-on:click="reset_view()" style="float:right; margin-top: 1em;">
-                        {{guiMessages.selected.admin.button_abort}}
-                    </button>
                 </div>
 
                 <ul class="collection-list two-columns" v-if="showCollection == 'all' && showUser == 'all' ">
