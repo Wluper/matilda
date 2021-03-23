@@ -287,10 +287,10 @@ Vue.component("datamanagement-view", {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="gold-true">Administrator</span>
+                                        Role: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="gold-false">Annotator</span>
+                                        Role: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -301,10 +301,11 @@ Vue.component("datamanagement-view", {
 
                 <div class="closing-list" v-if="showUser == 'all'">
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
-                    <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">{{guiMessages.selected.annotation_app.unsaved}} 
+                    <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">
                         <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save()">
                         {{guiMessages.selected.annotation_app.save}}
                         </button>
+                        {{guiMessages.selected.annotation_app.unsaved}}
                     </span>
                 </div>
                     
@@ -472,10 +473,10 @@ Vue.component('collection-users-reverse', {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="gold-true">Administrator</span>
+                                        Role: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="gold-false">Annotator</span>
+                                        Role: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -484,8 +485,9 @@ Vue.component('collection-users-reverse', {
                     </li>
                 </ul>
                 <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
-                <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">{{guiMessages.selected.annotation_app.unsaved}} 
+                <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">
                     <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save()">{{guiMessages.selected.annotation_app.save}}</button>
+                    {{guiMessages.selected.annotation_app.unsaved}} 
                 </span>
             </div>
   `

@@ -318,6 +318,17 @@ pre:first-line {
     padding-left:3px;
 }
 
+.admin-false {
+    color:#087fdd !important;
+    font-weight: 100;
+    padding-left:3px;
+}
+.admin-true {
+    font-weight: 100;
+    color:red !important;
+    padding-left:3px;
+}
+
 #ask-selector label {
     display:inline-block;
     padding:3px 0px 7px 7px;

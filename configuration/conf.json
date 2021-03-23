@@ -2,13 +2,13 @@
 	"app": {
 		"address":"0.0.0.0",
 		"port":5000,
-		"annotation_models":["unipi_model.json","lida_model.json","multiwoz.json", "unipi_v2.json"],
+		"annotation_models":["unipi_model.json","lida_model.json","multiwoz.json", "unipi_model_v2.json"],
 		"conversion_scripts": {
 			"multiwoz.json": { "file": "convertToFormat" }
 		}
 	},
 	"database": {
-		"name": "matilda_development",
+		"name": "matilda_dev",
 		"legacy_configuration": {
 			"address": "localhost",
 			"port": 27017,
