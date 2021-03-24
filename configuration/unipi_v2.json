@@ -38,7 +38,7 @@
 
         },
 
-        "sys_inform_basic": {
+        "usr_inform_basic": {
 
             "description" : "Entity's value",
             "label_type"  : "multilabel_classification_string",
