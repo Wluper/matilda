@@ -81,6 +81,7 @@ class DatabaseManagement(object):
 		#print(" * Searching in:",coll,"for key '",pairs)
 
 		entries = {}
+		documentLengthOnly = False
 
 		#adds restrictions to the search
 		if pairs is None:
@@ -88,17 +89,27 @@ class DatabaseManagement(object):
 		
 		#search with projection of interested fields or simple search
 		if projection is not None:
+			try:
+				if projection["document"] == "length":
+					projection["document"] = 1
+					documentLengthOnly = True
+			except:
+				pass
 			query = selected_collection.find(pairs,projection)
 		else:
 			query = selected_collection.find(pairs)
 
-		#convert objectId into string and gold in true or false
-		#calculate document length which also is dialogues total number
+		#operations after the query
 		for line in query:
+			#convert objectId into string
 			if line.get("_id") is not None:
 				line["_id"] = str(line["_id"])
+			#calculate document length which also is dialogues total number	
 			if line.get("document") is not None:
 				line["documentLength"] = len(line["document"])
+			if documentLengthOnly:
+				line["document"] = line["documentLength"]
+
 			responseObject.append(line)
 
 		return responseObject

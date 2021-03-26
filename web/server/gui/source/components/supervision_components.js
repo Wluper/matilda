@@ -67,7 +67,7 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"document":1} )
+         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1, "document":"length"} )
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;

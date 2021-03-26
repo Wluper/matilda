@@ -52,7 +52,8 @@ Vue.component("datamanagement-view", {
 
         getAllEntriesFromServer() {
             mainContainer.style.cursor = "progress";
-            backend.get_collections_async("dialogues_collections")
+            projection = {"annotationStyle":1, "assignedTo":1, "description":1, "document":"length", "gold":1, "id":1};
+            backend.get_specific_collections("dialogues_collections",{}, projection)
                 .then( (response) => {
                     for (collection in response) {
                       this.allEntriesNamedMetadata[response[collection].id] = response[collection]
@@ -369,7 +370,8 @@ Vue.component('collection-users-reverse', {
             this.allEntriesNamedMetadata = [];
             this.assignedCollections = [];
             //get data from server
-            backend.get_collections_async("dialogues_collections")
+            projection = {"annotationStyle":1, "assignedTo":1, "description":1, "documentLength":1, "gold":1, "id":1};
+            backend.get_specific_collections("dialogues_collections",{}, projection)
                   .then( (response) => {
                     console.log("All collections",response);
                     for (collection in response) {
