@@ -182,7 +182,7 @@ Vue.component('classification-annotation',{
 
 Vue.component('classification-string-annotation', {
 
-      props: ["classification_strings", "uniqueName", "classes", "info", "confidences","currentId","multilabelStringOptions","accepted"],
+      props: ["classification_strings", "uniqueName", "classes", "info", "confidences", "currentId", "multilabelStringOptions", "accepted", "supervision"],
 
       data () {
 
@@ -192,6 +192,8 @@ Vue.component('classification-string-annotation', {
             showInfo: false,
             guiMessages,
             backup_classification_strings: this.classification_strings,
+            selectedLabel: "",
+            filledLabels: []
          }
 
       },
@@ -200,7 +202,7 @@ Vue.component('classification-string-annotation', {
          if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
          } else {
-            if (this.classes.length > 5) {
+            if (this.supervision == false) {
                this.collapsed = true;
             }
          }
@@ -334,20 +336,6 @@ Vue.component('classification-string-annotation', {
 
          },
 
-         clearValue: function(event,labelName) {
-             event.stopPropagation();
-             let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
-             if (stringField.value == "") {
-                 console.log("empty");
-                 event.target.checked = false;
-                 return;
-             } else {
-                 console.log("cleaning");
-                 stringField.value = "";
-                 this.updateClassAndString(stringField, labelName);
-             }
-         },
-
          selectWords: function(event,labelName) {
              annotationAppEventBus.$emit("resume_annotation_tools");
              //display feedbacks
@@ -432,6 +420,33 @@ Vue.component('classification-string-annotation', {
              }
              //TODO: filled labels showed higher in the list?
          },
+
+         clearValue: function(event,labelName) {
+             event.stopPropagation();
+             let stringField = event.target.parentNode.parentNode.querySelector("input.multilabel-string-input");
+             if (stringField.value == "") {
+                 console.log("empty");
+                 event.target.checked = false;
+                 //empty output?
+                 this.directUpdateClassAndString("none", labelName);
+             } else {
+                 console.log("cleaning");
+                 stringField.value = "";
+                 this.updateClassAndString(stringField, labelName);
+             }
+         },
+
+         resetLabels(label) {
+            if ((label == "") && (this.classification_strings.length > 0)) {
+                let r = confirm("Reset all slot values for "+this.uniqueName+"?");
+                if (r == true) {
+                    outEvent = {name: this.uniqueName, data: undefined}
+                    annotationAppEventBus.$emit('classification_string_updated', outEvent);
+                }
+            } else if (label == "none") {
+                this.directUpdateClassAndString("none","none");
+            }
+         }
       
       },
 
@@ -439,17 +454,70 @@ Vue.component('classification-string-annotation', {
     `
     <div id="multilabel-string-header">
 
-        <div v-if="collapsed"
-             class="classification-annotation">
+        <div v-if="collapsed" class="classification-annotation">
 
-            <div class="sticky space collapsor"
-                 v-on:click="toggleCollapse()"
-                 v-on:mouseover="turnSeparatorWhite()"
-                 v-on:mouseout="turnSeparatorGrey()">
-                {{uniqueName.replace(/_/g, ' ')}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
-                <span class="soft-text">[Click to Expand]</span>
+                <div class="single-annotation-header">
+                    <div class="sticky space collapsor" v-on:click="toggleCollapse()">
+                    {{uniqueName.replace(/_/g, ' ')}}
+                    </div>
+
+                    <div class="info-button-container">
+
+                        <button v-if="showInfo" class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                            {{guiMessages.selected.annotation_app.close}}
+                        </button>
+
+                        <button v-else class="info-button" v-on:click="showInfo ? showInfo = false : showInfo = true">
+                            Info
+                        </button>
+
+                    </div>
+                </div>
+
+                <div v-if="showInfo">
+
+                    <hr>
+
+                    <div class="text-container">
+                        {{ info }}
+                    </div>
+
+                    <hr>
+
+                </div>
+                
+            <div class="multilabel-string-item-new-wrapper">
+
+                    Label: <select v-model="selectedLabel" class="multilabel-string-item-selector" v-on:change="resetLabels(selectedLabel)">
+                        <option></option>
+                        <template v-for="labelName in classes">
+                            <option v-if="checkedMethod(labelName)">{{labelName}}</option>
+                            <option v-else>{{labelName}}</option>
+                        </template>
+                    </select>
+
+                    <template v-if="selectedLabel !='' ">
+                        <input type="checkbox"
+                             class="multilabel-string-checkbox"
+                             v-bind:id="selectedLabel"
+                             v-bind:value="selectedLabel"
+                             v-bind:checked="checkedMethod(selectedLabel)"
+                             v-on:click="clearValue($event,selectedLabel)">
+                        
+                        <br>
+                        
+                        <input v-bind:id="selectedLabel+'_input'" class="multilabel-string-input" style="width: 87%;"
+                               v-bind:value="getStringPart(selectedLabel)"
+                               v-on:input="updateClassAndString($event, selectedLabel)">
+                        </input>
+
+                        <button type="button" 
+                            class="txt-sel-button" @click="selectWords($event,selectedLabel)" 
+                            style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
+                        <img src="assets/images/text_sel.svg"></button>
+                    </template>
+
             </div>
-
         </div>
 
         <div v-else class="classification-annotation">
@@ -608,7 +676,7 @@ Vue.component('classification-global-annotation',{
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
 
-                Global Slots
+                Global Slot
                 <br><hr id="Global Slot">
 
                 <span class="soft-text">{{guiMessages.selected.annotation_app.expand}}</span>

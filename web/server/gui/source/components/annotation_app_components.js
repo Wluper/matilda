@@ -618,7 +618,7 @@ Vue.component('annotations',{
 
     template:
     `
-    <div id="annotations" v-bind:class = "{ supervision_readonly : readOnly }">
+    <div id="annotations" v-bind:class="{supervision_readonly:readOnly}">
         <div class="annotation-header sticky">
         Current Turn: {{currentId}}
         </div>
@@ -641,7 +641,8 @@ Vue.component('annotations',{
                                           v-bind:uniqueName="classString.name"
                                           v-bind:classes="classString.params"
                                           v-bind:info="classString.info"
-                                          v-bind:currentId="currentId">
+                                          v-bind:currentId="currentId"
+                                          v-bind:supervision="readOnly">
         </classification-string-annotation>
 
     </div>

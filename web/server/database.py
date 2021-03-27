@@ -107,6 +107,7 @@ class DatabaseManagement(object):
 			#calculate document length which also is dialogues total number	
 			if line.get("document") is not None:
 				line["documentLength"] = len(line["document"])
+			#remove document if only length is requested
 			if documentLengthOnly:
 				line["document"] = line["documentLength"]
 
