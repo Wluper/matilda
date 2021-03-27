@@ -131,6 +131,7 @@ guiMessages = {
             expand: "Click to Expand",
             noTurn: "No turn selected. Please select one to annotate",
             rate: "Annotation rate",
+            switchAnnotationView: "Expanded Slots View",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -382,6 +383,7 @@ guiMessages = {
             expand: "Clicca per espandere",
             noTurn: "Nessun turno selezionato, nessuna modifica effettuata.",
             rate: "Stima annotazione",
+            switchAnnotationView: "Visuale Slot-Espansi",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -633,6 +635,7 @@ guiMessages = {
             expand: "Klicken zum Erweitern",
             noTurn: "Keine Runde ausgewählt. Bitte wählen Sie eine zum Kommentieren aus",
             rate: "Annotation Rate",
+            switchAnnotationView: "Expanded Slots View",
         },
         resolution_app: {
             errorId: "Error Id:",

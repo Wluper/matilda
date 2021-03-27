@@ -406,6 +406,9 @@ Vue.component('dialogue-menu',{
             <span v-if="changesSaved" class="is-saved">{{guiMessages.selected.annotation_app.allSaved}}</span>
             <span v-else class="is-not-saved">{{guiMessages.selected.annotation_app.unsaved}}</span>
         </div>
+
+        <button type="button" class="btn btn-sm" style="grid-area:switch-button">{{guiMessages.selected.annotation_app.switchAnnotationView}}</button>
+
     </div>
     `
 })

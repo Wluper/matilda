@@ -192,6 +192,7 @@ Vue.component('classification-string-annotation', {
             showInfo: false,
             guiMessages,
             backup_classification_strings: this.classification_strings,
+            slotView: "new",
             selectedLabel: "",
             filledLabels: []
          }
@@ -202,7 +203,7 @@ Vue.component('classification-string-annotation', {
          if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
          } else {
-            if (this.supervision == false) {
+            if ((this.supervision == false) && (this.slotView == "new")){
                this.collapsed = true;
             }
          }
@@ -211,6 +212,7 @@ Vue.component('classification-string-annotation', {
       methods: {
 
            get_confidence : function (id){
+            console.log(this.confidences);
                if (this.confidences){
 
                    x = this.confidences[id];
@@ -437,6 +439,8 @@ Vue.component('classification-string-annotation', {
          },
 
          resetLabels(label) {
+            console.log(label);
+            console.log(this.classification_strings);
             if ((label == "") && (this.classification_strings.length > 0)) {
                 let r = confirm("Reset all slot values for "+this.uniqueName+"?");
                 if (r == true) {
@@ -454,7 +458,7 @@ Vue.component('classification-string-annotation', {
     `
     <div id="multilabel-string-header">
 
-        <div v-if="collapsed" class="classification-annotation">
+        <div v-if="collapsed==true" class="classification-annotation">
 
                 <div class="single-annotation-header">
                     <div class="sticky space collapsor" v-on:click="toggleCollapse()">
@@ -515,6 +519,36 @@ Vue.component('classification-string-annotation', {
                             class="txt-sel-button" @click="selectWords($event,selectedLabel)" 
                             style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                         <img src="assets/images/text_sel.svg"></button>
+                    </template>
+
+                    <!-- already inserted slots -->
+                    
+                    <template v-if="classification_strings.length > 0">
+                        <template v-for="labelName in classification_strings">
+                            <div v-if="selectedLabel != labelName[0]" class="multilabel-string-item-new-wrapper" style="margin-top:10px">
+                                
+                                <label>{{labelName[0]}}</label> <br>
+                                
+                                <input type="checkbox"
+                                     class="multilabel-string-checkbox"
+                                     v-bind:id="labelName[0]"
+                                     v-bind:value="labelName[0]"
+                                     v-bind:checked="checkedMethod(labelName[0])"
+                                     v-on:click="clearValue($event,labelName[0])">
+                                
+                                <input v-bind:id="labelName[0]+'_input'" class="multilabel-string-input" style="width: 80%;"
+                                    v-bind:value="getStringPart(labelName[0])"
+                                    v-on:input="updateClassAndString($event, labelName[0])">
+                                </input>
+                        
+                                <button type="button" 
+                                    class="txt-sel-button" @click="selectWords($event,selectedLabel)" 
+                                    style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
+                                <img src="assets/images/text_sel.svg"></button>
+
+                            </div>
+                        </template>
+
                     </template>
 
             </div>
