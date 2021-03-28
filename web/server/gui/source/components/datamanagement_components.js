@@ -174,7 +174,7 @@ Vue.component("datamanagement-view", {
                             {{guiMessages.selected.collection.create}}
                     </button> 
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
-                    <button v-on:click="go_back()" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                    <button v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>

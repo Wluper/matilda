@@ -204,7 +204,7 @@ Vue.component('classification-string-annotation', {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
          } else {
             if ((this.supervision == false) && (this.slotView == "new")){
-               this.collapsed = true;
+               this.collapsed = "new";
             }
          }
       },
@@ -212,7 +212,6 @@ Vue.component('classification-string-annotation', {
       methods: {
 
            get_confidence : function (id){
-            console.log(this.confidences);
                if (this.confidences){
 
                    x = this.confidences[id];
@@ -231,13 +230,17 @@ Vue.component('classification-string-annotation', {
 
 
          toggleCollapse: function () {
-
-             if (this.collapsed) {
-                 this.collapsed = false;
-             } else {
-                 this.collapsed = true;
-             }
-
+            switch(this.collapsed) {
+                case true:
+                    this.collapsed = "new";
+                    break;
+                case "new":
+                    this.collapsed = false;
+                    break;
+                case false:
+                    this.collapsed = true;
+                    break;
+            }
          },
 
          turnSeparatorWhite: function() {
@@ -460,6 +463,31 @@ Vue.component('classification-string-annotation', {
 
         <div v-if="collapsed==true" class="classification-annotation">
 
+            <div class="sticky space collapsor"
+                 v-on:click="toggleCollapse()"
+                 v-on:mouseover="turnSeparatorWhite()"
+                 v-on:mouseout="turnSeparatorGrey()">
+                {{uniqueName.replace(/_/g, ' ')}} <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
+                <span class="soft-text">[Click to Expand]</span>
+            </div>
+            <div v-if="showInfo">
+
+                <hr>
+
+                <div class="text-container">
+                    {{ info }}
+                </div>
+
+                <hr>
+
+            </div>
+
+        </div>
+
+        <!-- new annotation view for slots -->
+
+        <div v-else-if="collapsed=='new'" class="classification-annotation">
+
                 <div class="single-annotation-header">
                     <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
@@ -521,7 +549,7 @@ Vue.component('classification-string-annotation', {
                         <img src="assets/images/text_sel.svg"></button>
                     </template>
 
-                    <!-- already inserted slots -->
+                    <!-- already valorized labels -->
                     
                     <template v-if="classification_strings.length > 0">
                         <template v-for="labelName in classification_strings">
@@ -553,6 +581,7 @@ Vue.component('classification-string-annotation', {
 
             </div>
         </div>
+
 
         <div v-else class="classification-annotation">
 

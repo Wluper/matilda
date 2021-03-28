@@ -95,13 +95,13 @@ Vue.component("users-view", {
             <user-bar v-bind:userName="userName"></user-bar>
 
           <div class="help-button-container">
-                <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createUserButton}}</button>
+                <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
           </div>
         </div>
             <div class="inner-wrap">
                 <div style="padding-bottom:10px;">
                     <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
-                    <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary button-title">{{guiMessages.selected.admin.createUserButton}}</button>
                 </div>
                 <ul class="user-list">
                     <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
