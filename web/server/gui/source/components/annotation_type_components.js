@@ -379,7 +379,7 @@ Vue.component('classification-string-annotation', {
              let context = event.target.id;
              //updating
              let range = getTokenRange(event,text);
-             activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
+             activeLabel.value += context.trim()+"["+range+"]["+text+"],";
              this.updateClassAndString(activeLabel, labelName);
              //put all back in place. Two possible parent view: interannotator and annotation
              annotationAppEventBus.$emit("resume_annotation_tools");

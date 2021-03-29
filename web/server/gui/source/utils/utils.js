@@ -203,10 +203,23 @@ function annotation_rate_increment(turnNumber, annotations, turnTot, turnList) {
     }
 }
 
-function getTokenRange(utterance,selection) {
-    console.log(utterance);
-    console.log(selection);
+function getTokenRange(event,selectionText) {
+    let utterance = event.target.value;
+    //if selection starts with a space trims it
+    if (utterance.charAt(event.target.selectionStart) == " ") {
+        event.target.selectionStart++;
+    }
+    if (utterance.charAt(event.target.selectionEnd-1) == " ") {
+        event.target.selectionEnd--;
+    }
+    let utteranceUntilFirstToken = utterance.substr(0,event.target.selectionStart);
+    let rangeStart = utteranceUntilFirstToken.split(/[\s]/).length;
     
+    let utteranceUntilLastToken = utterance.substr(0,event.target.selectionEnd);
+    let rangeEnd = utteranceUntilLastToken.split(/[\s]/).length;
+
+    let range = rangeStart+","+rangeEnd;
+    return range
 }
 
 
