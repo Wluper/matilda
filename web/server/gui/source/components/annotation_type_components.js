@@ -444,13 +444,7 @@ Vue.component('classification-string-annotation', {
          resetLabels(label) {
             console.log(label);
             console.log(this.classification_strings);
-            if ((label == "") && (this.classification_strings.length > 0)) {
-                let r = confirm("Reset all slot values for "+this.uniqueName+"?");
-                if (r == true) {
-                    outEvent = {name: this.uniqueName, data: undefined}
-                    annotationAppEventBus.$emit('classification_string_updated', outEvent);
-                }
-            } else if (label == "none") {
+            if (label == "none") {
                 this.directUpdateClassAndString("none","none");
             }
          }
