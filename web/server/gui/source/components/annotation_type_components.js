@@ -203,7 +203,7 @@ Vue.component('classification-string-annotation', {
          if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
          } else {
-            if ((this.supervision == false) && (this.slotView == "new")){
+            if ((this.classes.length > 1) && (this.supervision == false) && (this.slotView == "new")){
                this.collapsed = "new";
             }
          }
@@ -232,7 +232,11 @@ Vue.component('classification-string-annotation', {
          toggleCollapse: function () {
             switch(this.collapsed) {
                 case true:
-                    this.collapsed = "new";
+                    if (this.classes.length > 1) {
+                        this.collapsed = "new";
+                    } else {
+                        this.collapsed = false;
+                    }
                     break;
                 case "new":
                     this.collapsed = false;
