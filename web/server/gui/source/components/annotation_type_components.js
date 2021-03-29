@@ -345,10 +345,15 @@ Vue.component('classification-string-annotation', {
 
          },
 
-         selectWords: function(event,labelName) {
+         selectWords: function(event,labelName,typeName=undefined) {
              annotationAppEventBus.$emit("resume_annotation_tools");
              //display feedbacks
-             let inputField = document.getElementById(labelName+"_input");
+             if (typeName != undefined) {
+                var container = document.getElementById(typeName+"_container");
+                var inputField = container.querySelector("#"+labelName+"_input");
+             } else {
+                var inputField = document.getElementById(labelName+"_input");
+             }
              let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
              if (activeTurn != null) {
                activeTurn.style.border = "4px solid #259af7ad";
@@ -484,7 +489,7 @@ Vue.component('classification-string-annotation', {
 
         <!-- new annotation view for slots -->
 
-        <div v-else-if="collapsed=='new'" class="classification-annotation">
+        <div v-else-if="collapsed=='new'" class="classification-annotation" v-bind:id="uniqueName+'_container'">
 
                 <div class="single-annotation-header">
                     <div class="sticky space collapsor" v-on:click="toggleCollapse()">
@@ -516,7 +521,7 @@ Vue.component('classification-string-annotation', {
 
                 </div>
                 
-            <div class="multilabel-string-item-new-wrapper">
+                <div class="multilabel-string-item-new-wrapper">
 
                     Label: <select v-model="selectedLabel" class="multilabel-string-item-selector" v-on:change="resetLabels(selectedLabel)">
                         <option></option>
@@ -542,7 +547,7 @@ Vue.component('classification-string-annotation', {
                         </input>
 
                         <button type="button" 
-                            class="txt-sel-button" @click="selectWords($event,selectedLabel)" 
+                            class="txt-sel-button" @click="selectWords($event,selectedLabel, uniqueName)" 
                             style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                         <img src="assets/images/text_sel.svg"></button>
                     </template>
@@ -568,7 +573,7 @@ Vue.component('classification-string-annotation', {
                                 </input>
                         
                                 <button type="button" 
-                                    class="txt-sel-button" @click="selectWords($event,selectedLabel)" 
+                                    class="txt-sel-button" @click="selectWords($event,selectedLabel,uniqueName)" 
                                     style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                                 <img src="assets/images/text_sel.svg"></button>
 

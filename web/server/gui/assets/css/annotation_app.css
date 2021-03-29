@@ -6,7 +6,7 @@
     background-color: #f1f1f3;
     height: 100%;
     display: grid !important;
-    grid-template-columns: minmax(0,0.8fr) minmax(0,3.2fr);
+    grid-template-columns: minmax(0,0.85fr) minmax(0,3.2fr);
     grid-template-rows: minmax(0, 1.4fr) minmax(0, 2.4fr) minmax(0,12fr);
     min-height: 0;
     min-width: 0;
@@ -107,7 +107,7 @@
     grid-row-start: 1;
     grid-row-end: 5;
     overflow-y: scroll;
-    /*padding: 14px 8px;*/
+    padding: 14px 0px;
     position:relative;
     z-index: 10;
     background:white;
