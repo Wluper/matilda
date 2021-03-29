@@ -203,6 +203,11 @@ function annotation_rate_increment(turnNumber, annotations, turnTot, turnList) {
     }
 }
 
+function getTokenRange(utterance,selection) {
+    console.log(utterance);
+    console.log(selection);
+    
+}
 
 
 utils =

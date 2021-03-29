@@ -378,6 +378,7 @@ Vue.component('classification-string-annotation', {
              let labelName = activeLabel.id.split("_input")[0];
              let context = event.target.id;
              //updating
+             let range = getTokenRange(event.target.value,text);
              activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
              this.updateClassAndString(activeLabel, labelName);
              //put all back in place. Two possible parent view: interannotator and annotation
@@ -620,7 +621,7 @@ Vue.component('classification-string-annotation', {
             </div>
 
 
-            <div v-for="labelName in classes" class="multilabel-string-item-wrapper">
+            <div v-for="labelName in classes" class="multilabel-string-item-wrapper" v-bind:id="uniqueName+'_container'">
 
                 <div class="multilabel-string-checkbox-container">
                   <input type="checkbox"
@@ -633,11 +634,11 @@ Vue.component('classification-string-annotation', {
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
                     <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     
                     <span v-else> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName)"><img src="assets/images/text_sel.svg"></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName)"><img src="assets/images/text_sel.svg"></button>
                     </span>
                 </label>
 
