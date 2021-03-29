@@ -349,7 +349,7 @@ Vue.component('classification-string-annotation', {
              annotationAppEventBus.$emit("resume_annotation_tools");
              //display feedbacks
              if (typeName != undefined) {
-                var container = document.getElementById(typeName+"_container");
+                var container = document.getElementById(typeName);
                 var inputField = container.querySelector("#"+labelName+"_input");
              } else {
                 var inputField = document.getElementById(labelName+"_input");
@@ -378,7 +378,7 @@ Vue.component('classification-string-annotation', {
              let labelName = activeLabel.id.split("_input")[0];
              let context = event.target.id;
              //updating
-             let range = getTokenRange(event.target.value,text);
+             let range = getTokenRange(event,text);
              activeLabel.value += context.trim()+"["+event.target.selectionStart+","+event.target.selectionEnd+"]["+text+"],";
              this.updateClassAndString(activeLabel, labelName);
              //put all back in place. Two possible parent view: interannotator and annotation
@@ -490,7 +490,7 @@ Vue.component('classification-string-annotation', {
 
         <!-- new annotation view for slots -->
 
-        <div v-else-if="collapsed=='new'" class="classification-annotation" v-bind:id="uniqueName+'_container'">
+        <div v-else-if="collapsed=='new'" class="classification-annotation">
 
                 <div class="single-annotation-header">
                     <div class="sticky space collapsor" v-on:click="toggleCollapse()">
@@ -522,7 +522,7 @@ Vue.component('classification-string-annotation', {
 
                 </div>
                 
-                <div class="multilabel-string-item-new-wrapper">
+                <div class="multilabel-string-item-new-wrapper" v-bind:id="uniqueName+'_container'">
 
                     Label: <select v-model="selectedLabel" class="multilabel-string-item-selector" v-on:change="resetLabels(selectedLabel)">
                         <option></option>
@@ -548,7 +548,7 @@ Vue.component('classification-string-annotation', {
                         </input>
 
                         <button type="button" 
-                            class="txt-sel-button" @click="selectWords($event,selectedLabel, uniqueName)" 
+                            class="txt-sel-button" @click="selectWords($event,selectedLabel, uniqueName+'_container')" 
                             style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                         <img src="assets/images/text_sel.svg"></button>
                     </template>
@@ -574,7 +574,7 @@ Vue.component('classification-string-annotation', {
                                 </input>
                         
                                 <button type="button" 
-                                    class="txt-sel-button" @click="selectWords($event,selectedLabel,uniqueName)" 
+                                    class="txt-sel-button" @click="selectWords($event,labelName[0],uniqueName+'_container')" 
                                     style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                                 <img src="assets/images/text_sel.svg"></button>
 
@@ -621,7 +621,7 @@ Vue.component('classification-string-annotation', {
             </div>
 
 
-            <div v-for="labelName in classes" class="multilabel-string-item-wrapper" v-bind:id="uniqueName+'_container'">
+            <div v-for="labelName in classes" class="multilabel-string-item-wrapper" v-bind:id="uniqueName+'_old'">
 
                 <div class="multilabel-string-checkbox-container">
                   <input type="checkbox"
@@ -634,11 +634,11 @@ Vue.component('classification-string-annotation', {
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
                     <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName+'_old')"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     
                     <span v-else> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName)"><img src="assets/images/text_sel.svg"></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName+'_old')"><img src="assets/images/text_sel.svg"></button>
                     </span>
                 </label>
 
