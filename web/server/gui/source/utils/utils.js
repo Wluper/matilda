@@ -218,7 +218,7 @@ function getTokenRange(event,selectionText) {
     let utteranceUntilLastToken = utterance.substr(0,event.target.selectionEnd);
     let rangeEnd = utteranceUntilLastToken.split(/[\s]/).length;
 
-    let range = rangeStart+","+rangeEnd;
+    let range = (rangeStart-1)+","+(rangeEnd-1);
     return range
 }
 
