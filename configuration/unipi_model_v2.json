@@ -215,6 +215,19 @@
             ]
 
         },
+	
+	"sys_deny": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description"
+            ]
+
+        },
 
         "async": {
 
