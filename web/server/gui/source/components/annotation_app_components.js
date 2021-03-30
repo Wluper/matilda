@@ -19,7 +19,7 @@ Vue.component("annotation-app", {
             primaryElementClassName: "primary-turn-input",
             globalSlotNonEmpty: 0,
             metaTags: [],
-            annotatedTurns: [],
+            annotatedTurns: ["annotated"],
             annotationRate: '0%',
             readOnly:false,
         }
@@ -199,9 +199,10 @@ Vue.component("annotation-app", {
             //turn 0 is meta-tags and global_slot reserved so it's skipped
             if (this.dCurrentId != 0) {
                 this.allDataSaved = false;
-                //update annotation rate, slots don't count
-                if (event.turn != undefined) {
-                    this.update_annotation_rate(event, this.dTurns.length);
+                //update annotation rate
+                if (this.annotatedTurns[this.dCurrentId] != "annotated") {
+                    this.update_annotation_rate();
+                    this.turn_is_annotated(this.dCurrentId);
                 }
                 //update turn
                 utils.update_turn( this.dTurns[this.dCurrentId], event);
@@ -217,10 +218,10 @@ Vue.component("annotation-app", {
                 this.annotatedTurns[event] = "annotated";
         },
 
-        update_annotation_rate: function(annotations, turnTot) {
+        update_annotation_rate: function() {
             let oldValue = Number(this.dTurns[0]["status"].slice(0,-1));
-            let increment = Number(utils.annotation_rate_increment(annotations.turn, annotations, turnTot, this.annotatedTurns));
-            let newValue = ( Number(oldValue) + Number(increment) ).toFixed(1);
+            let unitRate = (100 / (this.dTurns.length-1));
+            let newValue = ( Number(oldValue) + Number(unitRate) ).toFixed(1);
             //small adjustments due to decimals removal and exceptions
             if (newValue >= 98) newValue = 100;
             else if (newValue < 0) newValue = 0;

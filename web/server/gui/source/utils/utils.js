@@ -180,30 +180,7 @@ function update_turn(turn, turnData){
     update_dict1_from_dict2(turn,temp)
 }
 
-function annotation_rate_increment(turnNumber, annotations, turnTot, turnList) {
-    // if turn is not already annotated return the dialogue relative % increment
-    let unitRate = (100 / (turnTot-1));
-
-    if (annotations.data != undefined) {
-        if (annotations.data.length > 0) {
-            if ((turnList[turnNumber] == undefined) || (turnList[turnNumber] == false) || (turnList[turnNumber] == "annotated")) {
-                turnList[turnNumber] = true;
-                return unitRate
-            } else {
-                return 0
-            }
-        } else if (annotations.data.length == 0) {
-            if ((turnList[turnNumber] != undefined) && (turnList[turnNumber] != false)) {
-                turnList[turnNumber] = false; 
-                return -(unitRate)
-            } else {
-                return 0
-            }
-        }
-    }
-}
-
-function getTokenRange(event,selectionText) {
+function get_token_range(event,selectionText) {
     let utterance = event.target.value;
     //if selection starts with a space trims it
     if (utterance.charAt(event.target.selectionStart) == " ") {
@@ -230,5 +207,5 @@ utils =
     get_turn_data : get_turn_data,
     get_all_turns_data : get_all_turns_data,
     create_date  : create_date,
-    annotation_rate_increment : annotation_rate_increment
+    get_token_range : get_token_range
 }

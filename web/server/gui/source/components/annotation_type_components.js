@@ -280,6 +280,7 @@ Vue.component('classification-string-annotation', {
 
                  if (this.classification_strings[classStringTuple][0] == labelName) {
                      console.log(this.classification_strings[classStringTuple][0]);
+
                      return this.classification_strings[classStringTuple][1]
 
                  }
@@ -378,7 +379,7 @@ Vue.component('classification-string-annotation', {
              let labelName = activeLabel.id.split("_input")[0];
              let context = event.target.id;
              //updating
-             let range = getTokenRange(event,text);
+             let range = utils.get_token_range(event,text);
              activeLabel.value += context.trim()+"["+range+"]["+text+"],";
              this.updateClassAndString(activeLabel, labelName);
              //put all back in place. Two possible parent view: interannotator and annotation
