@@ -46,6 +46,7 @@ guiMessages = {
             wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
             confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
             role:"Role",
+            configPage: "Matilda Configuration",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -153,6 +154,7 @@ guiMessages = {
             "Create, edit and assign dialogues collections",
             "Inspect how annotations are progressing",
             "Annotate collections assigned to you",
+            "Configure annotation models, database connection, app environment"
         ],
         modal_formatInfo:
         [
@@ -298,6 +300,7 @@ guiMessages = {
             confirmOverwriteUser: "L'username scelto esiste già, vuoi sovrascrivere l'utente già esistente?",
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
             role:"Ruolo",
+            configPage: "Configurazione di Matilda",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -405,6 +408,7 @@ guiMessages = {
             "Crea, modifica e assegna le collezioni di dialoghi",
             "Controlla come sta procedendo il lavoro di annotazione",
             "Annota le collezioni assegnate a te",
+            "Configura i modelli di annotazione, la connessione al database, l'ambiente dell'app"
         ],
         modal_formatInfo:
         [
@@ -549,6 +553,7 @@ guiMessages = {
             wipeCacheConfirm: "Dadurch wird die Konfliktdatei gelöscht, sodass die Konfliktlösung erneut gestartet werden kann.",
             confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
             role:"Role",
+            configPage: "Matilda Configuration",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -657,6 +662,7 @@ guiMessages = {
             "Dialogsammlungen erstellen, bearbeiten und zuweisen",
             "Überprüfen Sie, wie die Anmerkungen fortschreiten",
             "Ihnen zugewiesene Sammlungen kommentieren",
+            "Configure annotation models, database connection, app environment"
         ],
         modal_formatInfo:
         [

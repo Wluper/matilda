@@ -6,3 +6,9 @@ GOLD*
 John.json
 /lib
 pyvenv.cfg
+.gitattributes
+.gitattributes
+db/
+web/github
+web/github.pub
+web/server/LIDA_ANNOTATIONS/

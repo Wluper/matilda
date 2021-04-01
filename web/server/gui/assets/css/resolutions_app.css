@@ -21,6 +21,10 @@
     margin-top: 25px;
 }
 
+#admin_main .inner-wrap {
+    max-width: 1210px !important;
+}
+
 #resolution-app {
     background-color: #f1f1f3;
     height: 100%;

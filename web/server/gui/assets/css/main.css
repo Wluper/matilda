@@ -358,7 +358,7 @@ input:focus {
 
 .admin-panel {
     display: grid;
-    grid-template: [row1-start] "1 2 3 4" [row1-end] / 1fr 1fr 1fr 1fr;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
     padding-top:30px;
 }
 
