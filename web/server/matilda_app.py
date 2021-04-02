@@ -52,6 +52,33 @@ def welcome():
 #  FUNCTION HANDLERS
 ##############################################
 
+@MatildaApp.route('/configuration_file', methods=['GET'])
+@MatildaApp.route('/configuration_file/<settings>', methods=['PUT'])
+def handle_configuration_file(settings=None):
+    """
+    Returns the annotation styles registered in configuration json
+    """
+    responseObject = { "status":"fail" }
+
+    if request.method == "GET":
+
+        for section in Configuration.conf:
+            responseObject[section] = Configuration.conf[section]
+            if (type(section)) != str:
+                for setting in section:
+                    responseObject[setting][section] = setting
+
+        responseObject["status"] = "done";
+
+    if request.method == "PUT":
+
+        #do something
+
+        responseObject = { "status":"done" }
+
+    return jsonify( responseObject )
+
+
 @MatildaApp.route('/<user>/dialogues_metadata',methods=['GET'])
 @MatildaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
 def handle_dialogues_metadata_resource(user, id=None):

@@ -58,6 +58,45 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
+async function manage_configuration_file(settings){
+
+    if (settings == undefined) {
+
+        var apiLink = API_BASE+`/configuration_file`;
+
+        try {
+            var response = await axios.get(apiLink)
+
+            var configurationFile = response.data
+            console.log("============= CONFIGURATION ==============")
+            console.log(configurationFile)
+            return configurationFile
+
+        } catch (error) {
+
+            console.log(error);
+            response["error"] = error;
+            return response;
+        }
+
+    } else {
+        
+        var apiLink = API_BASE+`/configuration_file/${settings}`;
+        
+        try {
+            var response = await axios.put(apiLink)
+            var result = response;
+            console.log("============= CONFIGURATION MODIFIED ==============")
+            console.log(result);
+            return result;
+
+        } catch (error) {
+
+            console.log(error);
+        }
+    }
+}
+
 async function get_annotation_style_async(collection,id,supervision){
 
     var dialogues = {}
@@ -76,8 +115,8 @@ async function get_annotation_style_async(collection,id,supervision){
     }
 
     try {
+        
         var response = await axios.get(apiLink)
-
 
         dialogueStyle = response.data
         console.log("============= ANNOTATION CLASSES ==============")
@@ -90,7 +129,7 @@ async function get_annotation_style_async(collection,id,supervision){
 
     }
 
-};
+}
 
 async function get_registered_annotation_styles(){
 
@@ -1014,6 +1053,7 @@ backend =
     write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,
     get_registered_annotation_styles            : get_registered_annotation_styles,
+    manage_configuration_file                   : manage_configuration_file,
 
     get_all_dialogues_async                     : get_all_dialogues_async,
     put_single_dialogue_async                   : put_single_dialogue_async,

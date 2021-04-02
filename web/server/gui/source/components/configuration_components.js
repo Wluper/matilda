@@ -9,14 +9,16 @@ Vue.component("configuration-view", {
             changesSaved: "",
             guiMessages,
             showHelpConfig:false,
+            settings: {"app":{},"database":{}},
+            outModels:[],
         }
     },
 
     created() {
+        this.init();
     },
 
     mounted () {
-        this.init();
     },
 
     computed : {
@@ -32,7 +34,17 @@ Vue.component("configuration-view", {
     // METHODS
     methods:{
         init : function(){
-            //get configuration infos from server
+            //get configuration info from server
+            backend.manage_configuration_file() 
+                .then( (response) => {
+                    if (response.status == "done") {
+                        this.settings = response;
+                        this.outModels = this.settings.app.annotation_models;
+                    } else {
+                        alert(response.error);
+                    }
+                }
+            );
         },
 
         go_back: function() {
@@ -40,11 +52,15 @@ Vue.component("configuration-view", {
         },
 
         save() {
-            //send new configuration
-            //fields = {"assignedTo":this.selectedCollection.assignedTo};
-            //backend.update_collection_async(this.selectedCollection.id,"dialogues_collections",fields)
-            //  .then( (response) => {
-            //});
+            backend.manage_configuration_file(settings) 
+                .then( (response) => {
+                    if (response.status == "done") {
+                        this.init();
+                    } else {
+                        alert(response.error);
+                    }
+                }
+            );
         },
     },
     template:
@@ -62,6 +78,20 @@ Vue.component("configuration-view", {
 
             <div class="inner-wrap">
                 <h2 class="list-title">Configuration</h2>
+                <h3>Listed annotation models</h3>
+                <ul>
+                    <template v-for="model in settings['app']['annotation_models']">
+                    <li class="listed-entry collection-users">
+                         <div class="entry-list-single-item-container">
+                            <input type="checkbox" class="user-checkbox" v-bind:id="model" :value="model" v-model="outModels">
+                            <div class="entry-info">
+                                <label :for="model" class="listed-label" v-on:click="changesSaved = 'false'">{{model}}</label>
+                            </div>
+                        </div>
+                    </li>
+                    </template>
+                    Aggiungi un nuovo annotation model
+                </ul>
             </div>
         </div>
     `
