@@ -67,7 +67,7 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"document":1} )
+         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1, "document":"length"} )
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
@@ -118,17 +118,23 @@ Vue.component("supervision-view", {
                      <span v-else>False</span>
                   </div>
 
+				<template v-if="name.assignedTo.length != 1">
                   <div v-if="show_annotators(name.id)"
                      class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo }}
                   </div>
-
                   <div v-else
                      class="int-coll-num-turns"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo.length }}
                   </div>
+				</template>
+				<template v-else>
+				  <div class="int-coll-num-turns" style="letter-spacing:0.5px; font-size:10.5px;">
+                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo[0] }}
+                  </div>
+				</template>
                </div>
             </div>
          </li>
