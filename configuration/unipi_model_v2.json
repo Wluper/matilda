@@ -170,6 +170,12 @@
                 "none",
 				"job_description",
                 "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
                 "area",
                 "company_size",
                 "location"
@@ -202,6 +208,29 @@
             ]
 
         },
+		
+		"sys_deny": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
+            ]
+
+        },
 
         "usr_deny": {
 
@@ -211,20 +240,17 @@
             "labels"      : [
 
                 "none",
-				"job_description"
-            ]
-
-        },
-	
-	"sys_deny": {
-
-            "description" : "Entity's value",
-            "label_type"  : "multilabel_classification_string",
-            "required"    : false,
-            "labels"      : [
-
-                "none",
-				"job_description"
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
             ]
 
         },
