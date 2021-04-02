@@ -546,7 +546,7 @@ guiMessages = {
             button_fileFormatInfo: "Info formatieren",
             button_delete: "Löschen",
             button_switch: "Ansicht wechseln",
-            dreht: "dreht",
+            turns: "dreht",
             button_newDialogue: "Neuen Dialog hinzufügen",
             button_wipeDialogues: "Dialoge löschen",
             interfaceLanguage: "System Sprache:",
