@@ -75,7 +75,12 @@ async function manage_configuration_file(settings){
         } catch (error) {
 
             console.log(error);
-            response["error"] = error;
+            if (response != undefined) {
+                response["error"] = error;
+            } else {
+                response = {}
+                response["error"] = error;
+            }
             return response;
         }
 

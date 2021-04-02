@@ -43,17 +43,21 @@ class Configuration(object):
     class responsible for configuration and valid annotation structure
     """
 
+    DEFAULT_PATH = ""
+
     #importing json configuration file
     try: 
         #docker
         with open('configuration/conf.json') as json_file:
             conf = json.load(json_file)
             __DEFAULT_PATH = "configuration/"
+            DEFAULT_PATH = __DEFAULT_PATH
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:
             conf = json.load(json_file)
             __DEFAULT_PATH = "../../configuration/"
+            DEFAULT_PATH = __DEFAULT_PATH
 
     # Here the list of annotation model file names
     annotation_styles = conf["app"]["annotation_models"]

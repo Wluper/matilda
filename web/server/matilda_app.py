@@ -68,7 +68,13 @@ def handle_configuration_file(settings=None):
                 for setting in section:
                     responseObject[setting][section] = setting
 
+        responseObject["annotationStyles"] = {}       
+        for model in Configuration.annotation_styles:
+            with open(Configuration.DEFAULT_PATH+model) as style_file:
+                responseObject["annotationStyles"][model] = json.load(style_file)
+
         responseObject["status"] = "done";
+
 
     if request.method == "PUT":
 
