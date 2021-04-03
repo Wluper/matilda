@@ -264,7 +264,6 @@ input:focus {
 
 .int-coll-num-turns:hover {
     background-color: #999;
-    transition: 0.2s;
     color: white;
 }
 
