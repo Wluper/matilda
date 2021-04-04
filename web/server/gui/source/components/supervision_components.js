@@ -132,7 +132,7 @@ Vue.component("supervision-view", {
 				</template>
 				<template v-else>
 				  <div class="int-coll-num-turns" style="letter-spacing:0.5px; font-size:10.5px;">
-                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo[0] }}
+                    {{ guiMessages.selected.admin.annotator }}: {{ name.assignedTo[0] }}
                   </div>
 				</template>
                </div>

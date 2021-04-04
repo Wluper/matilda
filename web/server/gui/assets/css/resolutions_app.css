@@ -14,7 +14,7 @@
 }
 
 .inner-wrap {
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
     margin: 0 auto;
     padding: 0 30px;
@@ -22,7 +22,7 @@
 }
 
 #admin_main .inner-wrap {
-    max-width: 1210px !important;
+    max-width: 1400px !important;
 }
 
 #resolution-app {

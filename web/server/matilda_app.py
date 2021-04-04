@@ -53,8 +53,8 @@ def welcome():
 ##############################################
 
 @MatildaApp.route('/configuration', methods=['GET'])
-@MatildaApp.route('/configuration/<option>', methods=['POST'])
 @MatildaApp.route('/configuration/<annotationStyle>', methods=['GET'])
+@MatildaApp.route('/configuration/<option>', methods=['POST'])
 @MatildaApp.route('/configuration/<annotationStyle>', methods=['PUT'])
 def handle_configuration_file(option=None,annotationStyle=None):
     """
@@ -64,6 +64,12 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
     if request.method == "GET":
 
+        responseObject["databaseList"] = {}
+        ignoreList = ["admin","config","local"]
+        for db in DatabaseManagement.client.list_databases():
+            if db["name"] not in ignoreList:
+                responseObject["databaseList"][db["name"]] = db
+
         if annotationStyle is None:
             for section in Configuration.conf:
                 responseObject[section] = Configuration.conf[section]
@@ -71,7 +77,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
                     for setting in section:
                         responseObject[setting][section] = setting
 
-        if annotationStyle is not None:     
+        else:     
             with open(Configuration.DEFAULT_PATH+annotationStyle) as style_file:
                 responseObject["annotationStyle"] = json.load(style_file)
         
@@ -83,19 +89,19 @@ def handle_configuration_file(option=None,annotationStyle=None):
             newOption = data["json"]
 
             #backup of previous configuration
-            with open(Configuration.DEFAULT_PATH+"conf.old.json", "w") as configuration:
-                configuration.write(json.dumps(Configuration.conf, indent=4))
-                configuration.close()
+            with open(Configuration.DEFAULT_PATH+"conf.old.json", "w") as configurationOld:
+                configurationOld.write(json.dumps(Configuration.conf, indent=4))
+                configurationOld.close()
 
-            #editing memorized configuration file
+            #editing and overwriting memorized configuration file
             Configuration.annotation_styles = newOption
 
             Configuration.conf["app"]["annotation_models"] = newOption
 
             #dumping new configuration file
-            with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configuration:
-                configuration.write(json.dumps(Configuration.conf, indent=4))
-                configuration.close()
+            with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configurationFile:
+                configurationFile.write(json.dumps(Configuration.conf, indent=4))
+                configurationFile.close()
 
             responseObject["status"] = "done"
 

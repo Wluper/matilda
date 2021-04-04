@@ -170,17 +170,25 @@ Vue.component("interannotator-view", {
                           <span v-else>{{name.gold}}</span>
                 </div>
 
-                <div v-if="show_annotators(name.id)"
-                     class="int-coll-num-turns-clicked"
-                     v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
-                </div>
+                <template v-if="name.assignedTo.length == 1">
+                    <div class="int-coll-num-turns" style="padding-right:10px;">
+                        {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo[0] }}
+                    </div>
+                </template>
 
-                <div v-else
-                     class="int-coll-num-turns"
-                     v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo.length }}
-                </div>
+                <template v-else>
+                    <div v-if="show_annotators(name.id)"
+                         class="int-coll-num-turns-clicked"
+                         v-on:click="toggle_show_annotators(name.id)">
+                        {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
+                    </div>
+
+                    <div v-else
+                         class="int-coll-num-turns"
+                         v-on:click="toggle_show_annotators(name.id)">
+                        {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo.length }}
+                    </div>
+                </template>
 
             </div>
 
@@ -451,17 +459,25 @@ Vue.component("interannotator-app", {
                      {{ guiMessages.selected.admin.visited }}
                 </div>
 
-                <div v-if="show_annotators(dat[0])"
-                     class="dialogue-num-turns"
-                     v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
-                </div>
+                <template v-if="dat[1].length == 1">
+                  <div class="dialogue-num-turns">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1][0] }}
+                  </div>
+                </template>
 
-                <div v-else
-                     class="dialogue-num-turns"
-                     v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].length }}
-                </div>
+                <template v-else>
+                  <div v-if="show_annotators(dat[0])"
+                       class="dialogue-num-turns"
+                       v-on:click="toggle_show_annotators(dat[0])">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
+                  </div>
+
+                  <div v-else
+                       class="dialogue-num-turns"
+                       v-on:click="toggle_show_annotators(dat[0])">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].length }}
+                  </div>
+                </template>
 
             </div>
 
