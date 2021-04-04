@@ -52,9 +52,11 @@ def welcome():
 #  FUNCTION HANDLERS
 ##############################################
 
-@MatildaApp.route('/configuration_file', methods=['GET'])
-@MatildaApp.route('/configuration_file/<settings>', methods=['PUT'])
-def handle_configuration_file(settings=None):
+@MatildaApp.route('/configuration', methods=['GET'])
+@MatildaApp.route('/configuration/<option>', methods=['POST'])
+@MatildaApp.route('/configuration/<annotationStyle>', methods=['GET'])
+@MatildaApp.route('/configuration/<annotationStyle>', methods=['PUT'])
+def handle_configuration_file(option=None,annotationStyle=None):
     """
     Returns the annotation styles registered in configuration json
     """
@@ -62,25 +64,67 @@ def handle_configuration_file(settings=None):
 
     if request.method == "GET":
 
-        for section in Configuration.conf:
-            responseObject[section] = Configuration.conf[section]
-            if (type(section)) != str:
-                for setting in section:
-                    responseObject[setting][section] = setting
+        if annotationStyle is None:
+            for section in Configuration.conf:
+                responseObject[section] = Configuration.conf[section]
+                if (type(section)) != str:
+                    for setting in section:
+                        responseObject[setting][section] = setting
 
-        responseObject["annotationStyles"] = {}       
-        for model in Configuration.annotation_styles:
-            with open(Configuration.DEFAULT_PATH+model) as style_file:
-                responseObject["annotationStyles"][model] = json.load(style_file)
+        if annotationStyle is not None:     
+            with open(Configuration.DEFAULT_PATH+annotationStyle) as style_file:
+                responseObject["annotationStyle"] = json.load(style_file)
+        
+        responseObject["status"] = "done"
 
-        responseObject["status"] = "done";
+    if request.method == "POST":
+
+            data = request.get_json()
+            newOption = data["json"]
+
+            #backup of previous configuration
+            with open(Configuration.DEFAULT_PATH+"conf.old.json", "w") as configuration:
+                configuration.write(json.dumps(Configuration.conf, indent=4))
+                configuration.close()
+
+            #editing memorized configuration file
+            Configuration.annotation_styles = newOption
+
+            Configuration.conf["app"]["annotation_models"] = newOption
+
+            #dumping new configuration file
+            with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configuration:
+                configuration.write(json.dumps(Configuration.conf, indent=4))
+                configuration.close()
+
+            responseObject["status"] = "done"
 
 
     if request.method == "PUT":
 
-        #do something
+        data = request.get_json()
+        newFile = json.loads(data["json"])
 
-        responseObject = { "status":"done" }
+        with open(Configuration.DEFAULT_PATH+annotationStyle+".new", "w") as new_style_file:
+            new_style_file.write(json.dumps(newFile, indent=4))
+            new_style_file.close()
+
+        try:
+            #trying if everything fine with the new file
+            with open(Configuration.DEFAULT_PATH+annotationStyle+".new") as style_file:
+                Configuration.configDict[annotationStyle] = json.load(style_file)
+            #if passes the original model will be overwritten and reloaded
+            with open(Configuration.DEFAULT_PATH+annotationStyle, "w") as new_style_file:
+                new_style_file.write(json.dumps(newFile, indent=4))
+                new_style_file.close()
+            with open(Configuration.DEFAULT_PATH+annotationStyle) as style_file:
+                Configuration.configDict[annotationStyle] = json.load(style_file)                      
+        
+        except Exception as ex:
+            responseObject = { "status":"fail", "error":Exception }
+            return responseObject
+
+        responseObject["status"] = "done"
 
     return jsonify( responseObject )
 

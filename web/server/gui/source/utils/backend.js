@@ -58,11 +58,11 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
-async function manage_configuration_file(settings){
+async function manage_configuration_file(mode,id,jsonFile) {
 
-    if (settings == undefined) {
+    if (id == undefined) {
 
-        var apiLink = API_BASE+`/configuration_file`;
+        var apiLink = API_BASE+`/configuration`;
 
         try {
             var response = await axios.get(apiLink)
@@ -86,18 +86,38 @@ async function manage_configuration_file(settings){
 
     } else {
         
-        var apiLink = API_BASE+`/configuration_file/${settings}`;
-        
         try {
-            var response = await axios.put(apiLink)
+
+            var apiLink = API_BASE+`/configuration/${id}`;
+
+            if (mode == "get") {
+
+                var response = await axios.get(apiLink)
+
+            } else if (mode == "post") {  
+
+                var response = await axios.post(apiLink, {json:jsonFile})
+           
+            } else if (mode == "put") {
+
+                var response = await axios.put(apiLink, {json:jsonFile})
+            }
+
             var result = response;
-            console.log("============= CONFIGURATION MODIFIED ==============")
+            console.log("============= CONFIGURATION ==============")
             console.log(result);
             return result;
 
         } catch (error) {
 
             console.log(error);
+            if (response != undefined) {
+                response["data"]["error"] = error;
+            } else {
+                response = {}
+                response["data"]["error"] = error;
+            }
+            return response;
         }
     }
 }
@@ -144,7 +164,7 @@ async function get_registered_annotation_styles(){
         var response = await axios.get(apiLink)
 
 
-        annotationStyles = response.data
+        let annotationStyles = response.data
         console.log("============= REGISTERED ANNOTATION STYLES ==============")
         console.log(annotationStyles)
         return annotationStyles

@@ -816,7 +816,7 @@ Vue.component('collection-creation', {
                        class="help-button btn btn-sm btn-primary">
                        {{ guiMessages.selected.collection.importCollfromFile }}
                 </label>
-                <textarea v-model="entry.showDocument">
+                <textarea v-model="entry.showDocument" readonly>
                 </textarea>
             </div>
 

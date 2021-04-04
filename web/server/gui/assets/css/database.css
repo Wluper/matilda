@@ -587,3 +587,81 @@ input[type="password"]:hover {
     padding: 5px;
     transition: ease 250ms all;
 }
+
+/*******************************
+// CONFIGURATION VIEW
+*******************************/
+
+.annotation-models-list .entry-list-single-item-container {
+    border-left:5px solid #3a9dd6 !important;
+    width:75%;
+    grid-template: [row1-start] "info buttons" [row1-end] / 7fr 3fr;
+    margin-bottom:2%;
+}
+
+.annotation-models-list .entry-info {
+    display:block;
+    padding:1%;
+    padding-left:4%;
+}
+
+.annotation-models-list .entry-info:hover {
+    border-left: 3px solid #3a9dd6;
+}
+
+.annotation-models-list .entry-info span {
+    font-family: 'Montserrat';
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
+    align-self: center;
+}
+
+.annotation-models-list .entry-info label {
+    grid-template: none !important;
+}
+
+.annotation-models-list .edit-dialogue-button, 
+.annotation-models-list .del-dialogue-button{
+    margin-top:0px;
+    margin-right:4%;
+    width: 48%;
+    height: 55%;
+    place-self: center;
+    margin-right: 4%;
+}
+
+.entry-buttons {
+    grid-area: buttons;
+    display: flex;
+}
+
+.closing-list {
+    clear:both;
+}
+
+.annotation-style-structure {
+    overflow-y: scroll;
+    height: 40em;
+}
+
+.annotation-style-text {
+    width: 95%;
+    height: 40em;
+    background: white !important;
+    border:1px solid rgb(0 0 0 / 17%);
+}
+
+h4 {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+h5 {
+    margin:4px;
+    padding:0;
+}
+
+h4 span, h5 span {
+    color: rgb(0 0 0 / 61%);
+}

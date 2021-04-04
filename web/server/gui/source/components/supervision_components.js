@@ -147,13 +147,13 @@ Vue.component("supervision-view", {
    </supervision-collection>
    
    <supervision-dialogues v-else-if="mode == 'supervision-dialogues-list' "
-   v-bind:Su_activeCollection="selectedCollection"
-   v-bind:selectedAnnotator="selectedAnnotator">
+       v-bind:Su_activeCollection="selectedCollection"
+       v-bind:selectedAnnotator="selectedAnnotator">
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
-                    v-bind:selectedCollection="selectedCollection"
-                    v-bind:dialogueId="displayingDialogue">
+      v-bind:selectedCollection="selectedCollection"
+      v-bind:dialogueId="displayingDialogue">
    </supervision-annotation-app>
 </div>
   `
