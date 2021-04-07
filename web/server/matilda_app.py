@@ -64,12 +64,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
     if request.method == "GET":
 
-        responseObject["databaseList"] = {}
-        ignoreList = ["admin","config","local"]
-        for db in DatabaseManagement.client.list_databases():
-            if db["name"] not in ignoreList:
-                responseObject["databaseList"][db["name"]] = db
-
+        #configuration requested
         if annotationStyle is None:
             for section in Configuration.conf:
                 responseObject[section] = Configuration.conf[section]
@@ -77,6 +72,17 @@ def handle_configuration_file(option=None,annotationStyle=None):
                     for setting in section:
                         responseObject[setting][section] = setting
 
+            responseObject["app"]["docker"] = Configuration.DOCKER
+
+            #databases not listed
+            ignoreList = ["admin","config","local"]
+
+            responseObject["databaseList"] = {}
+            for db in DatabaseManagement.client.list_databases():
+                if db["name"] not in ignoreList:
+                    responseObject["databaseList"][db["name"]] = db
+
+        #annotationStyle requested
         else:     
             with open(Configuration.DEFAULT_PATH+annotationStyle) as style_file:
                 responseObject["annotationStyle"] = json.load(style_file)
@@ -108,24 +114,38 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
     if request.method == "PUT":
 
-        data = request.get_json()
-        newFile = json.loads(data["json"])
+        #overwrite or create a new annotation style with the provided name
 
-        with open(Configuration.DEFAULT_PATH+annotationStyle+".new", "w") as new_style_file:
-            new_style_file.write(json.dumps(newFile, indent=4))
-            new_style_file.close()
+        data = request.get_json()
+
+        newFile = data["json"]
+
+        if annotationStyle.includes(".json"):
+            annotationStyle = annotationStyle.replace(".json", "");
 
         try:
-            #trying if everything fine with the new file
-            with open(Configuration.DEFAULT_PATH+annotationStyle+".new") as style_file:
-                Configuration.configDict[annotationStyle] = json.load(style_file)
-            #if passes the original model will be overwritten and reloaded
-            with open(Configuration.DEFAULT_PATH+annotationStyle, "w") as new_style_file:
+            with open(Configuration.DEFAULT_PATH+annotationStyle+".json", "w") as new_style_file:
                 new_style_file.write(json.dumps(newFile, indent=4))
-                new_style_file.close()
-            with open(Configuration.DEFAULT_PATH+annotationStyle) as style_file:
-                Configuration.configDict[annotationStyle] = json.load(style_file)                      
-        
+                new_style_file.close()                  
+
+            #backup of previous configuration
+            with open(Configuration.DEFAULT_PATH+"conf.old.json", "w") as configurationOld:
+                configurationOld.write(json.dumps(Configuration.conf, indent=4))
+                configurationOld.close()
+
+            #editing and overwriting memorized configuration file
+            Configuration.conf["app"]["annotation_models"].append(annotationStyle+".json")
+
+            #dumping new configuration file
+            with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configurationFile:
+                configurationFile.write(json.dumps(Configuration.conf, indent=4))
+                configurationFile.close()
+
+            with open(Configuration.DEFAULT_PATH+annotationStyle+".json") as style_file:
+                Configuration.configDict[annotationStyle] = json.load(style_file)    
+
+
+
         except Exception as ex:
             responseObject = { "status":"fail", "error":Exception }
             return responseObject
@@ -331,6 +351,14 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
         #responseObject = DatabaseManagement.getDatabaseIds()
 
     return jsonify(responseObject)    
+
+
+@MatildaApp.route('/database/download', methods=['GET'])
+def handle_database_dump():
+
+    responseObject = DatabaseManagement.dumpDatabase()
+
+    return jsonify(responseObject)
 
 
 @MatildaApp.route('/<user>/dialogue/<id>/<tag>/<value>',methods=['GET','PUT']) 
@@ -824,8 +852,8 @@ def handle_post_of_collections(mode, destination, id=None):
             try: 
                 Configuration.configDict[values["annotationStyle"]]
                 annotationStyle = values["annotationStyle"]
-            except:
-                response = {"status":"error","error":"Impossible to load provided annotation style"}
+            except Exception as ex:
+                response = {"status":"error","error":"Impossible to load provided annotation style. "+ex}
                 return jsonify ( response )
         else:
             annotationStyle = Configuration.annotation_styles[0]

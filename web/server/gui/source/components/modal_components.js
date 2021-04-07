@@ -320,3 +320,91 @@ Vue.component('message-modal', {
   </transition>
   `
 });
+
+Vue.component('help-config-modal', {
+
+  props:[
+    "showHelpConfig"
+  ],
+  
+  data() { 
+    return {
+      guiMessages,
+      stringType:guiMessages.selected.modal_annotationStyle[0],
+      multiClassType:guiMessages.selected.modal_annotationStyle[1],
+      multiStringType:guiMessages.selected.modal_annotationStyle[2],
+      globalType:guiMessages.selected.modal_annotationStyle[3],
+      
+      stringExample:guiMessages.en.modal_examples[0],
+      multiClassExample:guiMessages.en.modal_examples[1],
+      multiStringExample:guiMessages.en.modal_examples[2],
+      globalExample:guiMessages.en.modal_examples[3],
+
+      stringImg:guiMessages.en.modal_examples_img[0],
+      multiClassImg:guiMessages.en.modal_examples_img[1],
+      multiStringImg:guiMessages.en.modal_examples_img[2],
+      globalImg:guiMessages.en.modal_examples_img[3],
+    }
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              Info about Classification Labels
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+
+               <div id="use">
+                 <h3>Use</h3>
+                 <p v-if="showHelpConfig == 'stringType'">{{stringType}}</p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'">{{multiClassType}}</p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'">{{multiStringType}}</p>
+                 <p v-else-if="showHelpConfig == 'globalType'">{{globalType}}</p>
+               </div>
+
+               <div id="interface">
+                 <h3>Interface</h3>
+                 <p v-if="showHelpConfig == 'stringType'"><img :src="stringImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'"><img :src="multiClassImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'"><img :src="multiStringImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'globalType'"><img :src="globalImg" class="annotation-img-example"/></p>
+               </div>
+
+               <div id="output">
+                 <h3>Output</h3>
+                 <p v-if="showHelpConfig == 'stringType'">{{stringExample}}</p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'">{{multiClassExample}}</p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'">{{multiStringExample}}</p>
+                 <p v-else-if="showHelpConfig == 'globalType'">{{globalExample}}</p>
+               </div>
+
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              MATILDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+});

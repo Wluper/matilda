@@ -48,6 +48,9 @@ Vue.component("datamanagement-view", {
 
         go_back: function() {
             adminEventBus.$emit("go_back");
+            databaseEventBus.$off("collections_changed", this.init );
+            databaseEventBus.$off("creation_completed", this.reset_view );
+            databaseEventBus.$off("entry_selected", this.inspect_entry );
         },
 
         getAllEntriesFromServer() {

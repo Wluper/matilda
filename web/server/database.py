@@ -22,7 +22,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 # == Local ==
-from utils import database_uri_compose
+from utils import database_uri_compose, stringify
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 
@@ -164,6 +164,20 @@ class DatabaseManagement(object):
 
 		return {"status":"success"}
 
+
+	def dumpDatabase():
+
+		collections = DatabaseManagement.db.collection_names()
+		dump = {}
+		for i, collection_name in enumerate(collections):
+			col = getattr(DatabaseManagement.db,collections[i])
+			collection = col.find()
+			dump[collection_name] = []
+			for document in collection:
+				for attribute in document:
+					document[attribute] = stringify(document[attribute])
+				dump[collection_name].append(document)
+		return dump
 
 ###############################################
 # ANNOTATIONS AND DIALOGUE-COLLECTIONS UPDATE

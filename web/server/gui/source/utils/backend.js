@@ -670,7 +670,7 @@ async function get_db_entry_async(entryId,DBcollection) {
     }
 }
 
-async function get_all_entries_async() {
+async function get_database_dump_async() {
 
   entriesList = []
 
@@ -1098,7 +1098,7 @@ backend =
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     get_db_entry_async                          : get_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
-    get_all_entries_async                       : get_all_entries_async,
+    get_database_dump_async                     : get_database_dump_async,
 
     update_annotations                          : update_annotations,
     update_collection_fields                    : update_collection_fields,

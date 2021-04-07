@@ -44,6 +44,7 @@ class Configuration(object):
     """
 
     DEFAULT_PATH = ""
+    DOCKER = False
 
     #importing json configuration file
     try: 
@@ -52,6 +53,7 @@ class Configuration(object):
             conf = json.load(json_file)
             __DEFAULT_PATH = "configuration/"
             DEFAULT_PATH = __DEFAULT_PATH
+            DOCKER = True
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:

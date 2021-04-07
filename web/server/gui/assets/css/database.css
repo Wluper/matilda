@@ -651,7 +651,8 @@ input[type="password"]:hover {
 }
 
 .annotation-style-form {
-    font-family:"Montserrat"
+    font-family:"Montserrat";
+    margin-top:1%;
 }
 
 .annotation-style-text {
@@ -665,6 +666,18 @@ input[type="password"]:hover {
     display: grid;
     grid-template: [row1-start] "name input" [row1-end] / 1fr 6fr;
     font-family: 'CoreSansNR35Light';
+}
+
+.info-model-button {
+    margin-top: 0 !important;
+    float: none !important;
+    border:none;
+    background-color: rgb(0 0 0 / 8%);
+    width: auto;
+    position: relative;
+    bottom: 2px;
+    left: 2px;
+    cursor:pointer;
 }
 
 .form-anno input {

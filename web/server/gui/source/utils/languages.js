@@ -243,6 +243,50 @@ guiMessages = {
             "With this function you can edit the information associated to a collection and remove one or more dialogues from it",
             "This button permanently delete the collection from the database",
         ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
+        ],
+        modal_examples:
+        [
+            `"usr":"Hello I'm looking for a job",`,
+            `"Dialogue_act": [
+                "sys_greet",
+                "usr_greet"
+            ],`,
+            `"sys_inform_basic": [
+                [
+                    "job_description",
+                    "none"
+                ],
+                [
+                    "skill",
+                    "usr[3,5][I know English]"
+                ]
+            ]`,
+            `"global_slot": {
+                "result": "positive",
+                "recorded": true
+            },`,
+        ],
+        modal_examples_img:
+        [
+            "assets/images/string_exa.png",
+            "assets/images/multiclass_exa.png",
+            "assets/images/multistring_exa.png",
+            "assets/images/global_exa.png",
+        ],
         database: {
             title: "Workspaces Management",
             location:"Database Location",
@@ -500,6 +544,21 @@ guiMessages = {
             "Questo pulsante permette di creare una collezione a partire da uno o più file json.",
             "Da questo pulsante accedi alla modifica della collezione. Puoi modificare le informazioni associate ad essa e rimuovere uno o più dialoghi singolarmente.",
             "Questo pulsante elimina permantentemente la collezione dal database",
+        ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
         ],
         database: {
             title: "Gestione Workspaces",
@@ -760,6 +819,21 @@ guiMessages = {
             "Mit dieser Schaltfläche können Sie eine Sammlung aus einer oder mehreren JSON-Dateien erstellen.",
             "Mit dieser Funktion können Sie die einer Sammlung zugeordneten Informationen bearbeiten und einen oder mehrere Dialoge daraus entfernen",
             "Diese Schaltfläche löscht die Sammlung dauerhaft aus der Datenbank",
+        ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
         ],
         database: {
             title: "Workspaces Management",

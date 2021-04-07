@@ -411,10 +411,10 @@ select {
 }
 
 .logo{
-    height: 54px;
-    width: 200px;
+    height: 72%;
     margin: 8px 0 8px 10px;
     align-self: baseline;
+    width: 200px;
 }
 
 .logo img {

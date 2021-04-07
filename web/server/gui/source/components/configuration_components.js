@@ -8,7 +8,6 @@ Vue.component("configuration-view", {
         return {
             changesSaved: "",
             guiMessages,
-            showHelpConfig:false,
             settings: {
                 "app":{},
                 "database": {
@@ -25,6 +24,7 @@ Vue.component("configuration-view", {
 
     created() {
         this.init();
+        databaseEventBus.$on("annotation_styles_changed", this.reset_view );
     },
 
     mounted () {
@@ -62,6 +62,12 @@ Vue.component("configuration-view", {
             } else {
                 this.selectedModel = false;
             }
+            databaseEventBus.$off("annotation_styles_changed", this.init );
+        },
+
+        reset_view: function() {
+            this.selectedModel = false;
+            this.init();
         },
 
         inspect_model: function(id) {
@@ -121,6 +127,20 @@ Vue.component("configuration-view", {
                 }
             );
         },
+        
+        download_database_dump() {
+            backend.get_database_dump_async()
+                .then( (response) => {
+                   let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
+                   const url = window.URL.createObjectURL(blob)
+                   const link = document.createElement('a')
+                   link.href = url;
+                   fileName = "database_"+utils.create_date()+".json"
+                   link.setAttribute('download', fileName )
+                   document.body.appendChild(link)
+                   link.click();
+             });
+      },
     },
     template:
     `
@@ -137,10 +157,9 @@ Vue.component("configuration-view", {
                     <button class="help-button btn btn-sm" @click="showHelpConfig = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
-                <help-config-modal v-if="showHelpConfig" @close="showHelpCongif = false"></help-config-modal>
             </div>
 
-            <div v-if="selectedModel == false" class="inner-wrap">
+            <div v-if="selectedModel == false" class="large-inner-wrap">
                 <ul class="collection-list two-columns annotation-models-list">
                     <h2 class="list-title">Annotation</h2>
                     <h3>Listed annotation models</h3>
@@ -158,7 +177,7 @@ Vue.component("configuration-view", {
                                 </div>
                             </div>
                     </div>
-                    <div style="margin-top: 3%; clear: both; margin-left: 17%;">
+                    <div style="margin-top: 5%; clear: both; width: 75%;">
                         <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                         <span v-else-if="changesSaved == 'false'" class="is-not-saved">
                             <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save_option('annotation_models')">
@@ -168,7 +187,7 @@ Vue.component("configuration-view", {
                         </span>
                     </div>   
                 </ul>
-                <ul class="collection-list two-columns annotation-models-list">
+                <ul class="collection-list two-columns annotation-models-list" style="width:25%">
                     <h2 class="list-title" style="margin-bottom:6.5%;">Database</h2>
 
                     <template v-if="settings.database.optional_uri == null">
@@ -183,7 +202,8 @@ Vue.component("configuration-view", {
                         <h4>Name: <span>{{settings.database.name}}</span></h4>
                         <template v-if="settings.databaseList">
                             <h4>Size: <span>{{settings.databaseList[settings.database.name].sizeOnDisk}} Byte</span></h4>
-                            <h4>Others on the same location:</h4>
+                            <h4 v-on:click="download_database_dump()" style="cursor:pointer;">Download Database dump</h4>
+                            <h4>Others on same location:</h4>
                             <select>
                                 <option>{{settings.database.name}}</option>
                                 <template v-for="db in settings.databaseList">
@@ -193,13 +213,19 @@ Vue.component("configuration-view", {
                         </template>
                     </template>
                 </ul>
+                <ul class="collection-list two-columns annotation-models-list" style="width:25%">
+                    <h2 class="list-title" style="margin-bottom:6.5%;">Matilda</h2>
+                    <h4>{{guiMessages.selected.database.location}}: <span>{{settings.app.address}}</span></h4>
+                    <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
+                    <h4>Docker: <span>{{settings.app.docker}}</span></h4>
+                </ul>
             </div>
 
-            <div v-else-if="selectedModel == 'create_new'" class="inner-wrap">
+            <div v-else-if="selectedModel == 'create_new'" class="large-inner-wrap">
                 <create-annotation-model></create-annotation-model>
             </div>
 
-            <div v-else class="inner-wrap">
+            <div v-else class="large-inner-wrap">
                 <h2>Modifica: {{selectedModel}}</h2>
                 <ul class="collection-list two-columns annotation-models-list" style="padding-right:2%;">
                     <h3>Structure</h3>
@@ -262,31 +288,13 @@ Vue.component("create-annotation-model", {
     data() {
         return {
             guiMessages,
+            showHelpConfig:false,
             newModelName:"",
             stringOut:"",
-            newString:{"required":true},
-            newMultiString:{"required":false},
-            newMultiClass:{"required":false},
-            newGlobal:{"required":false},
-            baseModel: {
-                "category_name": {
-                    "description": "generic_description",
-                    "label_type": "category_type_name",
-                    "labels": [
-                        "list",
-                        "of",
-                        "labels"
-                    ],
-                    "required": false
-                }
-            },
-            stringModel: {
-                "category_name": {
-                    "description": "utterance",
-                    "label_type": "category_type_name",
-                    "required": true
-                }
-            }
+            newString:{"required":true,"description":""},
+            newMultiString:{"required":false,"description":""},
+            newMultiClass:{"required":false,"description":""},
+            newGlobal:{"required":false,"description":"","name":"global_slot"}
         }
     },
 
@@ -309,30 +317,63 @@ Vue.component("create-annotation-model", {
         },
 
         addType(type,filler) {
-            checkName();
-            checkFormat();
-            let modelToFill = this.fillModel(type,filler)
-            if (this.stringOut.length > 0) {
-                this.stringOut += ",";
+            if (filler.name == undefined) {
+                alert("Name field is required!");
+                return;
             }
-            this.stringOut += JSON.stringify(modelToFill, null, 4);
+            let modelToFill = this.fillModel(type,filler);
+            //exceptions
+            if (modelToFill[filler.name]["labels"]  != undefined) {
+                modelToFill[filler.name]["labels"] = modelToFill[filler.name]["labels"].split(",");
+            } else if (type != "string") {
+                alert("You didn't declare any label!");
+                return;
+            }
+            //formatting
+            let stringType = JSON.stringify(modelToFill, null, 4);
+            stringType = stringType.substr(1,stringType.length-3);
+            if (this.stringOut.length > 0) {
+                stringType = ","+stringType;
+            }
+            this.stringOut += stringType;
         },
 
-        checkName() {
-            //check if you forgot fields
-        },
         checkFormat() {
-            //put labels in array
+            if (this.stringOut.length == 0) {
+                alert("The new model is empty!");
+                return false;
+            }
+            let toCheck = this.stringOut;
+            if (toCheck.charAt(0) != "{") {
+                toCheck = "{"+toCheck;
+            }
+            if (toCheck.charAt(-1) != "}") {
+                toCheck += "}";
+            }
+            console.log(toCheck);
+            let result = JSON.parse(toCheck);
+            console.log(result);
+            return result;
         },
+
         saveModel() {
-            checkFormat();
-            return;
+            if ((this.newModelName == "") || (this.newModelName == "conf") || (this.newModelName.includes("."))) {
+                alert("File name is empty or not valid");
+                return;
+            }
+            let checkResult = this.checkFormat();
+            if (checkResult != false) {
+               this.jsonFile = checkResult;
+            } else {
+                alert(checkResult);
+                return;
+            }
             backend.manage_configuration_file("put", this.newModelName, this.jsonFile)
                 .then( (response) => {
                     if (response.data.status == "done") {
                         this.changesSaved = 'true';
                         alert("Upload OK");
-                        this.selectedModel = false;
+                        databaseEventBus.$emit("annotation_styles_changed");
                     } else {
                         alert(response.error);
                     }
@@ -347,7 +388,7 @@ Vue.component("create-annotation-model", {
             <h2>Create New Annotation Model</h2>
             <ul class="collection-list two-columns annotation-models-list">
                 
-                <textarea v-model:value="stringOut" class="annotation-style-text"/>
+                <textarea v-model:value="stringOut" class="annotation-style-text" style="letter-spacing: 0.2px;"/>
 
                 <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="saveModel()" style="margin-top:0px;">
                     {{guiMessages.selected.annotation_app.save}}
@@ -356,44 +397,44 @@ Vue.component("create-annotation-model", {
             </ul>
             <ul class="collection-list two-columns annotation-models-list" style="padding-left:2%;">
 
-                Input Name: <input type="text" v-model="newModelName" style="margin-bottom:1%;" placeholder="write_a_file_name"/>.json <br>
+                File Name:  <span style="margin-left:10px;">Configuration/</span><input type="text" v-model="newModelName" style="margin-bottom:1%;" placeholder="write_a_file_name"/>.json <br>
 
-                <form id="string" class="annotation-style-form"> 
-                    <h4>String</h4>
+                <div id="string" class="annotation-style-form" style="margin-top:2%"> 
+                    <h4 style="display:inline;">String</h4> <button class="info-model-button" v-on:click="showHelpConfig='stringType'">Info</button>
                     <div class="form-anno"> Name: <input type="text" v-model="newString.name" placeholder="Name of your choice"/> </div>
-                    <div class="form-anno"> Description: <input type="text" v-model="newString.description" placeholder="Description of use"/> </div>
+                    <div class="form-anno"> Description: <input type="text" v-model="newString.description" placeholder="Description for confused annotators"/> </div>
                     <div class="form-anno"> Required: <input type="checkbox" v-model="newString.required"/> </div>
-                    <button type="button" class="help-button btn btn-sm" v-on:click="addType('string',newString)">Add String</button>
-                </form> <br>
+                    <button type="button" class="btn btn-sm" v-on:click="addType('string',newString)">Add String</button>
+                </div> <br>
 
-                <form id="multilabel_classification" class="annotation-style-form"> 
-                    <h4>Multilabel Classification</h4>
+                <div id="multilabel_classification" class="annotation-style-form"> 
+                    <h4 style="display:inline;">Multilabel Classification</h4>  <button class="info-model-button" v-on:click="showHelpConfig='multiClassType'">Info</button>
                     <div class="form-anno"> Name: <input type="text" v-model="newMultiClass.name" placeholder="Name of your choice"/> </div>
-                    <div class="form-anno"> Description: <input type="text" v-model="newMultiClass.description" placeholder="Description of use"/> </div>
-                    <div class="form-anno"> Labels: <input type="text" v-model="newMultiClass.labels" placeholder="Labels separated by a coma"/> </div>
+                    <div class="form-anno"> Description: <input type="text" v-model="newMultiClass.description" placeholder="Description for confused annotators"/> </div>
+                    <div class="form-anno"> Labels: <input type="text" v-model="newMultiClass.labels" placeholder="Labels,separated,by,coma"/> </div>
                     <div class="form-anno"> Required: <input type="checkbox" v-model="newMultiClass.required"/> </div>
-                    <button type="button" class="help-button btn btn-sm" v-on:click="addType('multilabel_classification',newMultiClass)">Add Multilabel Classification</button>
-                </form> <br>
+                    <button type="button" class="btn btn-sm" v-on:click="addType('multilabel_classification',newMultiClass)">Add Multilabel Classification</button>
+                </div> <br>
 
-                <form id="multilabel_classification_string" class="annotation-style-form">
-                    <h4>Multilabel Classification String</h4>
+                <div id="multilabel_classification_string" class="annotation-style-form">
+                    <h4 style="display:inline;">Multilabel Classification String</h4> <button class="info-model-button" v-on:click="showHelpConfig='multiStringType'">Info</button>
                     <div class="form-anno"> Name: <input type="text" v-model="newMultiString.name" placeholder="Name of your choice"/> </div>
-                    <div class="form-anno"> Description: <input type="text" v-model="newMultiString.description" placeholder="Description of use"/> </div>
-                    <div class="form-anno"> Labels: <input type="text" v-model="newMultiString.labels" placeholder="Labels separated by a coma"/> </div>
+                    <div class="form-anno"> Description: <input type="text" v-model="newMultiString.description" placeholder="Description for confused annotators"/> </div>
+                    <div class="form-anno"> Labels: <input type="text" v-model="newMultiString.labels" placeholder="Labels,separated,by,coma"/> </div>
                     <div class="form-anno"> Required: <input type="checkbox" v-model="newMultiString.required"/> </div>
-                    <button type="button" class="help-button btn btn-sm" v-on:click="addType('multilabel_classification_string',newMultiString)">Add Multilabel Classification String</button>
-                </form> <br>
+                    <button type="button" class="btn btn-sm" v-on:click="addType('multilabel_classification_string',newMultiString)">Add Multilabel Classification String</button>
+                </div> <br>
 
-                <form id="multilabel_global_string" class="annotation-style-form"> 
-                    <h4>Multilabel Global String</h4>
-                    <div class="form-anno"> Name: <input type="text" v-model="newGlobal.name" placeholder="Name of your choice"/> </div>
-                    <div class="form-anno"> Description: <input type="text" v-model="newGlobal.description" placeholder="Description of use"/> </div>
-                    <div class="form-anno"> Labels: <input type="text" v-model="newGlobal.labels" placeholder="Labels separated by a coma"/> </div>
+                <div id="multilabel_global_string" class="annotation-style-form"> 
+                    <h4 style="display:inline;">Multilabel Global String</h4> <button class="info-model-button" v-on:click="showHelpConfig='globalType'">Info</button>
+                    <div class="form-anno"> Description: <input type="text" v-model="newGlobal.description" placeholder="Description for confused annotators"/> </div>
+                    <div class="form-anno"> Labels: <input type="text" v-model="newGlobal.labels" placeholder="Labels,separated,by,coma"/> </div>
                     <div class="form-anno">Required: <input type="checkbox" v-model="newGlobal.required"/> </div>
-                    <button type="button" class="help-button btn btn-sm" v-on:click="addType('multilabel_global_string',newGlobal)">Add Multilabel Global String</button>
-                </form> <br>
+                    <button type="button" class="btn btn-sm" v-on:click="addType('multilabel_global_string',newGlobal)">Add Multilabel Global String</button>
+                </div <br>
 
             </ul>
+            <help-config-modal v-if="showHelpConfig" @close="showHelpConfig = false" v-bind:showHelpConfig="showHelpConfig"></help-config-modal>
         </div>
 
     `
