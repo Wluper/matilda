@@ -42,7 +42,9 @@ Vue.component("all-dialogues", {
                   //if new session then recover from database
                   this.restore_session_from_database();
                }
-               mainApp.restored = true;
+               //with this commented the collection will always be
+               //loaded anew from the server
+               //mainApp.restored = true;
          });
       },
 
@@ -86,7 +88,7 @@ Vue.component("all-dialogues", {
          if (this.activeCollection != undefined) {
             var doc = this.activeCollection;
          } else {
-            return
+            return;
          }
          backend.recover_dialogues(doc)
             .then( (response) => {

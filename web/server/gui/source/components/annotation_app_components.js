@@ -115,9 +115,17 @@ Vue.component("annotation-app", {
                 .then( (response) => {
                     console.log('---- RECEIVED DATA FROM THE SERVER ----')
                     console.log(response);
-                    this.metaTags = response[0];
+                    try {
+                        this.metaTags = response[0];
+                    } catch {
+                        console.log("metaTags empty");
+                    }
                     console.log('---- END ----')
                     this.dTurns = response;
+                    if (this.dTurns == null) {
+                        //alert("Server offline. Try again");
+                        annotationAppEventBus.$emit("go_back");
+                    }
                     //format collection meta-tag
                     if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined)) {
                         this.metaTags["collection"] = "";

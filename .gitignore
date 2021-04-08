@@ -9,6 +9,8 @@ pyvenv.cfg
 .gitattributes
 .gitattributes
 db/
+configdb
 web/github
 web/github.pub
 web/server/LIDA_ANNOTATIONS/
+gunicorn_logs.txt
