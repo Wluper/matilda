@@ -173,6 +173,10 @@
     margin-top: -6px;
 }
 
+.entry-data span {
+    display:block;
+}
+
 .load-entry-date {
     margin-top: -2px;
 }

@@ -57,12 +57,12 @@ Vue.component("configuration-view", {
         },
 
         go_back: function() {
+            databaseEventBus.$off("annotation_styles_changed", this.reset_view );
             if (this.selectedModel == false) {
                 adminEventBus.$emit("go_back");
             } else {
                 this.selectedModel = false;
             }
-            databaseEventBus.$off("annotation_styles_changed", this.init );
         },
 
         reset_view: function() {
@@ -97,7 +97,7 @@ Vue.component("configuration-view", {
                         this.changesSaved = "";
                         this.init();
                     } else {
-                        alert(response.error);
+                        alert(response.data.error);
                     }
                 }
             );            
@@ -122,7 +122,7 @@ Vue.component("configuration-view", {
                         this.changesSaved = 'true';
                         this.init();
                     } else {
-                        alert(response.error);
+                        alert(response.data.error);
                     }
                 }
             );
@@ -350,9 +350,7 @@ Vue.component("create-annotation-model", {
             if (toCheck.charAt(-1) != "}") {
                 toCheck += "}";
             }
-            console.log(toCheck);
             let result = JSON.parse(toCheck);
-            console.log(result);
             return result;
         },
 
@@ -365,7 +363,6 @@ Vue.component("create-annotation-model", {
             if (checkResult != false) {
                this.jsonFile = checkResult;
             } else {
-                alert(checkResult);
                 return;
             }
             backend.manage_configuration_file("put", this.newModelName, this.jsonFile)
@@ -375,7 +372,7 @@ Vue.component("create-annotation-model", {
                         alert("Upload OK");
                         databaseEventBus.$emit("annotation_styles_changed");
                     } else {
-                        alert(response.error);
+                        alert(response.data.error);
                     }
                 }
             );

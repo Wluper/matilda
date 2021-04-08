@@ -120,9 +120,20 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
         newFile = data["json"]
 
-        if annotationStyle.includes(".json"):
+
+        #normalize name
+        if ".json" in annotationStyle:
             annotationStyle = annotationStyle.replace(".json", "");
 
+        #check for file name conflicts
+        if annotationStyle+".json" in Configuration.conf["app"]["annotation_models"]:
+            responseObject = {
+                "status":"fail", 
+                "error":"Server error. It exists an annotation style with the same name"
+            }
+            return responseObject
+
+        #uploading
         try:
             with open(Configuration.DEFAULT_PATH+annotationStyle+".json", "w") as new_style_file:
                 new_style_file.write(json.dumps(newFile, indent=4))
@@ -143,8 +154,6 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
             with open(Configuration.DEFAULT_PATH+annotationStyle+".json") as style_file:
                 Configuration.configDict[annotationStyle] = json.load(style_file)    
-
-
 
         except Exception as ex:
             responseObject = { "status":"fail", "error":Exception }
