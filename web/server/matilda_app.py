@@ -291,7 +291,12 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
 
     else:
         dialogue = dialogueFile.get_dialogue(user, id = id)
-        Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
+        
+        try:
+            Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
+        except:
+            return {"status":"fail"}
+
         return jsonify( Configuration.create_annotation_dict(annotationStyle) )
 
 @MatildaApp.route('/turns',methods=['POST'])

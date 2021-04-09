@@ -128,13 +128,12 @@ async function get_annotation_style_async(collection,id,supervision){
 
     if (id == undefined) {
         var apiLink = API_BASE+`/dialogue_annotationstyle/${collection}`;
+    
     } else {
-        if (supervision != undefined) {
-
-            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         
+        if (supervision != undefined) {
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         } else { 
-
             var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         }
     }
@@ -151,6 +150,8 @@ async function get_annotation_style_async(collection,id,supervision){
     } catch (error) {
 
         console.log(error);
+        alert("Server offline or trying to access a deleted collection");
+        return {"status":"fail"}
 
     }
 

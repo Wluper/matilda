@@ -137,6 +137,10 @@ Vue.component("annotation-app", {
           backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
               .then( (response) => {
                   this.annotationFormat = response;
+                  if (response["status"] == "fail") {
+                        mainApp.activeCollection = null;
+                        databaseEventBus.$emit( "assignments_selected");
+                  }
                   if (this.annotationFormat.global_slot != undefined) {
                     this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
                   }
