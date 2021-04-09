@@ -570,10 +570,11 @@ Vue.component("supervision-annotation-app", {
                        v-bind:annotationRate="annotationRate">
         </dialogue-menu>
 
-        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+        <dialogue-turns style="margin-top:2%;" v-bind:primaryElementClass="primaryElementClassName"
                         v-bind:turns="dTransformedTurns"
                         v-bind:currentId="dCurrentId"
-                        v-bind:metaTags="metaTags">
+                        v-bind:metaTags="metaTags"
+                        v-bind:readOnly="readOnly">
         </dialogue-turns>
 
         <annotations v-bind:globalSlot="annotationFormat.global_slot"

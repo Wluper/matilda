@@ -216,7 +216,7 @@ class DialogueAnnotator(object):
         """
     #    return {"name": self.__fileName}
 
-    def change_file_name(self, newName, remove=False):
+    def create_userspace(self, newName, remove=False):
         """
         check if the new user has a workspace otherwise it's created
         """

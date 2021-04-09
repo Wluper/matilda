@@ -24,6 +24,9 @@ var mainApp = new Vue({
       done:false,
       boot:true,
       showMessage:false,
+      //configGui
+      turnWidth:localStorage["turnWidth"],
+      maxChars:localStorage["maxChars"],
     }
   },
 
@@ -91,6 +94,12 @@ var mainApp = new Vue({
         this.activeCollection = null;
       } else {
         this.activeCollection = localStorage["activeCollection"];
+      }
+      if (localStorage["turnWidth"] == undefined) {
+        localStorage.setItem("turnWidth", 80);
+      }
+      if (localStorage["maxChars"] == undefined) {
+        localStorage.setItem("maxChars", 80);
       }
     },
 

@@ -164,9 +164,9 @@ def handle_configuration_file(option=None,annotationStyle=None):
     return jsonify( responseObject )
 
 
-@MatildaApp.route('/<user>/dialogues_metadata',methods=['GET'])
+@MatildaApp.route('/<user>/dialogues_metadata/<collection>',methods=['GET'])
 @MatildaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
-def handle_dialogues_metadata_resource(user, id=None):
+def handle_dialogues_metadata_resource(user, id=None, collection=None):
     """
     GET - All dialogues metadata
 
@@ -175,6 +175,24 @@ def handle_dialogues_metadata_resource(user, id=None):
     if request.method == "GET":
         responseObject = dialogueFile.get_dialogues_metadata(user)
 
+        # temporary troublefix for a bug:
+        # if you are annotating a dialogue and the server rebooted
+        # the update performed on the dialogue will insert that dialogue
+        # in the user session but that dialogue will be the only one there
+        # until the collection will be entirely reloaded
+
+        if len(responseObject) == 1:
+            docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":collection, "annotator":user})
+
+            #update dialogue source
+            for docCollection in docRetrieved:
+                dialogueFile.update_dialogues(user, docCollection["document"])
+
+            dialogueFile.change_collection(user, collection)
+
+            responseObject = dialogueFile.get_dialogues_metadata(user)
+
+        #end of fix
 
     if request.method == "PUT":
         error = None
@@ -207,7 +225,12 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
         annotationStyle = retrieve_annotation_style_name(fileName)
 
         Configuration.validate_dialogue( annotationStyle, data )
-        responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
+
+        dialogueFile.update_dialogue(user, id=id, newDialogue=data )
+
+        DatabaseManagement.updateDoc(fileName, "annotated_collections", {"document"+"."+id:data})
+
+        responseObject = { "status": "success" }
 
     if supervisor:
         responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
@@ -304,11 +327,9 @@ def handle_name_resource(user):
     responseObject = {
         "status" : "success",
     }
-    #if request.method == "GET":
-    #    responseObject.update( user )
 
     if request.method == "PUT":
-        dialogueFile.change_file_name(user)
+        dialogueFile.create_userspace(user)
 
     return jsonify(responseObject)
 

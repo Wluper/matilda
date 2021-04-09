@@ -6,7 +6,7 @@
     background-color: #f1f1f3;
     height: 100%;
     display: grid !important;
-    grid-template-columns: minmax(0,0.85fr) minmax(0,3.2fr);
+    grid-template-columns: minmax(0,1fr) minmax(0,3.2fr);
     grid-template-rows: minmax(0, 1.4fr) minmax(0, 2.4fr) minmax(0,12fr);
     min-height: 0;
     min-width: 0;
@@ -35,9 +35,9 @@
     overflow: auto;
     padding: 5px 24px;
     display: grid;
-    grid-template: [row1-start] ". . . . . . ." 1fr [row1-end]
-        [row2-start] ". button-section title-section rate-section status-section . switch-button " 5fr [row2-end]
-        [row3-start] ". . . . . . . " 1fr [row3-end] / 0fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template: [row1-start] ". . . . ." 1fr [row1-end] 
+                [row2-start] ". button-section title-section rate-section status-section" 5fr 
+                [row2-end] [row3-start] ". . . . . " 1fr [row3-end] / 0fr 1fr 1fr 1fr 1fr;
 
 
 }
@@ -289,7 +289,7 @@ WluperDark: 0e181e
 
 .dialogue-turn,
 .dialogue-turn-selected {
-    max-width: 75%;
+    
     margin: 0 auto 15px;
     width: 100%;
     padding: 20px;
@@ -436,7 +436,7 @@ WluperDark: 0e181e
 }
 
 .meta-turn-container {
-    max-width: 75%;
+    max-width: 90%;
     margin: 0 auto 15px;
     width: 100%;
     padding: 20px;
@@ -503,4 +503,75 @@ WluperDark: 0e181e
     border: 1px solid #e1e1e3;
     padding: 0 15px;
     border-left: none
+}
+
+.conf-turn-container {
+    max-width: 90%;
+    margin: 0 auto 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff !important;
+    color: #666;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
+    border-radius: 1px;
+    transition: 0.3s;
+    overflow: hidden;
+    height: auto;
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: #d1d1d3;
+    cursor: pointer;
+    border-left-color: grey;
+}
+.conf-turn-container h2 {
+    margin-top:0;
+    font-size:16px;
+    font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: #222;
+}
+.annotation-options {
+    grid-template: [row1-start] "max-chars turn-width slot-coll" [row1-end] / 1fr 1fr 1fr;
+    display: grid;
+}
+.max-chars-option {
+    grid-area: max-chars;
+    text-align:left;
+}
+.turn-width-option {
+    grid-area:turn-width;
+    text-align:center;
+}
+.slot-coll-option {
+    grid-area:slot-coll;
+    text-align:right;
+}
+
+.max-chars-input {
+    width:3em;
+    border:1px solid rgb(0 0 0 / 13%);
+}
+
+.slider {
+  background: #259af7;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #259af7;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #259af7;
+  cursor: pointer;
 }

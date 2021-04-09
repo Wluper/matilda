@@ -208,7 +208,7 @@ async function get_all_dialogue_ids_async(admin) {
 
   if (admin == undefined) {
 
-    var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata';
+    var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata/'+mainApp.activeCollection;
 
   } else if (admin == "supervision") {
 

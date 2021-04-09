@@ -262,11 +262,10 @@ Vue.component("annotation-app", {
 
             backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns, mainApp.activeCollection)
                 .then( (status) => {
-
                     if (status == "success") {
                         this.allDataSaved = true;
-                        fields = {"status":mainApp.collectionRate};
-                        backend.update_annotations(mainApp.activeCollection, fields, false);
+                        //fields = {"status":mainApp.collectionRate};
+                        //backend.update_annotations(mainApp.activeCollection, fields, false);
                     } else {
                         this.allDataSaved = false;
                         alert("Server error, dialogue not saved!")
@@ -317,7 +316,8 @@ Vue.component("annotation-app", {
         <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
                         v-bind:turns="dTransformedTurns"
                         v-bind:currentId="dCurrentId"
-                        v-bind:metaTags="metaTags">
+                        v-bind:metaTags="metaTags"
+                        v-bind:readOnly="readOnly">
         </dialogue-turns>
 
         <annotations v-bind:globalSlot="annotationFormat.global_slot"
@@ -432,22 +432,51 @@ Vue.component('dialogue-turns',{
 
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turns","currentId", "primaryElementClass","metaTags"],
+    props : ["turns","currentId", "primaryElementClass","metaTags", "readOnly"],
+
+    data: function() {
+        return {
+            maxWidth: mainApp.turnWidth,
+            maxChars: mainApp.maxChars,
+        }
+    },
+
+    created() {
+        annotationAppEventBus.$on("change_width", this.change_width );
+        annotationAppEventBus.$on("change_number", this.change_number );
+    },
+
+    beforeDestroyed() {
+        annotationAppEventBus.$off("change_width", this.change_width );
+        annotationAppEventBus.$off("change_number", this.change_number );
+    },
+
+    methods: {
+
+        change_width: function(event) {
+            this.maxWidth = event;
+        },
+        change_number: function(event) {
+            this.maxChars = event;
+        }
+    },
 
     template:
     `
     <div id="dialogue-turns">
         <div class="overflow-hide">
-            <dialogue-meta v-for="(turn, index) in turns" v-if="(index == 0)"
+            <dialogue-meta
                        v-bind:metaTags="metaTags"
-                       v-bind:primaryElementClass="primaryElementClass">
+                       v-bind:primaryElementClass="primaryElementClass"
+                       v-bind:readOnly="readOnly">
             </dialogue-meta>
 
             <dialogue-turn v-for="(turn, index) in turns" v-if="(index > 0)"
                        v-bind:primaryElementClass="primaryElementClass"
                        v-bind:turn="turn.string"
                        v-bind:currentId="currentId"
-                       v-bind:myId="index">
+                       v-bind:myId="index"
+                       v-bind:style="{ maxWidth:maxWidth+'%' }">
             </dialogue-turn>
         </div>
     </div>
@@ -457,10 +486,13 @@ Vue.component('dialogue-turns',{
 Vue.component('dialogue-meta',{
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turn","currentId","myId", "primaryElementClass","metaTags"],
+    props : ["turn","currentId","myId", "primaryElementClass","metaTags", "readOnly"],
+    
     data: function (){
         return {
-            guiMessages
+            guiMessages,
+            maxChars: mainApp.maxChars,
+            maxWidth: mainApp.turnWidth,
         }
     },
     methods :{
@@ -473,6 +505,14 @@ Vue.component('dialogue-meta',{
         update_id(){
             annotationAppEventBus.$emit("update_turn_id", this.myId)
         },
+        resize_turn_width(newValue) {
+            mainApp.turnWidth = newValue;
+            annotationAppEventBus.$emit("change_width",newValue);
+        },
+        change_max_chars(newValue) {
+            mainApp.maxChars = newValue;
+            annotationAppEventBus.$emit("change_number",newValue);
+        }
     },
 
     directives: {
@@ -487,28 +527,38 @@ Vue.component('dialogue-meta',{
 
     template:
     `
-    <div class="meta-turn-container">
-
-        <div class="turn-header">
-            <div class="meta-turn">
-                Meta Tags: {{myId}}
+    <div>
+        <div v-if="readOnly != true" class="conf-turn-container" v-bind:style="{ maxWidth:maxWidth+'%' }">
+            <h2>Annotation Preferences</h2>
+            <div class="annotation-options">
+                <div class="max-chars-option">Scroll-bar after: <input type="number" v-model="maxChars" min="0" class="max-chars-input" v-on:change="change_max_chars(maxChars)"/> chars</div>
+                <div class="turn-width-option">Turn Width: {{maxWidth}}%</div>
+                <div class="slot-coll-option">Slot collapsed: true</div>
             </div>
+            <input type="range" min="60" max="98" v-model="maxWidth" v-on:change="resize_turn_width(maxWidth)" class="slider" style="width:100%">
         </div>
 
-        <div v-for="content,tag in metaTags" class="meta-tags" v-if="tag != 'global_slot'">
-            <div class="meta-type" :id="'meta_type_'+tag">
-                {{tag}}
+        <div class="meta-turn-container" v-bind:style="{ maxWidth:maxWidth+'%' }">
+            <div class="turn-header">
+                <div class="meta-turn">
+                    Meta Tags: {{myId}}
+                </div>
             </div>
 
-            <div class="meta-value">
-                <comm-input :id="'meta_value_'+tag" v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
-            </div>
+            <div v-for="content,tag in metaTags" class="meta-tags" v-if="tag != 'global_slot'">
+                <div class="meta-type" :id="'meta_type_'+tag">
+                    {{tag}}
+                </div>
 
+                <div class="meta-value">
+                    <comm-input :id="'meta_value_'+tag" v-bind:inputClassName="primaryElementClass" v-bind:placeholder="content" readonly="readonly"> </comm-input>
+                </div>
+
+            </div>
         </div>
     </div>
     `
 })
-
 
 
 Vue.component('dialogue-turn',{
@@ -517,7 +567,9 @@ Vue.component('dialogue-turn',{
     props : ["turn","currentId","myId", "primaryElementClass"],
     data: function (){
         return {
-            guiMessages
+            guiMessages,
+            maxWidth: mainApp.maxWidth,
+            maxChars: mainApp.maxChars,
         }
     },
     methods :{
@@ -559,7 +611,7 @@ Vue.component('dialogue-turn',{
 
     template:
     `
-    <div v-if="check_if_selected()" class="dialogue-turn-selected">
+    <div v-if="check_if_selected()" class="dialogue-turn-selected" v-bind:style="{ maxWidth:maxWidth+'%' }">
 
         <div class="turn-header">
             <div class="active-turn-id">
@@ -575,7 +627,7 @@ Vue.component('dialogue-turn',{
 
         <div class="user-string-type-text">
             
-            <comm-textarea :id="stringType.name" v-if="stringType.data.length > 95" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
+            <comm-textarea :id="stringType.name" v-if="stringType.data.length > maxChars" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
             <!-- v-on:comm_input_update="turn_updated_string($event)" -->
             </comm-textarea>  
             
@@ -587,7 +639,7 @@ Vue.component('dialogue-turn',{
         </div>
     </div>
 
-    <div v-else v-on:click="update_id()" class="dialogue-turn">
+    <div v-else v-on:click="update_id()" class="dialogue-turn" v-bind:style="{ maxWidth:maxWidth+'%' }">
         <div class="sticky">
             {{guiMessages.selected.annotation_app.turnId}}: {{myId}}
         </div>
