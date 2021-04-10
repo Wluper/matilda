@@ -360,6 +360,7 @@ select {
 }
 
 .panel {
+    margin-right:4px;
     padding: 10px 17px !important;
     box-shadow: 0 2px #1675c1, 0px 4px 6px 0px #00000026, 0px 15px 5px 0px rgb(0 0 0 / 10%);
     font-size: 14px !important;

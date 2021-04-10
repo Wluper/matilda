@@ -97,7 +97,12 @@ Vue.component("collection-view", {
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
                     mainContainer.style.cursor = null;
-                    this.retrieveActiveCollection();
+                    if (this.allEntryMetadata.length != 0) {
+                        this.retrieveActiveCollection();
+                    } else {
+                        this.activeCollection = null;
+                        databaseEventBus.$emit("collection_active", null );
+                    }
                 }
             )
         },
@@ -120,7 +125,7 @@ Vue.component("collection-view", {
             backend.get_specific_collections("annotated_collections",search, projection)
                 .then( (response) => {
                     if (response.length != 0) {
-                        this.activeCollectionMeta = response[0]
+                        this.activeCollectionMeta = response[0];
                         console.log("Active Collection",this.activeCollectionMeta);
                         //storing data for persistence
                         mainApp.collectionRate = response[0].status;
@@ -131,7 +136,7 @@ Vue.component("collection-view", {
                         this.retrieveServerless();
                     } else {
                         //if active collection document doesn't exist anymore
-                        mainApp.activeCollection = null;
+                        databaseEventBus.$emit( "collection_active", null );
                         this.activeCollection = null;
                         return
                     }
@@ -167,11 +172,22 @@ Vue.component("collection-view", {
             }
         },
 
-        clicked_active() {
-            if (this.activeCollectionMeta.done != true)
-                annotationAppEventBus.$emit("go_back");
-            else
+        clicked_active(id) {
+            if (this.activeCollectionMeta.done == true) {
                 allDialoguesEventBus.$emit("show_message",guiMessages.selected.collection.freezed);
+            } else {
+                //if the collection is still asigned to the user
+                for (index in this.allEntryMetadata) {
+                    if (this.allEntryMetadata[index]["id"] == id) {
+                        //go back to annotation view
+                        annotationAppEventBus.$emit("go_back");
+                        return;
+                    }
+                }
+                databaseEventBus.$emit("collection_active", null);
+                this.activeCollection = null;
+                alert("Collection is no more assigned to you or has been deleted from the server");
+            }
         }, 
 
         update_annotations(collectionID) {
@@ -214,7 +230,7 @@ Vue.component("collection-view", {
                 <ul class="active-collection">
                 <h2 class="list-title">{{guiMessages.selected.lida.activeColl}}</h2>
                     <div v-if="activeCollection != null" class="entry-list-single-item-container">
-                        <div class="entry-info" v-on:click="clicked_active()">
+                        <div class="entry-info" v-on:click="clicked_active(activeCollection)">
                             <div class="entry-id">
                                 <span>Collection:</span> {{activeCollection}}
                             </div>

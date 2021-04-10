@@ -277,7 +277,7 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                                <div class="entry-data" style="display:block;">>
+                                <div class="entry-data" style="display:block;">
                                     <span>{{collection.annotationStyle.split(".")[0]}}</span>
                                     <span>{{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}</span>
                                 </div>
