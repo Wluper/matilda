@@ -3,8 +3,8 @@ Vue.component("login-view", {
     data() {
         return {
             guiMessages,
-            insertedName: 'username',
-            insertedPass: 'password',
+            insertedName: '',
+            insertedPass: '',
             role: 'annotator'
         }
     },
@@ -56,8 +56,8 @@ Vue.component("login-view", {
                 <img src="assets/images/matilda_logo_min.png" class="login_logo">
                 <div>DEVELOPMENT VERSION</div>
                 <form class="login_form">
-                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" onclick="this.value= null; this.onclick = null" autocomplete="username">
-                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" onclick="this.value= null; this.onclick = null" v-on:keyup.enter="login()" autocomplete="current-password">
+                    <input id="login_input" class="login_input" type="text" name="login_username" v-bind:value="insertedName" placeholder="username" autocomplete="username">
+                    <input id="password_input" class="password_input" type="password" name="login_password" v-bind:value="insertedPass" v-on:keyup.enter="login()" autocomplete="current-password" placeholder="password">
                     <button type="button" @click="login()" class="login_button">{{guiMessages.selected.login.send}}</button>
                 </form>
             </div>

@@ -99,6 +99,7 @@
 #annotation-view .entry-list-single-item-container {
     display:block;
     grid-template:none;
+    padding-bottom: 3px;
 }
 
 .listed-annotations {
