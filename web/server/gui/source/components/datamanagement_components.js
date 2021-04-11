@@ -774,6 +774,10 @@ Vue.component('collection-creation', {
                     } else {
                         console.log("============== Dialogues-Collection Error ==============");
                         alert(response["data"]["error"]);
+                        //reset
+                        this.entry.showDocument = "";
+                        this.entry.document = {};
+                        this.params = undefined;
                     }
             });
         }
