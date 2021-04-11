@@ -294,7 +294,7 @@ Vue.component("annotation-app", {
             //resuming turn
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
             if (activeTurn != null) {
-                activeTurn.style = null;
+                activeTurn.style.border = null;
             }
             //resuming annotation sections
             if (document.getElementById("annotations") != undefined) {
