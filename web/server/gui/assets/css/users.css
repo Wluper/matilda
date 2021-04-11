@@ -11,7 +11,7 @@
     margin-top:10%;
     font-family:CoreSansNR35Light;
     color:#888;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #3a9dd64a;
     box-shadow: 0px 9px 20px 1px rgba(0,0,0,0.2);
 }
 
@@ -36,6 +36,18 @@
     padding:10%;
     padding-top:5%;
 }
+
+.login_form ::-webkit-input-placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
+  
+  .login_form :-ms-input-placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
+  
+  .login_form ::placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
 
 .login_input {
     color:grey;
@@ -261,7 +273,7 @@
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus,
+input:-webkit-autofill:focus
 {
     color:grey;
     text-align:center;

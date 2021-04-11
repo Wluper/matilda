@@ -40,8 +40,8 @@ Vue.component("login-view", {
                     if (response.data.status == "success") {
                         console.log("Username and password is valid");
                         mainApp.userName = this.insertedName;
-                        allDialoguesEventBus.$emit("update_username", this.insertedName, this.insertedPass);
                         mainApp.role = response.data.role;
+                        allDialoguesEventBus.$emit("landingPage", response.data.role);
                     } else {
                         alert(guiMessages.selected.login.fail)
                     }

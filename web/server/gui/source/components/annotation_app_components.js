@@ -447,21 +447,25 @@ Vue.component('dialogue-turns',{
 
     created() {
         annotationAppEventBus.$on("change_width", this.change_width );
-        annotationAppEventBus.$on("change_number", this.change_number );
+        annotationAppEventBus.$on("change_chars", this.change_chars );
     },
 
     beforeDestroyed() {
         annotationAppEventBus.$off("change_width", this.change_width );
-        annotationAppEventBus.$off("change_number", this.change_number );
+        annotationAppEventBus.$off("change_chars", this.change_chars );
     },
 
     methods: {
 
         change_width: function(event) {
+            mainApp.turnWidth = event;
             this.maxWidth = event;
+            localStorage["turnWidth"] = event;
         },
-        change_number: function(event) {
+        change_chars: function(event) {
+            mainApp.maxChars = event;
             this.maxChars = event;
+            localStorage["maxChars"] = event;
         }
     },
 
@@ -510,12 +514,10 @@ Vue.component('dialogue-meta',{
             annotationAppEventBus.$emit("update_turn_id", this.myId)
         },
         resize_turn_width(newValue) {
-            mainApp.turnWidth = newValue;
             annotationAppEventBus.$emit("change_width",newValue);
         },
         change_max_chars(newValue) {
-            mainApp.maxChars = newValue;
-            annotationAppEventBus.$emit("change_number",newValue);
+            annotationAppEventBus.$emit("change_chars",newValue);
         }
     },
 

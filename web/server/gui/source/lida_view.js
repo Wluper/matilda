@@ -25,8 +25,8 @@ var mainApp = new Vue({
       boot:true,
       showMessage:false,
       //configGui
-      turnWidth:localStorage["turnWidth"],
-      maxChars:localStorage["maxChars"],
+      turnWidth:this.setTurnWidth(),
+      maxChars:this.setMaxChars(),
     }
   },
 
@@ -41,10 +41,10 @@ var mainApp = new Vue({
       textSplitterEventBus.$on("splitting_complete", this.clear_text_split)
 
       // All Dialogue (MAIN VIEW) Event Bus
+      allDialoguesEventBus.$on( "landingPage", this.landingPage )
       allDialoguesEventBus.$on( "dialogue_selected", this.load_in_dialogue_to_annotate )
       allDialoguesEventBus.$on( "dialogue_deleted", this.remove_dialogue_from_visited_list )
       allDialoguesEventBus.$on( "loaded_text_file", this.handle_loaded_text_file )
-      allDialoguesEventBus.$on( "update_username", this.update_username )
       allDialoguesEventBus.$on( "show_message", this.show_message )
       allDialoguesEventBus.$on( "close_message", this.show_message )
 
@@ -61,23 +61,31 @@ var mainApp = new Vue({
 
   methods: {
 
-    update_username: function(event,event2) {
-        let newName = event;
-        let pass = event2;
-        backend.put_name(newName)
-            .then( (response) => {
-                if (response) {
-                    console.log("File name updated");
-                    this.set_cookie(newName,pass);
-                    if (mainApp.role == "administrator") {
-                        this.status = "admin-panel";
-                    } else {
-                        this.status = "assignments-view";
-                    }
-                } else {
-                    alert('Server error, name not changed.');
-                }
-        })
+    setTurnWidth : function(){
+        if ((localStorage["turnWidth"] == null) || (localStorage["turnWidth"] == undefined)) {
+            localStorage.setItem("turnWidth", 80);
+            return localStorage["turnWidth"];
+        } else {
+            return localStorage["turnWidth"];
+        }    
+    },
+
+    setMaxChars : function(){
+        if (localStorage["maxChars"] == null) {
+            localStorage.setItem("maxChars", 80);
+            return localStorage["maxChars"];
+        } else {
+            return localStorage["maxChars"];
+        }    
+    },
+
+    landingPage: function(role) {
+        //this.set_cookie(user,pass);
+        if (role == "administrator") {
+            this.status = "admin-panel";
+        } else {
+            this.status = "assignments-view";
+        }
     },    
 
     set_cookie: function(name,pass) {
@@ -95,26 +103,22 @@ var mainApp = new Vue({
       } else {
         this.activeCollection = localStorage["activeCollection"];
       }
-      if (localStorage["turnWidth"] == undefined) {
-        localStorage.setItem("turnWidth", 80);
-      }
-      if (localStorage["maxChars"] == undefined) {
-        localStorage.setItem("maxChars", 80);
-      }
     },
 
     check_login_cookie: function() {
         //only in case of refresh or previous sessions
-        if (this.logged == "true")
+        if (this.logged == "true") {
             return;
+        }
         if (localStorage["remember"] != undefined) {
+            console.log(localStorage["remember"]);
             let memorizedName = localStorage["remember"];
             let memorizedPass = localStorage["password"];
             backend.login(memorizedName,memorizedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username still valid");
-                        this.update_username(memorizedName);
+                        this.prepare_session(memorizedName);
                         mainApp.role = response.data.role;
                     } else {
                         (response.data.status == "fail")

@@ -1,34 +1,9 @@
-/********************************
-* FILE NAME FUNCTIONS
-********************************/
 
 API_BASE = window.origin
-
-async function put_name(name){
-
-    console.log("Set userspace",name);
-
-    var dialogues = {}
-
-    const apiLink = API_BASE+'/'+name+'/name'
-    try {
-        var response = await axios.put( apiLink, {name : name} )
-        return true;
-    } catch (error) {
-
-        console.log(error);
-        return false;
-    }
-
-};
-
-
 
 /********************************
 * API INTERACTION FUNCTIONS
 ********************************/
-
-
 
 async function annotate_query(query){
 
@@ -1074,7 +1049,6 @@ async function create_user(parameters,update=false){
 
 backend =
 {
-    put_name                                    : put_name,
     annotate_query                              : annotate_query,
     write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,

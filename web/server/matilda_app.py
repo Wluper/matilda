@@ -180,6 +180,8 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
         # the update performed on the dialogue will insert that dialogue
         # in the user session but that dialogue will be the only one there
         # until the collection will be entirely reloaded
+        # then the updated performed on the database will overwrite the 
+        # document with the new, empty, session.
 
         if len(responseObject) == 1:
             docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":collection, "annotator":user})
@@ -903,8 +905,8 @@ def handle_post_of_collections(mode, destination, id=None):
                     validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
                     if ((type(validation) is str) and (validation.startswith("ERROR"))):
                         print("Validation for",dialogueName," failed with "+annotationStyle)
-                        #response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
-                    #return jsonify( response )
+                        response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
+                    return jsonify( response )
                     rebuiltDocument[dialogueName] = dialogue
             values["document"] = rebuiltDocument
         else:
@@ -949,8 +951,14 @@ def handle_login(id=None):
 
     values = request.get_json()
 
+    username = values["username"]
+
     if request.method == "POST":
-        responseObject = LoginFuncs.logIn( values["username"], values["password"])
+        
+        allowed = LoginFuncs.logIn( username, values["password"])
+        if allowed["status"] == "success":
+            dialogueFile.create_userspace(username)
+        responseObject = allowed
 
     if request.method == "PUT":
         responseObject = LoginFuncs.create(id)
