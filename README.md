@@ -1,5 +1,13 @@
 ![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
+**Multimodel Branch:**
+1. Configuration of database and app via GUI
+2. Editing and creation of annotation models via GUI
+3. New multilabel_classification_string grouped view
+4. Supervision view revised
+5. New log-in system
+6. New logging system
+
 **What's new in MATILDA:** 
 1. Full support for multiple annotators and project management
 2. Full support for multiple annotation models
