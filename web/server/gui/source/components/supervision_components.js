@@ -454,9 +454,8 @@ Vue.component("supervision-annotation-app", {
         },
 
         init: function() {
-
             // Step One :: Download a Single Dialogue
-            backend.get_single_dialogue_async(this.dialogueId, "supervision")
+            backend.get_single_dialogue_async(this.dialogueId, null, "supervision")
                 .then( (response) => {
                     console.log('---- RECEIVED DATA FROM THE SERVER ----')
                     console.log(response);
