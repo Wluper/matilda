@@ -187,8 +187,14 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
             docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":collection, "annotator":user})
 
             #update dialogue source
-            for docCollection in docRetrieved:
-                dialogueFile.update_dialogues(user, docCollection["document"])
+            try:
+                for docCollection in docRetrieved:
+                    dialogueFile.update_dialogues(user, docCollection["document"])
+            except:
+                #reload session
+                dialogueFile.create_userspace(user)
+                for docCollection in docRetrieved:
+                    dialogueFile.update_dialogues(user, docCollection["document"])
 
             dialogueFile.change_collection(user, collection)
 
@@ -207,7 +213,7 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
 
 
 @MatildaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
-@MatildaApp.route('/<user>/dialogues/<id>',methods=['GET','POST','DELETE'])
+@MatildaApp.route('/<user>/dialogues/<id>/<fileName>',methods=['GET','POST','DELETE'])
 @MatildaApp.route('/<user>/dialogues/<fileName>/<id>',methods=['PUT'])
 @MatildaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
 @MatildaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
@@ -228,9 +234,14 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
         Configuration.validate_dialogue( annotationStyle, data )
 
-        dialogueFile.update_dialogue(user, id=id, newDialogue=data )
-
         DatabaseManagement.updateDoc(fileName, "annotated_collections", {"document"+"."+id:data})
+
+        try:
+            dialogueFile.update_dialogue(user, id=id, newDialogue=data )
+        except:
+            #reload session if needed
+            __load_collection_from_database(user, fileName)
+            responseObject = dialogueFile.update_dialogue(user, id=id, newDialogue=data )
 
         responseObject = { "status": "success" }
 
@@ -238,7 +249,16 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
         responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
         return jsonify(responseObject)
 
-    if fileName:
+    elif fileName:
+
+        if request.method == "GET":
+            try:
+                responseObject = dialogueFile.get_dialogue(user, id = id)
+            except:
+                #reload session if needed
+                __load_collection_from_database(user, fileName)
+                responseObject = dialogueFile.get_dialogue(user, id = id)
+
         if request.method == "POST":
             responseObject = __handle_post_of_new_dialogues(user, fileName)
             #dialogueFile.save(user)
@@ -292,7 +312,12 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
         return jsonify( Configuration.create_annotation_dict(annotationStyle) )
 
     else:
-        dialogue = dialogueFile.get_dialogue(user, id = id)
+        try:
+            dialogue = dialogueFile.get_dialogue(user, id = id)
+        except:
+            #reload session
+            __load_collection_from_database(user,collection)
+            dialogue = dialogueFile.get_dialogue(user, id = id)
         
         try:
             Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
@@ -348,7 +373,7 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
     GET - Gets the dialogues id in the database collection for the user
         or Gets an entire database document 
 
-    POST - Gets the entire dialogues in the database and import them
+    POST - Gets all dialogues in the database and import them
 
     PUT - Updates the database collection
 
@@ -986,6 +1011,35 @@ def handle_annotations_import(collection_id):
 #################################################
 # INDEX FUNCTIONS
 #################################################
+
+def __load_collection_from_database(user, doc):
+
+    responseObject = {}
+
+    docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
+    #first checks if exists an annotated version for the user
+    if len(docRetrieved) == 0:
+        print("No annotated version for user ",user," creating...")
+        docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
+        #create document 
+        values = {
+            "id":doc, 
+            "fromCollection":doc, 
+            "annotator":user, 
+            "done":False, 
+            "status":"0%",
+            "document":docRetrieved[0]["document"],
+            "lastUpdate":datetime.datetime.utcnow()
+        }
+        DatabaseManagement.createDoc(doc, "annotated_collections", values)
+    
+    dialogueFile.create_userspace(user)
+
+    #import and format new dialogues
+    for docCollection in docRetrieved:
+        __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+
+    dialogueFile.change_collection(user, doc)    
 
 def __handle_post_of_new_dialogues(user, fileName=None):
     """

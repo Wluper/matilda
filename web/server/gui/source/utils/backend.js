@@ -279,7 +279,7 @@ async function get_all_dialogues_async(admin) {
 };
 
 
-async function get_single_dialogue_async(id, supervision) {
+async function get_single_dialogue_async(id, collection, supervision) {
 
     if (supervision != undefined) {
 
@@ -290,11 +290,22 @@ async function get_single_dialogue_async(id, supervision) {
         dialogues = response.data.dialogue
 
         return dialogues
+    
+    } else if (collection != undefined) {
+
+        apiLink = API_BASE+"/"+mainApp.userName+"/dialogues/"+id+"/"+collection;
+
+        var response = await axios.get( apiLink )
+
+        dialogues = response.data.dialogue
+
+        return dialogues
+    
     }
 
     try {
 
-        var response = await RESTdialogues( "GET", id, {})
+        var response = await RESTdialogues( "GET", id, collection, {})
         console.log("===== GOT SINGLE DIALOGUE =====")
         console.log(response)
         dialogue = response.data.dialogue

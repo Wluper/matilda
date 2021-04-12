@@ -109,9 +109,8 @@ Vue.component("annotation-app", {
         },
 
         init: function() {
-
             // Step One :: Download a Single Dialogue
-            backend.get_single_dialogue_async(this.dialogueId)
+            backend.get_single_dialogue_async(this.dialogueId, mainApp.activeCollection)
                 .then( (response) => {
                     console.log('---- RECEIVED DATA FROM THE SERVER ----')
                     console.log(response);

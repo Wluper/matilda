@@ -101,11 +101,15 @@ Vue.component("all-dialogues", {
       download_all_dialogues_from_server(event) {
          backend.get_all_dialogues_async()
             .then( (response) => {
+               if ((response) == undefined) {
+                  alert("Server is offline or rebooted. Please log-in again.");
+                  return;
+               }
                let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                const url = window.URL.createObjectURL(blob)
                const link = document.createElement('a')
                link.href = url
-               fileName = "USER_" + mainApp.userName + "_"+utils.create_date()+".json"
+               fileName = mainApp.userName + "_"+utils.create_date()+".json";
                link.setAttribute('download', fileName )
                document.body.appendChild(link)
                link.click();
