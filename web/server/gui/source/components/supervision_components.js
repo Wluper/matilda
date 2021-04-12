@@ -88,7 +88,7 @@ Vue.component("supervision-view", {
    },
    template:
    `
-<div id="supervision">
+<div id="supervision-container">
    <div class="dialogue-list-title-container">
       <div class="all-dialogues-list-title">
             <h2>{{guiMessages.selected.admin.supervision}}</h2>
@@ -563,6 +563,7 @@ Vue.component("supervision-annotation-app", {
 
     template:
     `
+    <div id="supervision">
     <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
         <dialogue-menu v-bind:changesSaved="allDataSaved"
@@ -570,7 +571,7 @@ Vue.component("supervision-annotation-app", {
                        v-bind:annotationRate="annotationRate">
         </dialogue-menu>
 
-        <dialogue-turns style="margin-top:2%;" v-bind:primaryElementClass="primaryElementClassName"
+        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
                         v-bind:turns="dTransformedTurns"
                         v-bind:currentId="dCurrentId"
                         v-bind:metaTags="metaTags"
@@ -591,6 +592,7 @@ Vue.component("supervision-annotation-app", {
         <input-box>
         </input-box>
 
+    </div>
     </div>
     `
 });

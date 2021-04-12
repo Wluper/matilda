@@ -212,8 +212,14 @@
 }
 
 .supervision_readonly {
-    pointer-events:none;
+    /*pointer-events:none;*/
     opacity:0.7
+}
+
+#supervision #multilabel-string-header, 
+#supervision #single-annotation-header,
+#supervision .classification-annotation {
+    pointer-events: none;
 }
 
 /********************************
