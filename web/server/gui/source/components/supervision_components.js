@@ -88,7 +88,7 @@ Vue.component("supervision-view", {
    },
    template:
    `
-<div id="supervision">
+<div id="supervision-container">
    <div class="dialogue-list-title-container">
       <div class="all-dialogues-list-title">
             <h2>{{guiMessages.selected.admin.supervision}}</h2>
@@ -563,33 +563,35 @@ Vue.component("supervision-annotation-app", {
 
     template:
     `
-    <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div id="supervision">
+      <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
-        <dialogue-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId"
-                       v-bind:annotationRate="annotationRate">
-        </dialogue-menu>
+          <dialogue-menu v-bind:changesSaved="allDataSaved"
+                         v-bind:dialogueTitle="dialogueId"
+                         v-bind:annotationRate="annotationRate">
+          </dialogue-menu>
 
-        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
-                        v-bind:turns="dTransformedTurns"
-                        v-bind:currentId="dCurrentId"
-                        v-bind:metaTags="metaTags">
-        </dialogue-turns>
+          <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+                          v-bind:turns="dTransformedTurns"
+                          v-bind:currentId="dCurrentId"
+                          v-bind:metaTags="metaTags">
+          </dialogue-turns>
 
-        <annotations v-bind:globalSlot="annotationFormat.global_slot"
-                     v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
-                     v-bind:classifications="dCurrentTurn.multilabel_classification"
-                     v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
-                     v-bind:currentId="dCurrentId"
-                     v-bind:dialogueNonEmpty="dialogueNonEmpty"
-                     v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId"
-                     v-bind:readOnly="readOnly">
-        </annotations>
+          <annotations v-bind:globalSlot="annotationFormat.global_slot"
+                       v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
+                       v-bind:classifications="dCurrentTurn.multilabel_classification"
+                       v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
+                       v-bind:currentId="dCurrentId"
+                       v-bind:dialogueNonEmpty="dialogueNonEmpty"
+                       v-bind:dTurns="dTurns"
+                       v-bind:dialogueId="dialogueId"
+                       v-bind:readOnly="readOnly">
+          </annotations>
 
-        <input-box>
-        </input-box>
+          <input-box>
+          </input-box>
 
+      </div>
     </div>
     `
 });

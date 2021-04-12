@@ -341,16 +341,29 @@ input:focus {
     box-shadow: 0 1px 5px rgba(0,0,0,0.09);
 }
 
+#supervision-container {
+    height: 100%;
+}
+
+#supervision {
+    height:100%;
+    overflow: hidden;
+}
+
 #supervision #dialogue-menu {
     height:3em;
 }
+
 #supervision #dialogue-menu .back-button {
     display:none !important;
 }
+
 #supervision #dialogue-turns {
+    margin-top:4%;
     grid-row-start:1;
-    overflow-y:hidden;
+    overflow-y:scroll;
 }
+
 #supervision #input-box {
     display:none;
 }
