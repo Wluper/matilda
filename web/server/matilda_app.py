@@ -119,12 +119,13 @@ def handle_configuration_file(option=None,annotationStyle=None):
         data = request.get_json()
 
         newFile = data["json"]
-
+        newFile = json.loads(newFile)
 
         #normalize name
         if ".json" in annotationStyle:
             annotationStyle = annotationStyle.replace(".json", "");
 
+        """
         #check for file name conflicts
         if annotationStyle+".json" in Configuration.conf["app"]["annotation_models"]:
             responseObject = {
@@ -132,7 +133,8 @@ def handle_configuration_file(option=None,annotationStyle=None):
                 "error":"Server error. It exists an annotation style with the same name"
             }
             return responseObject
-
+        """
+        
         #uploading
         try:
             with open(Configuration.DEFAULT_PATH+annotationStyle+".json", "w") as new_style_file:
@@ -145,15 +147,17 @@ def handle_configuration_file(option=None,annotationStyle=None):
                 configurationOld.close()
 
             #editing and overwriting memorized configuration file
-            Configuration.conf["app"]["annotation_models"].append(annotationStyle+".json")
+            if annotationStyle+".json" not in Configuration.conf["app"]["annotation_models"]:
+                Configuration.conf["app"]["annotation_models"].append(annotationStyle+".json")
 
             #dumping new configuration file
             with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configurationFile:
                 configurationFile.write(json.dumps(Configuration.conf, indent=4))
                 configurationFile.close()
 
+            #loading new annotation style
             with open(Configuration.DEFAULT_PATH+annotationStyle+".json") as style_file:
-                Configuration.configDict[annotationStyle] = json.load(style_file)    
+                Configuration.configDict[annotationStyle] = json.load(style_file)  
 
         except Exception as ex:
             responseObject = { "status":"fail", "error":Exception }
