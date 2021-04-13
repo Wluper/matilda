@@ -124,6 +124,7 @@ Vue.component("annotation-app", {
                     if (this.dTurns == null) {
                         //alert("Server offline. Try again");
                         annotationAppEventBus.$emit("go_back");
+                        return;
                     }
                     //format collection meta-tag
                     if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined)) {
@@ -280,8 +281,12 @@ Vue.component("annotation-app", {
         resume_annotation_tools: function(event) {
             console.log("Resuming annotation tools");
             //resuming label
-            document.getElementById("usr").onmouseup = null;
-            document.getElementById("sys").onmouseup = null;
+            try {
+                document.getElementById("usr").onmouseup = null;
+                document.getElementById("sys").onmouseup = null;
+            } catch {
+                return;
+            }
             let active_label = document.getElementsByClassName("active_label")[0];
             if (active_label != null) {
                 active_label.classList.remove("active_label");

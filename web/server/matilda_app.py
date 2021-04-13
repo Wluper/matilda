@@ -238,7 +238,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
         Configuration.validate_dialogue( annotationStyle, data )
 
-        DatabaseManagement.updateDoc(fileName, "annotated_collections", {"document"+"."+id:data})
+        DatabaseManagement.updateDoc(fileName, "annotated_collections", {"annotator":user,"document"+"."+id:data})
 
         try:
             dialogueFile.update_dialogue(user, id=id, newDialogue=data )
