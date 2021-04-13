@@ -553,11 +553,24 @@ WluperDark: 0e181e
 }
 
 .slider {
+  height: 8px;
   background: #259af7;
   outline: none;
   opacity: 0.7;
   -webkit-transition: .2s;
   transition: opacity .2s;
+}
+
+.slider[type="range"]::-webkit-slider-runnable-track {
+  height: 10px;
+  -webkit-appearance: none;
+  color: #13bba4;
+  margin-top: -1px;
+}
+
+.slider[type="range"]::-moz-range-progress {
+  background-color: #259af7;
+  height: 90%;
 }
 
 .slider::-webkit-slider-thumb {
@@ -569,8 +582,8 @@ WluperDark: 0e181e
 }
 
 .slider::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
   background: #259af7;
   cursor: pointer;
