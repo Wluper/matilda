@@ -40,6 +40,11 @@ Vue.component("supervision-view", {
             this.mode = "supervision-collections-list";
             this.selectedCollection = "";
          } else {
+			try {
+			   event.stopPropagation();
+	        } catch {
+			   console.log("no event that can propagates");
+		    } 
             adminEventBus.$emit("go_back");
          }
       },
@@ -62,7 +67,11 @@ Vue.component("supervision-view", {
       },
 
       clear_view: function() {
-         event.stopPropagation();
+         try {
+			 event.stopPropagation();
+	     } catch {
+			console.log("no event that can propagates");
+		 } 
          this.mode = "supervision-collections-list";
       },
 
