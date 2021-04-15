@@ -157,7 +157,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
             #loading new annotation style
             with open(Configuration.DEFAULT_PATH+annotationStyle+".json") as style_file:
-                Configuration.configDict[annotationStyle] = json.load(style_file)  
+                Configuration.configDict[annotationStyle+".json"] = json.load(style_file)  
 
         except Exception as ex:
             responseObject = { "status":"fail", "error":Exception }
