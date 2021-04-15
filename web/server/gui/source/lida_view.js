@@ -19,7 +19,7 @@ var mainApp = new Vue({
       role:'annotator',
       activeCollection:localStorage["activeCollection"],
       annotationStyle:'',
-      collectionRate:'',
+      collectionRate:'0',
       lastUpdate:'',
       done:false,
       boot:true,
@@ -27,6 +27,7 @@ var mainApp = new Vue({
       //configGui
       turnWidth:this.setTurnWidth(),
       maxChars:this.setMaxChars(),
+      autoSave:this.setAutoSave()
     }
   },
 
@@ -52,6 +53,7 @@ var mainApp = new Vue({
       databaseEventBus.$on( "document_selected", this.load_document_view )
       databaseEventBus.$on( "assignments_selected", this.load_collections_view )
       databaseEventBus.$on( "collection_active", this.set_active_collection )
+      databaseEventBus.$on( "change_option", this.changeOption )
 
       //Check if already logged, restore session
       this.check_login_cookie();
@@ -77,6 +79,30 @@ var mainApp = new Vue({
         } else {
             return localStorage["maxChars"];
         }    
+    },
+
+    setAutoSave : function(){
+        if (localStorage["autoSave"] == null) {
+            localStorage.setItem("autoSave", false);
+            return JSON.parse(localStorage["autoSave"]);
+        } else {
+            return JSON.parse(localStorage["autoSave"]);
+        }    
+    },
+
+    changeOption : function(option, value) {
+        switch (option) {
+            case "turnWidth":
+                this.turnWidth = value;
+                break;
+            case "maxChars":
+                this.maxChars = value;
+                break;
+            case "autoSave":
+                this.autoSave = value;
+                break;
+        }
+        localStorage[option] = value;
     },
 
     landingPage: function(role) {

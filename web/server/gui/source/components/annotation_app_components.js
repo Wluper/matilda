@@ -22,6 +22,7 @@ Vue.component("annotation-app", {
             annotatedTurns: ["annotated"],
             annotationRate: '0%',
             readOnly:false,
+            autoSave:JSON.parse(mainApp.autoSave),
         }
     },
 
@@ -76,6 +77,7 @@ Vue.component("annotation-app", {
         // INPUT BOX EVENTS
         annotationAppEventBus.$on( "new_turn", this.append_new_turn );
         annotationAppEventBus.$on( "save_dialogue", this.save_dialogue );
+        annotationAppEventBus.$on( "change_auto_save", this.change_auto_save );
     },
 
     beforeDestroyed() {
@@ -106,6 +108,7 @@ Vue.component("annotation-app", {
             // INPUT BOX EVENTS
             annotationAppEventBus.$off( "new_turn", this.append_new_turn );
             annotationAppEventBus.$off( "save_dialogue", this.save_dialogue );
+            annotationAppEventBus.$off( "change_auto_save", this.change_auto_save );
         },
 
         init: function() {
@@ -201,6 +204,9 @@ Vue.component("annotation-app", {
         },
 
         id_updated_from_ids_list: function(event) {
+            if (((this.autoSave == 'true') || (this.autoSave == true)) && (this.allDataSaved != true)) {
+                this.save_dialogue();
+            }
             console.log("-----> Updating TurnId:")
             console.log(event);
             this.dCurrentId = event;
@@ -310,6 +316,11 @@ Vue.component("annotation-app", {
             }
         },
 
+        change_auto_save: function(value) {
+            this.autoSave = value;
+            databaseEventBus.$emit("change_option", "autoSave", value);
+        }
+
     },
 
     template:
@@ -325,6 +336,7 @@ Vue.component("annotation-app", {
                         v-bind:turns="dTransformedTurns"
                         v-bind:currentId="dCurrentId"
                         v-bind:metaTags="metaTags"
+                        v-bind:autoSave="autoSave"
                         v-bind:readOnly="readOnly">
         </dialogue-turns>
 
@@ -440,7 +452,7 @@ Vue.component('dialogue-turns',{
 
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turns","currentId", "primaryElementClass","metaTags", "readOnly"],
+    props : ["turns","currentId", "primaryElementClass","metaTags", "autoSave", "readOnly"],
 
     data: function() {
         return {
@@ -450,24 +462,34 @@ Vue.component('dialogue-turns',{
     },
 
     created() {
-        annotationAppEventBus.$on("change_width", this.change_width );
-        annotationAppEventBus.$on("change_chars", this.change_chars );
+        annotationAppEventBus.$on("change_option", this.change_option );
     },
 
     beforeDestroyed() {
-        annotationAppEventBus.$off("change_width", this.change_width );
-        annotationAppEventBus.$off("change_chars", this.change_chars );
+        annotationAppEventBus.$off("change_option", this.change_option );
     },
 
     methods: {
 
+        change_option: function(option,value) {
+            switch(option) {
+                case "change_width":
+                    this.change_width(value);
+                    databaseEventBus.$emit( "change_option", "turnWidth", value);
+                break;
+                case "change_chars":
+                    this.change_chars(value);
+                    databaseEventBus.$emit( "change_option", "maxChars", value);
+                break;
+            }
+            
+        },
+        
         change_width: function(event) {
-            mainApp.turnWidth = event;
             this.maxWidth = event;
             localStorage["turnWidth"] = event;
         },
         change_chars: function(event) {
-            mainApp.maxChars = event;
             this.maxChars = event;
             localStorage["maxChars"] = event;
         }
@@ -480,6 +502,7 @@ Vue.component('dialogue-turns',{
             <dialogue-meta
                        v-bind:metaTags="metaTags"
                        v-bind:primaryElementClass="primaryElementClass"
+                       v-bind:autoSave="autoSave"
                        v-bind:readOnly="readOnly">
             </dialogue-meta>
 
@@ -498,7 +521,7 @@ Vue.component('dialogue-turns',{
 Vue.component('dialogue-meta',{
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turn","currentId","myId", "primaryElementClass","metaTags", "readOnly"],
+    props : ["turn","currentId","myId", "primaryElementClass","metaTags", "autoSave", "readOnly"],
     
     data: function (){
         return {
@@ -515,14 +538,19 @@ Vue.component('dialogue-meta',{
             return this.currentId==this.myId;
         },
         update_id(){
-            annotationAppEventBus.$emit("update_turn_id", this.myId)
+            annotationAppEventBus.$emit("update_turn_id", this.myId);
         },
         resize_turn_width(newValue) {
-            annotationAppEventBus.$emit("change_width",newValue);
+            this.maxWidth = newValue;
+            annotationAppEventBus.$emit("change_option", "change_width", newValue);
         },
         change_max_chars(newValue) {
-            annotationAppEventBus.$emit("change_chars",newValue);
-        }
+            this.maxChars = newValue;
+            annotationAppEventBus.$emit("change_option", "change_chars", newValue);
+        },
+        auto_save_value(event) {
+            annotationAppEventBus.$emit("change_auto_save", event.target.checked);
+        },
     },
 
     directives: {
@@ -541,9 +569,9 @@ Vue.component('dialogue-meta',{
         <div v-if="readOnly != true" class="conf-turn-container" v-bind:style="{ maxWidth:maxWidth+'%' }">
             <h2>Annotation Preferences</h2>
             <div class="annotation-options">
-                <div class="max-chars-option">Scroll-bar after: <input type="number" v-model="maxChars" min="0" class="max-chars-input" v-on:change="change_max_chars(maxChars)"/> chars</div>
+                <div class="max-chars-option">Scroll-bar after: <input type="number" v-model="maxChars" min="0" class="max-chars-input" v-on:change="change_max_chars(maxChars)" /> chars</div>
                 <div class="turn-width-option">Turn Width: {{maxWidth}}%</div>
-                <div class="slot-coll-option">Slot collapsed: true</div>
+                <div class="slot-coll-option">Auto-save on turn changed: <input type="checkbox" v-model="autoSave" v-on:change="auto_save_value($event)" /></div>
             </div>
             <input type="range" min="60" max="98" v-model="maxWidth" v-on:change="resize_turn_width(maxWidth)" class="slider" style="width:100%">
         </div>
