@@ -213,6 +213,7 @@
     overflow:hidden;
 }
 .user-password input {
+    width:70%;
     color:#888;
     max-width: inherit;
 }
