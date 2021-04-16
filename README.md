@@ -32,10 +32,11 @@
 ## 0. Requirements
 
 In order to run MATILDA on Docker you will need a 64bit system because that's the minimum requirements for Docker.
-The server needs 60MB on the hard disk, plus the space needed for the database.
+If you wish to use MATILDA with a 32bit system you can just follow the Option B steps.
+In both cases server needs a minimum of 60MB on the hard disk, plus the space needed for the database.
 
 MATILDA is very light-weight. 
-Containerized with Docker MATILDA smoothly run on a system based on Intel Celeron J3355, a 2-core microprocessor dated 2016 created for entry level PCs, equipped with a 2GB RAM. During a significant processing peak induced with an upload the footprint did not exceed a few (2-3%) percent of hardware capacity.
+Containerized with Docker MATILDA smoothly run on a system based on Intel Celeron J3355, a 2-core microprocessor dated 2016 created for entry level PCs, equipped with a 2GB RAM. During a significant processing peak induced with an upload, the footprint did not exceed a few (2-3%) percent of hardware capacity.
 
 ## 1. Installation
 
