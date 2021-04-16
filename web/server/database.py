@@ -251,5 +251,3 @@ class LoginFuncs(object):
 		else:
 			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
 
-# DATABASE AND ADMIN ACCOUNT INIT
-LoginFuncs.start()

@@ -14,3 +14,4 @@ web/github
 web/github.pub
 web/server/LIDA_ANNOTATIONS/
 gunicorn_logs.txt
+web/server/error.log

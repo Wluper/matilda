@@ -8,6 +8,7 @@ import sys
 import json
 import copy
 import datetime
+import logging
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
 
@@ -40,9 +41,12 @@ MatildaApp = Flask(__name__,
 MatildaApp.config.from_object(__name__)
 CORS(MatildaApp)
 #set_main_path(path)
+#main modules
 dialogueFile = DialogueAnnotator(path)
 annotationFiles = MultiAnnotator(path)
 jsonConf = Configuration.conf["app"]
+#database and account init
+LoginFuncs.start()
 
 @MatildaApp.route('/')
 def welcome():
@@ -1441,6 +1445,8 @@ class Models:
 ##############
 # INIT
 ##############
+
+logging.basicConfig(filename='error.log', level=logging.DEBUG)
 
 if __name__ == "__main__":
     MatildaApp.run(port=jsonConf["port"],host=jsonConf["address"])
