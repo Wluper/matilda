@@ -45,7 +45,7 @@ class DatabaseManagement(object):
 		client.server_info()
 	except Exception as e: 
 		print(" *",e, "\n * Connecting Errror. Trying again with legacy configuration...")
-		conf["database"]["optional_uri"] = None;
+		conf["database"]["optional_uri"] = None
 		databaseURI = database_uri_compose(conf["database"])
 		client = MongoClient(databaseURI)
 
@@ -80,7 +80,6 @@ class DatabaseManagement(object):
 
 		#print(" * Searching in:",coll,"for key '",pairs)
 
-		entries = {}
 		documentLengthOnly = False
 
 		#adds restrictions to the search
@@ -132,9 +131,9 @@ class DatabaseManagement(object):
 		response = {"staus":"success"}
 		return response 
 
-	def updateDoc(doc_id, collection, fields):
+	def updateDoc(searchFields, collection, updateFields):
 
-		DatabaseManagement.selected(collection).update({ "id":doc_id }, { "$set": fields })
+		DatabaseManagement.selected(collection).update(searchFields, { "$set": updateFields })
 
 	def pullFromDoc(doc_id, collection, field):
 

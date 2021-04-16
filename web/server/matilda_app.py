@@ -210,7 +210,9 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
         error = None
         data  = request.get_json()
 
-        responseObject = dialogueFile.update_dialogue_name( user, id, data["id"])
+        dialogueFile.update_dialogue_name( user, id, data["id"])
+
+        responseObject = {"status":"success"}
 
     #dialogueFile.save(user)
     return jsonify( responseObject )
@@ -238,7 +240,7 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
 
         Configuration.validate_dialogue( annotationStyle, data )
 
-        DatabaseManagement.updateDoc(fileName, "annotated_collections", {"annotator":user,"document"+"."+id:data})
+        DatabaseManagement.updateDoc({"id":fileName, "annotator":user}, "annotated_collections", {"document"+"."+id:data})
 
         try:
             dialogueFile.update_dialogue(user, id=id, newDialogue=data )
@@ -571,13 +573,13 @@ def admin_dialogues_resource(id=None, collection=None):
 
         if request.method == "PUT":
 
-            #    
+            currentResponseObject = {}
             annotationStyle = retrieve_annotation_style_name(collection)
 
             data = request.get_json()
             data = Configuration.validate_dialogue( annotationStyle, data )
 
-            if isinstance(dialogue, str):
+            if isinstance(data, str):
                 currentResponseObject["error"] = data
                 currentResponseObject["status"] = "error"
                 return jsonify( currentResponseObject )
@@ -676,7 +678,7 @@ def handle_errors_resource(id=None, collection=None):
             annotationFiles.annotatorErrors[dialogueId][errorId] = error
             annotationFiles.annotatorErrorsMeta[dialogueId][errorId] = meta
 
-            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
+            DatabaseManagement.updateDoc({"id":collectionId}, "dialogues_collections", { "errors": { "errorsList":annotationFiles.annotatorErrors, "errorsMeta":annotationFiles.annotatorErrorsMeta} })
 
     else:
 
@@ -722,7 +724,7 @@ def restore_errorsList(collectionId):
             for error in errorMetaDict["errors"]:
                 __update_gold_from_error_id(dialogue, error)
 
-            DatabaseManagement.updateDoc(collectionId, "dialogues_collections", { 
+            DatabaseManagement.updateDoc({"id":collectionId}, "dialogues_collections", { 
                 "errors": { 
                     "errorsList":annotationFiles.annotatorErrors, 
                     "errorsMeta":annotationFiles.annotatorErrorsMeta
@@ -829,7 +831,7 @@ def handle_users(user=None, userPass=None, email=None):
 
         params = request.get_json()
 
-        responseObject = DatabaseManagement.updateDoc(params["userName"], "users", params)
+        responseObject = DatabaseManagement.updateDoc({"id":params["userName"]}, "users", params)
 
     return jsonify(responseObject)
 
@@ -956,12 +958,12 @@ def handle_post_of_collections(mode, destination, id=None):
 
     elif mode == "update":
 
-        response = DatabaseManagement.updateDoc(id, destination, values)
+        response = DatabaseManagement.updateDoc({"id":id}, destination, values)
 
     elif mode == "multiple":
 
         for line in values:
-            DatabaseManagement.updateDoc(line, destination, {"assignedTo":values[line]})
+            DatabaseManagement.updateDoc({"id":line}, destination, {"assignedTo":values[line]})
             response.update({line:values[line]})
 
     elif mode == "pull":
@@ -971,7 +973,6 @@ def handle_post_of_collections(mode, destination, id=None):
     return jsonify ( response )
 
 @MatildaApp.route('/login',methods=['POST'])
-@MatildaApp.route('/login/<id>',methods=['PUT'])
 def handle_login(id=None):
     """
     Check if user login is permitted
@@ -988,9 +989,6 @@ def handle_login(id=None):
         if allowed["status"] == "success":
             dialogueFile.create_userspace(username)
         responseObject = allowed
-
-    if request.method == "PUT":
-        responseObject = LoginFuncs.create(id)
 
     return jsonify(responseObject)
 
@@ -1248,7 +1246,7 @@ def __update_gold_from_error_id(dialogueId, error, collectionId=None):
     #annotationFiles.save()
 
     if collectionId: 
-        DatabaseManagement.updateDoc(collectionId, "dialogues_collections", {"gold":annotationFiles.get_dialogues()})
+        DatabaseManagement.updateDoc({"id":collectionId}, "dialogues_collections", {"gold":annotationFiles.get_dialogues()})
 
 
 def retrieve_annotation_style_name(collection):
