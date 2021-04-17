@@ -267,8 +267,7 @@ var mainApp = new Vue({
         this.status = "admin-panel";
     },
 
-    tabula_rasa: function() {
-        alert("Server rebooted. Please log-in again");
+    force_logout: function() {
         databaseEventBus.$emit( "collection_active", null );
         adminEventBus.$emit("clean_active_user");
         window.onbeforeunload = null;

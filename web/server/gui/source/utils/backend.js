@@ -22,6 +22,7 @@ async function annotate_query(query){
     } catch (error) {
 
         console.log(error);
+        alert(error);
 
     }
 
@@ -117,6 +118,13 @@ async function get_annotation_style_async(collection,id,supervision){
         
         var response = await axios.get(apiLink)
 
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
+
         dialogueStyle = response.data
         console.log("============= ANNOTATION CLASSES ==============")
         console.log(dialogueStyle)
@@ -148,7 +156,7 @@ async function get_registered_annotation_styles(){
     } catch (error) {
 
         console.log(error);
-
+        alert(error);
     }
 
 };
@@ -198,6 +206,13 @@ async function get_all_dialogue_ids_async(admin) {
   try {
 
     var response = await axios.get(apiLink)
+
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     dialoguesList = response.data
     console.log("=========== ALL DIALOGUE METADATA LIST ===========")
@@ -314,7 +329,8 @@ async function get_single_dialogue_async(id, collection, supervision) {
     } catch(error) {
 
         console.log(error)
-
+        alert(error);
+        //logout?
     }
 
 }
@@ -338,7 +354,7 @@ async function post_empty_dialogue(collection) {
     } catch(error) {
 
         console.log(error);
-
+        alert(error);
     }
 
 }
@@ -357,6 +373,7 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
     } catch(error) {
 
         console.log(error);
+        alert(error);
     }
 }
 
@@ -376,6 +393,7 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
     } catch(error) {
 
         console.log(error);
+        alert(error);
 
     }
 
@@ -390,11 +408,20 @@ async function put_single_dialogue_async(event, dialogueId, dTurns, collection) 
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
+
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
+
         return status
 
     } catch(error) {
 
         console.log(error);
+        alert(error)
 
     }
 
@@ -411,7 +438,7 @@ async function del_single_dialogue_async(dialogueId) {
     } catch(error) {
 
         console.log(error);
-
+        alert(error)
     }
 
 };
@@ -721,29 +748,12 @@ async function get_collections_ids_async(DBcollection) {
 
     console.log(response)
 
-    entriesList = response.data
-
-    return entriesList
-
-  } catch(error) {
-
-    console.log(error);
-    alert(guiMessages.selected.lida.connectionError)
-
-  }
-}
-
-async function get_collections_async(DBcollection) {
-
-  entriesList = []
-
-  const apiLink = API_BASE+`/collections/${DBcollection}`
-
-  try {
-
-    var response = await axios.get(apiLink)
-
-    console.log(response)
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     entriesList = response.data
 
@@ -759,16 +769,26 @@ async function get_collections_async(DBcollection) {
 
 async function get_specific_collections(DBcollection,fields,projection) {
 
-  entriesList = []
+  let entriesList = []
 
   const apiLink = API_BASE+`/collections/${DBcollection}`
 
   try {
 
-    if (projection == undefined)
+    if (projection == undefined) {
         var response = await axios.post(apiLink, {"search":JSON.stringify(fields)})
-    else
+    } else {
         var response = await axios.post(apiLink, {"search":JSON.stringify(fields), "projection":JSON.stringify(projection)})
+    }
+    
+    console.log(response)
+
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     entriesList = response.data
 
@@ -879,6 +899,7 @@ async function get_scores_async(collection){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -898,6 +919,7 @@ async function get_errors_async(collection,dialogueId){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -916,6 +938,7 @@ async function get_collection_errors_async(collectionId){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -933,6 +956,7 @@ async function put_error_async(listOfErrors){
     } catch (error) {
 
         console.log(error);
+        alert(error)
         return false
     }
 }
@@ -1022,12 +1046,21 @@ async function get_all_users(){
     try {
         var response = await axios.get( apiLink )
 
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
+
         users = response.data
         return users
 
     } catch(error) {
 
         console.log(error);
+        alert(error)
+
     }
 }
 
@@ -1050,6 +1083,7 @@ async function create_user(parameters,update=false){
     } catch(error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -1099,7 +1133,6 @@ backend =
     remove_from_collection_async                : remove_from_collection_async, 
 
     get_collections_ids_async                   : get_collections_ids_async,
-    get_collections_async                       : get_collections_async,
     get_specific_collections                    : get_specific_collections,
 
     get_scores_async                            : get_scores_async,

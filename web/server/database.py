@@ -14,7 +14,7 @@ import functools
 import ast
 
 # == Flask ==
-from flask import Flask, jsonify
+from flask import Flask, jsonify, session
 from flask_cors import CORS
 
 # == Pymongo ==
@@ -221,6 +221,8 @@ class DatabaseManagement(object):
 
 class LoginFuncs(object):
 
+	loggedUser = {}
+
 	administratorDefault = {
 		"id":"admin",
 		"userName":"admin",
@@ -240,9 +242,25 @@ class LoginFuncs(object):
 		if userDetails != None:
 			if userDetails["userName"] == userID:
 				if userDetails["password"] == userPass:
+					session['userName'] = userID
+					session['token'] = os.urandom(6)
+					LoginFuncs.loggedUser[userID] = session['token']
 					response = { "status":"success", "role":userDetails["role"] }
 
 		return response
+
+	def logOut(userID):
+		session.clear()
+		return { "status": "done" }
+
+	def checkSession():
+		try:
+			if session['userName']:
+				if LoginFuncs.loggedUser[session['userName']] != session['token']:
+					return False
+		except:
+			return False
+		return True
 
 	def start():
 		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:

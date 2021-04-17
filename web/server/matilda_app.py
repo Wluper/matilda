@@ -13,7 +13,7 @@ from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
 
 # == Flask ==
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session
 from flask_cors import CORS
 
 # == Local ==
@@ -127,7 +127,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
         #normalize name
         if ".json" in annotationStyle:
-            annotationStyle = annotationStyle.replace(".json", "");
+            annotationStyle = annotationStyle.replace(".json", "")
 
         """
         #check for file name conflicts
@@ -1446,7 +1446,22 @@ class Models:
 # INIT
 ##############
 
-logging.basicConfig(filename='error.log', level=logging.DEBUG)
+@MatildaApp.before_request
+def checkSession():
+    requestedUri = request.path
+    if (requestedUri != "/" 
+    and requestedUri != "/login" 
+    and requestedUri != "/favicon.ico"
+    and requestedUri.split("/")[1] != "assets"
+    and requestedUri.split("/")[1] != "source"):
+        check = LoginFuncs.checkSession()
+        if check == False:
+            print("Trying to access without login...")
+            return {"status":"logout", "error":"Server rebooted. You need to log-in again."}
+
+#logging.basicConfig(filename='error.log', level=logging.DEBUG)
+
+MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 
 if __name__ == "__main__":
     MatildaApp.run(port=jsonConf["port"],host=jsonConf["address"])
