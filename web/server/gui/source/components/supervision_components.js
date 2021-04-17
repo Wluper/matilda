@@ -196,7 +196,7 @@ Vue.component("supervision-collection", {
          );
         console.log(this.allAnnotators);
         // TO DO:
-        // divide between produced annotations, 
+        // distinguish between produced annotations, 
         // annotations from dis-assigned annotators,
         // annotations not yet produced.
       },
@@ -206,7 +206,30 @@ Vue.component("supervision-collection", {
             .then( (response) => {
                console.log("==== LOADING ANNOTATIONS FOR SELECTED USER ====");
                adminEventBus.$emit("annotator_selected",clickedAnnotator);
-            });
+            }
+         );
+      },
+
+      add_annotated: function(doc) {
+         backend.new_annotated_collection_async(this.selectedCollection, {"annotator":"upload"}, doc)
+            .then( (response) => {
+               console.log(response);
+               console.log("==== REFRESHING LIST ====");
+               this.get_all_annotated_collections(this.selectedCollection);
+            }
+         );
+      },
+
+      delete_annotated: function(id, annotator) {
+         if (confirm(guiMessages.selected.admin.deleteConfirm)) {
+            backend.del_db_entry_async({"_id":id, "annotator":annotator}, "annotated_collections")
+               .then((response) => {
+                  console.log(response);
+                  console.log("==== REFRESHING LIST ====");
+                  this.get_all_annotated_collections(this.selectedCollection);
+               }
+            );
+         }
       },
 
       freeze(clicked, doneValue) {
@@ -215,11 +238,32 @@ Vue.component("supervision-collection", {
             if (doneValue != true)
                done = true;
             backend.update_collection_fields(this.selectedCollection, {"done":done}, clicked)
-            .then((response) => {
-               this.get_all_annotated_collections(this.selectedCollection);
+               .then((response) => {
+                  console.log("=== NEW ANNOTATION LOADED CORRECTLY ==== ")
+                  this.get_all_annotated_collections(this.selectedCollection);
             });
          }
       },
+
+      open_file(event){
+         let file = event.target.files[0];
+         this.handle_file(file);
+     },
+ 
+     handle_file(file) {
+         let jsonType = /application.json/;
+         if (file.type.match(jsonType)) {
+            console.log('---- HANDLING LOADED JSON FILE ----');
+            let reader = new FileReader();
+            reader.onload = (event) => {
+               console.log('THE READER VALUE', reader);
+               this.add_annotated(reader.result);
+            }
+            reader.readAsText(file);
+         } else {
+            alert('Only .json files are supported.')
+         }
+      }
    },
 
    template:
@@ -228,12 +272,19 @@ Vue.component("supervision-collection", {
             <li id="annotated_list">
                <h2 class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
                <div class="entry-list-single-item-container" v-for="name in annotatedCollections">
+
+               <div class="supervisor-btn-container">
                   <div v-if="name.done" class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
                      {{guiMessages.selected.admin.button_unfreeze}}
                   </div>
                   <div v-else class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
                      {{guiMessages.selected.admin.button_freeze}}
                   </div>
+                  <div class="del-dialogue-button" v-on:click="delete_annotated(name._id, name.annotator)">
+                     {{guiMessages.selected.lida.button_delete}}
+                 </div>
+               </div>
+
                   <div class="entry-info" v-on:click="clicked_annotated(name.annotator)">
                      <div class="entry-id">
                         <span>Annotator:</span> {{name.annotator}}
@@ -255,6 +306,16 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
+         <input type="file"
+            id="fileInput"
+            name="fileInput"
+            accept=".txt, .json"
+         v-on:change="open_file($event)">
+         <label for="fileInput"
+            id="fileInputLabel"
+            class="btn btn-sm btn-primary">
+            Load an annotated collection
+         </label>
       </div>
    `
 });

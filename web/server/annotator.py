@@ -227,7 +227,7 @@ class DialogueAnnotator(object):
         except:
             self.set_dialogues(newName)
 
-        oldFileName = self.__fileName
+        #oldFileName = self.__fileName
         self.__fileName = newName
 
         #self.save(newName)

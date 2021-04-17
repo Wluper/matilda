@@ -164,7 +164,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
                 Configuration.configDict[annotationStyle+".json"] = json.load(style_file)  
 
         except Exception as ex:
-            responseObject = { "status":"fail", "error":Exception }
+            responseObject = { "status":"fail", "error":ex }
             return responseObject
 
         responseObject["status"] = "done"
@@ -377,7 +377,8 @@ def handle_name_resource(user):
 
 @MatildaApp.route('/database', methods=['GET'])
 @MatildaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
-@MatildaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST','DELETE'])
+@MatildaApp.route('/database/<DBcollection>',methods=['POST'])
+@MatildaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST'])
 def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None):
     """
     GET - Gets the dialogues id in the database collection for the user
@@ -416,8 +417,12 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
         #if request.method == "POST":
             #responseObject = DatabaseManagement.getUserEntry(id)
 
-        if request.method == "DELETE":
-            responseObject.update( DatabaseManagement.deleteDoc(DBcollection, id ) )
+    elif ((not id) and (request.method == "POST")):
+        
+        pair = request.get_json()
+        pair = json.loads(pair["search"])
+
+        responseObject.update( DatabaseManagement.deleteDoc(DBcollection, pair) )
 
     #else:
         #responseObject = DatabaseManagement.getDatabaseIds()
@@ -604,33 +609,6 @@ def admin_dialogues_resource(id=None, collection=None):
     annotationFiles.save()
     return jsonify( responseObject )
 
-@MatildaApp.route('/dialogues_import', methods=['POST'])
-def admin_post_of_new_dialogues():
-    """
-    takes care of posting new dialogues
-    """
-    responseObject = {}
-
-    dialoguesData = request.get_json()
-
-    stringListOrJsonDict = dialoguesData["payload"]
-
-    optionalFileName = dialoguesData["name"]
-
-    if isinstance(stringListOrJsonDict, str):
-        responseObject["error"]  = "JSON parsing failed"
-        responseObject["status"] = "error"
-
-    elif not stringListOrJsonDict:
-        responseObject = annotationFiles.add_new_dialogue()
-
-    elif isinstance(stringListOrJsonDict, list):
-        responseObject = admin__add_new_dialogues_from_string_lists(responseObject, dialogueList=stringListOrJsonDict)
-
-    elif isinstance(stringListOrJsonDict, dict):
-        responseObject = admin__add_new_dialogues_from_json_dict(responseObject, dialogueDict=stringListOrJsonDict, fileName=optionalFileName)
-
-    return responseObject
 
 @MatildaApp.route('/errors', methods=['PUT'])
 @MatildaApp.route('/errors/<collection>/<id>', methods=['GET'])
@@ -913,52 +891,45 @@ def handle_post_of_collections(mode, destination, id=None):
 
     if mode == "new":
 
-        #adds necessary fields
-        values["gold"] = {}
-        values["errors"] = {}
         values["lastUpdate"] = datetime.datetime.utcnow()
         values["document"] = json.loads(values["document"])
 
-        #validation
-        if values["annotationStyle"] != "":
-            try: 
-                Configuration.configDict[values["annotationStyle"]]
-                annotationStyle = values["annotationStyle"]
-            except Exception as ex:
-                response = {"status":"error","error":"Impossible to load provided annotation style. "+ex}
-                return jsonify ( response )
-        else:
-            annotationStyle = Configuration.annotation_styles[0]
-            values["annotationStyle"] = annotationStyle
+        if destination == "dialogues_collections":
+            #adds necessary fields
+            values["gold"] = {}
+            values["errors"] = {}
+            #validation
+            if values["annotationStyle"] != "":
+                try: 
+                    Configuration.configDict[values["annotationStyle"]]
+                    annotationStyle = values["annotationStyle"]
+                except Exception as ex:
+                    response = {"status":"error","error":"Impossible to load provided annotation style. "+ex}
+                    return jsonify ( response )
+            else:
+                annotationStyle = Configuration.annotation_styles[0]
+                values["annotationStyle"] = annotationStyle
 
-        #new model
-        if (type(values["document"])) == list:
-            rebuiltDocument = {}
-            for document in values["document"]:
-                for dialogueName, dialogue in document.items():
-                    #dialogue = convert_to_format(dialogue)
-                    validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
-                    if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                        print("Validation for",dialogueName," failed with "+annotationStyle)
-                        response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
-                    return jsonify( response )
-                    rebuiltDocument[dialogueName] = dialogue
-            values["document"] = rebuiltDocument
-        else:
-            for dialogueName, dialogue in values["document"].items():
-                validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
-                if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                    print("Validation for",dialogueName," failed with "+annotationStyle)
-                    response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
-                    return jsonify( response )
+            #check for duplicate documents 
+            check = DatabaseManagement.readDatabase(destination, { "id":id })
 
-        #check for same id    
-        check = DatabaseManagement.readDatabase("dialogues_collections", { "id":id })
+        #annotated collections
+        elif destination == "annotated_collections":
+            values["id"] = id
+            values["fromCollection"] = id
+            values["done"] = False
+            values["status"] = "0%"
+
+            annotator = values["annotator"]
+            check = DatabaseManagement.readDatabase(destination, { "id":id, "annotator":annotator })
 
         if (len(check) == 0):
             response = DatabaseManagement.createDoc(id, destination, values)
         else:
-            response = {"status":"error","error":"collection id already exists"}
+            if destination == "annotated_collections":
+                response = {"status":"error","error":"A collection with the same id already exists. Operation cancelled"}
+            else:
+                response = {"status":"error","error":"The selected annotator "+annotator+" already has a document for this collection "+id+". Operation cancelled."}
 
     elif mode == "update":
 
@@ -996,24 +967,41 @@ def handle_login(id=None):
 
     return jsonify(responseObject)
 
-@MatildaApp.route('/annotations_import/<collection_id>',methods=['GET'])
+@MatildaApp.route('/interannotation_import/<collection_id>',methods=['GET'])
+@MatildaApp.route('/interannotation_import/<collection_id>',methods=['POST'])
 def handle_annotations_import(collection_id):
 
-    responseObject = {"status":"fail"}
+    responseObject = {}
 
-    collections = DatabaseManagement.readDatabase("annotated_collections", {"id":collection_id})
+    if request.method == "POST":
 
-    if collections != []:
-        if collections[0]["document"]:
-            for collection in collections:
-                admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection_id, collection["annotator"])
+        dialoguesData = request.get_json()
 
-            responseObject = {"status":"success", "imported":collections}
+        stringListOrJsonDict = dialoguesData["payload"]
+
+        try:
+            responseObject = admin__add_new_dialogues_from_json_dict(responseObject, stringListOrJsonDict, collection_id, "uploaded")
+        except:
+            responseObject = {"status": "error", "error":"File format is incorrect. Please, check your file."}
+            return responseObject
+
+        return responseObject
+
+    else:
+        responseObject = {"status":"fail"}
+
+        collections = DatabaseManagement.readDatabase("annotated_collections", {"id":collection_id})
+
+        if collections != []:
+            if collections[0]["document"]:
+                for collection in collections:
+                    admin__add_new_dialogues_from_json_dict(responseObject, collection["document"], collection_id, collection["annotator"])
+
+                responseObject = {"status":"success", "imported":collections}
             
     return jsonify(responseObject)
 
-
-
+    
 #################################################
 # INDEX FUNCTIONS
 #################################################

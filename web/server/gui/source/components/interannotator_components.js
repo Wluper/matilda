@@ -89,7 +89,7 @@ Vue.component("interannotator-view", {
         backend.del_all_dialogues_async("admin")
             .then( (response) => {
                 console.log(response);
-                backend.admin_import_all_annotations(clickedCollection)
+                backend.admin_import_for_interannotation(clickedCollection)
                     .then( (response) => {
                         console.log("===== LOADING ANNOTATED COLLECTIONS FOR",clickedCollection," =====");
                         console.log(response);
@@ -128,8 +128,7 @@ Vue.component("interannotator-view", {
   `
   <div class="all-dialogues-container" id="listedDialoguesContainer">
 
-    <agreement-modal
-        v-if="showAgreement" @close="showAgreement = false">
+    <agreement-modal v-if="showAgreement" @close="showAgreement = false">
     </agreement-modal>
 
     <div class="dialogue-list-title-container">
@@ -349,13 +348,18 @@ Vue.component("interannotator-app", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                backend.import_new_dialogue_from_json_string_async(text, file.name)
+                backend.admin_import_for_interannotation(this.displayingCollection, text)
                     .then( (response) => {
-
-                        if ('error' in response.data) {
+                        if (response.data["error"] != undefined) {
                             alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
                         } else {
-                            this.getAllDialogueIdsFromServer();
+                            backend.get_collection_errors_async(this.displayingCollection)
+                            .then( (response) => {
+                                console.log(response);
+                                this.get_dialogues_with_errors(response);
+                                //this.errorList = response.errors
+                                //this.metaDataList = response.meta;
+                          });
                         }
 
                     });
@@ -435,6 +439,16 @@ Vue.component("interannotator-app", {
         <h2 class="list-title">{{guiMessages.selected.admin.dataItems}}</h2>
         <button class="btn btn-sm button-title" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
         <button class="help-button btn btn-sm button-title" style="margin-right:5px;" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
+        <input type="file"
+            id="fileInput"
+            name="fileInput"
+            accept=".txt, .json"
+        v-on:change="open_file($event)">
+        <label for="fileInput"
+            id="fileInputLabel"
+            class="btn btn-sm button-title">
+            {{ guiMessages.selected.admin.button_upload }}
+        </label>
     <ul class="dialogue-list">
 
       <li class="int-listed-dialogue"

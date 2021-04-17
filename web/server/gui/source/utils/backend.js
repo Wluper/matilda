@@ -630,37 +630,22 @@ async function update_collection_fields(activeColl,fields, annotator) {
     }
 }
 
-async function del_db_entry_async(entryId, collection) {
+async function del_db_entry_async(pairs, collectionDB) {
 
-    console.log("DELETING",entryId);
+    console.log("DELETING...");
 
-    if (collection == undefined) {
-        var apiLink = API_BASE+`/database/${entryId}`;
+    var apiLink = API_BASE+`/database/${collectionDB}`;
 
-        try {
+    try {
 
-            var response = await axios.delete( apiLink );
-            console.log('---- RESPONSE TO DEL ----', response);
+        var response = await axios.post( apiLink, {"search":JSON.stringify(pairs)} );
+        console.log('---- RESPONSE TO DEL ----', response);
+            
+        return response
 
-        } catch(error) {
+    } catch(error) {
 
-            console.log(error);
-        }
-    
-    } else {
-
-        var apiLink = API_BASE+`/database/${entryId}/${collection}`;
-
-        try {
-
-            var response = await axios.delete( apiLink );
-            console.log('---- RESPONSE TO DEL ----', response);
-            return response
-
-        } catch(error) {
-
-            console.log(error);
-        }
+        console.log(error);
     }
 }
 
@@ -841,6 +826,32 @@ async function new_collection_async(id, params, doc) {
     return response
 }
 
+async function new_annotated_collection_async(id, params, doc) {
+
+    params["document"] = doc
+
+    DBcollection = "annotated_collections"
+
+    const apiLink = API_BASE+`/new/collection/${DBcollection}/${id}`
+
+    try {
+
+        response = await axios.post(apiLink, params)
+
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+        }
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Error. This could be caused by a server error or a wrong character in your collection file")
+        response = error 
+    }
+
+    return response
+}
+
 async function update_collection_async(id, DBcollection, params) {
 
     const apiLink = API_BASE+`/update/collection/${DBcollection}/${id}`
@@ -980,13 +991,17 @@ async function admin_post_empty_dialogue() {
 }
 */
 
-async function admin_import_all_annotations(collection) {
+async function admin_import_for_interannotation(collection, newFile=undefined) {
 
-    var apiLink = API_BASE+`/annotations_import/${collection}`
+    var apiLink = API_BASE+`/interannotation_import/${collection}`
 
     try {
 
-        var response = await axios.get( apiLink )
+        if (newFile == undefined)
+            var response = await axios.get( apiLink )
+        else
+            var response = await axios.post( apiLink, { payload:JSON.parse(newFile) } )
+
         console.log('---- RESPONSE TO POST DATA ----', response);
         return response;
 
@@ -1012,29 +1027,6 @@ async function import_new_dialogues_from_string_lists_async(stringLists) {
         console.log(error);
     }
     return false;
-}
-
-
-async function import_new_dialogue_from_json_string_async(jsonString, fileName=null) {
-
-    fileName = fileName.split(".")[0]
-
-    var apiLink = API_BASE+"/dialogues_import"
-
-    try {
-
-        var response = await axios.post( apiLink, { payload:JSON.parse(jsonString), name:fileName } )
-
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
-
-        return response
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
 }
 
 async function get_all_users(){
@@ -1128,6 +1120,7 @@ backend =
     create_user                                 : create_user,
 
     new_collection_async                        : new_collection_async,
+    new_annotated_collection_async              : new_annotated_collection_async,
     update_collection_async                     : update_collection_async,
     update_multiple_collections_async           : update_multiple_collections_async,
     remove_from_collection_async                : remove_from_collection_async, 
@@ -1141,9 +1134,8 @@ backend =
     put_error_async                             : put_error_async,
 
     supervision                                  : supervision,
-    admin_import_all_annotations                 : admin_import_all_annotations,
-    import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,
-    import_new_dialogue_from_json_string_async   : import_new_dialogue_from_json_string_async
+    admin_import_for_interannotation             : admin_import_for_interannotation,
+    import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async
 }
 
 

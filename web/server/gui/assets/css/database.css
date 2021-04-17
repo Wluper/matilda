@@ -689,6 +689,32 @@ input[type="password"]:hover {
     cursor:pointer;
 }
 
+.supervisor-btn-container {
+    grid-template:
+    [row1-start] "del" 1fr [row1-end]
+    [row2-start] "blo" 1fr [row2-end] / 1fr;
+    display: grid;
+    margin-top: 8px;
+}
+
+.supervisor-btn-container .del-dialogue-button {
+    width: 87%;
+    height: 74%;
+    margin-top:0px;
+    font-size:12px;
+}
+
+.supervisor-btn-container .del-dialogue-button:first-of-type {
+    grid-area:blo;
+    border: 1px solid #259af7;
+    color: #259af7;
+}
+
+.supervisor-btn-container .del-dialogue-button:first-of-type:hover {
+    color:white;
+    background-color: #259af7;
+}
+
 .form-anno input {
     border:1px solid rgba(0,0,0,0.1);
 }

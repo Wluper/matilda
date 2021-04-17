@@ -67,7 +67,7 @@ Vue.component("users-view", {
                     alert(guiMessages.selected.admin.cantDeleteAdmin)
                     return
                 }
-                backend.del_db_entry_async(name,"users")
+                backend.del_db_entry_async({"id":name},"users")
                     .then( (response) => {
                         console.log(response);
                         if (response.data.status == "success") {

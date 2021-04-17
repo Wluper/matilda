@@ -118,7 +118,7 @@ Vue.component("datamanagement-view", {
             event.stopPropagation();
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
-                backend.del_db_entry_async(clickedEntry, "dialogues_collections")
+                backend.del_db_entry_async({"id":clickedEntry}, "dialogues_collections")
                     .then( (response) => {
                         databaseEventBus.$emit('collections_changed');
                     });

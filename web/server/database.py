@@ -114,11 +114,14 @@ class DatabaseManagement(object):
 
 		return responseObject
 
-	def deleteDoc(collection, id):
+	def deleteDoc(collection, pair):
 
 		#delete a database document by id
 
-		DatabaseManagement.selected(collection).delete_one({"id":id})
+		if "_id" in pair:
+			pair["_id"] = ObjectId(pair["_id"])
+
+		DatabaseManagement.selected(collection).delete_one(pair)
 
 		responseObject = { "status":"success" }
 		return responseObject
