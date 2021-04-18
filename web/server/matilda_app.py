@@ -890,7 +890,7 @@ def handle_post_of_collections(mode, destination, id=None):
     values = request.get_json()
 
     if mode == "new":
-
+        
         values["lastUpdate"] = datetime.datetime.utcnow()
         values["document"] = json.loads(values["document"])
 
@@ -898,7 +898,7 @@ def handle_post_of_collections(mode, destination, id=None):
             #adds necessary fields
             values["gold"] = {}
             values["errors"] = {}
-            #validation
+            #check if annotation style exists
             if values["annotationStyle"] != "":
                 try: 
                     Configuration.configDict[values["annotationStyle"]]
@@ -919,17 +919,30 @@ def handle_post_of_collections(mode, destination, id=None):
             values["fromCollection"] = id
             values["done"] = False
             values["status"] = "0%"
-
             annotator = values["annotator"]
+
             check = DatabaseManagement.readDatabase(destination, { "id":id, "annotator":annotator })
+
+            #getting annotation style from collection id
+            annotationStyle = retrieve_annotation_style_name(id)
+
+        #validation
+        for dialogueName, dialogue in values["document"].items():
+            validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
+            if ((type(validation) is str) and (validation.startswith("ERROR"))):
+                print("Validation for",dialogueName," failed with "+annotationStyle)
+                response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
+                return jsonify( response )
 
         if (len(check) == 0):
             response = DatabaseManagement.createDoc(id, destination, values)
         else:
-            if destination == "annotated_collections":
+            if destination == "dialogues_annotations":
                 response = {"status":"error","error":"A collection with the same id already exists. Operation cancelled"}
             else:
                 response = {"status":"error","error":"The selected annotator "+annotator+" already has a document for this collection "+id+". Operation cancelled."}
+
+        return jsonify( response )
 
     elif mode == "update":
 

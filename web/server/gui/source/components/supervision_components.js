@@ -40,11 +40,10 @@ Vue.component("supervision-view", {
             this.mode = "supervision-collections-list";
             this.selectedCollection = "";
          } else {
-			try {
-			   event.stopPropagation();
-	        } catch {
-			   console.log("no event that can propagates");
-		    } 
+            adminEventBus.$off("annotator_selected", this.clicked_annotator);
+            adminEventBus.$off("dialogue_selected", this.load_in_dialogue_in_supervision);
+            adminEventBus.$off("supervision_go_back_to_dialogues", this.clear_view);
+            annotationAppEventBus.$off("go_back", this.clear_view );
             adminEventBus.$emit("go_back");
          }
       },
@@ -175,12 +174,21 @@ Vue.component("supervision-collection", {
    data() {
       return {
          annotatedCollections: [],
-         guiMessages
+         guiMessages,
+         uploading:false,
       }
    },
 
    mounted () {
       this.get_all_annotated_collections(this.selectedCollection);
+   },
+
+   created () {
+      adminEventBus.$on("refresh_list", this.get_all_annotated_collections);
+   },
+
+   beforeDestroyed () {
+      adminEventBus.$off("refresh_list", this.get_all_annotated_collections);
    },
 
    methods: {
@@ -210,16 +218,6 @@ Vue.component("supervision-collection", {
          );
       },
 
-      add_annotated: function(doc) {
-         backend.new_annotated_collection_async(this.selectedCollection, {"annotator":"upload"}, doc)
-            .then( (response) => {
-               console.log(response);
-               console.log("==== REFRESHING LIST ====");
-               this.get_all_annotated_collections(this.selectedCollection);
-            }
-         );
-      },
-
       delete_annotated: function(id, annotator) {
          if (confirm(guiMessages.selected.admin.deleteConfirm)) {
             backend.del_db_entry_async({"_id":id, "annotator":annotator}, "annotated_collections")
@@ -244,26 +242,6 @@ Vue.component("supervision-collection", {
             });
          }
       },
-
-      open_file(event){
-         let file = event.target.files[0];
-         this.handle_file(file);
-     },
- 
-     handle_file(file) {
-         let jsonType = /application.json/;
-         if (file.type.match(jsonType)) {
-            console.log('---- HANDLING LOADED JSON FILE ----');
-            let reader = new FileReader();
-            reader.onload = (event) => {
-               console.log('THE READER VALUE', reader);
-               this.add_annotated(reader.result);
-            }
-            reader.readAsText(file);
-         } else {
-            alert('Only .json files are supported.')
-         }
-      }
    },
 
    template:
@@ -306,19 +284,176 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
-         <input type="file"
-            id="fileInput"
-            name="fileInput"
-            accept=".txt, .json"
-         v-on:change="open_file($event)">
-         <label for="fileInput"
-            id="fileInputLabel"
-            class="btn btn-sm btn-primary">
-            Load an annotated collection
-         </label>
+         <button type="button" class="btn btn-sm btn-primary" v-on:click="uploading = true">Load an annotated collection</button>
+         <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>
    `
 });
+
+Vue.component('supervisor-upload-modal', {
+
+   props: ["selectedCollection"],
+
+   data() { 
+       return {
+           guiMessages,
+           assignedTo:"",
+           allUsers:[],
+           newDocument: {},
+           newDocumentName: "",
+        }
+   },
+
+   mounted () {
+       this.init()
+   },
+   methods:{
+       init : function() {
+         this.get_all_users();
+       },
+
+       get_all_users() {
+         backend.get_all_users()
+             .then( (response) => {
+                 console.log();
+                 this.allUsers = response;
+                 console.log(this.allUsers);
+         });
+      },
+
+      close() {
+         this.$emit('close');
+      },
+
+      open_file(event){
+         let file = event.target.files[0];
+         this.handle_file(file);
+     },
+
+     handle_file(file) {
+         let jsonType = /application.json/;
+         if (file.type.match(jsonType)) {
+            console.log('---- HANDLING LOADED JSON FILE ----');
+            let reader = new FileReader();
+            reader.onload = (event) => {
+               console.log('THE READER VALUE', reader);
+               this.newDocument = reader.result;
+               this.newDocumentName = file.name;
+            }
+            reader.readAsText(file);
+         } else {
+            alert('Only .json files are supported.')
+         }
+      },
+
+      add_annotated: function() {
+         //check for empty fields
+         if (this.newDocument == {}) {
+            alert("You didn't upload anything. Please upload a json file to load.");
+            return;
+         } else if (this.assignedTo == "") {
+            alert("An annotated collection is always related to an annotator. Please select the annotator to assign it.");
+            return;
+         }
+         //check for format errors
+         try {
+            var check = JSON.parse(this.newDocument);
+         } catch (e) {
+            alert("Your json file format is wrong. Please, check your json file for format errors and invalid data types.");
+            return;
+         }
+         if (check.length > 1) {
+            alert("You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.");
+            return;
+         } else if (check["document"] != undefined) {
+            console.log("Collection document found in your json file. Other data will be ignored.");
+            alert("It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.")
+            this.newDocument = this.newDocument["document"];
+            console.log(this.newDocument);
+         }
+         backend.new_annotated_collection_async(this.selectedCollection, {"annotator":this.assignedTo}, this.newDocument)
+            .then( (response) => {
+               console.log(response);
+               if (response["data"]["error"] != undefined) {
+                  console.log("==== REFRESHING LIST ====");
+               } else {
+                  adminEventBus.$emit("refresh_list", this.selectedCollection);
+                  this.$emit('close');
+                  return;
+               }   
+            }
+         );
+      },
+
+   },  
+   template:
+`
+ <transition name="modal">
+   <div class="modal-mask">
+     <div class="modal-wrapper">
+       <div class="modal-container modal-user-creation">
+
+         <div class="modal-header">
+           <slot name="header">
+             <strong>Annotated Collection Upload</strong>
+           </slot>
+         </div>
+
+         <hr>
+
+         <div class="modal-body">
+           <slot name="body">
+               <div class="inner-form">
+                   <label for="id">ID:</label>
+                   <input class="user-creation" id="annotation_id" type="text" v-bind:value="selectedCollection" readonly>
+                   <br>
+                   <label for="select_annotator">Owner:</label>
+                   <select class="modal-select" id="annotation_annotator" v-model="assignedTo">
+                        <option disabled value=""></option>
+                        <template v-for="user in allUsers">
+                          <option v-bind:value="user.id">{{user.id}}</option>
+                        </template>
+                   </select>
+                   <br>
+                   <div v-if="newDocumentName != ''" style="margin-top: 10px;">
+                     <label for="annotation_name">Uploaded file:</label>
+                     <input class="modal-select" type="text" v-bind:value="newDocumentName" readonly/>
+                   </div>
+                   <br><br>
+
+                   <input type="file"
+                     id="fileInput"
+                     name="fileInput"
+                     accept=".txt, .json"
+                     v-on:change="open_file($event)">
+                  <label for="fileInput"
+                     id="fileInputLabel"
+                     class="btn btn-sm btn-primary">
+                     Upload json file
+                  </label>
+                   
+                  <button id="upload_collection" v-on:click="add_annotated()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createButton}}</button>
+               </div>
+           </slot>
+         </div>
+
+         <hr>
+
+         <div class="modal-footer">
+           <slot name="footer">
+             MATILDA
+             <button class="modal-default-button" @click="close()">
+               {{guiMessages.selected.annotation_app.close}}
+             </button>
+           </slot>
+         </div>
+       </div>
+     </div>
+   </div>
+ </transition>
+ `
+});
+
 
 Vue.component("supervision-dialogues", {
 

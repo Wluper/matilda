@@ -689,12 +689,16 @@ input[type="password"]:hover {
     cursor:pointer;
 }
 
+.inner-form {
+    margin-bottom:2px;
+}
+
 .supervisor-btn-container {
     grid-template:
     [row1-start] "del" 1fr [row1-end]
     [row2-start] "blo" 1fr [row2-end] / 1fr;
     display: grid;
-    margin-top: 8px;
+    margin-top: 7px;
 }
 
 .supervisor-btn-container .del-dialogue-button {
