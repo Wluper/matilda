@@ -47,7 +47,14 @@ Vue.component("datamanagement-view", {
         },
 
         go_back: function() {
-            adminEventBus.$emit("go_back");
+            if (this.status == 'collection') {
+                this.reset_view();
+            } else {
+                databaseEventBus.$off("collections_changed", this.init );
+                databaseEventBus.$off("creation_completed", this.reset_view );
+                databaseEventBus.$off("entry_selected", this.inspect_entry );
+                adminEventBus.$emit("go_back");
+            }
         },
 
         getAllEntriesFromServer() {
