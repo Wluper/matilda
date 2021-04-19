@@ -357,6 +357,16 @@ Vue.component("annotation-component", {
             v-bind:accepted="metaList[0].accepted">
         </classification-string-annotation>
 
+        <classification-global-annotation
+            v-else-if="type=='multilabel_classification_string'"
+            v-bind:classification_strings="predictions"
+            v-bind:uniqueName="uniqueName"
+            v-bind:classes="annotationFormat"
+            v-bind:confidences="confidences"
+            v-bind:multilabelStringOptions="multilabelStringOptions"
+            v-bind:accepted="metaList[0].accepted">
+        </classification-global-annotation>
+
         <div v-else >
             {{guiMessages.selected.resolution_app.fail}}
         </div>

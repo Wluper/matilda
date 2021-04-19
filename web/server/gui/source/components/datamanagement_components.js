@@ -137,7 +137,7 @@ Vue.component("datamanagement-view", {
               .then( (response) => {
                   console.log(response);
                   this.changesSaved = true;
-                  this.getAllEntriesFromServer();
+                  this.reset_view();
             });
         },
 
@@ -448,6 +448,7 @@ Vue.component('collection-users-reverse', {
                 .then( (response) => {
                     console.log("Collections updated",response);
                     this.init();
+                    databaseEventBus.$emit("creation_completed");
             })
         }
   },

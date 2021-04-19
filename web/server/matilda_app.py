@@ -1319,8 +1319,7 @@ class InterannotatorMethods:
                 predictions = None
                 agreementFunc = None
 
-
-                if annotationName=="turn_idx":
+                if annotationName == "turn_idx":
                     continue
 
                 #metatags can be ignored
@@ -1340,15 +1339,20 @@ class InterannotatorMethods:
 
                 if predictions: #means there is discrepency
 
-                    error["usr"] = turnsData[turnId]["usr"][0]
-                    error["sys"] = turnsData[turnId]["sys"][0]
+                    if turnId == 0:
+                        error["usr"] = " "
+                        error["sys"] = " "
+                    else:
+                        error["usr"] = turnsData[turnId]["usr"][0]
+                        error["sys"] = turnsData[turnId]["sys"][0]
+                    
                     error["type"] = annotationType
                     error["name"] = annotationName
                     error["predictions"] = predictions
                     error["counts"] = temp.get("counts")
 
                     #multilabel_classification_string needs more details to be evaluted by user
-                    if error["type"] == "multilabel_classification_string":
+                    if error["type"] == "multilabel_classification_string" or error["type"] == "multilabel_global_string":
                         optionList = []
                         for option in turnsData[turnId][error["name"]]:
                             optionList.append(option) 
@@ -1391,7 +1395,16 @@ class InterannotatorMethods:
         """
         for key, value in newDict.items():
 
-            defaultDict[key].append(value)
+            #print("chiave",key, type(key))
+            if key == "global_slot":
+                for subKey in value:
+                    if type(value) == dict:
+                        defaultDict[key].append( [ [subKey, value[subKey]] ] )
+                    else:
+                        defaultDict[key].append([ [subKey, value] ])
+            else:
+                defaultDict[key].append(value)
+
 
 ########################
 # COMMON STATIC METHODS
@@ -1448,19 +1461,20 @@ class Models:
 ##############
 
 @MatildaApp.before_request
-def checkSession():
+def guard():
     requestedUri = request.path
     if (requestedUri != "/" 
-    and requestedUri != "/login" 
+    and requestedUri != "/login"
     and requestedUri != "/favicon.ico"
     and requestedUri.split("/")[1] != "assets"
     and requestedUri.split("/")[1] != "source"):
         check = LoginFuncs.checkSession()
         if check == False:
-            print("Trying to access without login...")
+            print("Access violation on route "+requestedUri)
             return {"status":"logout", "error":"Server rebooted. You need to log-in again."}
 
 #logging.basicConfig(filename='error.log', level=logging.DEBUG)
+MatildaApp.debug = True
 
 MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 

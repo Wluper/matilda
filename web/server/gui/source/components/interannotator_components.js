@@ -439,6 +439,7 @@ Vue.component("interannotator-app", {
         <h2 class="list-title">{{guiMessages.selected.admin.dataItems}}</h2>
         <button class="btn btn-sm button-title" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
         <button class="help-button btn btn-sm button-title" style="margin-right:5px;" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
+        <!--
         <input type="file"
             id="fileInput"
             name="fileInput"
@@ -449,6 +450,7 @@ Vue.component("interannotator-app", {
             class="btn btn-sm button-title">
             {{ guiMessages.selected.admin.button_upload }}
         </label>
+        -->
     <ul class="dialogue-list">
 
       <li class="int-listed-dialogue"

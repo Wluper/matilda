@@ -99,12 +99,6 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
-                        # turn 0 stores meta-tags and global slot
-                        if i == 0:
-                            continue
-                            #if ("multilabel_global_string" != info["label_type"]):
-                            #    continue
-
                         if info["required"]:
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \
@@ -199,6 +193,7 @@ def agreement_classification(listOfClassifications):
     """
     computes, whether there is diagreement, the most likely prediction and confidences of each.
     """
+    
     countDict = { "counts" : defaultdict(float), "predictions" : set()}
     counter = 0
 
@@ -259,15 +254,27 @@ def agreement_classification_string(listOfClassificationStrings):
 
         for label in prediction:
 
-            countDict["counts"][label[0]] += 1
+            if type(label[0]) == list:
+                countDict["counts"][label[0][0]] += 1
 
-            temp = valueDict.get(label[0])
+                temp = valueDict.get(label[0][0])
 
-            if temp:
-                if not (temp==label[1]):
-                    errorFlag = True
+                if temp:
+                    if not (temp==label[0][1]):
+                        errorFlag = True
+                else:
+                    valueDict[label[0][0]] = label[0][1]                
+
             else:
-                valueDict[label[0]] = label[1]
+                countDict["counts"][label[0]] += 1
+
+                temp = valueDict.get(label[0])
+
+                if temp:
+                    if not (temp==label[1]):
+                        errorFlag = True
+                else:
+                    valueDict[label[0]] = label[1]
 
     if counter > 0:
 

@@ -21,13 +21,16 @@ guiMessages = {
             annotator:"Annotator",
             annotators:"Annotators",
             actualAnnotators:"Sources",
-            button_upload:"Upload File or Drag and Drop",
+            button_upload:"Upload File",
             button_admin:"Admin Panel",
             dropAnywhere: "Drop Files Anywhere to Upload!",
+            uploaded: "Uploaded file",
+            annotatedTitle: "Annotated Collection Upload",
             userButton: "Users Management",
             users:"Users",
             createButton: "Add",
             createAnno:"Create new annotation style",
+            newAnnotations: "Import annotations from a file",
             editButton:"Edit",
             hideButton:"Hide",
             showButton:"Show",
@@ -287,6 +290,14 @@ guiMessages = {
             "assets/images/multistring_exa.png",
             "assets/images/global_exa.png",
         ],
+        exception_create_annotations:
+        [
+            "You didn't upload anything. Please upload a json file to load.",
+            "An annotated collection is always related to an annotator. Please select the annotator to assign it.",
+            "Your json file format is wrong. Please, check your json file for format errors and invalid data types.",
+            "You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.",
+            "It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.",
+        ],
         database: {
             title: "Workspaces Management",
             location:"Database Location",
@@ -324,7 +335,9 @@ guiMessages = {
             to:"a",
             assignedTo: "Assegnato a",
             actualAnnotators:"Fonti",
-            button_upload:"Carica o trascina un file",
+            button_upload:"Carica un file",
+            uploaded: "File caricato",
+            annotatedTitle: "Carica una collezione annotata",
             button_admin:"Pannello Admin",
             dropAnywhere: "Rilascia il file per caricarlo!",
             userButton: "Gestione Utenti",
@@ -342,6 +355,7 @@ guiMessages = {
             supervision:"Supervisione annotazioni",
             annotation:"Annotazione",
             backToColl: "Indietro",
+            newAnnotations: "Carica annotazioni da file",
             importConflictsResult:"Non è stato trovato niente da importare, nessuna versione annotata è stata ancora prodotta.",
             cantDeleteAdmin:"L'account speciale 'admin' non può essere eliminato",
             annotationInProgress:"Annotazioni in corso per la collezione",
@@ -482,6 +496,14 @@ guiMessages = {
             Il formato richiesto è il seguente:
             `
         ],
+        exception_create_annotations:
+        [
+            "Non hai caricato alcun file. Carica un file json dal tuo computer per proseguire.",
+            "Le annotazioni sono sempre riferite ad un utente. Seleziona l'annotatore a cui riferirle per continuare.",
+            "Il formato del tuo file json è incorretto. Controlla il formato del file che vuoi caricare per errori di struttura, caratteri speciali o tipi di dato.",
+            "Hai caricato una lista di collezioni annotate, non una singola collezone annotata. Riformatta il tuo file per includere solo una collezione annotata.",
+            "Sembra che tu abbia caricato una collezione annotata completa di tutti i meta-dati. Solo le annotazioni (racchiuse nel campo 'document') verranno caricate. Altre informazioni nel tuo file come la percentuale di annotazione, lo stato di completamento, l'id del documento e l'annotatore precedente saranno ignorate.",
+        ],
         modal_formatInfo_list:
         [
             `
@@ -597,7 +619,9 @@ guiMessages = {
             annotator: "Annotator",
             annotators: "Annotatoren",
             actualAnnotators: "Sources",
-            button_upload: "Datei hochladen oder per Drag & Drop",
+            button_upload: "Datei hochladen",
+            uploaded: "Uploaded file",
+            annotatedTitle: "Annotated Collection Upload",
             button_admin: "Admin Panel",
             dropAnywhere: "Dateien überall zum Hochladen ablegen!",
             userButton: "Benutzerverwaltung",
@@ -608,6 +632,7 @@ guiMessages = {
             editButton: "Bearbeiten",
             hideButton:"Hide",
             showButton:"Show",
+            newAnnotations: "Import annotations from a file",
             createUserButton: "Neuen Benutzer hinzufügen",
             deleteConfirm: "Möchten Sie diesen Eintrag wirklich dauerhaft löschen? Dies kann nicht rückgängig gemacht werden!",
             deleteConfirm2:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
@@ -737,6 +762,14 @@ guiMessages = {
             "Überprüfen Sie, wie die Anmerkungen fortschreiten",
             "Ihnen zugewiesene Sammlungen kommentieren",
             "Configure annotation models, database connection, app environment"
+        ],        
+        exception_create_annotations:
+        [
+            "You didn't upload anything. Please upload a json file to load.",
+            "An annotated collection is always related to an annotator. Please select the annotator to assign it.",
+            "Your json file format is wrong. Please, check your json file for format errors and invalid data types.",
+            "You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.",
+            "It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.",
         ],
         modal_formatInfo:
         [

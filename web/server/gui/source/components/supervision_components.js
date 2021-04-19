@@ -108,6 +108,7 @@ Vue.component("supervision-view", {
    </div>
    
    <div v-if="mode == 'supervision-collections-list'" class="inner-wrap">
+
       <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
       <ul class="dialogue-list">
           <li class="listed-dialogue" v-for="(name) in allCollectionsMetadata">
@@ -176,6 +177,7 @@ Vue.component("supervision-collection", {
          annotatedCollections: [],
          guiMessages,
          uploading:false,
+         missingAnnotations:[]
       }
    },
 
@@ -199,6 +201,20 @@ Vue.component("supervision-collection", {
                console.log("==== ANNOTATED VERSIONS FOR",id,"====");
                this.annotatedCollections = response;
                console.log(this.annotatedCollections);
+               //check for missing documents
+               for (annotatorIndex in this.allAnnotators) {
+                  let found = false;
+                  for (documentIndex in this.annotatedCollections) {
+                     if (this.annotatedCollections[documentIndex]["annotator"] == this.allAnnotators[annotatorIndex]) {
+                        found = true;
+                        break;
+                     }
+                  }
+                  if (!found) {
+                     this.missingAnnotations.push(this.allAnnotators[annotatorIndex]);
+                  }
+               }
+               console.log(this.missingAnnotations)
                mainContainer.style.cursor = null;
             }  
          );
@@ -265,7 +281,7 @@ Vue.component("supervision-collection", {
 
                   <div class="entry-info" v-on:click="clicked_annotated(name.annotator)">
                      <div class="entry-id">
-                        <span>Annotator:</span> {{name.annotator}}
+                        <span>{{guiMessages.selected.admin.annotator}}:</span> {{name.annotator}}
                      </div>
                      <div class="entry-annotated">
                         <span>Status: {{name.status}}</span>
@@ -284,7 +300,8 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
-         <button type="button" class="btn btn-sm btn-primary" v-on:click="uploading = true">Load an annotated collection</button>
+         <h3 style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
+         <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
          <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>
    `
@@ -349,25 +366,25 @@ Vue.component('supervisor-upload-modal', {
       add_annotated: function() {
          //check for empty fields
          if (this.newDocument == {}) {
-            alert("You didn't upload anything. Please upload a json file to load.");
+            alert(guiMessages.selected.exception_create_annotations[0]);
             return;
          } else if (this.assignedTo == "") {
-            alert("An annotated collection is always related to an annotator. Please select the annotator to assign it.");
+            alert(guiMessages.selected.exception_create_annotations[1]);
             return;
          }
          //check for format errors
          try {
             var check = JSON.parse(this.newDocument);
          } catch (e) {
-            alert("Your json file format is wrong. Please, check your json file for format errors and invalid data types.");
+            alert(guiMessages.selected.exception_create_annotations[2]);
             return;
          }
          if (check.length > 1) {
-            alert("You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.");
+            alert(guiMessages.selected.exception_create_annotations[3]);
             return;
          } else if (check["document"] != undefined) {
-            console.log("Collection document found in your json file. Other data will be ignored.");
-            alert("It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.")
+            console.log("Collection document found in your json file. Other data but 'document' field will be ignored.");
+            alert(guiMessages.selected.exception_create_annotations[4]);
             this.newDocument = this.newDocument["document"];
             console.log(this.newDocument);
          }
@@ -375,6 +392,7 @@ Vue.component('supervisor-upload-modal', {
             .then( (response) => {
                console.log(response);
                if (response["data"]["error"] != undefined) {
+                  alert("Upload OK");
                   console.log("==== REFRESHING LIST ====");
                } else {
                   adminEventBus.$emit("refresh_list", this.selectedCollection);
@@ -407,7 +425,7 @@ Vue.component('supervisor-upload-modal', {
                    <label for="id">ID:</label>
                    <input class="user-creation" id="annotation_id" type="text" v-bind:value="selectedCollection" readonly>
                    <br>
-                   <label for="select_annotator">Owner:</label>
+                   <label for="select_annotator">{{guiMessages.selected.admin.annotator}}:</label>
                    <select class="modal-select" id="annotation_annotator" v-model="assignedTo">
                         <option disabled value=""></option>
                         <template v-for="user in allUsers">
@@ -416,7 +434,7 @@ Vue.component('supervisor-upload-modal', {
                    </select>
                    <br>
                    <div v-if="newDocumentName != ''" style="margin-top: 10px;">
-                     <label for="annotation_name">Uploaded file:</label>
+                     <label for="annotation_name">{{guiMessages.selected.admin.uploaded}}:</label>
                      <input class="modal-select" type="text" v-bind:value="newDocumentName" readonly/>
                    </div>
                    <br><br>
@@ -429,7 +447,7 @@ Vue.component('supervisor-upload-modal', {
                   <label for="fileInput"
                      id="fileInputLabel"
                      class="btn btn-sm btn-primary">
-                     Upload json file
+                     {{guiMessages.selected.admin.button_upload}}
                   </label>
                    
                   <button id="upload_collection" v-on:click="add_annotated()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createButton}}</button>
