@@ -100,7 +100,8 @@ Vue.component("users-view", {
         </div>
             <div class="inner-wrap">
                 <div style="padding-bottom:10px;">
-                    <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createUserButton}}</button>
+                    <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
+                    <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary button-title">{{guiMessages.selected.admin.createUserButton}}</button>
                 </div>
                 <ul class="user-list">
                     <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
@@ -123,7 +124,7 @@ Vue.component("users-view", {
                                 <div class="user-email" v-else>{{name.email}}</div>
 
                                 <div class="user-role">
-                                   <span class="user-span">Role</span>
+                                   <span class="user-span">{{guiMessages.selected.admin.role}}</span>
                                    <span class="user-admin" v-if="name.role == 'administrator'">ADMN</span> 
                                    <span class="user-annt" v-else>ANNT</span> 
                                 </div>
@@ -274,17 +275,17 @@ Vue.component('users-creation-modal', {
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">
                     <br>
-                    <label for="select_role">Role:</label>
+                    <label for="select_role">{{guiMessages.selected.admin.role}}:</label>
                     <select class="modal-select" id="select_role">
-                        <option disabled value="">Role</option>
+                        <option disabled value="">{{guiMessages.selected.admin.role}}</option>
                         <option value="annotator">Annotator</option>
                         <option value="administrator">Administrator</option>
                     </select>
                     <br><br>
                     
-                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_update()" class="button btn btn-sm">{{guiMessages.selected.annotation_app.save}}</button>
+                    <button v-if="activeUser != ''" id="create_user" v-on:click="user_update()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.save}}</button>
                     
-                    <button v-else id="create_user" v-on:click="user_create()" class="button btn btn-sm">{{guiMessages.selected.admin.createButton}}</button>
+                    <button v-else id="create_user" v-on:click="user_create()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createButton}}</button>
                 </div>
             </slot>
           </div>
@@ -293,7 +294,7 @@ Vue.component('users-creation-modal', {
 
           <div class="modal-footer">
             <slot name="footer">
-              LIDA
+              MATILDA
               <button class="modal-default-button" @click="close()">
                 {{guiMessages.selected.annotation_app.close}}
               </button>

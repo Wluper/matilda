@@ -1,5 +1,5 @@
 /************************************
-* All Dialgoues View "aka MAIN LIDA VIEW"
+* All Dialgoues View "aka MAIN MATILDA VIEW"
 *************************************/
 
 Vue.component("all-dialogues", {
@@ -145,6 +145,9 @@ Vue.component("all-dialogues", {
           <div class="all-dialogues-list-title">
               <h2>
                   <span>{{activeCollection}}:</span> {{ allDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}}
+                    <div class="annotated-bar" style="margin-top:1px;">
+                        <div class="annotated-fill" v-bind:style="{ width: collectionRate }"></div>
+                    </div>
               </h2>
           </div>
 
@@ -152,7 +155,7 @@ Vue.component("all-dialogues", {
 
           <div class="help-button-container">
               <button class="help-button btn btn-sm" @click="showModal = true">{{ guiMessages.selected.lida.button_fileFormatInfo }}</button>
-              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.admin.button_downloadAll }}</button>
+              <button class="help-button btn btn-sm btn-primary" @click="download_all_dialogues_from_server()">{{ guiMessages.selected.lida.button_downloadAll }}</button>
               <button class="help-button btn btn-sm" @click="clicked_collections_button()">{{guiMessages.selected.annotation_app.backToAll}}</button> 
           </div>
       </div>

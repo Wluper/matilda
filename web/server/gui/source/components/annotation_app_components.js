@@ -21,6 +21,7 @@ Vue.component("annotation-app", {
             metaTags: [],
             annotatedTurns: [],
             annotationRate: '0%',
+            readOnly:false,
         }
     },
 
@@ -99,6 +100,7 @@ Vue.component("annotation-app", {
             // ANNOTATION EVENTS
             annotationAppEventBus.$off( "update_classification", this.turn_update );
             annotationAppEventBus.$off( "classification_string_updated", this.turn_update );
+            annotationAppEventBus.$off( "resume_annotation_tools", this.resume_annotation_tools );
             annotationAppEventBus.$off( "turn_is_annotated", this.turn_is_annotated );
 
             // INPUT BOX EVENTS
@@ -124,10 +126,12 @@ Vue.component("annotation-app", {
                 })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(this.dialogueId)
+          backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
               .then( (response) => {
                   this.annotationFormat = response;
-                  this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  if (this.annotationFormat.global_slot != undefined) {
+                    this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  }
               });
 
         },
@@ -239,15 +243,15 @@ Vue.component("annotation-app", {
 
         focus_on_new_query_box: function() {
             console.log('FOCUSING ON THE INPUT BOX')
-            const toFocus = document.getElementById('new-query-entry-box')
-            toFocus.focus()
+            const toFocus = document.getElementById('new-query-entry-box');
+            if (toFocus != null) toFocus.focus();
         },
 
         save_dialogue: function(event) {
             console.log("DIALOGUE ID BEING SENT");
             console.log(this.dialogueId);
 
-            backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns)
+            backend.put_single_dialogue_async(event, this.dialogueId, this.dTurns, mainApp.activeCollection)
                 .then( (status) => {
 
                     if (status == "success") {
@@ -267,15 +271,17 @@ Vue.component("annotation-app", {
             //resuming label
             document.getElementById("usr").onmouseup = null;
             document.getElementById("sys").onmouseup = null;
-            if (document.getElementById("active_label") != undefined) {
-                let activeLabel = document.getElementById("active_label");
-                let labelName = activeLabel.title;
-                activeLabel.id = labelName+"_input";
-                activeLabel.removeAttribute("title");
+            let active_label = document.getElementsByClassName("active_label")[0];
+            if (active_label != null) {
+                active_label.classList.remove("active_label");
+            }
+            let active_button = document.getElementsByClassName("active_button")[0];
+            if (active_button != null) {
+                active_button.classList.remove("active_button");
             }
             //resuming turn
             let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
-            if (activeTurn != undefined) {
+            if (activeTurn != null) {
                 activeTurn.style = null;
             }
             //resuming annotation sections
@@ -312,7 +318,8 @@ Vue.component("annotation-app", {
                      v-bind:currentId="dCurrentId"
                      v-bind:dialogueNonEmpty="dialogueNonEmpty"
                      v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId">
+                     v-bind:dialogueId="dialogueId"
+                     v-bind:readOnly="readOnly">
         </annotations>
 
         <input-box>
@@ -607,11 +614,11 @@ Vue.component('dialogue-turn',{
 ********************************/
 
 Vue.component('annotations',{
-    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId"],
+    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId", "readOnly"],
 
     template:
     `
-    <div id="annotations">
+    <div id="annotations" v-bind:class = "{ supervision_readonly : readOnly }">
         <div class="annotation-header sticky">
         Current Turn: {{currentId}}
         </div>

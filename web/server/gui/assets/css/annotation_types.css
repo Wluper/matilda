@@ -34,8 +34,7 @@
 }
 
 .soft-text {
-    font-size: 14px;
-    font-style: italic;
+    font-size: 11px;
 }
 
 .multilabel-string-item-wrapper {
@@ -127,10 +126,14 @@
     align-items: center;
 }
 
-#active_label {
+.active_label {
     border:1px solid rgba(250, 250, 105, 0.48);
     vertical-align:bottom;
     background-color: rgb(255, 255, 182);
+}
+
+.active_button {
+    background-color: #259af7ad !important;
 }
 
 .txt-sel-button {
@@ -192,7 +195,15 @@
     cursor: pointer;
 }
 
+.supervision_readonly {
+    opacity:0.7;
+}
 
+#supervision #multilabel-string-header, 
+#supervision #single-annotation-header,
+#supervision .classification-annotation {
+    pointer-events: none;
+}
 
 /********************************
 * Info button
@@ -202,12 +213,12 @@
     margin:0 0 15px;
     display: grid;
     grid-template: [row1-start] "name-zone . info-button-zone" [row1-end]
-                 / 0fr 1fr 2fr
+                 / 2fr 0fr 2fr
 }
 
 #resolutions .single-annotation-header {
-    grid-template: [row1-start] "name-zone switches info-button-zone" [row1-end]
-                 / 1fr 3fr 1fr
+    grid-template: [row1-start] "name-zone switches ." [row1-end]
+                 / 1fr 5fr 0.5fr
 }
 
 .single-annotation-header > div {

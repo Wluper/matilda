@@ -18,6 +18,7 @@ var mainApp = new Vue({
       userName:'',
       role:'annotator',
       activeCollection:localStorage["activeCollection"],
+      annotationStyle:'',
       collectionRate:'',
       lastUpdate:'',
       done:false,

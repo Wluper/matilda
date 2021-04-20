@@ -1,5 +1,5 @@
 /************************************
-* MAIN ADMIN LIDA VIEW
+* MAIN ADMIN MATILDA VIEW
 *************************************/
 
 Vue.component("main-admin-view", {
@@ -117,6 +117,7 @@ Vue.component("main-admin-view", {
   </div>
 
   <interannotator-view v-if="view === 'listview'" 
+      v-bind:displayingCollection="displayingCollection" 
       v-bind:alreadyVisited="alreadyVisited"
       v-bind:userName="userName">
   </interannotator-view>

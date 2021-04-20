@@ -22,7 +22,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 # == Local ==
-from utils import load_json_file, save_json_file, database_uri_compose
+from utils import database_uri_compose
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 
@@ -32,26 +32,29 @@ class DatabaseManagement(object):
 #  INIT
 ##############################################
 
-	try: 
-		#docker
-		with open('configuration/conf.json') as json_file:
-			conf = json.load(json_file)
-	except:
-		#standalone
-		with open('../../configuration/conf.json') as json_file:
-			conf = json.load(json_file)
+	#importing json configuration file
+	conf = Configuration.conf
 
+	#the uri, if present, will override the legacy configuration
 	databaseURI = database_uri_compose(conf["database"])
 
+	#connecting
 	client = MongoClient(databaseURI)
-
-	print(" * Connected to database")
+	try:
+		print(" * \n * MATILDA: Connecting to database... \n * "+databaseURI)
+		client.server_info()
+	except Exception as e: 
+		print(" *",e, "\n * Connecting Errror. Trying again with legacy configuration...")
+		conf["database"]["optional_uri"] = None;
+		databaseURI = database_uri_compose(conf["database"])
+		client = MongoClient(databaseURI)
 
 	db = client[conf["database"]["name"]]
 
 	users = db["users"]
 	dialogueCollections = db["dialogues_collections"]
 	annotatedCollections = db["annotated_collections"]
+
 
 ##############################################
 #  METHODS
@@ -64,11 +67,11 @@ class DatabaseManagement(object):
 			return DatabaseManagement.annotatedCollections
 		else:
 			return DatabaseManagement.users
-	
+
 	def readDatabase(coll,pairs=None, projection=None):
-		# if field parameter is provided the search will be a projection of the id
-		# and the requested field only.
-		# if string is provided the search will be restricted to the string match
+		# if pairs parameter is provided the search will be a projection of the id
+		# and the requested fields.
+		# if string is provided the search will be restricted to the string match.
 		# last parameter allows to restrict response to desired fields
 
 		responseObject = []
@@ -193,10 +196,6 @@ class DatabaseManagement(object):
 
 class LoginFuncs(object):
 
-##############################################
-#  INIT
-##############################################
-
 	administratorDefault = {
 		"id":"admin",
 		"userName":"admin",
@@ -204,14 +203,6 @@ class LoginFuncs(object):
 		"email":"",
 		"role":"administrator"
 	}
-
-	if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
-		DatabaseManagement.users.insert_one(administratorDefault)
-		#print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
-
-##############################################
-#  LOGIN FUNCTION
-##############################################
 
 	def logIn(userID, userPass):
 
@@ -227,3 +218,13 @@ class LoginFuncs(object):
 					response = { "status":"success", "role":userDetails["role"] }
 
 		return response
+
+	def start():
+		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
+			DatabaseManagement.users.insert_one(LoginFuncs.administratorDefault)
+			print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+		else:
+			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
+
+# DATABASE AND ADMIN ACCOUNT INIT
+LoginFuncs.start()

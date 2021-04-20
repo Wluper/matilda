@@ -47,7 +47,14 @@ Vue.component("datamanagement-view", {
         },
 
         go_back: function() {
-            adminEventBus.$emit("go_back");
+            if (this.status == 'collection') {
+                this.reset_view();
+            } else {
+                databaseEventBus.$off("collections_changed", this.init );
+                databaseEventBus.$off("creation_completed", this.reset_view );
+                databaseEventBus.$off("entry_selected", this.inspect_entry );
+                adminEventBus.$emit("go_back");
+            }
         },
 
         getAllEntriesFromServer() {
@@ -190,7 +197,7 @@ Vue.component("datamanagement-view", {
                 </div>
 
                 <ul class="collection-list two-columns" v-if="showCollection == 'all' && showUser == 'all' ">
-                    <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
                     <li class="listed-entry" v-for='collection,index in allEntryMetadata' v-bind:id="collection.id" style="opacity:1;">
                         <div class="entry-list-single-item-container" v-on:click="switch_view(collection.id)">
                             <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
@@ -224,10 +231,13 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                                <div class="entry-date">
+
+                                <div class="entry-data">
+                                    {{collection.annotationStyle.split(".")[0]}}
                                     {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                 </div>
                             </div>
+
                             <div v-else class="entry-info" v-on:click="clicked_entry(collection.id, index)">
                                 <div class="entry-id">
                                     <span>ID:</span> {{collection.id}}
@@ -251,7 +261,8 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                                <div class="entry-date">
+                                <div class="entry-data">
+                                    {{collection.annotationStyle.split(".")[0]}}
                                     {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                 </div>
                             </div>
@@ -261,7 +272,7 @@ Vue.component("datamanagement-view", {
                 </ul>
 
                 <ul class="collection-user-list two-columns" v-if="showCollection == 'all' && showUser == 'all'">
-                    <h2>{{guiMessages.selected.admin.users}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
                     <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
                         <div class="entry-list-single-item-container" v-on:click="switch_view(user.id)">
                             <input type="checkbox" class="user-checkbox" v-bind:id="'check_'+user.id" :value="user.id" v-model="selectedCollection.assignedTo">
@@ -409,7 +420,7 @@ Vue.component('collection-users-reverse', {
     `
             <div id="collection-user-editing">
                 <ul class="collection-list two-columns">
-                    <h2>{{guiMessages.selected.lida.buttonCollections}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
                     <li class="listed-entry" v-for='collection in allEntryMetadata' v-bind:id="collection.id">
                         <div class="entry-list-single-item-container">
                             <div class="edit-dialogue-button" v-on:click="inspect_entry(collection.id)">
@@ -435,7 +446,8 @@ Vue.component('collection-users-reverse', {
                                     <div class="entry-assigned">
                                         <span>Assigned: <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> </span>
                                     </div>
-                                    <div class="entry-date">
+                                    <div class="entry-data">
+                                        {{collection.annotationStyle.split(".")[0]}}
                                         {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
                                     </div>
                                 </label>
@@ -445,7 +457,7 @@ Vue.component('collection-users-reverse', {
                 </ul>
 
                 <ul class="collection-user-list two-columns">
-                    <h2>{{guiMessages.selected.admin.users}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
                     <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id" v-on:click="clicked_user(user.id)">
                         <div class="entry-list-single-item-container">
                             <input type="radio" class="user-checkbox radio-primary" v-bind:id="'user_'+user.id" v-bind:value="user.id" v-model="selectedUser">
@@ -627,7 +639,7 @@ Vue.component('collection-entry-details', {
                     <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
                     </div>
-                    <div class="dialogue-entry-info" v-on:click="clicked_active()">
+                    <div class="dialogue-entry-info">
                         <div class="entry-id">
                             {{name}}
                         </div>
@@ -653,6 +665,7 @@ Vue.component('collection-creation', {
             guiMessages,
             role: mainApp.role,
             checkedUsers:[],
+            registeredAnnotationStyles:[]
         }
     },
 
@@ -663,7 +676,16 @@ Vue.component('collection-creation', {
     methods: {
 
         init : function(){
-            //
+            this.request_annotation_styles()
+        },
+
+        request_annotation_styles: function() {
+            backend.get_registered_annotation_styles()
+                .then( (response) => {
+                    this.registeredAnnotationStyles = response["registered_models"];
+                    this.entry.annotationStyle = response["registered_models"][0]
+                }
+            );
         },
 
         close_document_view: function() {
@@ -714,10 +736,13 @@ Vue.component('collection-creation', {
             backend.new_collection_async(this.entry.id, params, this.entry.document)
                .then( (response) => {
                     console.log(response);
-                    if (!response["error"]) {
+                    if (!response["data"]["error"]) {
                         console.log("============== Dialogues-Collection Created ==============");
+                        databaseEventBus.$emit('creation_completed');
+                    } else {
+                        console.log("============== Dialogues-Collection Error ==============");
+                        alert(response["data"]["error"]);
                     }
-                    databaseEventBus.$emit('creation_completed');
             });
         }
     },
@@ -736,7 +761,18 @@ Vue.component('collection-creation', {
                   <input class="collection-input" type="text" v-model="entry.description" :placeholder="guiMessages.selected.coll_creation[2]">
                   <br>
                 <strong>{{guiMessages.selected.collection.collAnnot}}:</strong>
-                  <input class="collection-input" type="text" v-model="entry.annotationStyle" :placeholder="guiMessages.selected.coll_creation[3]">
+
+                  <select class="collection-input creation-list" v-model="entry.annotationStyle">
+                    <template v-for="annotationStyle,index in registeredAnnotationStyles">
+                        <option v-if="index == 0" v-bind:value="annotationStyle" selected="true">
+                            {{annotationStyle}}
+                        </option>
+                        <option v-else v-bind:value="annotationStyle">
+                            {{annotationStyle}}
+                        </option>
+                    </template>
+                  </select>
+
                   <br><br>
                 {{guiMessages.selected.modal_document[0]}}
                 </strong>

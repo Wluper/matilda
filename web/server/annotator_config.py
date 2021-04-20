@@ -27,7 +27,7 @@ from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel
 #     => "multilabel_classification_string" :: displays as a checkbox and text input for string value. Used for
 #                                              slot-value pairs.
 #
-#     => "multilabel_global_string"         :: same as multilabel_classification_string but global for the dialogue
+#     => "multilabel_global_string"         :: same as multilabel_classification_string but global for the entire dialogue
 #
 #     => "string" :: displays underneath the user utterance (indicated by label_type of "data")
 #
@@ -43,33 +43,51 @@ class Configuration(object):
     class responsible for configuration and valid annotation structure
     """
 
-    # Folder where annotation models are stored
-    __DEFAULT_PATH = "annotation_styles"
+    #importing json configuration file
+    try: 
+        #docker
+        with open('configuration/conf.json') as json_file:
+            conf = json.load(json_file)
+            __DEFAULT_PATH = "configuration/"
+    except:
+        #standalone
+        with open('../../configuration/conf.json') as json_file:
+            conf = json.load(json_file)
+            __DEFAULT_PATH = "../../configuration/"
 
-    # Here the annotation model file name
-    annotation_style = "unipi_model.json"
-    
-    with open(annotation_style) as style_file:
-        configDict = json.load(style_file)
+    # Here the list of annotation model file names
+    annotation_styles = conf["app"]["annotation_models"]
 
-    #convert back functions and classes from string 
-    for key,value in configDict.items():
-        for sub_key,sub_value in value.items():
-            if "()" in str(sub_value):
-                configDict[key][sub_key] = eval(sub_value)
+    # Dict where classifications are stored
+    configDict = {}
 
     #accepted metaTags, this list can be customized
     metaTags = ["collection","status","ID"]
 
+    for model in annotation_styles:
+        with open(__DEFAULT_PATH+model) as style_file:
+            configDict[model] = json.load(style_file)
+            #convert back functions and classes from string 
+            for key,value in configDict[model].items():
+                for sub_key,sub_value in value.items():
+                    if "()" in str(sub_value):
+                        configDict[model][key][sub_key] = eval(sub_value)
+
     @staticmethod
-    def validate_dialogue(dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
+    def validate_dialogue(annotation_style, dialogue: List[Dict[str, Any]]) -> Union[str, List[Dict]]:
         """
         validates the dialogue and makes sure it conforms to the configDict
         """
+
+        #print(dialogue[0])
+        #if dialogue[0]["collection"]:
+        #    search = DatabaseManagement.readDatabase("dialogues_collections", {"id":dialogue[0]["collection"]}, {"_id":0,"annotationStyle":1})
+        #    annotation_style = search[0]["annotationStyle"]
+
         try:
             for i, turn in enumerate(dialogue):
 
-                for labelName, info in Configuration.configDict.items():
+                for labelName, info in Configuration.configDict[annotation_style].items():
 
                     try:
                         turn[labelName]
@@ -85,13 +103,13 @@ class Configuration(object):
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \
                                     "dialogue in turn {}.".format(labelName, i))
-                            print(message)
+                            print(message, turn)
                             return message
 
                         if info["required"] and not turn[labelName]:
                             message = ("ERROR2: Required label, \'{}\', does not have a value " \
                                 "provided in the dialogue in turn {}".format(labelName, i))
-                            print(message)
+                            print(message, turn)
                             return message
 
                         if info["required"] and ("multilabel_classification" == info["label_type"]):
@@ -102,7 +120,7 @@ class Configuration(object):
                                 message = "ERROR3: One of the provided labels in the list: " \
                                    "\'{}\' is not in allowed list according to " \
                                    "config.py in turn {}".format(providedLabels, i)
-                                print(message)
+                                print(message, turn)
                                 return message
         except:
             print("dialogue",i,"in list couldn't validate with the current annotation style model")
@@ -113,14 +131,14 @@ class Configuration(object):
 
 
     @staticmethod
-    def create_annotation_dict():
+    def create_annotation_dict(annotation_style):
         """
         Generates a dictionary mapping label names to a dictionary of their description, label types
         and, if applicable, the possible values the label can take.
         """
         out = {}
 
-        for key,value in Configuration.configDict.items():
+        for key,value in Configuration.configDict[annotation_style].items():
 
             temp = list(value["labels"]) if value.get("labels") else ""
 
@@ -323,9 +341,6 @@ def agreement_classification_score(listOfClassifications, totalLabels):
     countDict["accuracy"] = errorCount/totalLabels
 
     return countDict
-
-
-
 
 
 

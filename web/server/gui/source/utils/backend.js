@@ -20,7 +20,6 @@ async function put_name(name){
         return false;
     }
 
-
 };
 
 
@@ -59,20 +58,20 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
-async function get_annotation_style_async(id,supervision){
+async function get_annotation_style_async(collection,id,supervision){
 
     var dialogues = {}
 
     if (id == undefined) {
-        var apiLink = API_BASE+"/dialogue_annotationstyle";
+        var apiLink = API_BASE+`/dialogue_annotationstyle/${collection}`;
     } else {
         if (supervision != undefined) {
 
-            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         
         } else { 
 
-            var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${id}`
+            var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         }
     }
 
@@ -91,6 +90,26 @@ async function get_annotation_style_async(id,supervision){
 
     }
 
+};
+
+async function get_registered_annotation_styles(){
+
+    const apiLink = API_BASE+"/registered_annotationstyles";
+
+    try {
+        var response = await axios.get(apiLink)
+
+
+        annotationStyles = response.data
+        console.log("============= REGISTERED ANNOTATION STYLES ==============")
+        console.log(annotationStyles)
+        return annotationStyles
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
 
 };
 
@@ -312,11 +331,11 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
 }
 
 
-async function put_single_dialogue_async(event, dialogueId, dTurns) {
+async function put_single_dialogue_async(event, dialogueId, dTurns, collection) {
 
     try {
 
-        const response = await RESTdialogues( "PUT", dialogueId, dTurns )
+        const response = await RESTdialogues( "PUT", dialogueId, dTurns, collection )
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
@@ -345,6 +364,7 @@ async function del_single_dialogue_async(dialogueId) {
     }
 
 };
+
 
 async function del_all_dialogues_async(admin) {
 
@@ -438,7 +458,8 @@ async function RESTdialogues(method, id, params, fileName){
         var response = await axios.delete( apiLink );
     }
     else if (method=="PUT") {
-        var response = await axios.put( apiLink, params );
+        //override
+        var response = await axios.put( API_BASE+`/${mainApp.userName}/dialogues/${fileName}/${id}`, params );
     }
     else if (method=="POST") {
         var response = await axios.post( apiLink, params );
@@ -791,11 +812,11 @@ async function update_multiple_collections_async(DBcollection, params) {
 *  ADMIN
 ********************************************/
 
-async function get_scores_async(){
+async function get_scores_async(collection){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+"/agreements"
+    const apiLink = API_BASE+"/agreements/"+collection
     try {
         var response = await axios.get( apiLink );
 
@@ -810,11 +831,11 @@ async function get_scores_async(){
     }
 }
 
-async function get_errors_async(dialogueId){
+async function get_errors_async(collection,dialogueId){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+`/errors/${dialogueId}`
+    const apiLink = API_BASE+`/errors/${collection}/${dialogueId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -833,7 +854,7 @@ async function get_collection_errors_async(collectionId){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+`/errors/collection/${collectionId}`
+    const apiLink = API_BASE+`/errors/restore/${collectionId}`
     try {
         var response = await axios.get( apiLink );
 
@@ -865,6 +886,7 @@ async function put_error_async(listOfErrors){
     }
 }
 
+/*
 async function admin_post_empty_dialogue() {
 
     const apiLink = API_BASE+"/dialogues";
@@ -881,6 +903,7 @@ async function admin_post_empty_dialogue() {
         console.log(error)
     }
 }
+*/
 
 async function admin_import_all_annotations(collection) {
 
@@ -990,6 +1013,7 @@ backend =
     annotate_query                              : annotate_query,
     write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,
+    get_registered_annotation_styles            : get_registered_annotation_styles,
 
     get_all_dialogues_async                     : get_all_dialogues_async,
     put_single_dialogue_async                   : put_single_dialogue_async,
@@ -1034,7 +1058,6 @@ backend =
 
     supervision                                  : supervision,
     admin_import_all_annotations                 : admin_import_all_annotations,
-    admin_post_empty_dialogue                    : admin_post_empty_dialogue,
     import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,
     import_new_dialogue_from_json_string_async   : import_new_dialogue_from_json_string_async
 }

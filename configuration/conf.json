@@ -1,16 +1,17 @@
 {
 	"app": {
-		"address":"localhost",
-		"port":5000
+		"address":"0.0.0.0",
+		"port":5000,
+		"annotation_models":["unipi_model.json","lida_model.json"]
 	},
 	"database": {
-		"name": "lida",
+		"name": "matilda",
 		"legacy_configuration": {
 			"address": "localhost",
 			"port": 27017,
 			"username": null,
 			"password": null
 		},
-		"optional_uri": null
+		"optional_uri": "mongodb://mongo:27017/?retryWrites=true&w=majority"
 	}
 }

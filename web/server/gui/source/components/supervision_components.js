@@ -67,7 +67,7 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"document":1} )
+         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1, "document":"length"} )
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
@@ -88,7 +88,7 @@ Vue.component("supervision-view", {
    },
    template:
    `
-<div id="supervision">
+<div id="supervision-container">
    <div class="dialogue-list-title-container">
       <div class="all-dialogues-list-title">
             <h2>{{guiMessages.selected.admin.supervision}}</h2>
@@ -100,6 +100,7 @@ Vue.component("supervision-view", {
    </div>
    
    <div v-if="mode == 'supervision-collections-list'" class="inner-wrap">
+      <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
       <ul class="dialogue-list">
           <li class="listed-dialogue" v-for="(name) in allCollectionsMetadata">
             <div class="int-coll-list-single-item-container">
@@ -117,17 +118,23 @@ Vue.component("supervision-view", {
                      <span v-else>False</span>
                   </div>
 
+				<template v-if="name.assignedTo.length != 1">
                   <div v-if="show_annotators(name.id)"
                      class="int-coll-num-turns-clicked"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo }}
                   </div>
-
                   <div v-else
                      class="int-coll-num-turns"
                      v-on:click="toggle_show_annotators(name.id)">
                     {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo.length }}
                   </div>
+				</template>
+				<template v-else>
+				  <div class="int-coll-num-turns" style="letter-spacing:0.5px; font-size:10.5px;">
+                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo[0] }}
+                  </div>
+				</template>
                </div>
             </div>
          </li>
@@ -145,6 +152,7 @@ Vue.component("supervision-view", {
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
+                    v-bind:selectedCollection="selectedCollection"
                     v-bind:dialogueId="displayingDialogue">
    </supervision-annotation-app>
 </div>
@@ -178,6 +186,7 @@ Vue.component("supervision-collection", {
             }  
          );
         console.log(this.allAnnotators);
+        // TO DO:
         // divide between produced annotations, 
         // annotations from dis-assigned annotators,
         // annotations not yet produced.
@@ -208,7 +217,7 @@ Vue.component("supervision-collection", {
    `  <div id="annotated_wrap" class="inner-wrap">
          <ul class="dialogue-list">
             <li id="annotated_list">
-               <h2>{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
+               <h2 class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
                <div class="entry-list-single-item-container" v-for="name in annotatedCollections">
                   <div v-if="name.done" class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
                      {{guiMessages.selected.admin.button_unfreeze}}
@@ -277,26 +286,27 @@ Vue.component("supervision-dialogues", {
                this.supervisionDialogueMetadata = response;
                this.collectionRate = response[0].status;
                console.log(response);
-               this.collectionAnnotationRate();
+               this.collectionAnnotationRate(response);
          });
       },
 
-      collectionAnnotationRate() {
+      collectionAnnotationRate(allDialogueMetadata) {
           let summatory = 0; 
           total_turns = 0;
-          for (i=0; i < this.supervisionDialogueMetadata.length; i++) {
-              total_turns += Number(this.supervisionDialogueMetadata[i]["num_turns"]-1);
-              summatory += Number(this.supervisionDialogueMetadata[i]["status"].slice(0,-1) * this.supervisionDialogueMetadata[i]["num_turns"]-1)
+          for (i=0; i < allDialogueMetadata.length; i++) {
+              total_turns += Number(allDialogueMetadata[i]["num_turns"]-1);
+              summatory += Number(allDialogueMetadata[i]["status"].slice(0,-1) * allDialogueMetadata[i]["num_turns"]-1)
           }
-          this.colletionRate = Number( summatory / total_turns).toFixed(1);
-          if ((this.colletionRate <= 0) || (this.colletionRate == NaN)) {
-            this.colletionRate = 0;
-          } else if (this.colletionRate >= 99) {
-            this.colletionRate = 100;
+          this.collectionRate = Number( summatory / total_turns).toFixed(1);
+          if ((this.collectionRate <= 0) || (this.collectionRate == NaN)) {
+            this.collectionRate = 0;
+          } else if (this.collectionRate >= 99) {
+            this.collectionRate = 100;
           }
-          this.colletionRate = this.colletionRate+"%";
-          if (this.colletionRate == "NaN%") {
-              this.colletionRate = "0%";
+          this.collectionRate = this.collectionRate+"%";
+          if (this.collectionRate == "NaN%") {
+              this.collectionRate = "0%";
+              this.collectionRate = "0%"
           }
       },
 
@@ -329,8 +339,9 @@ Vue.component("supervision-dialogues", {
   `
     <div class="inner-wrap">
 
-      <h2>
-         <span>{{Su_activeCollection}}:</span> {{ supervisionDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }}, {{collectionRate}} {{guiMessages.selected.lida.annotated}} {{guiMessages.selected.lida.annotatedBy}} {{selectedAnnotator}}
+      <h2 class="list-title-left">
+         <span>{{Su_activeCollection}}:</span> {{ supervisionDialogueMetadata.length }} {{ guiMessages.selected.admin.dataItems }} 
+         <span class="button-title" style="margin-top:0;">{{collectionRate}} {{guiMessages.selected.lida.annotated}} {{guiMessages.selected.lida.annotatedBy}} {{selectedAnnotator}}</span>
       </h2>
 
       <ul class="dialogue-list">
@@ -375,7 +386,7 @@ Vue.component("supervision-dialogues", {
 Vue.component("supervision-annotation-app", {
 
     props: [
-      "dialogueId"
+      "dialogueId","selectedCollection"
     ],
 
     data () {
@@ -391,6 +402,7 @@ Vue.component("supervision-annotation-app", {
             metaTags: [],
             annotatedTurns: [],
             annotationRate: '0%',
+            readOnly: true,
         }
     },
 
@@ -459,10 +471,12 @@ Vue.component("supervision-annotation-app", {
                 })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(this.dialogueId, "supervision")
+          backend.get_annotation_style_async(this.selectedCollection, this.dialogueId, "supervision")
               .then( (response) => {
                   this.annotationFormat = response;
-                  this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  if (this.annotationFormat.global_slot != undefined) {
+                    this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                  }
               });
 
         },
@@ -535,8 +549,8 @@ Vue.component("supervision-annotation-app", {
 
         focus_on_new_query_box: function() {
             console.log('FOCUSING ON THE INPUT BOX')
-            const toFocus = document.getElementById('new-query-entry-box')
-            toFocus.focus()
+            const toFocus = document.getElementById('new-query-entry-box');
+            if (toFocus != null) toFocus.focus();
         },
 
         save_dialogue: function(event) {
@@ -549,32 +563,35 @@ Vue.component("supervision-annotation-app", {
 
     template:
     `
-    <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div id="supervision">
+      <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
-        <dialogue-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId"
-                       v-bind:annotationRate="annotationRate">
-        </dialogue-menu>
+          <dialogue-menu v-bind:changesSaved="allDataSaved"
+                         v-bind:dialogueTitle="dialogueId"
+                         v-bind:annotationRate="annotationRate">
+          </dialogue-menu>
 
-        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
-                        v-bind:turns="dTransformedTurns"
-                        v-bind:currentId="dCurrentId"
-                        v-bind:metaTags="metaTags">
-        </dialogue-turns>
+          <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+                          v-bind:turns="dTransformedTurns"
+                          v-bind:currentId="dCurrentId"
+                          v-bind:metaTags="metaTags">
+          </dialogue-turns>
 
-        <annotations v-bind:globalSlot="annotationFormat.global_slot"
-                     v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
-                     v-bind:classifications="dCurrentTurn.multilabel_classification"
-                     v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
-                     v-bind:currentId="dCurrentId"
-                     v-bind:dialogueNonEmpty="dialogueNonEmpty"
-                     v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId">
-        </annotations>
+          <annotations v-bind:globalSlot="annotationFormat.global_slot"
+                       v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
+                       v-bind:classifications="dCurrentTurn.multilabel_classification"
+                       v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
+                       v-bind:currentId="dCurrentId"
+                       v-bind:dialogueNonEmpty="dialogueNonEmpty"
+                       v-bind:dTurns="dTurns"
+                       v-bind:dialogueId="dialogueId"
+                       v-bind:readOnly="readOnly">
+          </annotations>
 
-        <input-box>
-        </input-box>
+          <input-box>
+          </input-box>
 
+      </div>
     </div>
     `
 });

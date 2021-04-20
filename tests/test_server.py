@@ -15,7 +15,7 @@ sys.path.append(path + "/../server")
 
 # == Local ==
 import app
-import lida_app as lida
+import matilda_app as matilda
 from annotator_config import Configuration
 from interannotator_config import agreementConfig
 

@@ -157,7 +157,7 @@
     font-size: 13px
 }
 
-.entry-date {
+.entry-date, .entry-data, .load-entry-date {
     display: flex;
     justify-content: flex-end;
     text-align: right;
@@ -166,7 +166,15 @@
     text-transform: uppercase;
     font-size: 10px;
     overflow: visible;
-    padding-right: 5px
+    padding-right: 5px;
+}
+
+.entry-data {
+    margin-top: -6px;
+}
+
+.load-entry-date {
+    margin-top: -2px;
 }
 
 .entry-annotated {
@@ -192,6 +200,21 @@
     padding-bottom:8px;
 }
 
+.entry-annotation-style {
+    justify-content: start;
+    font-family: montserrat;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.entry-annotation-style span {
+    font-weight: 100;
+    padding-left:2px;
+}
 
 .entry-done {
     display: flex;
@@ -244,7 +267,8 @@ pre:first-line {
 }
 
 .modal-body input:read-only {
-    background-color:#8080801c;
+    background-color: #8080801c;
+    cursor: not-allowed;
 }
 
 .modal-footer button:last-of-type {
@@ -346,6 +370,13 @@ input:not(:checked) + div {
 
 .radio-primary + div {
     border-left-color:red !important;
+}
+
+.creation-list {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.64);
+    margin-top: 1%;
+    border:1px solid #d1d1d3;
 }
 
 .collection-list .entry-info:hover {

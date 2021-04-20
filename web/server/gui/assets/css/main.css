@@ -108,21 +108,21 @@ input:focus {
 }
 
 
-.sticky{
+.sticky {
     position:sticky;
-
     top:0;
     height: auto;
     margin: 0.5em;
     margin-left: 1em;
     background-color: inherit;
-
+    font-size: 13px;
     font-family: Montserrat, CoreSansNR65Bold, Helvetica, Arial, sans-serif;
     font-weight:600;
+    text-transform: capitalize;
 }
 
 .space{
-    margin: 3%;
+    margin:0;
 }
 
 
@@ -161,6 +161,20 @@ input:focus {
     grid-area: button-section;
 }
 
+
+.list-title {
+    color:rgba(0,0,0,0.62);
+    display: inline-block;
+}
+
+.list-title-left {
+    color:rgba(0,0,0,0.62);
+}
+
+.button-title {
+    float:right;
+    margin-top: 1.5em;
+}
 
 /*******************************************************************************
 ********************************************************************************
@@ -250,7 +264,6 @@ input:focus {
 
 .int-coll-num-turns:hover {
     background-color: #999;
-    transition: 0.2s;
     color: white;
 }
 
@@ -261,12 +274,12 @@ input:focus {
     justify-content: flex-end;
     align-items: center;
     text-align: right;
-    padding-right: 20px;
+    padding-right: 3px;
     font-weight: bold;
     font-family: montserrat;
     text-transform: uppercase;
     font-size: 11px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     background-color: #999;
     transition: 0.2s;
     color: white;
@@ -277,7 +290,7 @@ input:focus {
 }
 
 .int-info {
-    grid-template: [row1-start] "id numTurns . visited" [row1-end] / 5fr 2fr 0fr 1fr !important;
+    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 6fr 0.1fr 1fr 2fr !important;
 }
 
 .int-dialogue-id {
@@ -328,16 +341,29 @@ input:focus {
     box-shadow: 0 1px 5px rgba(0,0,0,0.09);
 }
 
+#supervision-container {
+    height: 100%;
+}
+
+#supervision {
+    height:100%;
+    overflow: hidden;
+}
+
 #supervision #dialogue-menu {
     height:3em;
 }
+
 #supervision #dialogue-menu .back-button {
     display:none !important;
 }
+
 #supervision #dialogue-turns {
+    margin-top:4%;
     grid-row-start:1;
-    overflow-y:hidden;
+    overflow-y:scroll;
 }
+
 #supervision #input-box {
     display:none;
 }
@@ -350,7 +376,9 @@ input:focus {
 
 .panel {
     padding: 10px 17px !important;
-    box-shadow:0 2px #1675c1, 0px 4px 6px 0px #00000026;
+    box-shadow: 0 2px #1675c1, 0px 4px 6px 0px #00000026, 0px 15px 5px 0px rgb(0 0 0 / 10%);
+    font-size: 14px !important;
+    line-height: 40px !important;
 }
 
 .admin-panel p {
@@ -400,13 +428,12 @@ input:focus {
 
 .logo img {
     width: 100%;
-    vertical-align: top;
 }
 
 .copyright {
-    font-size: .7em;
+    font-size: .8em;
     line-height: 4em;
-    color: #636b74;
+    color: #8a95a0;
     margin-left: 20px;
 }
 .foot-bar {
@@ -418,8 +445,8 @@ input:focus {
     text-align:center;
     padding: 13px 24px;
     vertical-align:bottom;
-    color:#636b74;
-    font-size:13px;
+    color:#8a95a0;
+    font-size:.8em;
 }
 
 .language-list-title-container label {
