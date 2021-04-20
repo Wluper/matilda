@@ -8,6 +8,8 @@
 
 **Paper:** [link to the EACL paper](https://www.aclweb.org/anthology/2021.eacl-demos.5/)
 
+Citation at bottom of README! (Please cite when using)
+
 MATILDA is the first multi-annotator, multi-language annotation tool that is built on the top of an open source dialogue annotation tool [LIDA](https://github.com/Wluper/lida),specifically it has full support for multiple annotators, project management and multiple annotation models. It uses MongoDB for data delivery and consistency, It comes with  production ready server by using Gunicorn and nginx.
 
 
