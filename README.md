@@ -4,12 +4,12 @@
 
 **Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi,
 
-**What's new in MATILDA:**
-1. Full support for multiple annotators and project management
-2. Full support for multiple annotation models
-3. Database MongoDB for data delivery and consistency
-4. Production ready server with Gunicorn and nginx
-5. New annotation functions
+**Contact:** contact@wluper.com
+
+**Paper:** [link to the EACL paper](https://www.aclweb.org/anthology/2021.eacl-demos.5/)
+
+MATILDA is the first multi-annotator, multi-language annotation tool that is built on the top of an open source dialogue annotation tool [LIDA](https://github.com/Wluper/lida),specifically it has full support for multiple annotators, project management and multiple annotation models. It uses MongoDB for data delivery and consistency, It comes with  production ready server by using Gunicorn and nginx.
+
 
 ## Document structure
 
