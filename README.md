@@ -1,6 +1,10 @@
 ![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
-**What's new in MATILDA:** 
+# MATILDA: Multi-AnnoTtor multi-language Interactive Lightweight Dialogue Annotator
+
+**Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi,
+
+**What's new in MATILDA:**
 1. Full support for multiple annotators and project management
 2. Full support for multiple annotation models
 3. Database MongoDB for data delivery and consistency
@@ -15,7 +19,7 @@
      - Docker and docker-compose
    - Option B) Running the Server with flask (WSGI) or gunicorn
      - Downloading & Installing Modules Requirements
-     - Run the server 
+     - Run the server
    - Optional: Installing a MongoDB local database
    - Accessing the interface
    - First username and password
@@ -35,23 +39,23 @@ In order to run MATILDA on Docker you will need a 64bit system because that's th
 If you wish to use MATILDA with a 32bit system you can just follow the Option B steps.
 In both cases server needs a minimum of 60MB on the hard disk, plus the space needed for the database.
 
-MATILDA is very light-weight. 
+MATILDA is very light-weight.
 Containerized with Docker MATILDA smoothly run on a system based on Intel Celeron J3355, a 2-core microprocessor dated 2016 created for entry level PCs, equipped with a 2GB RAM. During a significant processing peak induced with an upload, the footprint did not exceed a few (2-3%) percent of hardware capacity.
 
 ## 1. Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue.js and communicates
-with the back end via a RESTful API. 
+with the back end via a RESTful API.
 
-To run MATILDA, you will need to first run the Flask server on your 
+To run MATILDA, you will need to first run the Flask server on your
 local machine / wherever you want the back end to run.
 
 To do this you have two options:
 1) Using the provided docker-compose.yml file to run it
 in a docker container together with its database. This is probably faster and cleaner.
-2) Otherwise you will need to have Python 3.6 or above installed on your machine 
-and a mongoDB database, either online (there are many free services) or local. 
+2) Otherwise you will need to have Python 3.6 or above installed on your machine
+and a mongoDB database, either online (there are many free services) or local.
 If you are using an online database you will need to set the database address in
 configuration/conf.json.
 
@@ -139,18 +143,18 @@ You can test it's running by:
 
 ### Accessing the interface
 
-Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
+Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally
 or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
 
-HTTP Requests from your client may not reach your server in some configuration environment, 
+HTTP Requests from your client may not reach your server in some configuration environment,
 in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
 Other configuration options are exposed in `/Configuration/conf.json`.
 
 ### First username and password
 
 On its first start MATILDA creates an administrator account with username "admin" and password "admin".
-You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
+You need to use this credentials for your first login. Once you are allowed to enter it's recommended
 to change the admin password from the graphical interface.
 
 ## 2. Configuration
@@ -168,8 +172,8 @@ If you are using the Docker version you can also perform additional configuratio
 ### Annotation Models
 
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
-`/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
-which labels will appear in MATILDA's front end. 
+`/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes
+which labels will appear in MATILDA's front end.
 You can also add an entire new annotation model file and put a reference to it in the `/Configuration/conf.json` file in
 order to instruct the program to load it on start.
 
@@ -272,8 +276,8 @@ have the following properties:
   of key-value pairs which are used to display the dialogue data for annotation.
 
 * Some key-value pairs are compulsory in order to correctly display the
-  dialogue. The key-value pairs which are compulsory are defined in the 
-  annotation model json file in the `/Configuration` folder read by `/web/gui/server/annotator_config.py` module. 
+  dialogue. The key-value pairs which are compulsory are defined in the
+  annotation model json file in the `/Configuration` folder read by `/web/gui/server/annotator_config.py` module.
 
 * By default, the only required key-value pair in each turn is called
   `usr` and should be the user's query as a string.
