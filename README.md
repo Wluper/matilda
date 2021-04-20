@@ -13,8 +13,8 @@ MATILDA is the first multi-annotator, multi-language annotation tool that is bui
 
 ## Document structure
 
-<strong>Requirements</strong>
-<strong>Installation</strong>
+0. <strong>Requirements</strong>
+1. <strong>Installation</strong>
    - Option A) Running the Server with Docker
      - Docker and docker-compose
    - Option B) Running the Server with flask (WSGI) or gunicorn
@@ -23,15 +23,15 @@ MATILDA is the first multi-annotator, multi-language annotation tool that is bui
    - Optional: Installing a MongoDB local database
    - Accessing the interface
    - First username and password
-<strong>Configuration</strong>
+2. <strong>Configuration</strong>
    - Network and database
    - Annotation Models
-<strong>Advanced Configuration</strong>
+3. <strong>Advanced Configuration</strong>
    - New Labels
    - Interannotator Tool
    - Adding ML Models As Recommenders
    - Dummy Models
-<strong>JSON Format Example</strong>
+4. <strong>JSON Format Example</strong>
 
 ## 0. Requirements
 
