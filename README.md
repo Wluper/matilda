@@ -2,7 +2,7 @@
 
 # MATILDA: Multi-AnnoTtor multi-language Interactive Lightweight Dialogue Annotator
 
-**Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi,
+**Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi
 
 **Contact:** contact@wluper.com
 
