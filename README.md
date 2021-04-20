@@ -15,9 +15,9 @@ MATILDA is the first multi-annotator, multi-language annotation tool that is bui
 
 0. <strong>Requirements</strong>
 1. <strong>Installation</strong>
-   - Option A) Running the Server with Docker
+   - Option A: Running the Server with Docker
      - Docker and docker-compose
-   - Option B) Running the Server with flask (WSGI) or gunicorn
+   - Option B: Running the Server with flask (WSGI) or gunicorn
      - Downloading & Installing Modules Requirements
      - Run the server
    - Optional: Installing a MongoDB local database
@@ -61,7 +61,7 @@ configuration/conf.json.
 
 Further instructions are provided in the next paragraph.
 
-### Option A) Running the Server with Docker
+### Option A: Running the Server with Docker
 
 MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux, OSX and Windows systems.
 
@@ -86,9 +86,9 @@ To manually stop the service use the command:
 
 <strong> For further details, please see the specific instructions in `/docker_readme.md.` </strong>
 
-### Option B) Running the Server with Flask (WSGI) or Gunicorn
+### Option B: Running the Server with Flask (WSGI) or Gunicorn
 
-#### 1) Downloading & Installing Modules Requirements
+#### 1. Downloading & Installing Modules Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -101,7 +101,7 @@ $ cd MATILDA/ && source bin/activate
 (MATILDA)$ pip3 install -r requirements.txt
 ```
 
-#### 2) Run the server with Flask or Gunicorn
+#### 2. Run the server with Flask or Gunicorn
 
 Assuming you have just followed the steps to "Downloading & Installing MATILDA Module Requirements"
 and you have a mongoDB locally installed on your system:
