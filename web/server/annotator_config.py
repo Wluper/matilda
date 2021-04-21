@@ -99,6 +99,9 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
+                        if i == 0:
+                            continue
+
                         if info["required"]:
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \

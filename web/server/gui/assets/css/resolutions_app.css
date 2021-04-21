@@ -357,9 +357,6 @@
 
 }
 
-
-
-
 .user-string-type-text{
     background-color: #ffffff!important;
     border-radius: 2px;
@@ -370,7 +367,6 @@
     grid-column-end: -1;
 
 }
-
 
 .user-string-type-text input{
     display: inline-block;
@@ -384,5 +380,13 @@
     padding: 0 15px;
 }
 
+.resolution-global-slot {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.resolution-global-input {
+    width:100%;
+}
 
 /* EOF */

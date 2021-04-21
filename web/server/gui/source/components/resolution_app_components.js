@@ -19,6 +19,7 @@ Vue.component("resolution-app", {
             currentErrorId: 1,
             annotationFormat : {},
             goldDialogue : this.dialogue,
+            globalSlotValue: "",
         }
     },
 
@@ -65,6 +66,7 @@ Vue.component("resolution-app", {
 
         annotationAppEventBus.$on("update_classification", this.resolve_annotation_update );
         annotationAppEventBus.$on("classification_string_updated", this.resolve_annotation_update );
+        annotationAppEventBus.$on("global_string_updated", this.update_global_slot_value );
 
     },
 
@@ -86,7 +88,8 @@ Vue.component("resolution-app", {
 
             annotationAppEventBus.$off("update_classification", this.resolve_annotation_update );
             annotationAppEventBus.$off("classification_string_updated", this.resolve_annotation_update );
-
+            annotationAppEventBus.$off("global_string_updated", this.update_global_slot_value );
+            //get back using the event
             adminEventBus.$emit("conflicts_on_collection", this.collectionId);
         },
         init: function() {
@@ -148,6 +151,10 @@ Vue.component("resolution-app", {
 
         },
 
+        update_global_slot_value : function(event) {
+            this.globalSlotValue = event;
+        },
+
         accept: function(event) {
             this.metaDataList[this.currentErrorId-1].accepted=true;
             let errorsToSave = [];
@@ -158,6 +165,12 @@ Vue.component("resolution-app", {
                 dialogueId : this.dialogueId,
                 collectionId : this.collectionId
             }
+
+            if (this.metaDataList[this.currentErrorId-1]["name"] == "global_slot") {
+                params["errorObject"]["predictions"][0] = this.globalSlotValue;
+                this.errorList[this.currentErrorId-1]["predictions"][0][1] = this.globalSlotValue;
+            }
+
             errorsToSave.push(params);
             backend.put_error_async(errorsToSave);
 

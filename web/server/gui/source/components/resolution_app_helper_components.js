@@ -357,15 +357,15 @@ Vue.component("annotation-component", {
             v-bind:accepted="metaList[0].accepted">
         </classification-string-annotation>
 
-        <classification-global-annotation
-            v-else-if="type=='multilabel_classification_string'"
-            v-bind:classification_strings="predictions"
-            v-bind:uniqueName="uniqueName"
+        <resolution-global-slot
+            v-else-if="type=='multilabel_global_string'"
             v-bind:classes="annotationFormat"
-            v-bind:confidences="confidences"
-            v-bind:multilabelStringOptions="multilabelStringOptions"
+            v-bind:predictions="predictions"
+            v-bind:uniqueName="uniqueName"
+            v-bind:labelName="predictions[0][0]"
+            v-bind:options="multilabelStringOptions"
             v-bind:accepted="metaList[0].accepted">
-        </classification-global-annotation>
+        </resolution-global-slot>
 
         <div v-else >
             {{guiMessages.selected.resolution_app.fail}}
@@ -471,7 +471,11 @@ Vue.component("resolution-type-header", {
          },
 
          switchSlotValue: function(optionIndex) {
-            adminEventBus.$emit("switch_slot_values", optionIndex);
+             if (this.uniqueName == "global_slot") {
+                adminEventBus.$emit("switch_global_values", optionIndex);
+             } else {
+                adminEventBus.$emit("switch_slot_values", optionIndex);
+             }
          }
 
     },
@@ -558,6 +562,73 @@ Vue.component("accept", {
     `
     <div id="accept">
         <button v-on:click="accept()" class="accept-button btn btn-sm- btn-primary"> {{guiMessages.selected.resolution_app.accept}}</button>
+    </div>
+    `
+});
+
+Vue.component("resolution-global-slot", {
+    props : ["predictions", "uniqueName", "options", "accepted", "labelName", "output"],
+
+    data() { 
+        return {
+            guiMessages,
+            info:"",
+            showInfo:false,
+            selected:0,
+            typeName:this.options[0][0][0],
+            typeValue:this.options[0][0][1],
+        }
+    },
+
+    created () {
+        console.log(this.predictions, this.uniqueName, this.options, this.accepted);
+        adminEventBus.$on("switch_global_values", this.switchGlobalValue);
+    },
+
+    beforeDestroyed() {
+        adminEventBus.$off("switch_global_values", this.switchGlobalValue);
+    },
+    // METHODS
+    methods: {
+
+        // function to switch between options
+
+        // function for actual saving, maybe in metaData
+
+        switchGlobalValue: function(optionIndex) {
+            console.log(optionIndex);
+            if (optionIndex == "gold") {
+                this.typeName = this.predictions[0][0];
+                this.typeValue = this.predictions[0][1];   
+            } else {
+                this.typeName = this.options[optionIndex][0][0];
+                this.typeValue = this.options[optionIndex][0][1];   
+            }
+        },
+
+        updateGlobalValue: function(event) {
+            annotationAppEventBus.$emit("global_string_updated", event.target.value);
+        }
+
+    },
+
+    template:
+    `
+    <div id="resolution-global-slot">
+        <div id="multilabel-global-header" class="classification-annotation">
+
+            <div class="multilabel-string-item-new-wrapper"
+                <div class="global-input-wrapper">
+                    <div class="single-annotation-header resolution-global-slot">
+                        {{labelName.replace(/_/g, ' ')}}
+                    </div>
+                    <input class="multilabel-string-input resolution-global-input" type="text" 
+                        v-bind:id="typeName" 
+                        v-model="typeValue"
+                        v-on:input="updateGlobalValue($event)">
+                </div>
+            </div>
+        </div>
     </div>
     `
 });
