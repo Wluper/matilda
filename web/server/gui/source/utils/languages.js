@@ -503,8 +503,8 @@ guiMessages = {
             "Non hai caricato alcun file. Carica un file json dal tuo computer per proseguire.",
             "Le annotazioni sono sempre riferite ad un utente. Seleziona l'annotatore a cui riferirle per continuare.",
             "Il formato del tuo file json è incorretto. Controlla il formato del file che vuoi caricare per errori di struttura, caratteri speciali o tipi di dato.",
-            "Hai caricato una lista di collezioni annotate, non una singola collezone annotata. Riformatta il tuo file per includere solo una collezione annotata.",
-            "Sembra che tu abbia caricato una collezione annotata completa di tutti i meta-dati. Solo le annotazioni (racchiuse nel campo 'document') verranno caricate. Altre informazioni nel tuo file come la percentuale di annotazione, lo stato di completamento, l'id del documento e l'annotatore precedente saranno ignorate.",
+            "Hai caricato una lista di collezioni, non una singola collezione. Riformatta il tuo file per includere solo una collezione.",
+            "Sembra che tu abbia caricato una collezione completa di tutti i meta-dati. Solo la lista dei dialoghi (racchiuse nel campo 'document') verrà caricata. Altre informazioni nel tuo file come la percentuale di annotazione, lo stato di completamento, l'id del documento e l'annotatore precedente saranno ignorate.",
         ],
         modal_formatInfo_list:
         [

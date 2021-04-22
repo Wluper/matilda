@@ -1473,8 +1473,8 @@ def guard():
             print("Access violation on route "+requestedUri+" from "+request.remote_addr)
             return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
-#logging.basicConfig(filename='error.log', level=logging.DEBUG)
-MatildaApp.debug = True
+logging.basicConfig(filename='error.log', level=logging.DEBUG)
+#MatildaApp.debug = True
 
 MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 

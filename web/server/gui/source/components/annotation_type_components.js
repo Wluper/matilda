@@ -202,8 +202,9 @@ Vue.component('classification-string-annotation', {
       created () {
          if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
+            this.collapsed = "new";
          } else {
-            if ((this.classes.length > 1) && (this.slotView == "new")){
+            if ((this.classes.length > 1) && (this.slotView == "new")) {
                this.collapsed = "new";
             }
          }
@@ -493,7 +494,7 @@ Vue.component('classification-string-annotation', {
 
         <div v-else-if="collapsed=='new'" class="classification-annotation">
 
-                <div class="single-annotation-header">
+                <div class="single-annotation-header" v-if="multilabelStringOptions == undefined">
                     <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
                     </div>

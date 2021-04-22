@@ -118,6 +118,7 @@
 .entry-list-single-item-container {
     display: grid;
     grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
     transition: ease 175ms all;
@@ -622,22 +623,22 @@ input[type="password"]:hover {
     font-family: 'Montserrat';
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
     align-self: center;
 }
 
 .annotation-models-list .entry-info label {
     grid-template: none !important;
+    padding:2px;
 }
 
 .annotation-models-list .edit-dialogue-button, 
 .annotation-models-list .del-dialogue-button{
     margin-top:0px;
-    margin-right:4%;
     width: 48%;
     height: 55%;
     place-self: center;
-    margin-right: 4%;
+    margin-right: 7%;
 }
 
 .annotation-models-list button {

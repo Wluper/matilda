@@ -60,7 +60,7 @@ Vue.component("interannotator-view", {
     },
 
     count_errors() {
-        for (i=0; i < this.allCollectionsMetadata.length-1; i++) {
+        for (i=0; i < this.allCollectionsMetadata.length; i++) {
             var count = 0;
             var resolved = 0;
             if (this.allCollectionsMetadata[i]["errors"]["errorsMeta"] != undefined) {

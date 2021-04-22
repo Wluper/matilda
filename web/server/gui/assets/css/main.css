@@ -183,6 +183,7 @@ select {
 .int-coll-list-single-item-container {
     display: grid;
     grid-template: [row1-start] "info" [row1-end] / 1fr;
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 6px 5px rgba(0,0,0,0.05);
     transition: ease 175ms all;

@@ -385,8 +385,7 @@ Vue.component('supervisor-upload-modal', {
          } else if (check["document"] != undefined) {
             console.log("Collection document found in your json file. Other data but 'document' field will be ignored.");
             alert(guiMessages.selected.exception_create_annotations[4]);
-            this.newDocument = this.newDocument["document"];
-            console.log(this.newDocument);
+            this.newDocument = JSON.stringify(check["document"]);
          }
          backend.new_annotated_collection_async(this.selectedCollection, {"annotator":this.assignedTo}, this.newDocument)
             .then( (response) => {

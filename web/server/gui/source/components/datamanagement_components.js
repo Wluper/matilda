@@ -736,9 +736,9 @@ Vue.component('collection-creation', {
                 console.log('---- HANDLING LOADED JSON FILE ----');
                 let reader = new FileReader();
                 reader.onload = (event) => {
-                console.log('THE READER VALUE', reader);
-                this.entry.showDocument = reader.result;
-                this.entry.document = reader.result;
+                    console.log('THE READER VALUE', reader);
+                    this.entry.showDocument = reader.result;
+                    this.entry.document = reader.result;
             }
             reader.readAsText(file);
             } else {
@@ -770,6 +770,25 @@ Vue.component('collection-creation', {
                if (params[element] == undefined)
                   params[element] = ""
             }
+            //check format
+            try {
+                var check = JSON.parse(this.entry.document);
+             } catch (e) {
+                alert(e,guiMessages.selected.exception_create_annotations[2]);
+                return;
+             }
+             if (check.length > 1) {
+                alert(guiMessages.selected.exception_create_annotations[3]);
+                return;
+             } else if (check["document"] != undefined) {
+                console.log("Collection document found in your json file. Other data but 'document' field will be ignored.");
+                alert(guiMessages.selected.exception_create_annotations[4]);
+                this.entry.document = JSON.stringify(check["document"]);
+             } else {
+                 //check for annotation
+                 //for (turn in )
+                 console.log(check);
+             }
             backend.new_collection_async(this.entry.id, params, this.entry.document)
                .then( (response) => {
                     console.log(response);
