@@ -376,7 +376,7 @@ Vue.component('supervisor-upload-modal', {
          try {
             var check = JSON.parse(this.newDocument);
          } catch (e) {
-            alert(guiMessages.selected.exception_create_annotations[2]);
+            alert(e, guiMessages.selected.exception_create_annotations[2]);
             return;
          }
          if (check.length > 1) {
