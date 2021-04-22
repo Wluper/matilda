@@ -155,6 +155,7 @@ guiMessages = {
             optionMin: "Option",
             prediction: "Prediction",
             instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
+            buttonWipeCache: "This will check all your collection dialogues for errors. After the end of this process you will be returned to the collections list."
         },
         admin_panel: [
             "Compare annotations on the same collection and resolve its conflicts",
@@ -469,6 +470,7 @@ guiMessages = {
             optionMin: "Opzione",
             prediction: "Predizione",
             instructions: "Confronta le diverse annotazioni generate dal sistema e dagli annatotatori così da produrre una versione definitiva per la collezione gold",
+            buttonWipeCache: "Questo processo analizzerà nuovamente tutti i dialoghi della tua collezione. Una volta completato sarai riportato nella lista delle collezioni e potrai rientrare."
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
@@ -754,6 +756,7 @@ guiMessages = {
             optionMin: "Option",
             prediction: "Prediction",
             instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
+            buttonWipeCache: "This will check all your collection dialogues for errors. After the end of this process you will be returned to the collections list."
         },
         admin_panel: [
             "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",

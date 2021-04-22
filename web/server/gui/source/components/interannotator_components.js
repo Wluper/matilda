@@ -281,10 +281,9 @@ Vue.component("interannotator-app", {
     get_dialogues_with_errors(errors) {
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
-                this.dialoguesWithErrors.push(dialogue);
-                this.dialoguesWithErrors.forEach( element => 
-                    document.getElementById(element).setAttribute("class","int-listed-dialogue relevant")
-                );
+                this.dialoguesWithErrors.push({dialogue});
+                document.getElementById(dialogue).setAttribute("class","int-listed-dialogue relevant");
+                document.getElementById(dialogue+"_count").textContent = "Errors: "+errors["errors"][dialogue].length;
             }
         }
         console.log("Errors found in",this.dialoguesWithErrors);
@@ -389,7 +388,7 @@ Vue.component("interannotator-app", {
     },
 
     wipe_cache() {
-        if (confirm(guiMessages.selected.admin.wipeCache)) {
+        if (confirm(guiMessages.selected.resolution_app.buttonWipeCache)) {
             backend.update_collection_async(this.displayingCollection, "dialogues_collections", {"errors":{}})
                 .then( (response) => {
                     console.log(response);
@@ -466,7 +465,7 @@ Vue.component("interannotator-app", {
                     {{dat[0]}}
                 </div>
 
-                <div class="filler-space" v-on:click="clicked_dialogue(dat[0])">
+                <div class="error-count-space" v-bind:id="dat[0]+'_count'" v-on:click="clicked_dialogue(dat[0])">
                 </div>
 
                 <div v-if="dialogue_already_visited(dat[0])"
