@@ -76,7 +76,7 @@ Vue.component("interannotator-view", {
             this.allCollectionsMetadata[i]["errors"]["found"] = count; 
             this.allCollectionsMetadata[i]["errors"]["resolved"] = resolved;  
         }
-        console.log(this.allCollectionsMetadata);
+        console.log("Error count",this.allCollectionsMetadata);
     },
 
     dialogue_already_visited(id) {
@@ -85,7 +85,7 @@ Vue.component("interannotator-view", {
 
     clicked_collection(clickedCollection) {
         //load in interannotator all the annotated versions of the same collection
-        mainContainer.style.cursor = "progress";
+        document.body.style.cursor = "progress";
         backend.del_all_dialogues_async("admin")
             .then( (response) => {
                 console.log(response);
@@ -93,7 +93,7 @@ Vue.component("interannotator-view", {
                     .then( (response) => {
                         console.log("===== LOADING ANNOTATED COLLECTIONS FOR",clickedCollection," =====");
                         console.log(response);
-                        mainContainer.style.cursor = null;
+                        document.body.style.cursor = null;
                         if (response.data.status == "fail") {
                             alert(guiMessages.selected.admin.importConflictsResult);
                             return;

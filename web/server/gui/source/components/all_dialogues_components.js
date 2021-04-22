@@ -83,8 +83,7 @@ Vue.component("all-dialogues", {
 
       restore_session_from_database: function () {
          console.log("Ready to restore from database");
-         const mainContainer = document.getElementById("mainContainer");
-         mainContainer.style.cursor = "progress";
+         document.body.style.cursor = "progress";
          if (this.activeCollection != undefined) {
             var doc = this.activeCollection;
          } else {
@@ -94,7 +93,7 @@ Vue.component("all-dialogues", {
             .then( (response) => {
                console.log(response);
                allDialoguesEventBus.$emit("refresh_dialogue_list");
-               mainContainer.style.cursor = null;
+               document.body.style.cursor = null;
          });
       },
 

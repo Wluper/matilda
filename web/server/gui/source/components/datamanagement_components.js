@@ -58,7 +58,7 @@ Vue.component("datamanagement-view", {
         },
 
         getAllEntriesFromServer() {
-            mainContainer.style.cursor = "progress";
+            document.body.style.cursor = "progress";
             projection = {"annotationStyle":1, "assignedTo":1, "description":1, "document":"length", "gold":1, "id":1};
             backend.get_specific_collections("dialogues_collections",{}, projection)
                 .then( (response) => {
@@ -67,7 +67,7 @@ Vue.component("datamanagement-view", {
                     }
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
@@ -77,7 +77,7 @@ Vue.component("datamanagement-view", {
 
         inspect_entry(clickedEntry) {
             event.stopPropagation();
-            mainContainer.style.cursor = "progress";
+            document.body.style.cursor = "progress";
             this.changesSaved = "";
             this.showUser = "all";
             this.showCollection = clickedEntry;
@@ -386,7 +386,7 @@ Vue.component('collection-users-reverse', {
                     }
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
@@ -551,7 +551,7 @@ Vue.component('collection-entry-details', {
                      console.log("Collection details",response[0]);
                      this.entry = response[0];
                      this.checkedUsers = response[0]["assignedTo"]
-                     mainContainer.style.cursor = null;
+                     document.body.style.cursor = null;
                      this.showGold.boo = this.check_if_gold(this.entry);
             });
         },

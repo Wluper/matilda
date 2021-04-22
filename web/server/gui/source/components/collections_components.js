@@ -90,13 +90,13 @@ Vue.component("collection-view", {
         },
 
         getAllEntriesFromServer() {
-            mainContainer.style.cursor = "progress";
+            document.body.style.cursor = "progress";
             backend.get_specific_collections("dialogues_collections",{"assignedTo":mainApp.userName})
                 .then( (response) => {
                     console.log("==== ASSIGNED COLLECTIONS ====");
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     if (this.allEntryMetadata.length != 0) {
                         this.retrieveActiveCollection();
                     } else {
@@ -152,7 +152,7 @@ Vue.component("collection-view", {
                 del = true;
             }
             if (del == true) {
-                mainContainer.style.cursor = "progress";
+                document.body.style.cursor = "progress";
                 backend.del_all_dialogues_async()
                 .then( (response) => {
                     console.log(response);
@@ -164,7 +164,7 @@ Vue.component("collection-view", {
                                 console.log("=== CREATED NEW DOCUMENT ====")
                             }
                             databaseEventBus.$emit("collection_active", clickedEntry);
-                            mainContainer.style.cursor = null;
+                            document.body.style.cursor = null;
                             annotationAppEventBus.$emit("go_back");
                         }
                     );
@@ -191,10 +191,10 @@ Vue.component("collection-view", {
         }, 
 
         update_annotations(collectionID) {
-            mainContainer.style.cursor = "progress";
+            document.body.style.cursor = "progress";
             backend.update_annotations(mainApp.activeCollection, {"status":mainApp.collectionRate}, false)
                 .then( (response) => {
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     databaseEventBus.$emit('collections_changed');
                     this.changesSaved = "true";
             });

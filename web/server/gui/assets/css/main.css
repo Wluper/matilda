@@ -288,7 +288,7 @@ select {
 }
 
 .int-info {
-    grid-template: [row-start] "id count visited numTurns" [row-end] / 3fr 1fr 1fr 1fr !important;
+    grid-template: [row-start] "id count visited numTurns" [row-end] / 5fr 2fr 1.5fr 1.5fr !important;
 }
 
 .int-dialogue-id {

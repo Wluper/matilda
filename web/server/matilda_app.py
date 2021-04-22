@@ -1471,7 +1471,7 @@ def guard():
         check = LoginFuncs.checkSession()
         if check == False:
             print("Access violation on route "+requestedUri+" from "+request.remote_addr)
-            return {"status":"logout", "error":"Server rebooted. You need to log-in again."}
+            return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
 #logging.basicConfig(filename='error.log', level=logging.DEBUG)
 MatildaApp.debug = True

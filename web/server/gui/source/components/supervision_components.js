@@ -195,7 +195,7 @@ Vue.component("supervision-collection", {
 
    methods: {
       get_all_annotated_collections: function(id) {
-         mainContainer.style.cursor = "progress";
+         document.body.style.cursor = "progress";
          backend.get_specific_collections("annotated_collections",{"id":id}, {"annotator":1,"done":1,"status":1,"lastUpdate":1})
             .then( (response) => {
                console.log("==== ANNOTATED VERSIONS FOR",id,"====");
@@ -215,7 +215,7 @@ Vue.component("supervision-collection", {
                   }
                }
                console.log(this.missingAnnotations)
-               mainContainer.style.cursor = null;
+               document.body.style.cursor = null;
             }  
          );
         console.log(this.allAnnotators);
