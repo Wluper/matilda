@@ -140,6 +140,30 @@ async function get_annotation_style_async(collection,id,supervision){
 
 }
 
+async function get_logs(complete=undefined){
+
+    if (complete == undefined) {
+        var apiLink = API_BASE+"/logs";
+    } else {
+        var apiLink = API_BASE+"/logs/complete";
+    }
+
+    try {
+        var response = await axios.get(apiLink)
+
+        let logs = response.data
+        console.log("============= APP LOGS ==============")
+        console.log(logs)
+        return logs
+
+    } catch (error) {
+
+        console.log(error);
+        alert(error);
+    }
+
+};
+
 async function get_registered_annotation_styles(){
 
     const apiLink = API_BASE+"/registered_annotationstyles";
@@ -159,7 +183,7 @@ async function get_registered_annotation_styles(){
         alert(error);
     }
 
-};
+}
 
 
 /***************************************
@@ -1091,6 +1115,7 @@ backend =
     get_annotation_style_async                  : get_annotation_style_async,
     get_registered_annotation_styles            : get_registered_annotation_styles,
     manage_configuration_file                   : manage_configuration_file,
+    get_logs                                    : get_logs,
 
     get_all_dialogues_async                     : get_all_dialogues_async,
     put_single_dialogue_async                   : put_single_dialogue_async,

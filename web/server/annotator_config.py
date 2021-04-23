@@ -99,6 +99,7 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
+                        #turn 0 stores meta-tags
                         if i == 0:
                             continue
 
@@ -360,6 +361,62 @@ def agreement_classification_score(listOfClassifications, totalLabels):
     return countDict
 
 
+def agreement_classification_string_score(listOfClassifications, totalLabels):
+    """
+    computes, whether there is diagreement, the most likely prediction and confidences of each.
+    """
+    countDict = { "counts" : defaultdict(float), "total" : 0 , "errors":0, "annotatedBy" : 0, "alpha" : 0.0 , "kappa" : 0.0, "accuracy" : 0 }
+    counter = 0
+
+    #getting raw counts
+    for prediction in listOfClassifications:
+
+        if len(prediction) == 1:
+
+            counter += 1
+
+            for label in prediction[0]:
+
+                countDict["counts"][label] += 1
+        else:
+            counter += 1
+
+            for label in prediction:
+
+                countDict["counts"][label] += 1
+
+    countDict["annotatedBy"] = counter
+
+    #getting error, `alpha` and `kappa` -> slightly modified version of Fleiss Kappa & Krippendorff Alpha
+    errorCount = 0
+    totalLabel = 0
+    for label, count in countDict["counts"].items():
+
+        totalLabel += 1
+
+        if counter > count:
+
+            errorCount += 1
+
+    countDict["errors"] = errorCount
+
+    countDict["total"] = totalLabel
+
+
+    #kappa is calculated with uniform random probabilty for the chance
+    A0 = (1 / (totalLabels * totalLabels ) )
+    Ae = errorCount / totalLabels
+    
+    if A0 == 1:
+        countDict["kappa"] = Ae-A0
+    else:
+        countDict["kappa"] = (Ae-A0) / (1-A0)
+
+    #A02
+    countDict["accuracy"] = errorCount/totalLabels
+
+    return countDict
+
 
 ##############################################
 # API to the outside world
@@ -377,19 +434,6 @@ agreementScoreConfig = {
     "data" : None,
     "string" : None,
     "multilabel_classification" : agreement_classification_score,
-    "multilabel_classification_string" : None,
+    "multilabel_classification_string" : agreement_classification_string_score,
     "multilabel_global_string" : None
 }
-
-
-def convert_to_format(dialogue):
-    turnList = []
-    metaTags = {}
-    turnList.append(metaTags)
-    for element in dialogue:
-        if ((element == "log") and (type(dialogue[element]) == list)):
-            for turn in dialogue[element]:
-                turnList.append(turn)
-        else:
-            turnList[0][element] = dialogue[element]
-    return turnList

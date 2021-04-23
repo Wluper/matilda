@@ -144,7 +144,7 @@ var mainApp = new Vue({
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username still valid");
-                        this.prepare_session(memorizedName);
+                        //this.prepare_session(memorizedName);
                         mainApp.role = response.data.role;
                     } else {
                         (response.data.status == "fail")

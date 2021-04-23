@@ -18,7 +18,8 @@ Vue.component("configuration-view", {
             selectedModel:false,
             outModel:{},
             dTurns:[],
-            dCurrentTurn:[]
+            dCurrentTurn:[],
+            inspectingLogs:false,
         }
     },
 
@@ -202,7 +203,7 @@ Vue.component("configuration-view", {
                         <h4>Name: <span>{{settings.database.name}}</span></h4>
                         <template v-if="settings.databaseList">
                             <h4>Size: <span>{{settings.databaseList[settings.database.name].sizeOnDisk}} Byte</span></h4>
-                            <h4 v-on:click="download_database_dump()" style="cursor:pointer;">Download Database dump</h4>
+                            <button class="grey-compact-button" v-on:click="download_database_dump()" style="cursor:pointer;">Download database dump</button>
                             <h4>Others on same location:</h4>
                             <select>
                                 <option>{{settings.database.name}}</option>
@@ -218,6 +219,8 @@ Vue.component("configuration-view", {
                     <h4>{{guiMessages.selected.database.location}}: <span>{{settings.app.address}}</span></h4>
                     <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
                     <h4>Docker: <span>{{settings.app.docker}}</span></h4>
+                    <button class="grey-compact-button" v-on:click="inspectingLogs = true">Show Logs</button>
+
                 </ul>
             </div>
 
@@ -245,6 +248,7 @@ Vue.component("configuration-view", {
                     </span>
                 </div>
             </div>
+            <configuration-show-logs v-if="inspectingLogs"  @close="inspectingLogs = false"></configuration-show-logs>
         </div>
     `
 });
@@ -436,3 +440,106 @@ Vue.component("create-annotation-model", {
 
     `
 });
+
+Vue.component('configuration-show-logs', {
+ 
+    data() { 
+        return {
+            guiMessages,
+            appLog: "",
+            auto:false,
+        }
+    },
+ 
+    mounted () {
+        this.init()
+    },
+
+    methods:{
+        init : function() {
+          this.update_logs();
+        },
+ 
+        update_logs() {
+            backend.get_logs()
+                .then((response) => {
+                    this.appLog = response.logs;
+                }
+            );
+        },
+
+        download_complete_logs() {
+            backend.get_logs(true)
+            .then((response) => {
+                let blob = new Blob(response.logs, {type: 'text/csv'});
+                   const url = window.URL.createObjectURL(blob)
+                   const link = document.createElement('a')
+                   link.href = url;
+                   fileName = "logs_"+utils.create_date()+".txt"
+                   link.setAttribute('download', fileName )
+                   document.body.appendChild(link)
+                   link.click();
+                }
+            );
+        },
+
+        auto_refresh(secondoCall) {
+            if (secondoCall == false) {
+                if (this.auto == true) {
+                    setTimeout(this.auto_refresh, 5000, true);
+                }
+            } else {
+                if (this.auto == true) {
+                    this.update_logs();
+                    setTimeout(this.auto_refresh, 5000, false);
+                }
+            }
+        },
+
+        close() {
+            this.$emit('close');
+        },
+ 
+    },  
+    template:
+ `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container modal-logs-viewer">
+ 
+          <div class="modal-header">
+            <slot name="header">
+              <strong>MATILDA LOGS</strong>
+            </slot>
+          </div>
+ 
+          <hr>
+ 
+          <div class="modal-body">
+            <slot name="body">
+                <div class="inner-form">
+                    <textarea v-model:value="appLog" class="logs-viewer-textarea" readonly/>
+                    <button type="button" class="btn btn-sm btn-primary" v-on:click="update_logs()">Refresh</button>
+                    <button type="button" class="btn btn-sm btn-primary" v-on:click="download_complete_logs()">Download complete log</button>
+                    <div style="float:right;"> auto-refresh 10 sec <input type="checkbox" v-model="auto" v-on:change="auto_refresh()"/></div>
+                </div>
+            </slot>
+          </div>
+ 
+          <hr>
+ 
+          <div class="modal-footer">
+            <slot name="footer">
+              MATILDA
+              <button class="modal-default-button" @click="close()">
+                {{guiMessages.selected.annotation_app.close}}
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+ });

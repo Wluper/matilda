@@ -456,4 +456,16 @@ select {
     outline:none;
 }
 
+.grey-compact-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    background-color: #ddd;
+    padding-right: 3%;
+    padding-left: 3%;
+    transition: .5s;
+    margin-top: 0 !important;
+    float: none !important
+}
+
 /* EOF */

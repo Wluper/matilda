@@ -7,7 +7,8 @@
             "lida_model.json",
             "unipi_model_v2.json"
         ],
-        "docker": false
+        "docker": false,
+        "session_guard": false
     },
     "database": {
         "name": "matilda_dev",

@@ -172,6 +172,26 @@
   border: 1px solid #259af7
 }
 
+.modal-logs-viewer {
+  overflow: auto;
+  border: 1px solid #259af7;
+  width: 70%;
+  margin: 0px auto;
+  padding: 45px;
+  max-height: 90vh;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 33%);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
 
+.logs-viewer-textarea {
+  height: 28vh !important;
+  letter-spacing: 0px;
+  font-size: 15px;
+  margin-bottom: 0;
+  background: white !important;
+}
 
 /* EOF */

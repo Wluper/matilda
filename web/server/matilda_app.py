@@ -171,6 +171,35 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
     return jsonify( responseObject )
 
+@MatildaApp.route('/logs/<complete>',methods=['GET'])
+@MatildaApp.route('/logs',methods=['GET'])
+def handle_logs_request(complete=None):
+
+    if request.method == "GET":
+
+        try:
+            with open("matilda.log", "r") as file:
+                logs = file.readlines()
+                file.close()
+        
+        except FileNotFoundError:
+            return {"status":"done", "logs":"Logs not active"}            
+
+        out = []
+        if complete is None:
+            #print of last 50 lines
+            if len(logs) > 50:
+                for log in range( len(logs)-50 , len(logs) ):
+                    out.append(logs[log])
+        else:
+            out = logs
+
+        responseObject = {"status":"done", "logs":out}
+
+        return responseObject
+
+    
+
 
 @MatildaApp.route('/<user>/dialogues_metadata/<collection>',methods=['GET'])
 @MatildaApp.route('/<user>/dialogues_metadata/<id>',methods=['PUT'])
@@ -558,7 +587,7 @@ def admin_dialogues_metadata_resource(id=None):
 
         responseObject = annotationFiles.update_dialogue_name( id, data["id"])
 
-    annotationFiles.save()
+    #annotationFiles.save()
     return jsonify( responseObject )
 
 @MatildaApp.route('/dialogues', methods=['GET','POST','DELETE'])
@@ -751,7 +780,7 @@ def handle_agreements_resource(collection):
                 totalTurns += 1
                 for annotationName, listOfAnnotations in turn.items():
 
-                    if ((annotationName=="turn_idx") or (annotationName=="turn_id")):
+                    if annotationName=="turn_idx" or annotationName=="turn_id":
                         continue
 
                     if annotationName not in Configuration.metaTags:
@@ -1180,6 +1209,7 @@ def admin__add_new_dialogues_from_json_dict(currentResponseObject, dialogueDict,
 
 
         if "error" not in currentResponseObject:
+            #here saves the file in interannotator json files
             annotationFiles.add_dialogue_file(dialogueDict, fileName=annotator)
             currentResponseObject["message"] = "Added new dialogues: " + " ".join(addedDialogues)
 
@@ -1469,15 +1499,16 @@ def guard():
     and requestedUri.split("/")[1] != "assets"
     and requestedUri.split("/")[1] != "source"):
         check = LoginFuncs.checkSession()
-        if check == False:
+        if check == False and GuardActive == True:
             print("Access violation on route "+requestedUri+" from "+request.remote_addr)
             return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
-logging.basicConfig(filename='error.log', level=logging.DEBUG)
 #MatildaApp.debug = True
+logging.basicConfig(filename='matilda.log', level=logging.DEBUG)
+
+GuardActive = jsonConf["session_guard"]
 
 MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 
 if __name__ == "__main__":
     MatildaApp.run(port=jsonConf["port"],host=jsonConf["address"])
-
