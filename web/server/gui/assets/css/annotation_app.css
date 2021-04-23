@@ -447,11 +447,7 @@ WluperDark: 0e181e
     transition: 0.3s;
     overflow: hidden;
     height: auto;
-    border-left-style: solid;
-    border-left-width: 5px;
-    border-left-color: #d1d1d3;
-    cursor:pointer;
-    border-left-color:grey;
+    border:1px solid rgba(0,0,0,0.1);
 }
 
 .meta-turn {
@@ -517,11 +513,8 @@ WluperDark: 0e181e
     transition: 0.3s;
     overflow: hidden;
     height: auto;
-    border-left-style: solid;
-    border-left-width: 5px;
-    border-left-color: #d1d1d3;
+    border: 1px solid rgba(0,0,0,0.1);
     cursor: pointer;
-    border-left-color: grey;
 }
 .conf-turn-container h2 {
     margin-top:0;
