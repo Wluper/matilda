@@ -386,7 +386,10 @@ def agreement_classification_string_score(listOfClassifications, totalLabels):
 
             for label in prediction:
 
-                countDict["counts"][label] += 1
+                if type(label) is list:
+                    countDict["counts"][label[0]] += 1
+                else:
+                    countDict["counts"][label] += 1
 
     countDict["annotatedBy"] = counter
 

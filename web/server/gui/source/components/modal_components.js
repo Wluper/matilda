@@ -365,6 +365,10 @@ Vue.component('help-config-modal', {
           <div class="modal-body">
             <slot name="body">
 
+              <div id="all-types" v-if="showHelpConfig == 'true'">
+
+              </div>
+
                <div id="use">
                  <h3>Use</h3>
                  <p v-if="showHelpConfig == 'stringType'">{{stringType}}</p>

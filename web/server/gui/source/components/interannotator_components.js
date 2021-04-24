@@ -170,7 +170,7 @@ Vue.component("interannotator-view", {
                 </div>
 
                 <template v-if="name.assignedTo.length == 1">
-                    <div class="int-coll-num-turns" style="padding-right:10px;">
+                    <div class="int-coll-num-turns static-num-turns" style="padding-right:10px;">
                         {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo[0] }}
                     </div>
                 </template>

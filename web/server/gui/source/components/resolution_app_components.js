@@ -239,7 +239,9 @@ Vue.component("resolution-app", {
     template:
     `
     <div id="resolution-app">
-        <resolution-menu>
+        <resolution-menu
+            v-bind:collectionId="collectionId"
+            v-bind:dialogueId="dialogueId">
         </resolution-menu>
 
         <error-list v-if="metaDataList" v-bind:metaList="metaDataList"

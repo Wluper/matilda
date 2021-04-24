@@ -42,7 +42,7 @@ class DatabaseManagement(object):
 	#connecting
 	client = MongoClient(databaseURI)
 	try:
-		logging.info(" * MATILDA: Connecting to database... \n * "+str(databaseURI))
+		logging.info(" * MATILDA: Connecting to database "+str(databaseURI))
 		client.server_info()
 	except Exception as e: 
 		logging.warning(" * "+e+"\n * Connecting Errror. Trying again with legacy configuration...")
@@ -249,6 +249,7 @@ class LoginFuncs(object):
 					session['userName'] = userID
 					session['token'] = os.urandom(6)
 					LoginFuncs.loggedUser[userID] = session['token']
+					logging.info(" * New session for "+userID)
 					response = { "status":"success", "role":userDetails["role"] }
 
 		return response

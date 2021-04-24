@@ -251,9 +251,8 @@ class DialogueAnnotator(object):
             self.addedDialogues[newName] = 0
         except:
             self.addedDialogues = {}
+            logging.info(" * New data structure for "+newName)
             self.addedDialogues[newName] = 0
-
-        logging.info(" * New session for "+newName)
 
     def set_file( self, filePath, annotatorName=None ):        
         """

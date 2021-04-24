@@ -16,8 +16,14 @@ from collections import defaultdict
 from flask import Flask, jsonify, request, render_template, session
 from flask_cors import CORS
 
-# == Local ==
-#logging.basicConfig(filename='matilda.log', level=logging.DEBUG, format='%(asctime)s MAT %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', style='%')
+# == Logging ==
+logging.basicConfig(
+    filename='matilda.log', 
+    level=logging.DEBUG, 
+    format='%(asctime)s %(message)s', 
+    datefmt='%m/%d/%Y %I:%M:%S %p', 
+    style='%')
+# == Local Import ==
 from annotator_config import *
 from annotator import DialogueAnnotator, MultiAnnotator
 from database import DatabaseManagement, LoginFuncs
@@ -40,6 +46,7 @@ MatildaApp = Flask(__name__,
     static_folder='gui',
     template_folder='gui')
 MatildaApp.config.from_object(__name__)
+#MatildaApp.debug = True
 CORS(MatildaApp)
 #set_main_path(path)
 #main modules
@@ -79,7 +86,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
             responseObject["app"]["docker"] = Configuration.DOCKER
 
-            #databases not listed
+            #default mongodb databases not listed
             ignoreList = ["admin","config","local"]
 
             responseObject["databaseList"] = {}
@@ -1502,9 +1509,10 @@ def guard():
             logging.warning(" * Access violation on route "+requestedUri+" from "+request.remote_addr)
             return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
-MatildaApp.debug = True
-
 GuardActive = jsonConf["session_guard"]
+
+if jsonConf["full_log"] is not True:
+    logging.disable(logging.INFO)
 
 MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 

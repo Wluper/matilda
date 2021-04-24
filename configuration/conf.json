@@ -8,10 +8,11 @@
             "unipi_model_v2.json"
         ],
         "docker": false,
-        "session_guard": true
+        "session_guard": true,
+        "full_log": false
     },
     "database": {
-        "name": "matilda_dev",
+        "name": "matilda",
         "legacy_configuration": {
             "address": "localhost",
             "port": 27017,

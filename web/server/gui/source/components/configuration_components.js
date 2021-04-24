@@ -20,6 +20,7 @@ Vue.component("configuration-view", {
             dTurns:[],
             dCurrentTurn:[],
             inspectingLogs:false,
+            showHelpConfig:false,
         }
     },
 
@@ -220,6 +221,7 @@ Vue.component("configuration-view", {
                     <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
                     <h4>Docker: <span>{{settings.app.docker}}</span></h4>
                     <h4>Session Guard: <span>{{settings.app.session_guard}}</span></h4>
+                    <h4>Full Server log: <span>{{settings.app.full_log}}</span></h4>
                     <button class="grey-compact-button" v-on:click="inspectingLogs = true">Show Logs</button>
 
                 </ul>
@@ -512,7 +514,7 @@ Vue.component('configuration-show-logs', {
  
           <div class="modal-header">
             <slot name="header">
-              <strong>MATILDA LOGS</strong>
+              <strong>MATILDA LAST 30 LOGS</strong>
             </slot>
           </div>
  
@@ -524,7 +526,7 @@ Vue.component('configuration-show-logs', {
                     <textarea v-model:value="appLog" class="logs-viewer-textarea" readonly/>
                     <button type="button" class="btn btn-sm btn-primary" v-on:click="update_logs()">Refresh</button>
                     <button type="button" class="btn btn-sm btn-primary" v-on:click="download_complete_logs()">Download complete log</button>
-                    <div style="float:right;"> auto-refresh 10 sec <input type="checkbox" v-model="auto" v-on:change="auto_refresh()"/></div>
+                    <div style="float:right;"> auto-refresh 10s <input type="checkbox" v-model="auto" v-on:change="auto_refresh()"/></div>
                 </div>
             </slot>
           </div>

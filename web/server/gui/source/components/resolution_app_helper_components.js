@@ -3,8 +3,8 @@
 *************************************/
 
 Vue.component("resolution-menu", {
-    // props : [],
-    //
+     props : ["collectionId", "dialogueId"],
+    
     data () {
         return {
             guiMessages
@@ -22,6 +22,7 @@ Vue.component("resolution-menu", {
     `
     <div id="resolution-menu">
         <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
+        <div class="dialogue-name">{{collectionId}} - {{dialogueId}}</div>
     </div>
     `
 })

@@ -79,15 +79,16 @@
     grid-area: resolution-menu;
     height: 100%;
     display: grid;
-    grid-template: [row1-start] ". . . . . ." 1fr [row1-end]
-                   [row2-start] ". button-section . . . ." 5fr [row2-end]
-                   [row3-start] ". . . . . ." 1fr [row3-end]
-                   / 0.05fr 1fr 0.05fr 1fr 2fr 1fr;
+    grid-template:
+        [row1-start] ". . . . ." 1fr [row1-end]
+        [row2-start] ". button-section . title-section ." 7fr [row2-end]
+        [row3-start] ". . . . ." 1fr [row3-end] / 0.05fr 1fr 1fr 2fr 2fr 0fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
     height: 100%;
     color: #222;
+    box-shadow:1px 1px 5px rgb(0 0 0 / 16%);
 }
 
 /*******************************************************************************
@@ -401,6 +402,11 @@
     font-size: 11px;
     letter-spacing: 1px;
     grid-area: count;
+}
+
+.static-num-turns:hover {
+    color:inherit !important;
+    background-color: inherit !important;
 }
 
 /* EOF */
