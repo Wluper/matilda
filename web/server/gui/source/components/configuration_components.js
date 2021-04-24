@@ -219,10 +219,12 @@ Vue.component("configuration-view", {
                     <h4>{{guiMessages.selected.database.location}}: <span>{{settings.app.address}}</span></h4>
                     <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
                     <h4>Docker: <span>{{settings.app.docker}}</span></h4>
+                    <h4>Session Guard: <span>{{settings.app.session_guard}}</span></h4>
                     <button class="grey-compact-button" v-on:click="inspectingLogs = true">Show Logs</button>
 
                 </ul>
             </div>
+
 
             <div v-else-if="selectedModel == 'create_new'" class="large-inner-wrap">
                 <create-annotation-model></create-annotation-model>

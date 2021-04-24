@@ -9,6 +9,7 @@ import json
 import copy
 import json
 import datetime
+import logging
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 import functools
 import ast
@@ -41,10 +42,10 @@ class DatabaseManagement(object):
 	#connecting
 	client = MongoClient(databaseURI)
 	try:
-		print(" * \n * MATILDA: Connecting to database... \n * "+databaseURI)
+		logging.info(" * MATILDA: Connecting to database... \n * "+str(databaseURI))
 		client.server_info()
 	except Exception as e: 
-		print(" *",e, "\n * Connecting Errror. Trying again with legacy configuration...")
+		logging.warning(" * "+e+"\n * Connecting Errror. Trying again with legacy configuration...")
 		conf["database"]["optional_uri"] = None
 		databaseURI = database_uri_compose(conf["database"])
 		client = MongoClient(databaseURI)
@@ -78,7 +79,7 @@ class DatabaseManagement(object):
 
 		selected_collection = DatabaseManagement.selected(coll)
 
-		#print(" * Searching in:",coll,"for key '",pairs)
+		#logging.info(" * Searching in:",coll,"for key '",pairs)
 
 		documentLengthOnly = False
 
@@ -128,7 +129,7 @@ class DatabaseManagement(object):
 
 	def createDoc(document_id, collection, values):
 		
-		#print(" * Creating document", document_id, "in",collection)
+		#logging.info(" * Creating document", document_id, "in",collection)
 		DatabaseManagement.selected(collection).save(values)
 		
 		response = {"staus":"success"}
@@ -268,7 +269,7 @@ class LoginFuncs(object):
 	def start():
 		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
 			DatabaseManagement.users.insert_one(LoginFuncs.administratorDefault)
-			print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+			logging.info(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
 		else:
-			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
+			logging.info(" * Connected to database "+str(DatabaseManagement.databaseURI))
 

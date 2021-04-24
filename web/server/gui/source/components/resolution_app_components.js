@@ -167,7 +167,6 @@ Vue.component("resolution-app", {
             }
 
             if (this.metaDataList[this.currentErrorId-1]["name"] == "global_slot") {
-                params["errorObject"]["predictions"][0] = this.globalSlotValue;
                 this.errorList[this.currentErrorId-1]["predictions"][0][1] = this.globalSlotValue;
             }
 

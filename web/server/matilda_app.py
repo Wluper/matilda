@@ -17,6 +17,7 @@ from flask import Flask, jsonify, request, render_template, session
 from flask_cors import CORS
 
 # == Local ==
+#logging.basicConfig(filename='matilda.log', level=logging.DEBUG, format='%(asctime)s MAT %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', style='%')
 from annotator_config import *
 from annotator import DialogueAnnotator, MultiAnnotator
 from database import DatabaseManagement, LoginFuncs
@@ -187,7 +188,6 @@ def handle_logs_request(complete=None):
 
         out = []
         if complete is None:
-            #print of last 50 lines
             if len(logs) > 50:
                 for log in range( len(logs)-50 , len(logs) ):
                     out.append(logs[log])
@@ -516,7 +516,7 @@ def handle_switch_collection_request(user, doc):
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
-            print("No annotated version for user ",user," creating...")
+            logging.info(" * No annotated version for user ",user," creating...")
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
             #create document 
             values = {
@@ -624,8 +624,8 @@ def admin_dialogues_resource(id=None, collection=None):
 
             responseObject = annotationFiles.update_dialogue( id=id, newDialogue=data )
 
-        if request.method == "DELETE":
-            responseObject = annotationFiles.delete_dialogue(id=id)
+        #if request.method == "DELETE":
+        #    responseObject = annotationFiles.delete_dialogue(id=id)
 
     else:
 
@@ -635,7 +635,7 @@ def admin_dialogues_resource(id=None, collection=None):
         if request.method == "POST":
             responseObject = admin_post_of_new_dialogues()
 
-    annotationFiles.save()
+    #annotationFiles.save()
     return jsonify( responseObject )
 
 
@@ -959,7 +959,7 @@ def handle_post_of_collections(mode, destination, id=None):
         for dialogueName, dialogue in values["document"].items():
             validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
             if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                print("Validation for",dialogueName," failed with "+annotationStyle)
+                logging.info(" * Validation for",dialogueName," failed with "+annotationStyle)
                 response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
                 return jsonify( response )
 
@@ -1055,7 +1055,7 @@ def __load_collection_from_database(user, doc):
     docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
     #first checks if exists an annotated version for the user
     if len(docRetrieved) == 0:
-        print("No annotated version for user ",user," creating...")
+        logging.info(" * No annotated version for user ",user," creating...")
         docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
         #create document 
         values = {
@@ -1425,7 +1425,6 @@ class InterannotatorMethods:
         """
         for key, value in newDict.items():
 
-            #print("chiave",key, type(key))
             if key == "global_slot":
                 for subKey in value:
                     if type(value) == dict:
@@ -1500,11 +1499,10 @@ def guard():
     and requestedUri.split("/")[1] != "source"):
         check = LoginFuncs.checkSession()
         if check == False and GuardActive == True:
-            print("Access violation on route "+requestedUri+" from "+request.remote_addr)
+            logging.warning(" * Access violation on route "+requestedUri+" from "+request.remote_addr)
             return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
-#MatildaApp.debug = True
-logging.basicConfig(filename='matilda.log', level=logging.DEBUG)
+MatildaApp.debug = True
 
 GuardActive = jsonConf["session_guard"]
 

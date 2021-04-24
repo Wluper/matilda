@@ -8,7 +8,7 @@
             "unipi_model_v2.json"
         ],
         "docker": false,
-        "session_guard": false
+        "session_guard": true
     },
     "database": {
         "name": "matilda_dev",

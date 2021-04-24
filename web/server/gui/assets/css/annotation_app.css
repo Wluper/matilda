@@ -56,10 +56,6 @@
     display: none;
 }
 
-.dialogue-title-span {
-
-}
-
 .annotation-rate {
     grid-area: rate-section;
     align-self: center;
@@ -312,15 +308,6 @@ WluperDark: 0e181e
 
 }
 
-.dialogue-turn{
-   
-    
-}
-
-.dialogue-turn:hover{
-
-}
-
 .dialogue-turn .sticky {
     padding:0;
     margin:0 0 20px;
@@ -354,10 +341,6 @@ WluperDark: 0e181e
 #input-box{
     text-align: center;
     padding:20px 20px 20px 10px;
-}
-
-#input-box:focus{
-
 }
 
 #input-box ul {

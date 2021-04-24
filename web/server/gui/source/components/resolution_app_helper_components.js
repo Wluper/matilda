@@ -272,7 +272,8 @@ Vue.component("resolutions", {
             v-bind:uniqueName="error.name"
             v-bind:classes="annotationFormat"
             v-bind:multilabelStringOptions="error.options"
-            v-bind:accepted="metaList[0].accepted">
+            v-bind:errorId="errorId"
+            v-bind:metaList="metaList">
         </resolution-type-header>
 
         <div class="right">
@@ -430,7 +431,7 @@ Vue.component("string-type-data", {
 
 Vue.component("resolution-type-header", {
     props :[
-        "multilabelStringOptions", "accepted", "uniqueName", "classification_strings", "classes"
+        "multilabelStringOptions", "metaList", "errorId", "uniqueName", "classification_strings", "classes"
     ],
 
     data() { 
@@ -505,12 +506,18 @@ Vue.component("resolution-type-header", {
                 </div>
 
                 <div v-if="multilabelStringOptions" class="annotator-switch">
-                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
+                  <button v-if="metaList[errorId-1].accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
                   <template v-for="option,index in multilabelStringOptions">
-                      <button class="switch-button" v-on:click="switchSlotValue(index)">
-                        <template v-if="multilabelStringOptions.length > 2">{{guiMessages.selected.resolution_app.optionMin}}</template> 
-                        <template v-else>{{guiMessages.selected.resolution_app.option}}</template> 
-                        {{index+1}}</button>
+                      <button v-if="index == 0" class="switch-button">Prediction</button>
+                      <button v-else class="switch-button" v-on:click="switchSlotValue(index)">
+
+                        <template v-if="multilabelStringOptions.length > 3">
+                            {{guiMessages.selected.resolution_app.optionMin}}
+                        </template>
+                        <template v-else>
+                            {{guiMessages.selected.resolution_app.option}}
+                            </template> 
+                        {{index}}</button>
                   </template>
                 </div>
 

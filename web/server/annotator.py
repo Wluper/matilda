@@ -11,6 +11,7 @@ import copy
 import time
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 import functools
+import logging
 
 # >>>> Flask <<<<
 from flask import Flask, jsonify, request
@@ -70,7 +71,7 @@ class MultiAnnotator(object):
         #AdminAnnotator.set_dialogues(jsonObject)
         self.allFiles[MultiAnnotator.__GOLD_FILE_NAME].update_dialogues(jsonObject)
         #self.allFiles[ fileName ] = jsonObject
-        self.allFiles[ fileName ] = AdminAnnotator( self.path, jsonObject )
+        self.allFiles[ fileName ] = AdminAnnotator( self.path, fileName, jsonObject )
 
         #self.save()
 
@@ -252,7 +253,7 @@ class DialogueAnnotator(object):
             self.addedDialogues = {}
             self.addedDialogues[newName] = 0
 
-        print(" * New session for",newName)
+        logging.info(" * New session for "+newName)
 
     def set_file( self, filePath, annotatorName=None ):        
         """
@@ -343,7 +344,7 @@ class DialogueAnnotator(object):
 
         self.activeCollection[user] = fileName
 
-        print("* ",user,"is working on collection",fileName)
+        logging.info(" * "+user+" is working on collection "+fileName)
 
 
     def update_dialogue_name(self, user, id, newName):
@@ -458,11 +459,28 @@ class AdminAnnotator(object):
     """
     __DEFAULT_FILENAME = "admin.json"
 
-    def __init__( self, filePath, dialogues=None ):
+    def __init__( self, filePath, fileName=None, dialogues=None ):
         """
         """
+        self.filePath = fileName
         self.set_dialogues( dialogues )
         self.addedDialogues = 0
+
+    def get_file_name(self):
+        """
+        """
+        return {"name": self.__fileName}
+
+    def change_file_name(self, newName, remove=False):
+        """
+        """
+        oldFileName = self.__fileName
+        self.__fileName = newName
+
+        #self.save()
+
+        if remove:
+            os.remove( os.path.join( self.__filePath, oldFileName ) )
 
     def set_dialogues( self, dialogues=None ):
         """
@@ -547,6 +565,16 @@ class AdminAnnotator(object):
 
         return {"id":id}
 
+
+    def __get_new_dialogue_id(self):
+        """
+        """
+        newId = "Dialogue" + str(self.addedDialogues)
+
+        return newId
+
+        # save_json_file( obj=self.__dialogues, path=self.__filePath )
+
     
     def delete_dialogue(self, id):
         """
@@ -562,7 +590,6 @@ class AdminAnnotator(object):
         #save_json_file( obj=self.__dialogues, path=os.path.join( self.__filePath, self.__fileName+".json" ) )
         return
 
-
     def __get_new_dialogue_id(self):
         """
         """
@@ -571,5 +598,5 @@ class AdminAnnotator(object):
         return newId
 
         # save_json_file( obj=self.__dialogues, path=self.__filePath )
-
+        
 # EOF
