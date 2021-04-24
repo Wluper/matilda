@@ -190,7 +190,7 @@ Vue.component("collection-view", {
             }
         }, 
 
-        update_annotations(collectionID) {
+        update_annotation_rate(collectionID) {
             document.body.style.cursor = "progress";
             backend.update_annotations(mainApp.activeCollection, {"status":mainApp.collectionRate}, false)
                 .then( (response) => {
@@ -206,7 +206,7 @@ Vue.component("collection-view", {
                 return
             }
             if (confirm(guiMessages.selected.collection.updateConfirm1+" "+this.activeCollection+" "+guiMessages.selected.collection.updateConfirm2)) {
-                this.update_annotations(this.activeCollection);
+                this.update_annotation_rate(this.activeCollection);
             }
         },
 

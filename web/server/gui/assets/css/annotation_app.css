@@ -133,7 +133,7 @@ textarea {
     border-left:none;
 }
 textarea:focus {
-    background-color:#f9f9a291
+    background-color:#3a9dd63b;
 }
 
 #input-box {

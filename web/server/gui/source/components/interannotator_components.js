@@ -264,6 +264,7 @@ Vue.component("interannotator-app", {
     },
 
     getAllDialogueIdsFromServer() {
+        document.body.style.cursor = "progress";
         backend.get_all_dialogue_ids_async("admin")
           .then( (response) => {
               console.log(response);
@@ -287,6 +288,7 @@ Vue.component("interannotator-app", {
             }
         }
         console.log("Errors found in",this.dialoguesWithErrors);
+        document.body.style.cursor = null;
     },
 
     fill_list(id) {

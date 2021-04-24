@@ -11,6 +11,8 @@ Vue.component("supervision-view", {
          guiMessages,
          selectedCollection:'',
          selectedAnnotator:'',
+         selectedAnnotationStyle:'',
+         selectedAnnotationRate:'',
          allAnnotators:[],
          mode:'supervision-collections-list',
       }
@@ -48,14 +50,17 @@ Vue.component("supervision-view", {
          }
       },
 
-      clicked_collection(id, assignedTo) {
+      clicked_collection(id, assignedTo, index) {
+         console.log(index);
+         this.selectedAnnotationStyle = this.allCollectionsMetadata[index].annotationStyle;
          this.selectedCollection = id;
          this.allAnnotators = assignedTo;
          this.mode = "supervision-annotators-list";
       },
 
-      clicked_annotator(annotator) {
-         console.log(annotator)
+      clicked_annotator(annotator, status) {
+         console.log(annotator);
+         this.selectedAnnotationRate = status;
          this.selectedAnnotator = annotator;
          this.mode = "supervision-dialogues-list";
       },
@@ -75,7 +80,7 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1, "document":"length"} )
+         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"annotationStyle":1,"document":"length"} )
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
@@ -111,18 +116,18 @@ Vue.component("supervision-view", {
 
       <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
       <ul class="dialogue-list">
-          <li class="listed-dialogue" v-for="(name) in allCollectionsMetadata">
+          <li class="listed-dialogue" v-for="(name, index) in allCollectionsMetadata">
             <div class="int-coll-list-single-item-container">
                <div class="int-coll-info">
-                  <div class="int-coll-id" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="int-coll-id" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      {{name.id}}
                   </div>
 
-                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      {{guiMessages.selected.admin.dataItems}}:<span class="gold-false">{{name.documentLength}}</span>
                   </div>
 
-                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
@@ -152,12 +157,14 @@ Vue.component("supervision-view", {
 
    <supervision-collection v-else-if="mode == 'supervision-annotators-list' "
       v-bind:selectedCollection="selectedCollection"
-      v-bind:allAnnotators="allAnnotators">
+      v-bind:allAnnotators="allAnnotators"
+      v-bind:selectedAnnotationStyle="selectedAnnotationStyle">
    </supervision-collection>
    
    <supervision-dialogues v-else-if="mode == 'supervision-dialogues-list' "
        v-bind:Su_activeCollection="selectedCollection"
-       v-bind:selectedAnnotator="selectedAnnotator">
+       v-bind:selectedAnnotator="selectedAnnotator"
+       v-bind:savedAnnotationRate="selectedAnnotationRate">
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
@@ -170,7 +177,7 @@ Vue.component("supervision-view", {
 
 Vue.component("supervision-collection", {
 
-   props: ["selectedCollection", "allAnnotators"],
+   props: ["selectedCollection", "allAnnotators", "selectedAnnotationStyle"],
 
    data() {
       return {
@@ -225,11 +232,11 @@ Vue.component("supervision-collection", {
         // annotations not yet produced.
       },
 
-      clicked_annotated: function(clickedAnnotator) {
-         backend.supervision(clickedAnnotator,this.selectedCollection) 
+      clicked_annotated: function(clickedAnnotator, status) {
+         backend.supervision(clickedAnnotator,this.selectedCollection, status) 
             .then( (response) => {
                console.log("==== LOADING ANNOTATIONS FOR SELECTED USER ====");
-               adminEventBus.$emit("annotator_selected",clickedAnnotator);
+               adminEventBus.$emit("annotator_selected",clickedAnnotator, status);
             }
          );
       },
@@ -265,7 +272,7 @@ Vue.component("supervision-collection", {
          <ul class="dialogue-list">
             <li id="annotated_list">
                <h2 class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
-               <div class="entry-list-single-item-container" v-for="name in annotatedCollections">
+               <div class="entry-list-single-item-container" v-for="(name, index) in annotatedCollections">
 
                <div class="supervisor-btn-container">
                   <div v-if="name.done" class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
@@ -279,7 +286,7 @@ Vue.component("supervision-collection", {
                  </div>
                </div>
 
-                  <div class="entry-info" v-on:click="clicked_annotated(name.annotator)">
+                  <div class="entry-info" v-on:click="clicked_annotated(name.annotator, name.status)">
                      <div class="entry-id">
                         <span>{{guiMessages.selected.admin.annotator}}:</span> {{name.annotator}}
                      </div>
@@ -300,7 +307,8 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
-         <h3 style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
+         <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
+         <h3 style="color: rgba(0,0,0,0.62);">Annotation style: {{selectedAnnotationStyle}}</h3>
          <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
          <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>
@@ -475,7 +483,7 @@ Vue.component('supervisor-upload-modal', {
 Vue.component("supervision-dialogues", {
 
    props: [
-      "Su_activeCollection", "selectedAnnotator"
+      "Su_activeCollection", "selectedAnnotator", "savedAnnotationRate"
    ],
 
    data () {
@@ -529,6 +537,12 @@ Vue.component("supervision-dialogues", {
           if (this.collectionRate == "NaN%") {
               this.collectionRate = "0%";
               this.collectionRate = "0%"
+          }
+          if (this.collectionRate != this.savedAnnotationRate) {
+            backend.update_collection_fields(this.Su_activeCollection, {"status":this.collectionRate}, this.selectedAnnotator)
+               .then( (response) => {
+                  console.log("annotation rate silently updated from saved"+this.savedAnnotationRate+" to calculated"+this.collectionRate);
+            });
           }
       },
 

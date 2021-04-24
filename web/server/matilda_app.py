@@ -27,7 +27,6 @@ logging.basicConfig(
 from annotator_config import *
 from annotator import DialogueAnnotator, MultiAnnotator
 from database import DatabaseManagement, LoginFuncs
-from text_splitter import convert_string_list_into_dialogue
 
 ##############################################
 #  MAIN
@@ -46,6 +45,7 @@ MatildaApp = Flask(__name__,
     static_folder='gui',
     template_folder='gui')
 MatildaApp.config.from_object(__name__)
+MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 #MatildaApp.debug = True
 CORS(MatildaApp)
 #set_main_path(path)
@@ -55,6 +55,7 @@ annotationFiles = MultiAnnotator(path)
 jsonConf = Configuration.conf["app"]
 #database and account init
 LoginFuncs.start()
+sessionGuard = jsonConf["session_guard"]
 
 @MatildaApp.route('/')
 def welcome():
@@ -1446,6 +1447,42 @@ class InterannotatorMethods:
 # COMMON STATIC METHODS
 ########################
 
+def convert_string_list_into_dialogue(stringList: List[str]) -> List[Dict[str, Any]]:
+    """
+    Converts a list of strings into a dialogue with the following assumptions:
+
+        - (1) :: there are only two participants in the dialogue: user and sys
+        - (2) :: user speaks first
+    """
+
+    dialogue    = []
+    userTurn    = True
+    currentTurn = {}
+    turnIdx     = 1
+
+    for providedString in stringList:
+
+        if userTurn:
+
+            currentTurn["usr"] = providedString
+            userTurn = False
+
+        else:
+
+            currentTurn["sys"]      = providedString
+            currentTurn["turn_idx"] = turnIdx
+            dialogue.append(currentTurn)
+            turnIdx    += 1
+            currentTurn = {}
+            userTurn    = True
+
+    if currentTurn:
+        currentTurn["turn_idx"] = turnIdx
+        dialogue.append(currentTurn)
+        turnIdx                += 1
+
+    return dialogue
+
 class Models:
 
     @staticmethod
@@ -1505,16 +1542,12 @@ def guard():
     and requestedUri.split("/")[1] != "assets"
     and requestedUri.split("/")[1] != "source"):
         check = LoginFuncs.checkSession()
-        if check == False and GuardActive == True:
+        if check == False and sessionGuard == True:
             logging.warning(" * Access violation on route "+requestedUri+" from "+request.remote_addr)
             return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
 
-GuardActive = jsonConf["session_guard"]
-
 if jsonConf["full_log"] is not True:
     logging.disable(logging.INFO)
-
-MatildaApp.config['SECRET_KEY'] = os.urandom(12)
 
 if __name__ == "__main__":
     MatildaApp.run(port=jsonConf["port"],host=jsonConf["address"])

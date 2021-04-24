@@ -29,10 +29,10 @@ input{
     transition: ease-in-out 0.2s;
 }
 input:hover{
-    background-color:#f9f9a291;
+    background-color:#3a9dd63b;
 }
 input:focus {
-  background-color:#f9f9a291;
+  background-color:#3a9dd63b;
 }
 
 *:focus {

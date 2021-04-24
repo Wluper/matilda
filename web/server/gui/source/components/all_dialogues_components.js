@@ -84,7 +84,7 @@ Vue.component("all-dialogues", {
       restore_session_from_database: function () {
          console.log("Ready to restore from database");
          document.body.style.cursor = "progress";
-         if (this.activeCollection != undefined) {
+         if ((this.activeCollection != undefined) && (this.activeCollection != null)) {
             var doc = this.activeCollection;
          } else {
             return;
