@@ -308,7 +308,8 @@ Vue.component("supervision-collection", {
             </li>
          </ul>
          <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
-         <h3 style="color: rgba(0,0,0,0.62);">Annotation style: {{selectedAnnotationStyle}}</h3>
+         <h3 style="color: rgba(0,0,0,0.62);">Annotation style: {{selectedAnnotationStyle.split(".")[0]}}</h3>
+         
          <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
          <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>

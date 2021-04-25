@@ -468,6 +468,7 @@ Vue.component('configuration-show-logs', {
             backend.get_logs()
                 .then((response) => {
                     this.appLog = response.logs;
+                    setTimeout(function(){document.getElementsByClassName("logs-viewer-textarea")[0].scroll(0, 1000),500});
                 }
             );
         },

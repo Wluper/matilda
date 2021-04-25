@@ -68,7 +68,8 @@
 }
 
 .active-collection .entry-list-single-item-container {
-    border-left:5px solid #259af7
+    border-left:5px solid #259af7;
+    box-shadow: 4px 10px 10px 2px rgb(0 0 0 / 13%);
 }
 
 .load {
