@@ -5,7 +5,9 @@
 # >>>> Native <<<<
 import os
 import json
+import datetime
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
+from bson.objectid import ObjectId
 
 # >>>> Packages <<<<
 from flask import Response
@@ -55,5 +57,11 @@ def database_uri_compose(config):
 			databaseURL = "mongodb+srv://"+auth+config["address"]+"?"+options
 
 	return databaseURL
+
+def stringify(obj):
+	if type(obj) == ObjectId or datetime:
+		return str(obj)
+	else:
+		return json.dumps(obj)
 
 # EOF

@@ -11,6 +11,8 @@ Vue.component("supervision-view", {
          guiMessages,
          selectedCollection:'',
          selectedAnnotator:'',
+         selectedAnnotationStyle:'',
+         selectedAnnotationRate:'',
          allAnnotators:[],
          mode:'supervision-collections-list',
       }
@@ -40,18 +42,25 @@ Vue.component("supervision-view", {
             this.mode = "supervision-collections-list";
             this.selectedCollection = "";
          } else {
+            adminEventBus.$off("annotator_selected", this.clicked_annotator);
+            adminEventBus.$off("dialogue_selected", this.load_in_dialogue_in_supervision);
+            adminEventBus.$off("supervision_go_back_to_dialogues", this.clear_view);
+            annotationAppEventBus.$off("go_back", this.clear_view );
             adminEventBus.$emit("go_back");
          }
       },
 
-      clicked_collection(id, assignedTo) {
+      clicked_collection(id, assignedTo, index) {
+         console.log(index);
+         this.selectedAnnotationStyle = this.allCollectionsMetadata[index].annotationStyle;
          this.selectedCollection = id;
          this.allAnnotators = assignedTo;
          this.mode = "supervision-annotators-list";
       },
 
-      clicked_annotator(annotator) {
-         console.log(annotator)
+      clicked_annotator(annotator, status) {
+         console.log(annotator);
+         this.selectedAnnotationRate = status;
          this.selectedAnnotator = annotator;
          this.mode = "supervision-dialogues-list";
       },
@@ -62,12 +71,16 @@ Vue.component("supervision-view", {
       },
 
       clear_view: function() {
-         event.stopPropagation();
+         try {
+			 event.stopPropagation();
+	     } catch {
+			console.log("no event that can propagates");
+		 } 
          this.mode = "supervision-collections-list";
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1, "document":"length"} )
+         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"annotationStyle":1,"document":"length"} )
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
@@ -100,20 +113,21 @@ Vue.component("supervision-view", {
    </div>
    
    <div v-if="mode == 'supervision-collections-list'" class="inner-wrap">
+
       <h2 class="list-title">{{guiMessages.selected.lida.buttonCollections}}</h2>
       <ul class="dialogue-list">
-          <li class="listed-dialogue" v-for="(name) in allCollectionsMetadata">
+          <li class="listed-dialogue" v-for="(name, index) in allCollectionsMetadata">
             <div class="int-coll-list-single-item-container">
                <div class="int-coll-info">
-                  <div class="int-coll-id" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="int-coll-id" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      {{name.id}}
                   </div>
 
-                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      {{guiMessages.selected.admin.dataItems}}:<span class="gold-false">{{name.documentLength}}</span>
                   </div>
 
-                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo)">
+                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
@@ -131,8 +145,8 @@ Vue.component("supervision-view", {
                   </div>
 				</template>
 				<template v-else>
-				  <div class="int-coll-num-turns" style="letter-spacing:0.5px; font-size:10.5px;">
-                    {{ guiMessages.selected.admin.annotators }}: {{ name.assignedTo[0] }}
+				  <div class="int-coll-num-turns static-num-turns" style="letter-spacing:0.5px; font-size:10.5px;">
+                    {{ guiMessages.selected.admin.annotator }}: {{ name.assignedTo[0] }}
                   </div>
 				</template>
                </div>
@@ -143,17 +157,19 @@ Vue.component("supervision-view", {
 
    <supervision-collection v-else-if="mode == 'supervision-annotators-list' "
       v-bind:selectedCollection="selectedCollection"
-      v-bind:allAnnotators="allAnnotators">
+      v-bind:allAnnotators="allAnnotators"
+      v-bind:selectedAnnotationStyle="selectedAnnotationStyle">
    </supervision-collection>
    
    <supervision-dialogues v-else-if="mode == 'supervision-dialogues-list' "
-   v-bind:Su_activeCollection="selectedCollection"
-   v-bind:selectedAnnotator="selectedAnnotator">
+       v-bind:Su_activeCollection="selectedCollection"
+       v-bind:selectedAnnotator="selectedAnnotator"
+       v-bind:savedAnnotationRate="selectedAnnotationRate">
    </supervision-dialogues>
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
-                    v-bind:selectedCollection="selectedCollection"
-                    v-bind:dialogueId="displayingDialogue">
+      v-bind:selectedCollection="selectedCollection"
+      v-bind:dialogueId="displayingDialogue">
    </supervision-annotation-app>
 </div>
   `
@@ -161,12 +177,14 @@ Vue.component("supervision-view", {
 
 Vue.component("supervision-collection", {
 
-   props: ["selectedCollection", "allAnnotators"],
+   props: ["selectedCollection", "allAnnotators", "selectedAnnotationStyle"],
 
    data() {
       return {
          annotatedCollections: [],
-         guiMessages
+         guiMessages,
+         uploading:false,
+         missingAnnotations:[]
       }
    },
 
@@ -174,30 +192,65 @@ Vue.component("supervision-collection", {
       this.get_all_annotated_collections(this.selectedCollection);
    },
 
+   created () {
+      adminEventBus.$on("refresh_list", this.get_all_annotated_collections);
+   },
+
+   beforeDestroyed () {
+      adminEventBus.$off("refresh_list", this.get_all_annotated_collections);
+   },
+
    methods: {
       get_all_annotated_collections: function(id) {
-         mainContainer.style.cursor = "progress";
+         document.body.style.cursor = "progress";
          backend.get_specific_collections("annotated_collections",{"id":id}, {"annotator":1,"done":1,"status":1,"lastUpdate":1})
             .then( (response) => {
                console.log("==== ANNOTATED VERSIONS FOR",id,"====");
                this.annotatedCollections = response;
                console.log(this.annotatedCollections);
-               mainContainer.style.cursor = null;
+               //check for missing documents
+               for (annotatorIndex in this.allAnnotators) {
+                  let found = false;
+                  for (documentIndex in this.annotatedCollections) {
+                     if (this.annotatedCollections[documentIndex]["annotator"] == this.allAnnotators[annotatorIndex]) {
+                        found = true;
+                        break;
+                     }
+                  }
+                  if (!found) {
+                     this.missingAnnotations.push(this.allAnnotators[annotatorIndex]);
+                  }
+               }
+               console.log(this.missingAnnotations)
+               document.body.style.cursor = null;
             }  
          );
         console.log(this.allAnnotators);
         // TO DO:
-        // divide between produced annotations, 
+        // distinguish between produced annotations, 
         // annotations from dis-assigned annotators,
         // annotations not yet produced.
       },
 
-      clicked_annotated: function(clickedAnnotator) {
-         backend.supervision(clickedAnnotator,this.selectedCollection) 
+      clicked_annotated: function(clickedAnnotator, status) {
+         backend.supervision(clickedAnnotator,this.selectedCollection, status) 
             .then( (response) => {
                console.log("==== LOADING ANNOTATIONS FOR SELECTED USER ====");
-               adminEventBus.$emit("annotator_selected",clickedAnnotator);
-            });
+               adminEventBus.$emit("annotator_selected",clickedAnnotator, status);
+            }
+         );
+      },
+
+      delete_annotated: function(id, annotator) {
+         if (confirm(guiMessages.selected.admin.deleteConfirm)) {
+            backend.del_db_entry_async({"_id":id, "annotator":annotator}, "annotated_collections")
+               .then((response) => {
+                  console.log(response);
+                  console.log("==== REFRESHING LIST ====");
+                  this.get_all_annotated_collections(this.selectedCollection);
+               }
+            );
+         }
       },
 
       freeze(clicked, doneValue) {
@@ -206,8 +259,9 @@ Vue.component("supervision-collection", {
             if (doneValue != true)
                done = true;
             backend.update_collection_fields(this.selectedCollection, {"done":done}, clicked)
-            .then((response) => {
-               this.get_all_annotated_collections(this.selectedCollection);
+               .then((response) => {
+                  console.log("=== NEW ANNOTATION LOADED CORRECTLY ==== ")
+                  this.get_all_annotated_collections(this.selectedCollection);
             });
          }
       },
@@ -218,16 +272,23 @@ Vue.component("supervision-collection", {
          <ul class="dialogue-list">
             <li id="annotated_list">
                <h2 class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
-               <div class="entry-list-single-item-container" v-for="name in annotatedCollections">
+               <div class="entry-list-single-item-container" v-for="(name, index) in annotatedCollections">
+
+               <div class="supervisor-btn-container">
                   <div v-if="name.done" class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
                      {{guiMessages.selected.admin.button_unfreeze}}
                   </div>
                   <div v-else class="del-dialogue-button" v-on:click="freeze(name.annotator, name.done)">
                      {{guiMessages.selected.admin.button_freeze}}
                   </div>
-                  <div class="entry-info" v-on:click="clicked_annotated(name.annotator)">
+                  <div class="del-dialogue-button" v-on:click="delete_annotated(name._id, name.annotator)">
+                     {{guiMessages.selected.lida.button_delete}}
+                 </div>
+               </div>
+
+                  <div class="entry-info" v-on:click="clicked_annotated(name.annotator, name.status)">
                      <div class="entry-id">
-                        <span>Annotator:</span> {{name.annotator}}
+                        <span>{{guiMessages.selected.admin.annotator}}:</span> {{name.annotator}}
                      </div>
                      <div class="entry-annotated">
                         <span>Status: {{name.status}}</span>
@@ -246,14 +307,184 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
+         <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
+         <h3 style="color: rgba(0,0,0,0.62);">Annotation style: {{selectedAnnotationStyle.split(".")[0]}}</h3>
+         
+         <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
+         <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>
    `
 });
 
+Vue.component('supervisor-upload-modal', {
+
+   props: ["selectedCollection"],
+
+   data() { 
+       return {
+           guiMessages,
+           assignedTo:"",
+           allUsers:[],
+           newDocument: {},
+           newDocumentName: "",
+        }
+   },
+
+   mounted () {
+       this.init()
+   },
+   methods:{
+       init : function() {
+         this.get_all_users();
+       },
+
+       get_all_users() {
+         backend.get_all_users()
+             .then( (response) => {
+                 console.log();
+                 this.allUsers = response;
+                 console.log(this.allUsers);
+         });
+      },
+
+      close() {
+         this.$emit('close');
+      },
+
+      open_file(event){
+         let file = event.target.files[0];
+         this.handle_file(file);
+     },
+
+     handle_file(file) {
+         let jsonType = /application.json/;
+         if (file.type.match(jsonType)) {
+            console.log('---- HANDLING LOADED JSON FILE ----');
+            let reader = new FileReader();
+            reader.onload = (event) => {
+               console.log('THE READER VALUE', reader);
+               this.newDocument = reader.result;
+               this.newDocumentName = file.name;
+            }
+            reader.readAsText(file);
+         } else {
+            alert('Only .json files are supported.')
+         }
+      },
+
+      add_annotated: function() {
+         //check for empty fields
+         if (this.newDocument == {}) {
+            alert(guiMessages.selected.exception_create_annotations[0]);
+            return;
+         } else if (this.assignedTo == "") {
+            alert(guiMessages.selected.exception_create_annotations[1]);
+            return;
+         }
+         //check for format errors
+         try {
+            var check = JSON.parse(this.newDocument);
+         } catch (e) {
+            alert(e, guiMessages.selected.exception_create_annotations[2]);
+            return;
+         }
+         if (check.length > 1) {
+            alert(guiMessages.selected.exception_create_annotations[3]);
+            return;
+         } else if (check["document"] != undefined) {
+            console.log("Collection document found in your json file. Other data but 'document' field will be ignored.");
+            alert(guiMessages.selected.exception_create_annotations[4]);
+            this.newDocument = JSON.stringify(check["document"]);
+         }
+         backend.new_annotated_collection_async(this.selectedCollection, {"annotator":this.assignedTo}, this.newDocument)
+            .then( (response) => {
+               console.log(response);
+               if (response["data"]["error"] != undefined) {
+                  alert("Upload OK");
+                  console.log("==== REFRESHING LIST ====");
+               } else {
+                  adminEventBus.$emit("refresh_list", this.selectedCollection);
+                  this.$emit('close');
+                  return;
+               }   
+            }
+         );
+      },
+
+   },  
+   template:
+`
+ <transition name="modal">
+   <div class="modal-mask">
+     <div class="modal-wrapper">
+       <div class="modal-container modal-user-creation">
+
+         <div class="modal-header">
+           <slot name="header">
+             <strong>Annotated Collection Upload</strong>
+           </slot>
+         </div>
+
+         <hr>
+
+         <div class="modal-body">
+           <slot name="body">
+               <div class="inner-form">
+                   <label for="id">ID:</label>
+                   <input class="user-creation" id="annotation_id" type="text" v-bind:value="selectedCollection" readonly>
+                   <br>
+                   <label for="select_annotator">{{guiMessages.selected.admin.annotator}}:</label>
+                   <select class="modal-select" id="annotation_annotator" v-model="assignedTo">
+                        <option disabled value=""></option>
+                        <template v-for="user in allUsers">
+                          <option v-bind:value="user.id">{{user.id}}</option>
+                        </template>
+                   </select>
+                   <br>
+                   <div v-if="newDocumentName != ''" style="margin-top: 10px;">
+                     <label for="annotation_name">{{guiMessages.selected.admin.uploaded}}:</label>
+                     <input class="modal-select" type="text" v-bind:value="newDocumentName" readonly/>
+                   </div>
+                   <br><br>
+
+                   <input type="file"
+                     id="fileInput"
+                     name="fileInput"
+                     accept=".txt, .json"
+                     v-on:change="open_file($event)">
+                  <label for="fileInput"
+                     id="fileInputLabel"
+                     class="btn btn-sm btn-primary">
+                     {{guiMessages.selected.admin.button_upload}}
+                  </label>
+                   
+                  <button id="upload_collection" v-on:click="add_annotated()" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createButton}}</button>
+               </div>
+           </slot>
+         </div>
+
+         <hr>
+
+         <div class="modal-footer">
+           <slot name="footer">
+             MATILDA
+             <button class="modal-default-button" @click="close()">
+               {{guiMessages.selected.annotation_app.close}}
+             </button>
+           </slot>
+         </div>
+       </div>
+     </div>
+   </div>
+ </transition>
+ `
+});
+
+
 Vue.component("supervision-dialogues", {
 
    props: [
-      "Su_activeCollection", "selectedAnnotator"
+      "Su_activeCollection", "selectedAnnotator", "savedAnnotationRate"
    ],
 
    data () {
@@ -307,6 +538,12 @@ Vue.component("supervision-dialogues", {
           if (this.collectionRate == "NaN%") {
               this.collectionRate = "0%";
               this.collectionRate = "0%"
+          }
+          if (this.collectionRate != this.savedAnnotationRate) {
+            backend.update_collection_fields(this.Su_activeCollection, {"status":this.collectionRate}, this.selectedAnnotator)
+               .then( (response) => {
+                  console.log("annotation rate silently updated from saved"+this.savedAnnotationRate+" to calculated"+this.collectionRate);
+            });
           }
       },
 
@@ -454,9 +691,8 @@ Vue.component("supervision-annotation-app", {
         },
 
         init: function() {
-
             // Step One :: Download a Single Dialogue
-            backend.get_single_dialogue_async(this.dialogueId, "supervision")
+            backend.get_single_dialogue_async(this.dialogueId, null, "supervision")
                 .then( (response) => {
                     console.log('---- RECEIVED DATA FROM THE SERVER ----')
                     console.log(response);
@@ -564,34 +800,36 @@ Vue.component("supervision-annotation-app", {
     template:
     `
     <div id="supervision">
-      <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
+    <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
-          <dialogue-menu v-bind:changesSaved="allDataSaved"
-                         v-bind:dialogueTitle="dialogueId"
-                         v-bind:annotationRate="annotationRate">
-          </dialogue-menu>
+        <dialogue-menu v-bind:changesSaved="allDataSaved"
+                       v-bind:dialogueTitle="dialogueId"
+                       v-bind:annotationRate="annotationRate">
+        </dialogue-menu>
 
-          <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
-                          v-bind:turns="dTransformedTurns"
-                          v-bind:currentId="dCurrentId"
-                          v-bind:metaTags="metaTags">
-          </dialogue-turns>
+        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+                        v-bind:turns="dTransformedTurns"
+                        v-bind:currentId="dCurrentId"
+                        v-bind:metaTags="metaTags"
+                        v-bind:readOnly="readOnly">
+        </dialogue-turns>
 
-          <annotations v-bind:globalSlot="annotationFormat.global_slot"
-                       v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
-                       v-bind:classifications="dCurrentTurn.multilabel_classification"
-                       v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
-                       v-bind:currentId="dCurrentId"
-                       v-bind:dialogueNonEmpty="dialogueNonEmpty"
-                       v-bind:dTurns="dTurns"
-                       v-bind:dialogueId="dialogueId"
-                       v-bind:readOnly="readOnly">
-          </annotations>
+        <annotations v-bind:globalSlot="annotationFormat.global_slot"
+                     v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
+                     v-bind:classifications="dCurrentTurn.multilabel_classification"
+                     v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
+                     v-bind:currentId="dCurrentId"
+                     v-bind:dialogueNonEmpty="dialogueNonEmpty"
+                     v-bind:dTurns="dTurns"
+                     v-bind:dialogueId="dialogueId"
+                     v-bind:readOnly="readOnly">
+        </annotations>
 
-          <input-box>
-          </input-box>
+        <input-box>
+        </input-box>
 
       </div>
+    </div>
     </div>
     `
 });

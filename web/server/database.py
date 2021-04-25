@@ -9,12 +9,13 @@ import json
 import copy
 import json
 import datetime
+import logging
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 import functools
 import ast
 
 # == Flask ==
-from flask import Flask, jsonify
+from flask import Flask, jsonify, session
 from flask_cors import CORS
 
 # == Pymongo ==
@@ -22,7 +23,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 # == Local ==
-from utils import database_uri_compose
+from utils import database_uri_compose, stringify
 from annotator_config import Configuration
 from annotator import DialogueAnnotator
 
@@ -41,11 +42,11 @@ class DatabaseManagement(object):
 	#connecting
 	client = MongoClient(databaseURI)
 	try:
-		print(" * \n * MATILDA: Connecting to database... \n * "+databaseURI)
+		logging.info(" * MATILDA: Connecting to database "+str(databaseURI))
 		client.server_info()
 	except Exception as e: 
-		print(" *",e, "\n * Connecting Errror. Trying again with legacy configuration...")
-		conf["database"]["optional_uri"] = None;
+		logging.warning(" * "+e+"\n * Connecting Errror. Trying again with legacy configuration...")
+		conf["database"]["optional_uri"] = None
 		databaseURI = database_uri_compose(conf["database"])
 		client = MongoClient(databaseURI)
 
@@ -78,9 +79,9 @@ class DatabaseManagement(object):
 
 		selected_collection = DatabaseManagement.selected(coll)
 
-		#print(" * Searching in:",coll,"for key '",pairs)
+		#logging.info(" * Searching in:",coll,"for key '",pairs)
 
-		entries = {}
+		documentLengthOnly = False
 
 		#adds restrictions to the search
 		if pairs is None:
@@ -88,41 +89,55 @@ class DatabaseManagement(object):
 		
 		#search with projection of interested fields or simple search
 		if projection is not None:
+			try:
+				if projection["document"] == "length":
+					projection["document"] = 1
+					documentLengthOnly = True
+			except:
+				pass
 			query = selected_collection.find(pairs,projection)
 		else:
 			query = selected_collection.find(pairs)
 
-		#convert objectId into string and gold in true or false
-		#calculate document length which also is dialogues total number
+		#operations after the query
 		for line in query:
+			#convert objectId into string
 			if line.get("_id") is not None:
 				line["_id"] = str(line["_id"])
+			#calculate document length which also is dialogues total number	
 			if line.get("document") is not None:
 				line["documentLength"] = len(line["document"])
+			#remove document if only length is requested
+			if documentLengthOnly:
+				line["document"] = line["documentLength"]
+
 			responseObject.append(line)
 
 		return responseObject
 
-	def deleteDoc(collection, id):
+	def deleteDoc(collection, pair):
 
 		#delete a database document by id
 
-		DatabaseManagement.selected(collection).delete_one({"id":id})
+		if "_id" in pair:
+			pair["_id"] = ObjectId(pair["_id"])
+
+		DatabaseManagement.selected(collection).delete_one(pair)
 
 		responseObject = { "status":"success" }
 		return responseObject
 
 	def createDoc(document_id, collection, values):
 		
-		#print(" * Creating document", document_id, "in",collection)
+		#logging.info(" * Creating document", document_id, "in",collection)
 		DatabaseManagement.selected(collection).save(values)
 		
 		response = {"staus":"success"}
 		return response 
 
-	def updateDoc(doc_id, collection, fields):
+	def updateDoc(searchFields, collection, updateFields):
 
-		DatabaseManagement.selected(collection).update({ "id":doc_id }, { "$set": fields })
+		DatabaseManagement.selected(collection).update(searchFields, { "$set": updateFields })
 
 	def pullFromDoc(doc_id, collection, field):
 
@@ -152,6 +167,20 @@ class DatabaseManagement(object):
 
 		return {"status":"success"}
 
+
+	def dumpDatabase():
+
+		collections = DatabaseManagement.db.collection_names()
+		dump = {}
+		for i, collection_name in enumerate(collections):
+			col = getattr(DatabaseManagement.db,collections[i])
+			collection = col.find()
+			dump[collection_name] = []
+			for document in collection:
+				for attribute in document:
+					document[attribute] = stringify(document[attribute])
+				dump[collection_name].append(document)
+		return dump
 
 ###############################################
 # ANNOTATIONS AND DIALOGUE-COLLECTIONS UPDATE
@@ -196,6 +225,8 @@ class DatabaseManagement(object):
 
 class LoginFuncs(object):
 
+	loggedUser = {}
+
 	administratorDefault = {
 		"id":"admin",
 		"userName":"admin",
@@ -215,16 +246,31 @@ class LoginFuncs(object):
 		if userDetails != None:
 			if userDetails["userName"] == userID:
 				if userDetails["password"] == userPass:
+					session['userName'] = userID
+					session['token'] = os.urandom(6)
+					LoginFuncs.loggedUser[userID] = session['token']
+					logging.info(" * New session for "+userID)
 					response = { "status":"success", "role":userDetails["role"] }
 
 		return response
 
+	def logOut(userID):
+		session.clear()
+		return { "status": "done" }
+
+	def checkSession():
+		try:
+			if session['userName']:
+				if LoginFuncs.loggedUser[session['userName']] != session['token']:
+					return False
+		except:
+			return False
+		return True
+
 	def start():
 		if DatabaseManagement.users.count_documents({"id":"admin"}) == 0:
 			DatabaseManagement.users.insert_one(LoginFuncs.administratorDefault)
-			print(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
+			logging.info(" * Default admin account created: please log-in with username 'admin' and password 'admin'")
 		else:
-			print(" * Connected to database \n *", DatabaseManagement.databaseURI)
+			logging.info(" * Connected to database "+str(DatabaseManagement.databaseURI))
 
-# DATABASE AND ADMIN ACCOUNT INIT
-LoginFuncs.start()

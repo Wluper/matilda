@@ -12,7 +12,7 @@ guiMessages = {
             dataManagement: "Data Management",
             visited: "Visited",
             visited_dialogues: "Visited Dialogues",
-            supervision:"Supervision",
+            supervision:"Annotation Supervision",
             notVisited: "Not visited",
             button_downloadAll:"Download Data",
             button_interAgreement:"Inter-annotator Agreement",
@@ -21,15 +21,23 @@ guiMessages = {
             annotator:"Annotator",
             annotators:"Annotators",
             actualAnnotators:"Sources",
-            button_upload:"Upload File or Drag and Drop",
+            button_upload:"Upload File",
             button_admin:"Admin Panel",
             dropAnywhere: "Drop Files Anywhere to Upload!",
+            uploaded: "Uploaded file",
+            annotatedTitle: "Annotated Collection Upload",
             userButton: "Users Management",
             users:"Users",
             createButton: "Add",
+            createAnno:"Create new annotation style",
+            newAnnotations: "Import annotations from a file",
             editButton:"Edit",
+            hideButton:"Hide",
+            showButton:"Show",
+            fileName:"File Name",
             createUserButton: "Add a new user",
             deleteConfirm:"Are you sure you want to permanently delete this entry? This cannot be undone!",
+            deleteConfirm2:"Are you sure you want to permanently delete this entry? If you delete it and proceed to save, the file on the server will be removed!",
             wipeConfirm:"Are you sure to clean the dialogue list? Actual dialogues' files won't be deleted",
             button_wipeView:"Clean dialogues view",
             annotation:"Annotation",
@@ -43,9 +51,10 @@ guiMessages = {
             userCreation: "User Creation",
             button_downloadGold:"Download Gold",
             button_wipeCache:"Check again for errors",
-            wipeCacheConfirm: "This will delete the conflicts file allowing to start conflict resolving anew.",
+            wipeCacheConfirm: "This will delete the conflicts' file allowing to start resolving from scratch.",
             confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
             role:"Role",
+            configPage: "Configuration",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -113,6 +122,9 @@ guiMessages = {
             freeze: "This operation will freeze the collection and notify your work is done and can be reviewed. Do it only when you finished",
             freezed: "These annotations are freezed and can not be edited until reviewed and unlocked by an administrator",
             empty:"Empty",
+            dataManagementTitle:"Select a user or a collection",
+            collectionToAnnotator:"Assign collections to selected user",
+            annotatorToCollection:"Assign annotators to selected collection"
 
         },
         annotation_app: {
@@ -128,6 +140,7 @@ guiMessages = {
             expand: "Click to Expand",
             noTurn: "No turn selected. Please select one to annotate",
             rate: "Annotation rate",
+            switchAnnotationView: "Expanded Slots View",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -142,6 +155,7 @@ guiMessages = {
             optionMin: "Option",
             prediction: "Prediction",
             instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
+            buttonWipeCache: "This will check all your collection dialogues for errors. After the end of this process you will be returned to the collections list."
         },
         admin_panel: [
             "Compare annotations on the same collection and resolve its conflicts",
@@ -149,6 +163,7 @@ guiMessages = {
             "Create, edit and assign dialogues collections",
             "Inspect how annotations are progressing",
             "Annotate collections assigned to you",
+            "Configure annotation models, database connection, app environment"
         ],
         modal_formatInfo:
         [
@@ -232,6 +247,58 @@ guiMessages = {
             "With this function you can edit the information associated to a collection and remove one or more dialogues from it",
             "This button permanently delete the collection from the database",
         ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
+        ],
+        modal_examples:
+        [
+            `"usr":"Hello I'm looking for a job",`,
+            `"Dialogue_act": [
+                "sys_greet",
+                "usr_greet"
+            ],`,
+            `"sys_inform_basic": [
+                [
+                    "job_description",
+                    "none"
+                ],
+                [
+                    "skill",
+                    "usr[3,5][I know English]"
+                ]
+            ]`,
+            `"global_slot": {
+                "result": "positive",
+                "recorded": true
+            },`,
+        ],
+        modal_examples_img:
+        [
+            "assets/images/string_exa.png",
+            "assets/images/multiclass_exa.png",
+            "assets/images/multistring_exa.png",
+            "assets/images/global_exa.png",
+        ],
+        exception_create_annotations:
+        [
+            "You didn't upload anything. Please upload a json file to load.",
+            "An annotated collection is always related to an annotator. Please select the annotator to assign it.",
+            "Your json file format is wrong. Please, check your json file for format errors and invalid data types.",
+            "You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.",
+            "It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.",
+        ],
         database: {
             title: "Workspaces Management",
             location:"Database Location",
@@ -265,23 +332,31 @@ guiMessages = {
             button_interAgreement:"Statistiche",
             annotator:"Annotatore",
             annotators:"Annotatori",
+            fileName:"File Name",
             to:"a",
             assignedTo: "Assegnato a",
             actualAnnotators:"Fonti",
-            button_upload:"Carica o trascina un file",
+            button_upload:"Carica un file",
+            uploaded: "File caricato",
+            annotatedTitle: "Carica una collezione annotata",
             button_admin:"Pannello Admin",
             dropAnywhere: "Rilascia il file per caricarlo!",
             userButton: "Gestione Utenti",
             users:"Utenti",
             createButton: "Crea",
+            createAnno:"Crea modello di annotazione",
             editButton:"Modifica",
+            hideButton:"Nascondi",
+            showButton:"Mostra",
             createUserButton: "Crea nuovo utente",
             deleteConfirm:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
+            deleteConfirm2:"Si è sicuri di voler eliminare questo documento? Se confermate e poi salvate le modifiche, il file verrà rimosso dal server!",
             wipeConfirm:"Si è sicuri di voler azzerare la lista dei dialoghi? I dialoghi non saranno eliminati dai loro file",
             button_wipeView:"Pulisci la lista",
-            supervision:"Supervisione",
+            supervision:"Supervisione annotazioni",
             annotation:"Annotazione",
             backToColl: "Indietro",
+            newAnnotations: "Carica annotazioni da file",
             importConflictsResult:"Non è stato trovato niente da importare, nessuna versione annotata è stata ancora prodotta.",
             cantDeleteAdmin:"L'account speciale 'admin' non può essere eliminato",
             annotationInProgress:"Annotazioni in corso per la collezione",
@@ -294,6 +369,7 @@ guiMessages = {
             confirmOverwriteUser: "L'username scelto esiste già, vuoi sovrascrivere l'utente già esistente?",
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
             role:"Ruolo",
+            configPage: "Configurazione",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -362,6 +438,9 @@ guiMessages = {
             freeze: "Questa operazione bloccherà la collezione e notificherà che hai finito e che le annotazioni sono pronte per la revisione",
             freezed: "L'annotazione è stata segnalata come completata e quindi non potrà essere modificata fino alla revisione e allo sblocco da parte di un amministratore.",
             empty:"Vuoto",
+            dataManagementTitle:"Seleziona un utente o una collezione",
+            collectionToAnnotator:"Assegna collezioni all'utente selezionato",
+            annotatorToCollection:"Assegna utenti alla collezione selezionata"
         },
         annotation_app: {
             turnId: "Id Turno",
@@ -376,6 +455,7 @@ guiMessages = {
             expand: "Clicca per espandere",
             noTurn: "Nessun turno selezionato, nessuna modifica effettuata.",
             rate: "Stima annotazione",
+            switchAnnotationView: "Visuale Slot-Espansi",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -390,6 +470,7 @@ guiMessages = {
             optionMin: "Opzione",
             prediction: "Predizione",
             instructions: "Confronta le diverse annotazioni generate dal sistema e dagli annatotatori così da produrre una versione definitiva per la collezione gold",
+            buttonWipeCache: "Questo processo analizzerà nuovamente tutti i dialoghi della tua collezione. Una volta completato sarai riportato nella lista delle collezioni e potrai rientrare."
         },
         admin_panel: [
             "Confronta le annotazioni fatte sulla stessa collezione e risolvine i conflitti",
@@ -397,6 +478,7 @@ guiMessages = {
             "Crea, modifica e assegna le collezioni di dialoghi",
             "Controlla come sta procedendo il lavoro di annotazione",
             "Annota le collezioni assegnate a te",
+            "Configura i modelli di annotazione, la connessione al database, l'ambiente dell'app"
         ],
         modal_formatInfo:
         [
@@ -415,6 +497,14 @@ guiMessages = {
             Se carichi un file JSON, deve essere nel formato corretto.
             Il formato richiesto è il seguente:
             `
+        ],
+        exception_create_annotations:
+        [
+            "Non hai caricato alcun file. Carica un file json dal tuo computer per proseguire.",
+            "Le annotazioni sono sempre riferite ad un utente. Seleziona l'annotatore a cui riferirle per continuare.",
+            "Il formato del tuo file json è incorretto. Controlla il formato del file che vuoi caricare per errori di struttura, caratteri speciali o tipi di dato.",
+            "Hai caricato una lista di collezioni, non una singola collezione. Riformatta il tuo file per includere solo una collezione.",
+            "Sembra che tu abbia caricato una collezione completa di tutti i meta-dati. Solo la lista dei dialoghi (racchiuse nel campo 'document') verrà caricata. Altre informazioni nel tuo file come la percentuale di annotazione, lo stato di completamento, l'id del documento e l'annotatore precedente saranno ignorate.",
         ],
         modal_formatInfo_list:
         [
@@ -479,6 +569,21 @@ guiMessages = {
             "Da questo pulsante accedi alla modifica della collezione. Puoi modificare le informazioni associate ad essa e rimuovere uno o più dialoghi singolarmente.",
             "Questo pulsante elimina permantentemente la collezione dal database",
         ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
+        ],
         database: {
             title: "Gestione Workspaces",
             location: "Indirizzo",
@@ -516,15 +621,23 @@ guiMessages = {
             annotator: "Annotator",
             annotators: "Annotatoren",
             actualAnnotators: "Sources",
-            button_upload: "Datei hochladen oder per Drag & Drop",
+            button_upload: "Datei hochladen",
+            uploaded: "Uploaded file",
+            annotatedTitle: "Annotated Collection Upload",
             button_admin: "Admin Panel",
             dropAnywhere: "Dateien überall zum Hochladen ablegen!",
             userButton: "Benutzerverwaltung",
             users: "Benutzer",
+            fileName:"File Name",
             createButton: "Hinzufügen",
+            createAnno:"Create new annotation style",
             editButton: "Bearbeiten",
+            hideButton:"Hide",
+            showButton:"Show",
+            newAnnotations: "Import annotations from a file",
             createUserButton: "Neuen Benutzer hinzufügen",
             deleteConfirm: "Möchten Sie diesen Eintrag wirklich dauerhaft löschen? Dies kann nicht rückgängig gemacht werden!",
+            deleteConfirm2:"Si è sicuri di voler eliminare questo documento? Non sarà recuperabile!",
             wipeConfirm: "Sind Sie sicher, die Dialogliste zu bereinigen? Die tatsächlichen Dialogdateien werden nicht gelöscht",
             button_wipeView: "Dialogansicht bereinigen",
             annotation: "Annotation",
@@ -541,6 +654,7 @@ guiMessages = {
             wipeCacheConfirm: "Dadurch wird die Konfliktdatei gelöscht, sodass die Konfliktlösung erneut gestartet werden kann.",
             confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
             role:"Role",
+            configPage: "Configuration",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -609,6 +723,9 @@ guiMessages = {
             freeze: "Dieser Vorgang friert die Sammlung ein und benachrichtigt Sie, dass Ihre Arbeit erledigt ist und überprüft werden kann. Führen Sie sie erst aus, wenn Sie fertig sind.",
             freezed: "Diese Anmerkungen sind eingefroren und können erst bearbeitet werden, wenn sie von einem Administrator überprüft und entsperrt wurden",
             empty: "leer",
+            dataManagementTitle:"Select a user or a collection",
+            collectionToAnnotator:"Assign collections to selected annotator",
+            annotatorToCollection:"Assign users to selected collection"
 
         },
         annotation_app: {
@@ -624,6 +741,7 @@ guiMessages = {
             expand: "Klicken zum Erweitern",
             noTurn: "Keine Runde ausgewählt. Bitte wählen Sie eine zum Kommentieren aus",
             rate: "Annotation Rate",
+            switchAnnotationView: "Expanded Slots View",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -638,6 +756,7 @@ guiMessages = {
             optionMin: "Option",
             prediction: "Prediction",
             instructions: "Compare the different options provided by the system and the annotators to produce a definitive version for the gold collection.",
+            buttonWipeCache: "This will check all your collection dialogues for errors. After the end of this process you will be returned to the collections list."
         },
         admin_panel: [
             "Konfrontieren Sie Anmerkungen zu denselben Sammlungen und lösen Sie deren Konflikte",
@@ -645,6 +764,15 @@ guiMessages = {
             "Dialogsammlungen erstellen, bearbeiten und zuweisen",
             "Überprüfen Sie, wie die Anmerkungen fortschreiten",
             "Ihnen zugewiesene Sammlungen kommentieren",
+            "Configure annotation models, database connection, app environment"
+        ],        
+        exception_create_annotations:
+        [
+            "You didn't upload anything. Please upload a json file to load.",
+            "An annotated collection is always related to an annotator. Please select the annotator to assign it.",
+            "Your json file format is wrong. Please, check your json file for format errors and invalid data types.",
+            "You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.",
+            "It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.",
         ],
         modal_formatInfo:
         [
@@ -727,6 +855,21 @@ guiMessages = {
             "Mit dieser Schaltfläche können Sie eine Sammlung aus einer oder mehreren JSON-Dateien erstellen.",
             "Mit dieser Funktion können Sie die einer Sammlung zugeordneten Informationen bearbeiten und einen oder mehrere Dialoge daraus entfernen",
             "Diese Schaltfläche löscht die Sammlung dauerhaft aus der Datenbank",
+        ],
+        modal_annotationStyle:
+        [
+            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
+            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
+            The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
+            is shown as a group of checkboxes the annotators can mark.`,
+            `Multilabel Classification String are used in few ways: one is to comment the selected turn with the provided field to fill with a string. 
+            Another way to use them is to reference part of the text in the turn in order to highlight the information provided in that portion. 
+            In the interface Multilabel Classification String are shown as a group of string fields the annotator can write into. Each string field
+            must have a unique name (label).`,
+            `Global slots are just like Multilabel Classification Strings but they are not related to the turn, they are related to the entire dialogue.
+            This category is memorized in the first turn of every dialogue and it should be use to provide information about the content of the dialogue.
+            In the interface they are shown as a group of text fields the annotators can fill. Global slots' group name 'globa_slot' is not editable.`,
         ],
         database: {
             title: "Workspaces Management",

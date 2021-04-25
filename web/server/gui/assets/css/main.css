@@ -29,16 +29,19 @@ input{
     transition: ease-in-out 0.2s;
 }
 input:hover{
-    background-color:#f9f9a291;
+    background-color:#3a9dd63b;
 }
 input:focus {
-  background-color:#f9f9a291;
+  background-color:#3a9dd63b;
 }
 
 *:focus {
     outline: none;
 }
 
+select {
+    border: 1px solid rgb(0 0 0 / 30%);
+}
 
 .btn-set {
     padding:0;
@@ -106,7 +109,6 @@ input:focus {
 .overflow-hide > div:first-of-type {
    margin-top:30px;
 }
-
 
 .sticky {
     position:sticky;
@@ -185,6 +187,7 @@ input:focus {
 .int-coll-list-single-item-container {
     display: grid;
     grid-template: [row1-start] "info" [row1-end] / 1fr;
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 6px 5px rgba(0,0,0,0.05);
     transition: ease 175ms all;
@@ -263,7 +266,7 @@ input:focus {
 }
 
 .int-coll-num-turns:hover {
-    background-color: #999;
+    background-color: #087fdd8f;
     color: white;
 }
 
@@ -274,7 +277,7 @@ input:focus {
     justify-content: flex-end;
     align-items: center;
     text-align: right;
-    padding-right: 3px;
+    padding-right: 5px;
     font-weight: bold;
     font-family: montserrat;
     text-transform: uppercase;
@@ -290,7 +293,7 @@ input:focus {
 }
 
 .int-info {
-    grid-template: [row1-start] "id . visited numTurns" [row1-end] / 6fr 0.1fr 1fr 2fr !important;
+    grid-template: [row-start] "id count visited numTurns" [row-end] / 5fr 2fr 1.5fr 1.5fr !important;
 }
 
 .int-dialogue-id {
@@ -341,12 +344,19 @@ input:focus {
     box-shadow: 0 1px 5px rgba(0,0,0,0.09);
 }
 
+<<<<<<< HEAD
+=======
+.annotation-models-list .entry-list-single-item-container:hover {
+    border-left-color: #3a9dd6 !important;
+}    
+
+>>>>>>> multimodel
 #supervision-container {
     height: 100%;
 }
 
 #supervision {
-    height:100%;
+    height:92%;
     overflow: hidden;
 }
 
@@ -370,11 +380,12 @@ input:focus {
 
 .admin-panel {
     display: grid;
-    grid-template: [row1-start] "1 2 3 4" [row1-end] / 1fr 1fr 1fr 1fr;
+    grid-template: [row1-start] "1 2 3 4 5" [row1-end] / 1fr 1fr 1fr 1fr 1fr;
     padding-top:30px;
 }
 
 .panel {
+    margin-right:4px;
     padding: 10px 17px !important;
     box-shadow: 0 2px #1675c1, 0px 4px 6px 0px #00000026, 0px 15px 5px 0px rgb(0 0 0 / 10%);
     font-size: 14px !important;
@@ -421,9 +432,10 @@ input:focus {
 }
 
 .logo{
-    height: 54px;
-    width: 200px;
+    height: 72%;
     margin: 8px 0 8px 10px;
+    align-self: baseline;
+    width: 200px;
 }
 
 .logo img {
@@ -456,6 +468,22 @@ input:focus {
 .droplist_language_selector {
     border:0;
     outline:none;
+}
+
+.grey-compact-button {
+    border-style: hidden;
+    border-radius: 1px;
+    cursor: pointer;
+    background-color: #ddd;
+    padding: 1% 3% 1% 3%;
+    transition: .5s;
+    margin-top: 0 !important;
+    float: none !important
+}
+
+.grey-compact-button:hover {
+    background-color: #259af7;
+    color:white
 }
 
 /* EOF */

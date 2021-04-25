@@ -7,12 +7,15 @@ import os
 import sys
 import json
 import copy
+import logging
 from json import loads
 from typing import Dict, List, Any, Tuple, Hashable, Iterable, Union
 from collections import defaultdict
 
 # >>>> Local <<<<
 from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel, SysDummyModel
+
+#logging.basicConfig(filename='matilda.log', level=logging.DEBUG, format='%(asctime)s VALIDATOR %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', style='%')
 
 ##############################################
 #                  CONFIG Dict
@@ -43,17 +46,23 @@ class Configuration(object):
     class responsible for configuration and valid annotation structure
     """
 
+    DEFAULT_PATH = ""
+    DOCKER = False
+
     #importing json configuration file
     try: 
         #docker
         with open('configuration/conf.json') as json_file:
             conf = json.load(json_file)
             __DEFAULT_PATH = "configuration/"
+            DEFAULT_PATH = __DEFAULT_PATH
+            DOCKER = True
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:
             conf = json.load(json_file)
             __DEFAULT_PATH = "../../configuration/"
+            DEFAULT_PATH = __DEFAULT_PATH
 
     # Here the list of annotation model file names
     annotation_styles = conf["app"]["annotation_models"]
@@ -93,23 +102,21 @@ class Configuration(object):
                         turn[labelName]
                     except KeyError:
 
-                        # turn 0 stores meta-tags and global slot
+                        #turn 0 stores meta-tags
                         if i == 0:
                             continue
-                            #if ("multilabel_global_string" != info["label_type"]):
-                            #    continue
 
                         if info["required"]:
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \
                                     "dialogue in turn {}.".format(labelName, i))
-                            print(message, turn)
+                            logger.info(message, turn)
                             return message
 
                         if info["required"] and not turn[labelName]:
                             message = ("ERROR2: Required label, \'{}\', does not have a value " \
                                 "provided in the dialogue in turn {}".format(labelName, i))
-                            print(message, turn)
+                            logger.info(message, turn)
                             return message
 
                         if info["required"] and ("multilabel_classification" == info["label_type"]):
@@ -120,12 +127,13 @@ class Configuration(object):
                                 message = "ERROR3: One of the provided labels in the list: " \
                                    "\'{}\' is not in allowed list according to " \
                                    "config.py in turn {}".format(providedLabels, i)
-                                print(message, turn)
+                                logger.info(message, turn)
                                 return message
         except:
-            print("dialogue",i,"in list couldn't validate with the current annotation style model")
-            return
-
+            message = "ERROR4: dialogue in list couldn't validate with the current annotation style model"
+            logger.info(message)
+            return message
+            
         return dialogue
 
 
@@ -192,6 +200,7 @@ def agreement_classification(listOfClassifications):
     """
     computes, whether there is diagreement, the most likely prediction and confidences of each.
     """
+    
     countDict = { "counts" : defaultdict(float), "predictions" : set()}
     counter = 0
 
@@ -252,15 +261,27 @@ def agreement_classification_string(listOfClassificationStrings):
 
         for label in prediction:
 
-            countDict["counts"][label[0]] += 1
+            if type(label[0]) == list:
+                countDict["counts"][label[0][0]] += 1
 
-            temp = valueDict.get(label[0])
+                temp = valueDict.get(label[0][0])
 
-            if temp:
-                if not (temp==label[1]):
-                    errorFlag = True
+                if temp:
+                    if not (temp==label[0][1]):
+                        errorFlag = True
+                else:
+                    valueDict[label[0][0]] = label[0][1]                
+
             else:
-                valueDict[label[0]] = label[1]
+                countDict["counts"][label[0]] += 1
+
+                temp = valueDict.get(label[0])
+
+                if temp:
+                    if not (temp==label[1]):
+                        errorFlag = True
+                else:
+                    valueDict[label[0]] = label[1]
 
     if counter > 0:
 
@@ -343,6 +364,65 @@ def agreement_classification_score(listOfClassifications, totalLabels):
     return countDict
 
 
+def agreement_classification_string_score(listOfClassifications, totalLabels):
+    """
+    computes, whether there is diagreement, the most likely prediction and confidences of each.
+    """
+    countDict = { "counts" : defaultdict(float), "total" : 0 , "errors":0, "annotatedBy" : 0, "alpha" : 0.0 , "kappa" : 0.0, "accuracy" : 0 }
+    counter = 0
+
+    #getting raw counts
+    for prediction in listOfClassifications:
+
+        if len(prediction) == 1:
+
+            counter += 1
+
+            for label in prediction[0]:
+
+                countDict["counts"][label] += 1
+        else:
+            counter += 1
+
+            for label in prediction:
+
+                if type(label) is list:
+                    countDict["counts"][label[0]] += 1
+                else:
+                    countDict["counts"][label] += 1
+
+    countDict["annotatedBy"] = counter
+
+    #getting error, `alpha` and `kappa` -> slightly modified version of Fleiss Kappa & Krippendorff Alpha
+    errorCount = 0
+    totalLabel = 0
+    for label, count in countDict["counts"].items():
+
+        totalLabel += 1
+
+        if counter > count:
+
+            errorCount += 1
+
+    countDict["errors"] = errorCount
+
+    countDict["total"] = totalLabel
+
+
+    #kappa is calculated with uniform random probabilty for the chance
+    A0 = (1 / (totalLabels * totalLabels ) )
+    Ae = errorCount / totalLabels
+    
+    if A0 == 1:
+        countDict["kappa"] = Ae-A0
+    else:
+        countDict["kappa"] = (Ae-A0) / (1-A0)
+
+    #A02
+    countDict["accuracy"] = errorCount/totalLabels
+
+    return countDict
+
 
 ##############################################
 # API to the outside world
@@ -360,6 +440,6 @@ agreementScoreConfig = {
     "data" : None,
     "string" : None,
     "multilabel_classification" : agreement_classification_score,
-    "multilabel_classification_string" : None,
+    "multilabel_classification_string" : agreement_classification_string_score,
     "multilabel_global_string" : None
 }

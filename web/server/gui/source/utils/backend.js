@@ -1,34 +1,9 @@
-/********************************
-* FILE NAME FUNCTIONS
-********************************/
 
 API_BASE = window.origin
-
-async function put_name(name){
-
-    console.log("Set userspace",name);
-
-    var dialogues = {}
-
-    const apiLink = API_BASE+'/'+name+'/name'
-    try {
-        var response = await axios.put( apiLink, {name : name} )
-        return true;
-    } catch (error) {
-
-        console.log(error);
-        return false;
-    }
-
-};
-
-
 
 /********************************
 * API INTERACTION FUNCTIONS
 ********************************/
-
-
 
 async function annotate_query(query){
 
@@ -47,6 +22,7 @@ async function annotate_query(query){
     } catch (error) {
 
         console.log(error);
+        alert(error);
 
     }
 
@@ -58,26 +34,96 @@ async function annotate_query(query){
 * ANNOTATON STYLE RESOURCE
 ***************************************/
 
+async function manage_configuration_file(mode,id,jsonFile) {
+
+    if (id == undefined) {
+
+        var apiLink = API_BASE+`/configuration`;
+
+        try {
+            var response = await axios.get(apiLink)
+
+            var configurationFile = response.data
+            console.log("============= CONFIGURATION ==============")
+            console.log(configurationFile)
+            return configurationFile
+
+        } catch (error) {
+
+            console.log(error);
+            if (response != undefined) {
+                response["error"] = error;
+            } else {
+                response = {}
+                response["error"] = error;
+            }
+            return response;
+        }
+
+    } else {
+        
+        try {
+
+            var apiLink = API_BASE+`/configuration/${id}`;
+
+            if (mode == "get") {
+
+                var response = await axios.get(apiLink)
+
+            } else if (mode == "post") {  
+
+                var response = await axios.post(apiLink, {json:jsonFile})
+           
+            } else if (mode == "put") {
+
+                var response = await axios.put(apiLink, {json:jsonFile})
+            }
+
+            var result = response;
+            console.log("============= CONFIGURATION ==============")
+            console.log(result);
+            return result;
+
+        } catch (error) {
+
+            console.log(error);
+            if (response != undefined) {
+                response["data"]["error"] = error;
+            } else {
+                response = {}
+                response["data"]["error"] = error;
+            }
+            return response;
+        }
+    }
+}
+
 async function get_annotation_style_async(collection,id,supervision){
 
     var dialogues = {}
 
     if (id == undefined) {
         var apiLink = API_BASE+`/dialogue_annotationstyle/${collection}`;
+    
     } else {
-        if (supervision != undefined) {
-
-            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         
+        if (supervision != undefined) {
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         } else { 
-
             var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         }
     }
 
     try {
+        
         var response = await axios.get(apiLink)
 
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
 
         dialogueStyle = response.data
         console.log("============= ANNOTATION CLASSES ==============")
@@ -87,7 +133,33 @@ async function get_annotation_style_async(collection,id,supervision){
     } catch (error) {
 
         console.log(error);
+        alert("Server offline or trying to access a deleted collection");
+        return {"status":"fail"}
 
+    }
+
+}
+
+async function get_logs(complete=undefined){
+
+    if (complete == undefined) {
+        var apiLink = API_BASE+"/logs";
+    } else {
+        var apiLink = API_BASE+"/logs/complete";
+    }
+
+    try {
+        var response = await axios.get(apiLink)
+
+        let logs = response.data
+        console.log("============= APP LOGS ==============")
+        console.log(logs)
+        return logs
+
+    } catch (error) {
+
+        console.log(error);
+        alert(error);
     }
 
 };
@@ -100,7 +172,7 @@ async function get_registered_annotation_styles(){
         var response = await axios.get(apiLink)
 
 
-        annotationStyles = response.data
+        let annotationStyles = response.data
         console.log("============= REGISTERED ANNOTATION STYLES ==============")
         console.log(annotationStyles)
         return annotationStyles
@@ -108,10 +180,10 @@ async function get_registered_annotation_styles(){
     } catch (error) {
 
         console.log(error);
-
+        alert(error);
     }
 
-};
+}
 
 
 /***************************************
@@ -144,7 +216,7 @@ async function get_all_dialogue_ids_async(admin) {
 
   if (admin == undefined) {
 
-    var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata';
+    var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata/'+mainApp.activeCollection;
 
   } else if (admin == "supervision") {
 
@@ -158,6 +230,13 @@ async function get_all_dialogue_ids_async(admin) {
   try {
 
     var response = await axios.get(apiLink)
+
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     dialoguesList = response.data
     console.log("=========== ALL DIALOGUE METADATA LIST ===========")
@@ -239,7 +318,7 @@ async function get_all_dialogues_async(admin) {
 };
 
 
-async function get_single_dialogue_async(id, supervision) {
+async function get_single_dialogue_async(id, collection, supervision) {
 
     if (supervision != undefined) {
 
@@ -250,11 +329,22 @@ async function get_single_dialogue_async(id, supervision) {
         dialogues = response.data.dialogue
 
         return dialogues
+    
+    } else if (collection != undefined) {
+
+        apiLink = API_BASE+"/"+mainApp.userName+"/dialogues/"+id+"/"+collection;
+
+        var response = await axios.get( apiLink )
+
+        dialogues = response.data.dialogue
+
+        return dialogues
+    
     }
 
     try {
 
-        var response = await RESTdialogues( "GET", id, {})
+        var response = await RESTdialogues( "GET", id, collection, {})
         console.log("===== GOT SINGLE DIALOGUE =====")
         console.log(response)
         dialogue = response.data.dialogue
@@ -263,7 +353,8 @@ async function get_single_dialogue_async(id, supervision) {
     } catch(error) {
 
         console.log(error)
-
+        alert(error);
+        //logout?
     }
 
 }
@@ -287,7 +378,7 @@ async function post_empty_dialogue(collection) {
     } catch(error) {
 
         console.log(error);
-
+        alert(error);
     }
 
 }
@@ -306,6 +397,7 @@ async function post_new_dialogues_from_string_lists_async(stringLists) {
     } catch(error) {
 
         console.log(error);
+        alert(error);
     }
 }
 
@@ -325,6 +417,7 @@ async function post_new_dialogue_from_json_string_async(jsonString, fileName) {
     } catch(error) {
 
         console.log(error);
+        alert(error);
 
     }
 
@@ -339,11 +432,20 @@ async function put_single_dialogue_async(event, dialogueId, dTurns, collection) 
         console.log('---- RESPONSE TO PUT ----', response);
         status = response.data.status
         console.log('status', status)
+
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
+
         return status
 
     } catch(error) {
 
         console.log(error);
+        alert(error)
 
     }
 
@@ -360,7 +462,7 @@ async function del_single_dialogue_async(dialogueId) {
     } catch(error) {
 
         console.log(error);
-
+        alert(error)
     }
 
 };
@@ -552,37 +654,22 @@ async function update_collection_fields(activeColl,fields, annotator) {
     }
 }
 
-async function del_db_entry_async(entryId, collection) {
+async function del_db_entry_async(pairs, collectionDB) {
 
-    console.log("DELETING",entryId);
+    console.log("DELETING...");
 
-    if (collection == undefined) {
-        var apiLink = API_BASE+`/database/${entryId}`;
+    var apiLink = API_BASE+`/database/${collectionDB}`;
 
-        try {
+    try {
 
-            var response = await axios.delete( apiLink );
-            console.log('---- RESPONSE TO DEL ----', response);
+        var response = await axios.post( apiLink, {"search":JSON.stringify(pairs)} );
+        console.log('---- RESPONSE TO DEL ----', response);
+            
+        return response
 
-        } catch(error) {
+    } catch(error) {
 
-            console.log(error);
-        }
-    
-    } else {
-
-        var apiLink = API_BASE+`/database/${entryId}/${collection}`;
-
-        try {
-
-            var response = await axios.delete( apiLink );
-            console.log('---- RESPONSE TO DEL ----', response);
-            return response
-
-        } catch(error) {
-
-            console.log(error);
-        }
+        console.log(error);
     }
 }
 
@@ -606,7 +693,7 @@ async function get_db_entry_async(entryId,DBcollection) {
     }
 }
 
-async function get_all_entries_async() {
+async function get_database_dump_async() {
 
   entriesList = []
 
@@ -670,29 +757,12 @@ async function get_collections_ids_async(DBcollection) {
 
     console.log(response)
 
-    entriesList = response.data
-
-    return entriesList
-
-  } catch(error) {
-
-    console.log(error);
-    alert(guiMessages.selected.lida.connectionError)
-
-  }
-}
-
-async function get_collections_async(DBcollection) {
-
-  entriesList = []
-
-  const apiLink = API_BASE+`/collections/${DBcollection}`
-
-  try {
-
-    var response = await axios.get(apiLink)
-
-    console.log(response)
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     entriesList = response.data
 
@@ -708,16 +778,26 @@ async function get_collections_async(DBcollection) {
 
 async function get_specific_collections(DBcollection,fields,projection) {
 
-  entriesList = []
+  let entriesList = []
 
   const apiLink = API_BASE+`/collections/${DBcollection}`
 
   try {
 
-    if (projection == undefined)
+    if (projection == undefined) {
         var response = await axios.post(apiLink, {"search":JSON.stringify(fields)})
-    else
+    } else {
         var response = await axios.post(apiLink, {"search":JSON.stringify(fields), "projection":JSON.stringify(projection)})
+    }
+    
+    console.log(response)
+
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    }
 
     entriesList = response.data
 
@@ -759,6 +839,32 @@ async function new_collection_async(id, params, doc) {
     try {
 
         response = await axios.post(apiLink, params)
+
+    } catch(error) {
+
+        console.log(error);
+        alert("Error. This could be caused by a server error or a wrong character in your collection file")
+        response = error 
+    }
+
+    return response
+}
+
+async function new_annotated_collection_async(id, params, doc) {
+
+    params["document"] = doc
+
+    DBcollection = "annotated_collections"
+
+    const apiLink = API_BASE+`/new/collection/${DBcollection}/${id}`
+
+    try {
+
+        response = await axios.post(apiLink, params)
+
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+        }
 
     } catch(error) {
 
@@ -828,6 +934,7 @@ async function get_scores_async(collection){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -847,6 +954,7 @@ async function get_errors_async(collection,dialogueId){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -865,6 +973,7 @@ async function get_collection_errors_async(collectionId){
     } catch (error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -882,6 +991,7 @@ async function put_error_async(listOfErrors){
     } catch (error) {
 
         console.log(error);
+        alert(error)
         return false
     }
 }
@@ -905,13 +1015,17 @@ async function admin_post_empty_dialogue() {
 }
 */
 
-async function admin_import_all_annotations(collection) {
+async function admin_import_for_interannotation(collection, newFile=undefined) {
 
-    var apiLink = API_BASE+`/annotations_import/${collection}`
+    var apiLink = API_BASE+`/interannotation_import/${collection}`
 
     try {
 
-        var response = await axios.get( apiLink )
+        if (newFile == undefined)
+            var response = await axios.get( apiLink )
+        else
+            var response = await axios.post( apiLink, { payload:JSON.parse(newFile) } )
+
         console.log('---- RESPONSE TO POST DATA ----', response);
         return response;
 
@@ -939,29 +1053,6 @@ async function import_new_dialogues_from_string_lists_async(stringLists) {
     return false;
 }
 
-
-async function import_new_dialogue_from_json_string_async(jsonString, fileName=null) {
-
-    fileName = fileName.split(".")[0]
-
-    var apiLink = API_BASE+"/dialogues_import"
-
-    try {
-
-        var response = await axios.post( apiLink, { payload:JSON.parse(jsonString), name:fileName } )
-
-        console.log('RECEIVED RESPONSE TO POST DATA')
-        console.log(response)
-
-        return response
-
-    } catch(error) {
-
-        console.log(error);
-
-    }
-}
-
 async function get_all_users(){
     
     const apiLink = API_BASE+"/users"
@@ -971,12 +1062,21 @@ async function get_all_users(){
     try {
         var response = await axios.get( apiLink )
 
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
+
         users = response.data
         return users
 
     } catch(error) {
 
         console.log(error);
+        alert(error)
+
     }
 }
 
@@ -999,6 +1099,7 @@ async function create_user(parameters,update=false){
     } catch(error) {
 
         console.log(error);
+        alert(error)
     }
 }
 
@@ -1009,11 +1110,12 @@ async function create_user(parameters,update=false){
 
 backend =
 {
-    put_name                                    : put_name,
     annotate_query                              : annotate_query,
     write_tag                                   : write_tag,
     get_annotation_style_async                  : get_annotation_style_async,
     get_registered_annotation_styles            : get_registered_annotation_styles,
+    manage_configuration_file                   : manage_configuration_file,
+    get_logs                                    : get_logs,
 
     get_all_dialogues_async                     : get_all_dialogues_async,
     put_single_dialogue_async                   : put_single_dialogue_async,
@@ -1033,7 +1135,7 @@ backend =
     get_all_db_entries_ids                      : get_all_db_entries_ids,
     get_db_entry_async                          : get_db_entry_async,
     del_db_entry_async                          : del_db_entry_async,
-    get_all_entries_async                       : get_all_entries_async,
+    get_database_dump_async                     : get_database_dump_async,
 
     update_annotations                          : update_annotations,
     update_collection_fields                    : update_collection_fields,
@@ -1043,12 +1145,12 @@ backend =
     create_user                                 : create_user,
 
     new_collection_async                        : new_collection_async,
+    new_annotated_collection_async              : new_annotated_collection_async,
     update_collection_async                     : update_collection_async,
     update_multiple_collections_async           : update_multiple_collections_async,
     remove_from_collection_async                : remove_from_collection_async, 
 
     get_collections_ids_async                   : get_collections_ids_async,
-    get_collections_async                       : get_collections_async,
     get_specific_collections                    : get_specific_collections,
 
     get_scores_async                            : get_scores_async,
@@ -1057,9 +1159,8 @@ backend =
     put_error_async                             : put_error_async,
 
     supervision                                  : supervision,
-    admin_import_all_annotations                 : admin_import_all_annotations,
-    import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async,
-    import_new_dialogue_from_json_string_async   : import_new_dialogue_from_json_string_async
+    admin_import_for_interannotation             : admin_import_for_interannotation,
+    import_new_dialogues_from_string_lists_async : import_new_dialogues_from_string_lists_async
 }
 
 

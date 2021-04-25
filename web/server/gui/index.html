@@ -17,23 +17,28 @@ HEAD
         CSS
         --------------------------------------------------------------->
         <!-- MAIN + FONT -->
-        <link rel="stylesheet" href="assets/css/main.css?v=3">
-        <link rel="stylesheet" href="assets/css/fonts.css?v=3">
+        <link rel="stylesheet" href="assets/css/main.css?v=1405">
+        <link rel="stylesheet" href="assets/css/fonts.css?v=1405">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700,900&display=swap" rel="stylesheet">
 
         <!-- APP SPECIFIC -->
-        <link rel="stylesheet" href="assets/css/lida.css?v=3">
+        <link rel="stylesheet" href="assets/css/lida.css?v=1405">
 
-        <link rel="stylesheet" href="assets/css/modal.css?v=3">
-        <link rel="stylesheet" href="assets/css/all_dialogues.css?v=3">
-        <link rel="stylesheet" href="assets/css/annotation_types.css?v=3">
-        <link rel="stylesheet" href="assets/css/annotation_app.css?v=3">        
-        <link rel="stylesheet" href="assets/css/text_splitter.css?v=3">
-        <link rel="stylesheet" href="assets/css/database.css?v=3">
-        <link rel="stylesheet" href="assets/css/users.css?v=3">
-        <link rel="stylesheet" href="assets/css/resolutions_app.css?v=3">
+        <link rel="stylesheet" href="assets/css/modal.css?v=1405">
+        <link rel="stylesheet" href="assets/css/all_dialogues.css?v=1405">
+        <link rel="stylesheet" href="assets/css/annotation_types.css?v=1405">
+        <link rel="stylesheet" href="assets/css/annotation_app.css?v=1405">        
+        <link rel="stylesheet" href="assets/css/text_splitter.css?v=1405">
+        <link rel="stylesheet" href="assets/css/database.css?v=1405">
+        <link rel="stylesheet" href="assets/css/users.css?v=1405">
+        <link rel="stylesheet" href="assets/css/resolutions_app.css?v=1405">
 
         <!-- SCRIPTS -->
+        
+        <!-- offline libs
+        <script src="lib/vue.js"></script>
+        <script src="lib/axios.min.js"></script>
+        -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
@@ -44,7 +49,7 @@ HEAD
 BODY
 ============================================= -->
     <body>
-        <div id=mainContainer>
+        <div id="mainContainer">
 
             <!-- Header -->
             <div class="header">
@@ -65,7 +70,7 @@ BODY
 
             <!-- Footer -->
             <div class="foot-bar">
-                <span class="copyright">MATILDA &#xB7; <span class="rights">Copyright © 2020 <a href="https://wluper.com" style="text-decoration:none;color:inherit;" target="_new">Wluper Ltd.</a> &#xB7; Developed in collaboration with University of Pisa</span>
+                <span class="copyright">MATILDA v.1.4.5 &#xB7; <span class="rights">Copyright © 2020 <a href="https://wluper.com" style="text-decoration:none;color:inherit;" target="_new">Wluper Ltd.</a> &#xB7; Developed in collaboration with University of Pisa</span>
                 </span>
                 <!-- Language Selector -->
                 <div id="language-selector">
@@ -83,33 +88,34 @@ BODY
         SCRIPTS
         ============================================= -->
         <!-- UTILS -->
-        <script src="source/utils/utils.js?v=3"></script>
-        <script src="source/utils/backend.js?v=3"></script>
-        <script src="source/utils/event_buses.js?v=3"></script>
-        <script src="source/utils/data.js?v=3"></script>
-        <script src="source/utils/languages.js?v=3"></script>
+        <script src="source/utils/utils.js?v=1405"></script>
+        <script src="source/utils/backend.js?v=1405"></script>
+        <script src="source/utils/event_buses.js?v=1405"></script>
+        <script src="source/utils/data.js?v=1405"></script>
+        <script src="source/utils/languages.js?v=1405"></script>
 
         <!-- COMPONENTS -->
-        <script src="source/components/login_components.js?v=3"></script>
-        <script src="source/components/helper_components.js?v=3"></script>
-        <script src="source/components/modal_components.js?v=3"></script>
-        <script src="source/components/all_dialogues_components.js?v=3"></script>
-        <script src="source/components/annotation_type_components.js?v=3"></script>
-        <script src="source/components/annotation_app_components.js?v=3"></script>
-        <script src="source/components/text_splitter_components.js?v=3"></script>
-        <script src="source/components/language_components.js?v=3"></script>
-        <script src="source/components/collections_components.js?v=3"></script>
-        <script src="source/components/datamanagement_components.js?v=3"></script>
+        <script src="source/components/login_components.js?v=1405"></script>
+        <script src="source/components/helper_components.js?v=1405"></script>
+        <script src="source/components/modal_components.js?v=1405"></script>
+        <script src="source/components/all_dialogues_components.js?v=1405"></script>
+        <script src="source/components/annotation_type_components.js?v=1405"></script>
+        <script src="source/components/annotation_app_components.js?v=1405"></script>
+        <script src="source/components/text_splitter_components.js?v=1405"></script>
+        <script src="source/components/language_components.js?v=1405"></script>
+        <script src="source/components/collections_components.js?v=1405"></script>
+        <script src="source/components/datamanagement_components.js?v=1405"></script>
         <!-- MAIN COMPONENT -->
-        <script src="source/lida_view.js?v=3"></script>
+        <script src="source/lida_view.js?v=1405"></script>
 
         <!-- ADMIN COMPONENT -->
-        <script src="source/admin_view.js?v=3"></script>
-        <script src="source/components/users_components.js?v=3"></script>
-        <script src="source/components/interannotator_components.js?v=3"></script>
-        <script src="source/components/resolution_app_helper_components.js?v=3"></script>
-        <script src="source/components/resolution_app_components.js?v=3"></script>
-        <script src="source/components/supervision_components.js?v=3"></script>
+        <script src="source/admin_view.js?v=1405"></script>
+        <script src="source/components/configuration_components.js?v=1405"></script>
+        <script src="source/components/users_components.js?v=1405"></script>
+        <script src="source/components/interannotator_components.js?v=1405"></script>
+        <script src="source/components/resolution_app_helper_components.js?v=1405"></script>
+        <script src="source/components/resolution_app_components.js?v=1405"></script>
+        <script src="source/components/supervision_components.js?v=1405"></script>
 
 
     </body>

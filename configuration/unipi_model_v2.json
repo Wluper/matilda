@@ -1,0 +1,279 @@
+{
+        
+        "sys": {
+            "description" : "The system's query",
+            "label_type"  : "string",
+            "required"    : true
+        },
+
+        "usr": {
+            "description" : "The user's query",
+            "label_type"  : "string",
+            "required"    : true
+        },
+		
+		"sys_greet": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none"
+            ]
+
+        },
+
+		"usr_greet": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none"
+            ]
+
+        },		
+
+        "sys_inform_basic": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_name",
+                "company_size",
+                "location",
+                "contact",
+                "other"
+            ]
+
+        },
+		
+		"usr_inform_basic": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_name",
+                "company_size",
+                "location",
+                "contact",
+                "other"
+            ]
+
+        },
+
+        "sys_inform_proactive": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_name",
+                "company_size",
+                "location",
+                "contact",
+                "other"
+            ]
+
+        },
+
+        "sys_request": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
+            ]
+
+        },
+
+        "usr_inform_proactive": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location",
+                "other"
+            ]
+
+        },
+
+        "usr_request": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
+            ]
+
+        },
+		
+		"sys_select": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description"
+            ]
+
+        },
+
+        "usr_select": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description"
+            ]
+
+        },
+		
+		"sys_deny": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
+            ]
+
+        },
+
+        "usr_deny": {
+
+            "description" : "Entity's value",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+
+                "none",
+				"job_description",
+                "contract",
+                "duties",
+                "skill",
+                "past_experience",
+                "degree",
+                "age",
+                "languages",
+                "area",
+                "company_size",
+                "location"
+            ]
+
+        },
+
+        "async": {
+
+            "description": "To annotate async messages",
+            "label_type"  : "multilabel_classification_string",
+            "required"    : false,
+            "labels"      : [
+                "turn_ref"
+            ]
+        },
+
+        "global_slot": {
+
+            "description" : "General info related to the dialogue",
+            "label_type"  : "multilabel_global_string",
+            "required"    : false,
+            "labels"      : [
+                "result"
+            ]
+
+        }
+
+    }

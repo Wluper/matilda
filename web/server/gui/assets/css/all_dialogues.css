@@ -96,6 +96,7 @@
 }
 
 .listed-dialogue:hover .dialogue-list-single-item-container {
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left:5px solid #259af7;
 }
 
@@ -104,6 +105,7 @@
     grid-template: [row1-start] "info vis" [row1-end] / 21fr 3fr;
     /* background-color: green; */
     /* padding: 10px; */
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 1px 5px 3px rgba(0,0,0,0.05);
     transition: ease 175ms all;

@@ -6,13 +6,17 @@
 
 .database-menu {
     display:grid;
-    grid-template:[row1-start] "title-zone name-zone help-button-zone" [row1-end] / 1.2fr 2fr 1.2fr;
+    grid-template: [row1-start] "title-zone name-zone help-button-zone" [row1-end] / 1.2fr 2fr 1.3fr;
     background: rgba(0,0,0,0.02);
     border-top: 1px solid #e6e6e6;
     border-bottom: 1px solid #e6e6e6;
     color: #222;
     padding:10px 24px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+}
+
+#fileNameInput {
+    width: 20%;
 }
 
 .database-title {
@@ -64,7 +68,8 @@
 }
 
 .active-collection .entry-list-single-item-container {
-    border-left:5px solid #259af7
+    border-left:5px solid #259af7;
+    box-shadow: 4px 10px 10px 2px rgb(0 0 0 / 13%);
 }
 
 .load {
@@ -99,6 +104,7 @@
 #annotation-view .entry-list-single-item-container {
     display:block;
     grid-template:none;
+    padding-bottom: 3px;
 }
 
 .listed-annotations {
@@ -113,6 +119,7 @@
 .entry-list-single-item-container {
     display: grid;
     grid-template: [row1-start] "info del" [row1-end] / 21fr 3fr;
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
     transition: ease 175ms all;
@@ -171,6 +178,10 @@
 
 .entry-data {
     margin-top: -6px;
+}
+
+.entry-data span {
+    display:block;
 }
 
 .load-entry-date {
@@ -313,6 +324,17 @@ pre:first-line {
     padding-left:3px;
 }
 .gold-false {
+    font-weight: 100;
+    color:red !important;
+    padding-left:3px;
+}
+
+.admin-false {
+    color:#087fdd !important;
+    font-weight: 100;
+    padding-left:3px;
+}
+.admin-true {
     font-weight: 100;
     color:red !important;
     padding-left:3px;
@@ -575,4 +597,148 @@ input[type="password"]:hover {
     color: #222;
     padding: 5px;
     transition: ease 250ms all;
+}
+
+/*******************************
+// CONFIGURATION VIEW
+*******************************/
+
+.annotation-models-list .entry-list-single-item-container {
+    border-left:5px solid #aaaaaab8 !important;
+    width:75%;
+    grid-template: [row1-start] "info buttons" [row1-end] / 7fr 3fr;
+    margin-bottom:2%;
+}
+
+.annotation-models-list .entry-info {
+    display:block;
+    padding:1%;
+    padding-left:4%;
+}
+
+.annotation-models-list .entry-info:hover {
+    border-left: 3px solid #3a9dd6;
+}
+
+.annotation-models-list .entry-info span {
+    font-family: 'Montserrat';
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 13px;
+    align-self: center;
+}
+
+.annotation-models-list .entry-info label {
+    grid-template: none !important;
+    padding:2px;
+}
+
+.annotation-models-list .edit-dialogue-button, 
+.annotation-models-list .del-dialogue-button{
+    margin-top:0px;
+    width: 48%;
+    height: 55%;
+    place-self: center;
+    margin-right: 7%;
+}
+
+.annotation-models-list button {
+    margin-top:-15px;
+    float:right;
+}
+
+.annotation-models-list .entry-info:hover {
+    border-left: none !important;
+}
+
+.entry-buttons {
+    grid-area: buttons;
+    display: flex;
+}
+
+.closing-list {
+    clear:both;
+}
+
+.annotation-style-structure {
+    overflow-y: scroll;
+    height: 50vh;
+}
+
+.annotation-style-form {
+    font-family:"Montserrat";
+    margin-top:1%;
+}
+
+.annotation-style-text {
+    width: 100%;
+    height: 50vh;
+    background: white !important;
+    border:1px solid rgb(0 0 0 / 17%);
+}
+
+.form-anno {
+    display: grid;
+    grid-template: [row1-start] "name input" [row1-end] / 1fr 6fr;
+    font-family: 'CoreSansNR35Light';
+}
+
+.info-model-button {
+    margin-top: 0 !important;
+    float: none !important;
+    border:none;
+    background-color: rgb(0 0 0 / 8%);
+    width: auto;
+    position: relative;
+    bottom: 2px;
+    left: 2px;
+    cursor:pointer;
+}
+
+.inner-form {
+    margin-bottom:2px;
+}
+
+.supervisor-btn-container {
+    grid-template:
+    [row1-start] "del" 1fr [row1-end]
+    [row2-start] "blo" 1fr [row2-end] / 1fr;
+    display: grid;
+    margin-top: 7px;
+}
+
+.supervisor-btn-container .del-dialogue-button {
+    width: 87%;
+    height: 74%;
+    margin-top:0px;
+    font-size:12px;
+}
+
+.supervisor-btn-container .del-dialogue-button:first-of-type {
+    grid-area:blo;
+    border: 1px solid #259af7;
+    color: #259af7;
+}
+
+.supervisor-btn-container .del-dialogue-button:first-of-type:hover {
+    color:white;
+    background-color: #259af7;
+}
+
+.form-anno input {
+    border:1px solid rgba(0,0,0,0.1);
+}
+
+h4 {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+h5 {
+    margin:4px;
+    padding:0;
+}
+
+h4 span, h5 span {
+    color: rgb(0 0 0 / 61%);
 }

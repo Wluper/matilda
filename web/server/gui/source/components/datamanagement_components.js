@@ -58,15 +58,16 @@ Vue.component("datamanagement-view", {
         },
 
         getAllEntriesFromServer() {
-            mainContainer.style.cursor = "progress";
-            backend.get_collections_async("dialogues_collections")
+            document.body.style.cursor = "progress";
+            projection = {"annotationStyle":1, "assignedTo":1, "description":1, "document":"length", "gold":1, "id":1};
+            backend.get_specific_collections("dialogues_collections",{}, projection)
                 .then( (response) => {
                     for (collection in response) {
                       this.allEntriesNamedMetadata[response[collection].id] = response[collection]
                     }
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
@@ -76,7 +77,7 @@ Vue.component("datamanagement-view", {
 
         inspect_entry(clickedEntry) {
             event.stopPropagation();
-            mainContainer.style.cursor = "progress";
+            document.body.style.cursor = "progress";
             this.changesSaved = "";
             this.showUser = "all";
             this.showCollection = clickedEntry;
@@ -91,7 +92,7 @@ Vue.component("datamanagement-view", {
             console.log("Selected collection",this.selectedCollection);
             this.changesSaved = "";
             //refresh from database
-            this.init();
+            //this.init();
         },
 
         clicked_active() {
@@ -121,7 +122,7 @@ Vue.component("datamanagement-view", {
             event.stopPropagation();
             if (confirm(guiMessages.selected.admin.deleteConfirm)) {
                 console.log('-------- DELETING --------')
-                backend.del_db_entry_async(clickedEntry, "dialogues_collections")
+                backend.del_db_entry_async({"id":clickedEntry}, "dialogues_collections")
                     .then( (response) => {
                         databaseEventBus.$emit('collections_changed');
                     });
@@ -136,7 +137,7 @@ Vue.component("datamanagement-view", {
               .then( (response) => {
                   console.log(response);
                   this.changesSaved = true;
-                  this.getAllEntriesFromServer();
+                  this.reset_view();
             });
         },
 
@@ -175,25 +176,44 @@ Vue.component("datamanagement-view", {
                 <h2 class="database-title">{{guiMessages.selected.collection.title}}</h2>
                 <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
+                    <button type="button" v-on:click="status = 'creation'" 
+                            class="help-button btn btn-sm btn-primary">
+                            {{guiMessages.selected.collection.create}}
+                    </button> 
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
-                    <button v-on:click="go_back()" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                    <button v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
 
             <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
-                    <button type="button" v-on:click="status = 'creation'" 
-                            class="help-button btn btn-sm btn-primary">
-                            {{guiMessages.selected.collection.create}}
-                    </button> 
+                    <template v-if="selectedCollection != ''">
+                        <h2 class="list-title">
+                            {{guiMessages.selected.collection.annotatorToCollection}}
+                        </h2>
+                        <button type="button" class="back-button btn btn-sm btn-primary" 
+                            v-on:click="reset_view()" style="float:right; margin-top: 1em;">
+                                {{guiMessages.selected.admin.button_abort}}
+                        </button>
+                    </template>
 
-                    <button v-if="selectedCollection != '' || showUser != 'all'" 
-                        type="button" 
-                        class="back-button btn btn-sm btn-primary" 
-                        v-on:click="reset_view()" style="float:right;">
-                        {{guiMessages.selected.admin.button_abort}}
-                    </button>
+                    <template v-else-if="showUser != 'all'">
+                        <h2 class="list-title">
+                            {{guiMessages.selected.collection.collectionToAnnotator}}
+                        </h2>
+                        <button type="button" class="back-button btn btn-sm btn-primary" 
+                            v-on:click="reset_view()" style="float:right; margin-top: 1em;">
+                                {{guiMessages.selected.admin.button_abort}}
+                        </button>
+                    </template>
+
+                    <template v-else>
+                        <h2 class="list-title">
+                        {{guiMessages.selected.collection.dataManagementTitle}}
+                    </h2>
+                    </template>
+
                 </div>
 
                 <ul class="collection-list two-columns" v-if="showCollection == 'all' && showUser == 'all' ">
@@ -232,9 +252,9 @@ Vue.component("datamanagement-view", {
                                     </span>
                                 </div>
 
-                                <div class="entry-data">
-                                    {{collection.annotationStyle.split(".")[0]}}
-                                    {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
+                                <div class="entry-data" style="display:block;">
+                                    <span>{{collection.annotationStyle.split(".")[0]}}</span>
+                                    <span>{{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}</span>
                                 </div>
                             </div>
 
@@ -261,9 +281,9 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
                                 </div>
-                                <div class="entry-data">
-                                    {{collection.annotationStyle.split(".")[0]}}
-                                    {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
+                                <div class="entry-data" style="display:block;">
+                                    <span>{{collection.annotationStyle.split(".")[0]}}</span>
+                                    <span>{{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}</span>
                                 </div>
                             </div>
 
@@ -283,10 +303,10 @@ Vue.component("datamanagement-view", {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="gold-true">Administrator</span>
+                                        Role: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="gold-false">Annotator</span>
+                                        Role: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -297,10 +317,11 @@ Vue.component("datamanagement-view", {
 
                 <div class="closing-list" v-if="showUser == 'all'">
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
-                    <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">{{guiMessages.selected.annotation_app.unsaved}} 
+                    <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">
                         <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save()">
                         {{guiMessages.selected.annotation_app.save}}
                         </button>
+                        {{guiMessages.selected.annotation_app.unsaved}}
                     </span>
                 </div>
                     
@@ -356,7 +377,8 @@ Vue.component('collection-users-reverse', {
             this.allEntriesNamedMetadata = [];
             this.assignedCollections = [];
             //get data from server
-            backend.get_collections_async("dialogues_collections")
+            projection = {"annotationStyle":1, "assignedTo":1, "description":1, "documentLength":1, "gold":1, "id":1};
+            backend.get_specific_collections("dialogues_collections",{}, projection)
                   .then( (response) => {
                     console.log("All collections",response);
                     for (collection in response) {
@@ -364,17 +386,17 @@ Vue.component('collection-users-reverse', {
                     }
                     this.allEntryMetadata = response;
                     console.log(this.allEntryMetadata);
-                    mainContainer.style.cursor = null;
+                    document.body.style.cursor = null;
                     backend.get_all_users()
                         .then( (response) => {
                             this.allUsers = response;
-                            this.get_user_assignments();
+                            this.get_user_assignments(this.selectedUser);
                     });
             });
         },
 
-        get_user_assignments: function() {
-            search = {"assignedTo":this.selectedUser}
+        get_user_assignments: function(selectedUser) {
+            search = {"assignedTo":selectedUser}
             projection = {"id":1,"gold":1,"assignedTo":1,"lastUpdate":1}
             backend.get_specific_collections("dialogues_collections",search, projection)
                 .then( (response) => {
@@ -382,14 +404,15 @@ Vue.component('collection-users-reverse', {
                     for (collection in response) {
                         this.assignedCollections.push(response[collection].id)
                     }
-                    console.log("Asssigned to",this.selectedUser,this.assignedCollections)
+                    console.log("Asssigned to",selectedUser,this.assignedCollections)
                 }
             )
         },
 
         clicked_user: function(clickedUser) {
             this.selectedUser = clickedUser;
-            this.init();
+            this.assignedCollections = [];
+            this.get_user_assignments(clickedUser);
         },
 
         inspect_entry: function(clickedEntry) {
@@ -407,12 +430,25 @@ Vue.component('collection-users-reverse', {
             console.log("Output array updated",this.allEntriesNamedMetadata[clickedCollection].assignedTo);
         },
 
+        delete_entry(clickedDialogue) {
+            let del = confirm(guiMessages.selected.collection.confirmDeleteDialogue);
+            if (del == true) { 
+                backend.remove_from_collection_async("dialogues_collections", this.entry.id, {"dialogue":clickedDialogue})
+                    .then( (response) => {
+                        console.log(response);
+                        this.init();
+                    }
+                )
+            }
+        },
+
         save: function() {
             console.log("Update plan",this.saveTasks);
             backend.update_multiple_collections_async("dialogues_collections",this.saveTasks) 
                 .then( (response) => {
                     console.log("Collections updated",response);
                     this.init();
+                    databaseEventBus.$emit("creation_completed");
             })
         }
   },
@@ -446,9 +482,9 @@ Vue.component('collection-users-reverse', {
                                     <div class="entry-assigned">
                                         <span>Assigned: <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> </span>
                                     </div>
-                                    <div class="entry-data">
-                                        {{collection.annotationStyle.split(".")[0]}}
-                                        {{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}
+                                    <div class="entry-data" style="display:block;">
+                                        <span>{{collection.annotationStyle.split(".")[0]}}</span>
+                                        <span>{{guiMessages.selected.admin.dataItems}} {{collection.documentLength}}</span>
                                     </div>
                                 </label>
                             </div>
@@ -468,10 +504,10 @@ Vue.component('collection-users-reverse', {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="gold-true">Administrator</span>
+                                        Role: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="gold-false">Annotator</span>
+                                        Role: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -480,8 +516,9 @@ Vue.component('collection-users-reverse', {
                     </li>
                 </ul>
                 <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
-                <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">{{guiMessages.selected.annotation_app.unsaved}} 
+                <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">
                     <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save()">{{guiMessages.selected.annotation_app.save}}</button>
+                    {{guiMessages.selected.annotation_app.unsaved}} 
                 </span>
             </div>
   `
@@ -514,7 +551,7 @@ Vue.component('collection-entry-details', {
                      console.log("Collection details",response[0]);
                      this.entry = response[0];
                      this.checkedUsers = response[0]["assignedTo"]
-                     mainContainer.style.cursor = null;
+                     document.body.style.cursor = null;
                      this.showGold.boo = this.check_if_gold(this.entry);
             });
         },
@@ -699,9 +736,9 @@ Vue.component('collection-creation', {
                 console.log('---- HANDLING LOADED JSON FILE ----');
                 let reader = new FileReader();
                 reader.onload = (event) => {
-                console.log('THE READER VALUE', reader);
-                this.entry.showDocument = reader.result;
-                this.entry.document = reader.result;
+                    console.log('THE READER VALUE', reader);
+                    this.entry.showDocument = reader.result;
+                    this.entry.document = reader.result;
             }
             reader.readAsText(file);
             } else {
@@ -733,6 +770,21 @@ Vue.component('collection-creation', {
                if (params[element] == undefined)
                   params[element] = ""
             }
+            //check format
+            try {
+                var check = JSON.parse(this.entry.document);
+            } catch (e) {
+                alert(e,guiMessages.selected.exception_create_annotations[2]);
+                return;
+            }
+            if (check.length > 1) {
+                alert(guiMessages.selected.exception_create_annotations[3]);
+                return;
+            } else if (check["document"] != undefined) {
+                console.log("Collection document found in your json file. Other data but 'document' field will be ignored.");
+                alert(guiMessages.selected.exception_create_annotations[4]);
+                this.entry.document = JSON.stringify(check["document"]);
+            }
             backend.new_collection_async(this.entry.id, params, this.entry.document)
                .then( (response) => {
                     console.log(response);
@@ -742,6 +794,10 @@ Vue.component('collection-creation', {
                     } else {
                         console.log("============== Dialogues-Collection Error ==============");
                         alert(response["data"]["error"]);
+                        //reset
+                        this.entry.showDocument = "";
+                        this.entry.document = {};
+                        this.params = undefined;
                     }
             });
         }
@@ -787,7 +843,7 @@ Vue.component('collection-creation', {
                        class="help-button btn btn-sm btn-primary">
                        {{ guiMessages.selected.collection.importCollfromFile }}
                 </label>
-                <textarea v-model="entry.showDocument">
+                <textarea v-model="entry.showDocument" readonly>
                 </textarea>
             </div>
 

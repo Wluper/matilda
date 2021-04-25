@@ -13,7 +13,7 @@ services:
     ports:
       - 27017:27017
   matilda:
-    image: davivcu/matilda:beta
+    image: davivcu/matilda:multimodel
     volumes: 
       - ./configuration:/configuration
     restart: always

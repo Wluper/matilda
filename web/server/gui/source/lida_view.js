@@ -19,11 +19,15 @@ var mainApp = new Vue({
       role:'annotator',
       activeCollection:localStorage["activeCollection"],
       annotationStyle:'',
-      collectionRate:'',
+      collectionRate:'0',
       lastUpdate:'',
       done:false,
       boot:true,
       showMessage:false,
+      //configGui
+      turnWidth:this.setTurnWidth(),
+      maxChars:this.setMaxChars(),
+      autoSave:this.setAutoSave()
     }
   },
 
@@ -38,10 +42,10 @@ var mainApp = new Vue({
       textSplitterEventBus.$on("splitting_complete", this.clear_text_split)
 
       // All Dialogue (MAIN VIEW) Event Bus
+      allDialoguesEventBus.$on( "landingPage", this.landingPage )
       allDialoguesEventBus.$on( "dialogue_selected", this.load_in_dialogue_to_annotate )
       allDialoguesEventBus.$on( "dialogue_deleted", this.remove_dialogue_from_visited_list )
       allDialoguesEventBus.$on( "loaded_text_file", this.handle_loaded_text_file )
-      allDialoguesEventBus.$on( "update_username", this.update_username )
       allDialoguesEventBus.$on( "show_message", this.show_message )
       allDialoguesEventBus.$on( "close_message", this.show_message )
 
@@ -49,6 +53,7 @@ var mainApp = new Vue({
       databaseEventBus.$on( "document_selected", this.load_document_view )
       databaseEventBus.$on( "assignments_selected", this.load_collections_view )
       databaseEventBus.$on( "collection_active", this.set_active_collection )
+      databaseEventBus.$on( "change_option", this.changeOption )
 
       //Check if already logged, restore session
       this.check_login_cookie();
@@ -58,23 +63,55 @@ var mainApp = new Vue({
 
   methods: {
 
-    update_username: function(event,event2) {
-        let newName = event;
-        let pass = event2;
-        backend.put_name(newName)
-            .then( (response) => {
-                if (response) {
-                    console.log("File name updated");
-                    this.set_cookie(newName,pass);
-                    if (mainApp.role == "administrator") {
-                        this.status = "admin-panel";
-                    } else {
-                        this.status = "assignments-view";
-                    }
-                } else {
-                    alert('Server error, name not changed.');
-                }
-        })
+    setTurnWidth : function(){
+        if ((localStorage["turnWidth"] == null) || (localStorage["turnWidth"] == undefined)) {
+            localStorage.setItem("turnWidth", 80);
+            return localStorage["turnWidth"];
+        } else {
+            return localStorage["turnWidth"];
+        }    
+    },
+
+    setMaxChars : function(){
+        if (localStorage["maxChars"] == null) {
+            localStorage.setItem("maxChars", 80);
+            return localStorage["maxChars"];
+        } else {
+            return localStorage["maxChars"];
+        }    
+    },
+
+    setAutoSave : function(){
+        if (localStorage["autoSave"] == null) {
+            localStorage.setItem("autoSave", false);
+            return JSON.parse(localStorage["autoSave"]);
+        } else {
+            return JSON.parse(localStorage["autoSave"]);
+        }    
+    },
+
+    changeOption : function(option, value) {
+        switch (option) {
+            case "turnWidth":
+                this.turnWidth = value;
+                break;
+            case "maxChars":
+                this.maxChars = value;
+                break;
+            case "autoSave":
+                this.autoSave = value;
+                break;
+        }
+        localStorage[option] = value;
+    },
+
+    landingPage: function(role) {
+        //this.set_cookie(user,pass);
+        if (role == "administrator") {
+            this.status = "admin-panel";
+        } else {
+            this.status = "assignments-view";
+        }
     },    
 
     set_cookie: function(name,pass) {
@@ -96,16 +133,18 @@ var mainApp = new Vue({
 
     check_login_cookie: function() {
         //only in case of refresh or previous sessions
-        if (this.logged == "true")
+        if (this.logged == "true") {
             return;
+        }
         if (localStorage["remember"] != undefined) {
+            console.log(localStorage["remember"]);
             let memorizedName = localStorage["remember"];
             let memorizedPass = localStorage["password"];
             backend.login(memorizedName,memorizedPass)
                 .then( (response) => {
                     if (response.data.status == "success") {
                         console.log("Username still valid");
-                        this.update_username(memorizedName);
+                        //this.prepare_session(memorizedName);
                         mainApp.role = response.data.role;
                     } else {
                         (response.data.status == "fail")
@@ -226,6 +265,13 @@ var mainApp = new Vue({
     switch_to_admin_panel: function () {
         console.log(" ==== ADMIN PANEL ====");
         this.status = "admin-panel";
+    },
+
+    force_logout: function() {
+        databaseEventBus.$emit( "collection_active", null );
+        adminEventBus.$emit("clean_active_user");
+        window.onbeforeunload = null;
+        location.reload();
     },
 
     prevent_back: function() {
