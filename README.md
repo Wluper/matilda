@@ -1,21 +1,27 @@
 ![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
-**What's new in MATILDA:** 
-1. Full support for multiple annotators and project management
-2. Full support for multiple annotation models
-3. Database MongoDB for data delivery and consistency
-4. Production ready server with Gunicorn and nginx
-5. New annotation functions
+# MATILDA: Multi-AnnoTtor multi-language Interactive Lightweight Dialogue Annotator
+
+**Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi
+
+**Contact:** contact@wluper.com
+
+**Paper:** [link to the EACL paper](https://www.aclweb.org/anthology/2021.eacl-demos.5/)
+
+### Citation at bottom of README! (Please cite when using)
+
+MATILDA is the first multi-annotator, multi-language annotation tool that is built on the top of an open source dialogue annotation tool [LIDA](https://github.com/Wluper/lida),specifically it has full support for multiple annotators, project management and multiple annotation models. It uses MongoDB for data delivery and consistency, It comes with  production ready server by using Gunicorn and nginx.
+
 
 ## Document structure
 
 0. <strong>Requirements</strong>
 1. <strong>Installation</strong>
-   - Option A) Running the Server with Docker
+   - Option A: Running the Server with Docker
      - Docker and docker-compose
-   - Option B) Running the Server with flask (WSGI) or gunicorn
+   - Option B: Running the Server with flask (WSGI) or gunicorn
      - Downloading & Installing Modules Requirements
-     - Run the server 
+     - Run the server
    - Optional: Installing a MongoDB local database
    - Accessing the interface
    - First username and password
@@ -35,29 +41,29 @@ In order to run MATILDA on Docker you will need a 64bit system because that's th
 If you wish to use MATILDA with a 32bit system you can just follow the Option B steps.
 In both cases server needs a minimum of 60MB on the hard disk, plus the space needed for the database.
 
-MATILDA is very light-weight. 
+MATILDA is very light-weight.
 Containerized with Docker MATILDA smoothly run on a system based on Intel Celeron J3355, a 2-core microprocessor dated 2016 created for entry level PCs, equipped with a 2GB RAM. During a significant processing peak induced with an upload, the footprint did not exceed a few (2-3%) percent of hardware capacity.
 
 ## 1. Installation
 
 MATILDA is a client-server app. The server is written in Python with the Flask
 web framework. The front end is written with HTML/CSS/Vue.js and communicates
-with the back end via a RESTful API. 
+with the back end via a RESTful API.
 
-To run MATILDA, you will need to first run the Flask server on your 
+To run MATILDA, you will need to first run the Flask server on your
 local machine / wherever you want the back end to run.
 
 To do this you have two options:
 1) Using the provided docker-compose.yml file to run it
 in a docker container together with its database. This is probably faster and cleaner.
-2) Otherwise you will need to have Python 3.6 or above installed on your machine 
-and a mongoDB database, either online (there are many free services) or local. 
+2) Otherwise you will need to have Python 3.6 or above installed on your machine
+and a mongoDB database, either online (there are many free services) or local.
 If you are using an online database you will need to set the database address in
 configuration/conf.json.
 
 Further instructions are provided in the next paragraph.
 
-### Option A) Running the Server with Docker
+### Option A: Running the Server with Docker
 
 MATILDA also comes with a docker container you may want to use for a fast and clean installation on Linux, OSX and Windows systems.
 
@@ -82,9 +88,9 @@ To manually stop the service use the command:
 
 <strong> For further details, please see the specific instructions in `/docker_readme.md.` </strong>
 
-### Option B) Running the Server with Flask (WSGI) or Gunicorn
+### Option B: Running the Server with Flask (WSGI) or Gunicorn
 
-#### 1) Downloading & Installing Modules Requirements
+#### 1. Downloading & Installing Modules Requirements
 
 It is strongly recommended that you clone into a Python virtual environment:
 
@@ -97,7 +103,7 @@ $ cd MATILDA/ && source bin/activate
 (MATILDA)$ pip3 install -r requirements.txt
 ```
 
-#### 2) Run the server with Flask or Gunicorn
+#### 2. Run the server with Flask or Gunicorn
 
 Assuming you have just followed the steps to "Downloading & Installing MATILDA Module Requirements"
 and you have a mongoDB locally installed on your system:
@@ -139,18 +145,18 @@ You can test it's running by:
 
 ### Accessing the interface
 
-Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally 
+Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally
 or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
 
-HTTP Requests from your client may not reach your server in some configuration environment, 
+HTTP Requests from your client may not reach your server in some configuration environment,
 in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
 Other configuration options are exposed in `/Configuration/conf.json`.
 
 ### First username and password
 
 On its first start MATILDA creates an administrator account with username "admin" and password "admin".
-You need to use this credentials for your first login. Once you are allowed to enter it's recommended 
+You need to use this credentials for your first login. Once you are allowed to enter it's recommended
 to change the admin password from the graphical interface.
 
 ## 2. Configuration
@@ -168,8 +174,8 @@ If you are using the Docker version you can also perform additional configuratio
 ### Annotation Models
 
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
-`/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes 
-which labels will appear in MATILDA's front end. 
+`/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes
+which labels will appear in MATILDA's front end.
 You can also add an entire new annotation model file and put a reference to it in the `/Configuration/conf.json` file in
 order to instruct the program to load it on start.
 
@@ -272,8 +278,8 @@ have the following properties:
   of key-value pairs which are used to display the dialogue data for annotation.
 
 * Some key-value pairs are compulsory in order to correctly display the
-  dialogue. The key-value pairs which are compulsory are defined in the 
-  annotation model json file in the `/Configuration` folder read by `/web/gui/server/annotator_config.py` module. 
+  dialogue. The key-value pairs which are compulsory are defined in the
+  annotation model json file in the `/Configuration` folder read by `/web/gui/server/annotator_config.py` module.
 
 * By default, the only required key-value pair in each turn is called
   `usr` and should be the user's query as a string.
@@ -284,7 +290,7 @@ An example of data in the correct form can be seen in `/web/server/LIDA_ANNOTATI
 ![JSON format](images/ann_conf.png)
 
 ## Citation
-The official citation from the EACL2021 conference in Kiev. Please cite this when using.
+Please cite these two papers when using.
 ```
 @inproceedings{cucurnia-etal-2021-matilda,
     title = "{MATILDA} - Multi-{A}nno{T}ator multi-language {I}nteractive{L}ight-weight Dialogue Annotator",
@@ -301,5 +307,23 @@ The official citation from the EACL2021 conference in Kiev. Please cite this whe
     url = "https://www.aclweb.org/anthology/2021.eacl-demos.5",
     pages = "32--39",
     abstract = "Dialogue Systems are becoming ubiquitous in various forms and shapes - virtual assistants(Siri, Alexa, etc.), chat-bots, customer sup-port, chit-chat systems just to name a few.The advances in language models and their publication have democratised advanced NLP.However, data remains a crucial bottleneck.Our contribution to this essential pillar isMATILDA, to the best of our knowledge the first multi-annotator, multi-language dialogue annotation tool. MATILDA allows the creation of corpora, the management of users, the annotation of dialogues, the quick adaptation of the user interface to any language and the resolution of inter-annotator disagreement. We evaluate the tool on ease of use, annotation speed and interannotation resolution for both experts and novices and conclude that this tool not only supports the full pipeline for dialogue annotation, but also allows non-technical people to easily use it. We are completely open-sourcing the tool at https://github.com/wluper/matilda and provide a tutorial video1.",
+}
+```
+
+```
+@inproceedings{collins-etal-2019-lida,
+    title = "{LIDA}: Lightweight Interactive Dialogue Annotator",
+    author = "Collins, Edward  and
+      Rozanov, Nikolai  and
+      Zhang, Bingbing",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP): System Demonstrations",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D19-3021",
+    doi = "10.18653/v1/D19-3021",
+    pages = "121--126",
+    abstract = "Dialogue systems have the potential to change how people interact with machines but are highly dependent on the quality of the data used to train them.It is therefore important to develop good dialogue annotation tools which can improve the speed and quality of dialogue data annotation. With this in mind, we introduce LIDA, an annotation tool designed specifically for conversation data. As far as we know, LIDA is the first dialogue annotation system that handles the entire dialogue annotation pipeline from raw text, as may be the output of transcription services, to structured conversation data. Furthermore it supports the integration of arbitrary machine learning mod-els as annotation recommenders and also has a dedicated interface to resolve inter-annotator disagreements such as after crowdsourcing an-notations for a dataset. LIDA is fully open source, documented and publicly available.[https://github.com/Wluper/lida] {--}{\textgreater} Screen Cast: https://vimeo.com/329824847",
 }
 ```
