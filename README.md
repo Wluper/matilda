@@ -1,6 +1,6 @@
 ![WLUPER AND UNIPI](images/research_collaboration_matilda.png)   
 
-# MATILDA: Multi-AnnoTtor multi-language Interactive Lightweight Dialogue Annotator
+# MATILDA: Multi-AnnoTator multi-language Interactive Lightweight Dialogue Annotator
 
 **Authors:** Davide Cucurnia, Nikolai Rozanov, Irene Sucameli, Augusto Ciuffoletti, Maria Simi
 
@@ -10,7 +10,7 @@
 
 ### Citation at bottom of README! (Please cite when using)
 
-MATILDA is the first multi-annotator, multi-language annotation tool that is built on the top of an open source dialogue annotation tool [LIDA](https://github.com/Wluper/lida),specifically it has full support for multiple annotators, project management and multiple annotation models. It uses MongoDB for data delivery and consistency, It comes with  production ready server by using Gunicorn and nginx.
+MATILDA is the first multi-annotator, multi-language annotation tool that is built on the top of an open source dialogue annotation tool [LIDA](https://github.com/Wluper/lida), specifically it has full support for multiple annotators, project management and multiple annotation models. It uses MongoDB for data delivery and consistency, it comes with  production ready server by using Gunicorn and nginx.
 
 
 ## Document structure
