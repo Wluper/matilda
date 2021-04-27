@@ -315,7 +315,7 @@ Vue.component("datamanagement-view", {
                     </li>
                 </ul>
 
-                <div class="closing-list" v-if="showUser == 'all'">
+                <div v-if="showUser == 'all'">
                     <span v-if="changesSaved == 'true'" class="is-saved">{{guiMessages.selected.database.saved}}</span>
                     <span v-else-if="changesSaved == 'false'" class="is-not-saved" style="float:right;">
                         <button type="button" class="help-button btn btn-sm btn-primary" v-on:click="save()">
