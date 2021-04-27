@@ -55,6 +55,9 @@ guiMessages = {
             confirmOverwriteUser: "Username already exists, please specify another username or confirm to overwrite existing user",
             role:"Role",
             configPage: "Configuration",
+            othersOn: "Others on same location",
+            showLogs: "Show Logs",
+            Size: "Size",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -299,6 +302,30 @@ guiMessages = {
             "You uploaded a list of collection, not a single collection. Please re-format your json file to only include one collection.",
             "It seems you uploaded a complete collection document. Only the document data (attribute 'document' in the file) will be uploaded. Info such as annotation rate, freezed status, previous id and previous annotator will be ignored.",
         ],
+        configuration_info_matilda:
+        [
+            "Address and Port. It shows the address of the main app",
+            "Docker. If you are running the Docker version or not.",
+            "Session Guard. With this option you can turn off or on the route protection from unauthorized access. Any user, in order to access a route must be logged in and have an active session. If the server reboots or crashes Matilda enforces log-out in order to avoid syncronization issues.",
+            "Full Server log. Matilda will record any route requested with this option active. Otherwise Matilda will only record errors and warning message.",
+            "Show Logs. This button allows to view the last 50 recorded logs or to download the full log file.",
+        ],
+        configuration_info_database:
+        [
+            "Address and Port. It shows the address and the port of the currently connected database",
+            "Username and Password. It show the current username and password configured for the currently connected database",
+            "Name. This displays the currently database name used by Matilda. This is created from Matilda and can be changed in the configuration file. If the name is changed Matilda will use the new name when rebooted. Note that the collections and user accounts of your current database won't automatically be exported in the new one.",
+            "Size. It shows the currenctly connected database size. ",
+            "Download Database Dump. This function exports a database dump in json format. The file exported is not a mongodump file and is intended to be used to retrieve and later upload your current collections using Matilda's functions.",
+            "Others on same location. This list displays the other databases' names found at the current database address and port. This can be useful to retrieve older Matilda's database names."
+        ],
+        configuration_info_annotation_models:
+        [
+            "The Annotation section of the Configuration page lists all annotation models loaded in Matilda.",
+            "Annotation models configure how your dialogue collections can be annotated.",
+            "From this page you can edit your annotation models, delete them or add new ones.",
+            "In order to add a new annotation model you can use the button 'Create new annotation model' or upload it manually in your server /Configuration folder. If you choose to do so you will also have to update accordingly the Configuration/conf.json file adding your new model to the loading list. With the manual procedure Matilda must be rebooted."
+        ],
         database: {
             title: "Workspaces Management",
             location:"Database Location",
@@ -370,6 +397,9 @@ guiMessages = {
             wipeCacheConfirm: "Questo cancellerà la lista dei conflitti e permetterà di ricominciare la risoluzione da capo",
             role:"Ruolo",
             configPage: "Configurazione",
+            othersOn: "Altri database",
+            showLogs: "Mostra i Log",
+            Size: "Dimensione",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -497,6 +527,30 @@ guiMessages = {
             Se carichi un file JSON, deve essere nel formato corretto.
             Il formato richiesto è il seguente:
             `
+        ],
+        configuration_info_matilda:
+        [
+            "Indirizzo e Porta. Mostra l'indirizzo del database a cui Matilda è connessa.",
+            "Docker. Indica se stai utilizzando la versione Docker di Matilda.",
+            "Session Guard. Con questa opzione attiva Matilda protegge le route da accessi non autorizzati. Ogni utente, per poter inviare richieste a Matilda dal proprio browser deve essere loggato e avere una sessione attiva. Se il server si riavvia o un utente si logga con le stesse credenziali, Matilda forza il log-out dell'utente per prevenire problemi di sincronizzazione.",
+            "Full Server log. Matilda registra soltanto gli errori e i messaggi di tipo 'warning'. Con questa opzione attiva Matilda registrerà ogni richiesta ricevuta.",
+            "Mostra i Logs. Questo pulsante permette di visionare gli ultimi 50 eventi registrati e di scaricare il file completo di log.",
+        ],
+        configuration_info_database:
+        [
+            "Indirizzo e Porta. Questa sezione mostra l'indirizzo e la porta del database a cui è connessa al momento Matilda.",
+            "Username e Password. Sono le credenziali con cui Matilda è connessa al database menzionato sopra.",
+            "Name. Questo è il Database Name che Matilda sta utilizzando. Si tratta di una sezione all'interno del Database e, se già non esiste, verrà creata da Matilda al primo utilizzo. Se viene cambiato tramite il file configuration/conf.json Matilda creerà un nuovo database name e inizierà ad utilizzare il nuovo. Da tenere in considerazione che Matilda non riverserà automaticamente le collezioni presenti nell'attuale database name nel nuovo ma anzi questo risulterà vuoto al primo utilizzo.",
+            "Dimensioni. Mostra le dimensioni del Database name attualmente in uso. ",
+            "Download Database Dump. Questa funzione esporta tutto il contenuto del database a cui Matilda è attualmente connessa. Il file esportato non è un file mongodump nativo ed è inteso come file da segmentare manualmente per esportare i dati d'interesse ed eventualmente ricaricarli tramite le funzioni native di Matilda.",
+            "Altri database. Questa lista è costituita dagli altri database name presenti all'indirizzo e alla porta del database a cui Matilda è attualmente connessa."
+        ],
+        configuration_info_annotation_models:
+        [
+            "La sezione Annotazione della pagina di Configurazione mostra la lista dei modelli di annotazione caricati in Matilda.",
+            "I modelli di annotazione configurano le categorie di annotazione che gli annotatori possono usare.",
+            "Da questa pagina puoi modificare i modelli di annotazione, cancellarli o aggiungerne di nuovi.",
+            "Per aggiungere un nuovo modello di annotazione usa il pulsante 'Crea nuovo modello di annotazione' o caricalo manualmente nella cartella /Configuration del server. Se scegli di procedere manualmente dovrai anche aggiornare di conseguenza il file Configuration/conf.json aggiungendo il nome del nuovo file alla lista dei modelli di annotazione. Con la procedura manuale vedrai il nuovo modello di annotazione al riavvio di Matilda."
         ],
         exception_create_annotations:
         [
@@ -655,6 +709,9 @@ guiMessages = {
             confirmOverwriteUser: "Benutzername existiert bereits, bitte geben Sie einen anderen Benutzernamen an oder bestätigen Sie, um den vorhandenen Benutzer zu überschreiben",
             role:"Role",
             configPage: "Configuration",
+            othersOn: "Others on same location",
+            showLogs: "Show Logs",
+            Size: "Size",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -792,6 +849,30 @@ guiMessages = {
             Wenn Sie eine JSON-Datei hochladen, muss diese im richtigen Format vorliegen. Dies
             Format ist wie folgt:
             `
+        ],
+        configuration_info_matilda:
+        [
+            "Address and Port. It shows the address of the main app",
+            "Docker. If you are running the Docker version or not.",
+            "Session Guard. With this option you can turn off or on the route protection from unauthorized access. Any user, in order to access a route must be logged in and have an active session. If the server reboots or crashes Matilda enforces log-out in order to avoid syncronization issues.",
+            "Full Server log. Matilda will record any route requested with this option active. Otherwise Matilda will only record errors and warning message.",
+            "Show Logs. This button allows to view the last 50 recorded logs or to download the full log file.",
+        ],
+        configuration_info_database:
+        [
+            "Address and Port. It shows the address and the port of the currently connected database",
+            "Username and Password. It show the current username and password configured for the currently connected database",
+            "Name. This displays the currently database name used by Matilda. This is created from Matilda and can be changed in the configuration file. If the name is changed Matilda will use the new name when rebooted. Note that the collections and user accounts of your current database won't automatically be exported in the new one.",
+            "Size. It shows the currenctly connected database size. ",
+            "Download Database Dump. This function exports a database dump in json format. The file exported is not a mongodump file and is intended to be used to retrieve and later upload your current collections using Matilda's functions.",
+            "Others on same location. This list displays the other databases' names found at the current database address and port. This can be useful to retrieve older Matilda's database names."
+        ],
+        configuration_info_annotation_models:
+        [
+            "The Annotation section of the Configuration page lists all annotation models loaded in Matilda.",
+            "Annotation models configure how your dialogue collections can be annotated.",
+            "From this page you can edit your annotation models, delete them or add new ones.",
+            "In order to add a new annotation model you can use the button 'Create new annotation model' or upload it manually in your server /Configuration folder. If you choose to do so you will also have to update accordingly the Configuration/conf.json file adding your new model to the loading list. With the manual procedure Matilda must be rebooted."
         ],
         modal_formatInfo_list:
         [
