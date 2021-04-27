@@ -811,6 +811,37 @@ async function get_specific_collections(DBcollection,fields,projection) {
   }
 }
 
+async function get_collections_and_annotations_meta() {
+
+    let entriesList = []
+  
+    const apiLink = API_BASE+`/collections_and_annotations_meta`
+  
+    try {
+  
+        var response = await axios.get(apiLink)
+      
+        console.log(response)
+  
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                 mainApp.force_logout()
+            }
+        }
+  
+      entriesList = response.data
+  
+      return entriesList
+  
+    } catch(error) {
+  
+      console.log(error);
+      alert(guiMessages.selected.lida.connectionError)
+  
+    }
+  }
+
 async function remove_from_collection_async(DBcollection, id, fields) {
 
     const apiLink = API_BASE+`/pull/collection/${DBcollection}/${id}`
@@ -1124,6 +1155,7 @@ backend =
     del_single_dialogue_async                   : del_single_dialogue_async,
     del_all_dialogues_async                     : del_all_dialogues_async,
     change_dialogue_name_async                  : change_dialogue_name_async,
+    get_collections_and_annotations_meta        : get_collections_and_annotations_meta,
 
     load_dialogues                              : load_dialogues,
     recover_dialogues                           : recover_dialogues,

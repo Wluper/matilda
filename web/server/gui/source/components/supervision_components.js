@@ -80,11 +80,30 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
-         backend.get_specific_collections("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"annotationStyle":1,"document":"length"} )
+         backend.get_collections_and_annotations_meta()
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
          });
+      },
+
+      gridStyle(columnNum) {
+         return {
+            gridTemplateColumns: `repeat(${columnNum}, minmax(100px, 1fr))`,
+            display: 'grid'
+         }
+      },
+
+      annotatorRate(status) {
+         if (status == undefined) {
+            return {
+               width: `0%`
+            }
+         } else {
+            return {
+               width: `${status}`
+            }
+         }
       },
 
       toggle_show_annotators(dialogueName){
@@ -149,6 +168,11 @@ Vue.component("supervision-view", {
                     {{ guiMessages.selected.admin.annotator }}: {{ name.assignedTo[0] }}
                   </div>
 				</template>
+               </div>
+               <div class="container-bar" :style="gridStyle(name.assignedTo.length)">
+                  <div v-for="annotator in name.assignedTo" class="annotated-bar">
+                     <div class="annotated-fill light-fill" :style="annotatorRate(name.rates[annotator])" v-bind:id="annotator+'_status'"></div>
+                  </div">
                </div>
             </div>
          </li>

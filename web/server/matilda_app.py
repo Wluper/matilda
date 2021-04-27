@@ -199,6 +199,8 @@ def handle_logs_request(complete=None):
             if len(logs) > 50:
                 for log in range( len(logs)-50 , len(logs) ):
                     out.append(logs[log])
+            else:       
+                out = logs
         else:
             out = logs
 
@@ -258,6 +260,31 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
     #dialogueFile.save(user)
     return jsonify( responseObject )
 
+@MatildaApp.route('/collections_and_annotations_meta',methods=['GET'])
+def handle_collections_and_annotations_metadata():
+    """
+    GET - All Collections metadata, with related annotations metadata
+
+    PUT - Handle
+    """
+    if request.method == "GET":
+
+        responseObject = []
+
+        docsRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"annotationStyle":1,"document":"length"} )
+
+        for document in docsRetrieved:
+            document["rates"] = {}
+            #annotations = DatabaseManagement.readDatabase("annotated_collections",{"id":document["id"]},{"annotator":1,"status":1} )
+            annotations = DatabaseManagement.annotatedCollections.find({"id":document["id"]},{"annotator":1,"status":1})
+            annotations.sort("status",-1)
+            for annotation in annotations:
+                print(document["id"])
+                print(annotation)
+                document["rates"][annotation["annotator"]] = annotation["status"]
+            responseObject.append(document)
+
+    return jsonify( responseObject )
 
 @MatildaApp.route('/<user>/dialogues',methods=['GET','POST','DELETE'])
 @MatildaApp.route('/<user>/dialogues/<id>/<fileName>',methods=['GET','POST','DELETE'])
@@ -524,7 +551,7 @@ def handle_switch_collection_request(user, doc):
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
         #first checks if exists an annotated version for the user
         if len(docRetrieved) == 0:
-            logging.info(" * No annotated version for user ",user," creating...")
+            logging.info(" * No annotated version for user "+user+" creating...")
             docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
             #create document 
             values = {
@@ -967,7 +994,7 @@ def handle_post_of_collections(mode, destination, id=None):
         for dialogueName, dialogue in values["document"].items():
             validation = Configuration.validate_dialogue(annotationStyle, dialogue) 
             if ((type(validation) is str) and (validation.startswith("ERROR"))):
-                logging.info(" * Validation for",dialogueName," failed with "+annotationStyle)
+                logging.info(" * Validation for "+dialogueName+" failed with "+annotationStyle)
                 response = {"status":"error","error":" Dialogue "+dialogueName+": "+str(validation)} 
                 return jsonify( response )
 
@@ -1063,7 +1090,7 @@ def __load_collection_from_database(user, doc):
     docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc,"annotator":user})
     #first checks if exists an annotated version for the user
     if len(docRetrieved) == 0:
-        logging.info(" * No annotated version for user ",user," creating...")
+        logging.info(" * No annotated version for user "+user+" creating...")
         docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":doc})
         #create document 
         values = {
