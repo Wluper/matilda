@@ -15,3 +15,6 @@ web/github.pub
 web/server/LIDA_ANNOTATIONS/
 gunicorn_logs.txt
 web/server/error.log
+.vscode/launch.json
+matilda.log
+web/server/matilda.log
