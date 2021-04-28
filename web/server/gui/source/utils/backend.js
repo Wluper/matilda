@@ -77,6 +77,12 @@ async function manage_configuration_file(mode,id,jsonFile) {
             } else if (mode == "put") {
 
                 var response = await axios.put(apiLink, {json:jsonFile})
+            
+            } else if (mode == "change") {
+                
+                apiLink = API_BASE+`/configuration/change/${id}`;
+                var response = await axios.post(apiLink, {json:jsonFile})
+            
             }
 
             var result = response;

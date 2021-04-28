@@ -344,13 +344,10 @@ select {
     box-shadow: 0 1px 5px rgba(0,0,0,0.09);
 }
 
-<<<<<<< HEAD
-=======
 .annotation-models-list .entry-list-single-item-container:hover {
     border-left-color: #3a9dd6 !important;
 }    
 
->>>>>>> multimodel
 #supervision-container {
     height: 100%;
 }

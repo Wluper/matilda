@@ -454,21 +454,20 @@ Vue.component('help-general-config-modal', {
 
                <div id="database-info" style="font-size:14px;">
                  <h4>Database</h4>
-                 {{guiMessages.selected.configuration_info_database[0]}}<br>
-                 {{guiMessages.selected.configuration_info_database[1]}}<br>
-                 {{guiMessages.selected.configuration_info_database[2]}}<br>
-                 {{guiMessages.selected.configuration_info_database[3]}}<br>
-                 {{guiMessages.selected.configuration_info_database[4]}}<br>
-                 {{guiMessages.selected.configuration_info_database[5]}}
+                 <strong>{{guiMessages.selected.configuration_info_database[0]}}.</strong> {{guiMessages.selected.configuration_info_database[1]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[2]}}.</strong> {{guiMessages.selected.configuration_info_database[3]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[4]}}.</strong> {{guiMessages.selected.configuration_info_database[5]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[6]}}.</strong> {{guiMessages.selected.configuration_info_database[7]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[8]}}.</strong> {{guiMessages.selected.configuration_info_database[9]}} <br>
                </div>
 
                <div id="matilda-info" style="font-size:14px;">
                  <h4>Matilda</h4>
-                 {{guiMessages.selected.configuration_info_matilda[0]}}<br>
-                 {{guiMessages.selected.configuration_info_matilda[1]}}<br>
-                 {{guiMessages.selected.configuration_info_matilda[2]}}<br>
-                 {{guiMessages.selected.configuration_info_matilda[3]}}<br>
-                 {{guiMessages.selected.configuration_info_matilda[4]}}
+                 <strong>{{guiMessages.selected.configuration_info_matilda[0]}}.</strong> {{guiMessages.selected.configuration_info_matilda[1]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[2]}}.</strong> {{guiMessages.selected.configuration_info_matilda[3]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[4]}}.</strong> {{guiMessages.selected.configuration_info_matilda[5]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[6]}}.</strong> {{guiMessages.selected.configuration_info_matilda[7]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[8]}}.</strong> {{guiMessages.selected.configuration_info_matilda[9]}}
                </div>
 
             </slot>

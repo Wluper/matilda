@@ -66,10 +66,9 @@ def welcome():
 ##############################################
 
 @MatildaApp.route('/configuration', methods=['GET'])
-@MatildaApp.route('/configuration/<annotationStyle>', methods=['GET'])
-@MatildaApp.route('/configuration/<option>', methods=['POST'])
-@MatildaApp.route('/configuration/<annotationStyle>', methods=['PUT'])
-def handle_configuration_file(option=None,annotationStyle=None):
+@MatildaApp.route('/configuration/<annotationStyle>', methods=['GET','POST','PUT'])
+@MatildaApp.route('/configuration/change/<option>', methods=['POST'])
+def handle_configuration_file(annotationStyle=None, option=None):
     """
     Returns the annotation styles registered in configuration json
     """
@@ -104,7 +103,26 @@ def handle_configuration_file(option=None,annotationStyle=None):
 
     if request.method == "POST":
 
-            data = request.get_json()
+        data = request.get_json()
+
+        if option:
+            newValue = data["json"]["new_value"]
+
+            if option == "full_logs":
+                #saving new option
+                jsonConf["full_log"] = newValue
+                #changing on runtime
+                if jsonConf["full_log"] is not True:
+                    logging.disable(logging.INFO)
+                else:
+                    logging.disable(logging.NOTSET)
+
+                #writing new option in configuration file
+                with open(Configuration.DEFAULT_PATH+"conf.json", "w") as configurationFile:
+                    configurationFile.write(json.dumps(Configuration.conf, indent=4))
+                    configurationFile.close()
+
+        else:
             newOption = data["json"]
 
             #backup of previous configuration
@@ -122,7 +140,7 @@ def handle_configuration_file(option=None,annotationStyle=None):
                 configurationFile.write(json.dumps(Configuration.conf, indent=4))
                 configurationFile.close()
 
-            responseObject["status"] = "done"
+        responseObject["status"] = "done"
 
 
     if request.method == "PUT":
@@ -1488,10 +1506,10 @@ def convert_string_list_into_dialogue(stringList: List[str]) -> List[Dict[str, A
         - (2) :: user speaks first
     """
 
-    dialogue    = []
-    userTurn    = True
+    dialogue = []
+    userTurn = True
     currentTurn = {}
-    turnIdx     = 1
+    turnIdx = 1
 
     for providedString in stringList:
 
@@ -1502,17 +1520,17 @@ def convert_string_list_into_dialogue(stringList: List[str]) -> List[Dict[str, A
 
         else:
 
-            currentTurn["sys"]      = providedString
+            currentTurn["sys"] = providedString
             currentTurn["turn_idx"] = turnIdx
             dialogue.append(currentTurn)
-            turnIdx    += 1
+            turnIdx += 1
             currentTurn = {}
-            userTurn    = True
+            userTurn = True
 
     if currentTurn:
         currentTurn["turn_idx"] = turnIdx
         dialogue.append(currentTurn)
-        turnIdx                += 1
+        turnIdx += 1
 
     return dialogue
 

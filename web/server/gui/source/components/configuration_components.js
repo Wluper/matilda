@@ -118,6 +118,19 @@ Vue.component("configuration-view", {
             }
         },
 
+        change_logs(newValue) {
+            console.log(newValue);
+            let ask = confirm(guiMessages.selected.admin.confirmSave);
+            if (ask != true) {
+                return;
+            }
+            backend.manage_configuration_file("change","full_logs", {new_value:newValue})
+                .then( (response) => {
+                    console.log(response)
+                }
+            );    
+        },
+
         save_model() {
             backend.manage_configuration_file("put", this.selectedModel, this.stringOutModel)
                 .then( (response) => {
@@ -164,8 +177,8 @@ Vue.component("configuration-view", {
 
             <div v-if="selectedModel == false" class="large-inner-wrap">
                 <ul class="collection-list two-columns annotation-models-list">
-                    <h2 class="list-title">Annotation</h2>
-                    <h3>Listed annotation models</h3>
+                    <h2 class="list-title">{{guiMessages.selected.admin.annotation}}</h2>
+                    <h3>{{guiMessages.selected.admin.loadAnno}}</h3>
                     
                     <div class="entry-list-single-item-container" v-for="model in settings['app']['annotation_models']">
                             <div class="entry-info" style="display:block;">
@@ -204,9 +217,13 @@ Vue.component("configuration-view", {
                     </template>
                         <h4>Name: <span>{{settings.database.name}}</span></h4>
                         <template v-if="settings.databaseList">
-                            <h4>Size: <span>{{settings.databaseList[settings.database.name].sizeOnDisk}} Byte</span></h4>
+                            <h4>{{guiMessages.selected.admin.size}}:
+                                <span v-if="settings.databaseList[settings.database.name].sizeOnDisk < 1000"> {{settings.databaseList[settings.database.name].sizeOnDisk}} Byte</span>
+                                <span v-else-if="settings.databaseList[settings.database.name].sizeOnDisk > 10000000"> {{String(settings.databaseList[settings.database.name].sizeOnDisk).slice(0,-6)}} MB</span>
+                                <span v-else>{{String(settings.databaseList[settings.database.name].sizeOnDisk).slice(0,-3)}} KB</span>
+                            </h4>
                             <button class="grey-compact-button" v-on:click="download_database_dump()" style="cursor:pointer;">Download database dump</button>
-                            <h4>Others on same location:</h4>
+                            <h4>{{guiMessages.selected.admin.othersOn}}:</h4>
                             <select>
                                 <option>{{settings.database.name}}</option>
                                 <template v-for="db in settings.databaseList">
@@ -222,7 +239,7 @@ Vue.component("configuration-view", {
                     <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
                     <h4>Docker: <span>{{settings.app.docker}}</span></h4>
                     <h4>Session Guard: <span>{{settings.app.session_guard}}</span></h4>
-                    <h4>Full Server log: <span>{{settings.app.full_log}}</span></h4>
+                    <h4>Full Server log: <span><input type="checkbox" v-model="settings.app.full_log" id="full_logs" v-on:change="change_logs(settings.app.full_log)"/></span></h4>
                     <button class="grey-compact-button" v-on:click="inspectingLogs = true">Show Logs</button>
 
                 </ul>
