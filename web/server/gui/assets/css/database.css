@@ -468,10 +468,17 @@ input:not(:checked) + div {
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
 }
 
+.collection-user-list .entry-list-single-item-container {
+    grid-template: [row1-start] "info" [row1-end] / 1fr;
+}
+
 .two-columns {
     float:left;
     width:50%;
     margin:0 0 20px 0;
+    height: 62vh;
+    overflow-y: auto;
+    padding-right: 1%;
 }
 
 .two-columns .listed-entry {

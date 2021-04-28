@@ -274,15 +274,18 @@ def handle_collections_and_annotations_metadata():
         docsRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{},{"id":1,"gold":1,"assignedTo":1,"annotationStyle":1,"document":"length"} )
 
         for document in docsRetrieved:
+            if document["gold"] != {}:
+                document["gold"] = True
+            else:
+                document["gold"] = False
+            #retrieve annotations' completion rates
             document["rates"] = {}
-            #annotations = DatabaseManagement.readDatabase("annotated_collections",{"id":document["id"]},{"annotator":1,"status":1} )
-            annotations = DatabaseManagement.annotatedCollections.find({"id":document["id"]},{"annotator":1,"status":1})
-            annotations.sort("status",-1)
-            for annotation in annotations:
-                print(document["id"])
-                print(annotation)
-                document["rates"][annotation["annotator"]] = annotation["status"]
-            responseObject.append(document)
+            if len(document["assignedTo"]) != 0:
+                annotations = DatabaseManagement.readDatabase("annotated_collections",{"id":document["id"]},{"annotator":1,"status":1} )
+                for annotation in annotations:
+                    if annotation["annotator"] in document["assignedTo"]:
+                        document["rates"][annotation["annotator"]] = annotation["status"]
+                responseObject.append(document)
 
     return jsonify( responseObject )
 

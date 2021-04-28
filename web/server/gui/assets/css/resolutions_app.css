@@ -29,6 +29,12 @@
     margin-top: 25px;
 }
 
+.large-inner-wrap .two-columns {
+    height: inherit;
+    overflow-y: inherit;
+    padding-right: inherit;
+}
+
 #admin_main .inner-wrap {
     max-width: 1220px !important;
 }

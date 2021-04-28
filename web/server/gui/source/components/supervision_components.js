@@ -80,10 +80,12 @@ Vue.component("supervision-view", {
       },
 
       getAllCollectionIdsFromServer() {
+         document.body.style.cursor = "progress";
          backend.get_collections_and_annotations_meta()
             .then( (response) => {
                console.log(response);
                this.allCollectionsMetadata = response;
+               document.body.style.cursor = null;
          });
       },
 
