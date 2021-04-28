@@ -49,6 +49,7 @@ Vue.component("all-dialogues", {
       },
 
       collectionAnnotationRate() {
+          let tempRate = mainApp.collectionRate;
           let summatory = 0; 
           total_turns = 0;
           for (i=0; i < this.allDialogueMetadata.length; i++) {
@@ -66,7 +67,9 @@ Vue.component("all-dialogues", {
               mainApp.collectionRate = "0%";
               mainApp.collectionRate = "0%"
           }
-          //backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
+          if (mainApp.collectionRate != tempRate) {
+            backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
+          }
       },
 
       dialogue_already_visited(id) {

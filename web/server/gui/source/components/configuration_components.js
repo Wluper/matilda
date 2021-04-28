@@ -21,6 +21,7 @@ Vue.component("configuration-view", {
             dCurrentTurn:[],
             inspectingLogs:false,
             showHelpConfig:false,
+            showHelpGeneral:false,
         }
     },
 
@@ -156,7 +157,7 @@ Vue.component("configuration-view", {
                             {{guiMessages.selected.admin.createAnno}}
                     </button>
 
-                    <button class="help-button btn btn-sm" @click="showHelpConfig = true">{{ guiMessages.selected.database.showHelp }}</button>
+                    <button class="help-button btn btn-sm" @click="showHelpGeneral = true">{{ guiMessages.selected.database.showHelp }}</button>
                     <button v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
             </div>
@@ -252,6 +253,8 @@ Vue.component("configuration-view", {
                     </span>
                 </div>
             </div>
+
+            <help-general-config-modal v-if="showHelpGeneral"  @close="showHelpGeneral = false"></help-general-config-modal>
             <configuration-show-logs v-if="inspectingLogs"  @close="inspectingLogs = false"></configuration-show-logs>
         </div>
     `

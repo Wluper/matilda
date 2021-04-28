@@ -52,6 +52,7 @@ Vue.component("interannotator-view", {
     },
 
     getAllCollectionIdsFromServer() {
+        document.body.style.cursor = "progress";
         backend.get_collections_ids_async("dialogues_collections")
             .then( (response) => {
                 this.allCollectionsMetadata = response;
@@ -77,6 +78,7 @@ Vue.component("interannotator-view", {
             this.allCollectionsMetadata[i]["errors"]["resolved"] = resolved;  
         }
         console.log("Error count",this.allCollectionsMetadata);
+        document.body.style.cursor = null;
     },
 
     dialogue_already_visited(id) {

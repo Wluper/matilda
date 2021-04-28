@@ -204,6 +204,7 @@
     margin-top:5px;
     display:block;
     width:-webkit-fill-available;
+    width:-moz-available;
 }
 
 .global-label {

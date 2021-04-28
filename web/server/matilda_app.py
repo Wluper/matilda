@@ -206,7 +206,7 @@ def handle_logs_request(complete=None):
 
         responseObject = {"status":"done", "logs":out}
 
-        return responseObject
+        return jsonify( responseObject )
 
     
 
@@ -515,7 +515,8 @@ def handle_dialogues_tag(user, id, tag, value):
     if request.method == "POST":
         dialogueFile.insert_meta_tags(user, id, tag, value)
 
-    return responseObject
+    return jsonify( responseObject )
+
 
 @MatildaApp.route('/<supervisor>/supervision',methods=['GET'])
 @MatildaApp.route('/<supervisor>/supervision/<annotator>/<doc>',methods=['PUT'])
@@ -576,7 +577,8 @@ def handle_switch_collection_request(user, doc):
         dialogueFile.change_collection(user, doc)
         responseObject["status"] = "success"
 
-        return responseObject
+        return jsonify( responseObject )
+
     else:
         docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":doc, "annotator":user})
 
@@ -588,7 +590,8 @@ def handle_switch_collection_request(user, doc):
 
     responseObject = { "status": "success" }
 
-    return responseObject
+    return jsonify( responseObject )
+
 
 @MatildaApp.route('/<user>/backup/<activecollection>',methods=['PUT'])
 def handle_backup_resource(user, activecollection):
@@ -902,7 +905,7 @@ def handle_wipe_request(user=None):
     else:
         responseObject = dialogueFile.clean_workspace(user)
 
-    return responseObject
+    return jsonify( responseObject )
 
 @MatildaApp.route('/collections/<DBcollection>',methods=['POST','GET'])
 @MatildaApp.route('/collections/<DBcollection>/<id>',methods=['GET','POST'])
@@ -1025,7 +1028,7 @@ def handle_post_of_collections(mode, destination, id=None):
 
         DatabaseManagement.pullFromDoc(id, destination, values)
 
-    return jsonify ( response )
+    return jsonify( response )
 
 @MatildaApp.route('/login',methods=['POST'])
 def handle_login(id=None):
@@ -1065,7 +1068,7 @@ def handle_annotations_import(collection_id):
             responseObject = {"status": "error", "error":"File format is incorrect. Please, check your file."}
             return responseObject
 
-        return responseObject
+        return jsonify(responseObject)
 
     else:
         responseObject = {"status":"fail"}
@@ -1142,7 +1145,7 @@ def __handle_post_of_new_dialogues(user, fileName=None):
     elif isinstance(stringListOrJsonDict, dict):
         responseObject = __add_new_dialogues_from_json_dict(user, fileName, responseObject, dialogueDict=stringListOrJsonDict)
 
-    return responseObject
+    return jsonify(responseObject)
 
 
 def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, dialogueDict):
@@ -1284,7 +1287,7 @@ def mock_handle_errors_resource(id=None):
 
         responseObject.update( InterannotatorMethods.find_errors_in_list_of_dialogue( None,listOfDialogue ) )
 
-        return responseObject
+        return jsonify( responseObject )
 
 
 def mock_analyse_interannotator_agreement(dialogueIdCap=None):
@@ -1574,7 +1577,7 @@ def guard():
         check = LoginFuncs.checkSession()
         if check == False and sessionGuard == True:
             logging.warning(" * Access violation on route "+requestedUri+" from "+request.remote_addr)
-            return {"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."}
+            return jsonify({"status":"logout", "error":"Server rebooted or you logged from another position. You need to log-in again."})
 
 if jsonConf["full_log"] is not True:
     logging.disable(logging.INFO)

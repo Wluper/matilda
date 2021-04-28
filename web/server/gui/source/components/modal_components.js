@@ -412,3 +412,81 @@ Vue.component('help-config-modal', {
   </transition>
   `
 });
+
+
+Vue.component('help-general-config-modal', {
+
+  props:[
+    "showHelpGeneral"
+  ],
+  
+  data() { 
+    return {
+      guiMessages
+    }
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              Configuration Useful Info
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+
+               <div id="annotation-info" style="font-size:14px;">
+                 <h4>Annotation</h4>
+                 {{guiMessages.selected.configuration_info_annotation_models[0]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[1]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[2]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[3]}}
+               </div>
+
+               <div id="database-info" style="font-size:14px;">
+                 <h4>Database</h4>
+                 {{guiMessages.selected.configuration_info_database[0]}}<br>
+                 {{guiMessages.selected.configuration_info_database[1]}}<br>
+                 {{guiMessages.selected.configuration_info_database[2]}}<br>
+                 {{guiMessages.selected.configuration_info_database[3]}}<br>
+                 {{guiMessages.selected.configuration_info_database[4]}}<br>
+                 {{guiMessages.selected.configuration_info_database[5]}}
+               </div>
+
+               <div id="matilda-info" style="font-size:14px;">
+                 <h4>Matilda</h4>
+                 {{guiMessages.selected.configuration_info_matilda[0]}}<br>
+                 {{guiMessages.selected.configuration_info_matilda[1]}}<br>
+                 {{guiMessages.selected.configuration_info_matilda[2]}}<br>
+                 {{guiMessages.selected.configuration_info_matilda[3]}}<br>
+                 {{guiMessages.selected.configuration_info_matilda[4]}}
+               </div>
+
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              MATILDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+});

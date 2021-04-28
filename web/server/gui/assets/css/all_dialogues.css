@@ -260,7 +260,7 @@
     background-color: rgb(0 0 0 / 10%);
 }
 
-.annotated-bar:nth-child(2n) {
+.container-bar .annotated-bar:nth-child(2n) {
     border-left:4px solid black;
 }
 
