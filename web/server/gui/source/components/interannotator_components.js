@@ -268,12 +268,11 @@ Vue.component("interannotator-app", {
               console.log(response);
               this.allDialogueMetadata = response["metadata"];
               this.errors = response["errorList"];
-              //setTimeout(this.get_dialogues_with_errors, 500, errors);
+              this.get_dialogues_with_errors(this.errors);
         });
     },
 
     get_dialogues_with_errors(errors) {
-        console.log(errors);
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
                 this.dialoguesWithErrors[dialogue] = true;
@@ -299,9 +298,9 @@ Vue.component("interannotator-app", {
     },
 
     errorCount: function(id) {
-        if (this.errors != undefined) {
-            if (this.errors[id] != undefined) {
-                return "Errors: "+this.errors[id].length; 
+        if (this.errors["errors"] != undefined) {
+            if (this.errors["errors"][id] != undefined) {
+                return "Errors: "+this.errors["errors"][id].length; 
             }
         }
     },
