@@ -216,26 +216,31 @@ async function write_tag(id,tag,value) {
 
 }
 
-async function get_all_dialogue_ids_async(admin) {
+async function get_all_dialogue_ids_async(admin, interannotatorCollection=undefined) {
 
   var dialogues = {}
 
   if (admin == undefined) {
 
+    //annotators
     var apiLink = API_BASE+"/"+mainApp.userName+'/dialogues_metadata/'+mainApp.activeCollection;
 
   } else if (admin == "supervision") {
 
+    //supervision
     var apiLink = API_BASE+"/"+mainApp.userName+'/supervision';
 
   } else { 
 
-    var apiLink = API_BASE+"/dialogues_metadata";
+    //interannotator
+    var apiLink = API_BASE+"/dialogues_metadata/"+interannotatorCollection;
   }
 
   try {
 
     var response = await axios.get(apiLink)
+
+    console.log(response);
 
     if (response["data"]["error"] != undefined) {
         alert(response["data"]["error"])
@@ -999,7 +1004,7 @@ async function get_collection_errors_async(collectionId){
 
     var dialogues = {}
 
-    const apiLink = API_BASE+`/errors/restore/${collectionId}`
+    const apiLink = API_BASE+`/errors/check_or_restore/${collectionId}`
     try {
         var response = await axios.get( apiLink );
 

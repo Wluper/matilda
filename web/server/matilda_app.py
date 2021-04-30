@@ -629,16 +629,21 @@ def handle_backup_resource(user, activecollection):
 # ADMIN ROUTES
 #################################################
 
-@MatildaApp.route('/dialogues_metadata',methods=['GET'])
+@MatildaApp.route('/dialogues_metadata/<id>',methods=['GET'])
 @MatildaApp.route('/dialogues_metadata/<id>', methods=['PUT'])
-def admin_dialogues_metadata_resource(id=None):
+def admin_dialogues_metadata_resource(id):
     """
-    GET - All dialogues metadata
+    GET - All dialogues metadata for interannotator
 
     PUT - Handle
     """
+
+    responseObject = {}
+
     if request.method == "GET":
-        responseObject = annotationFiles.get_dialogues_metadata()
+        responseObject["metadata"] = annotationFiles.get_dialogues_metadata()
+        # and calculate errors
+        responseObject["errorList"] = restore_errorsList(id)
 
     if request.method == "PUT":
         error = None
@@ -647,7 +652,7 @@ def admin_dialogues_metadata_resource(id=None):
         responseObject = annotationFiles.update_dialogue_name( id, data["id"])
 
     #annotationFiles.save()
-    return jsonify( responseObject )
+    return responseObject
 
 @MatildaApp.route('/dialogues', methods=['GET','POST','DELETE'])
 @MatildaApp.route('/dialogues/<collection>/<id>', methods=['GET','POST','PUT','DELETE'])
@@ -759,8 +764,10 @@ def handle_errors_resource(id=None, collection=None):
 
     return jsonify( responseObject )
 
-@MatildaApp.route('/errors/restore/<collectionId>', methods=['GET'])
+@MatildaApp.route('/errors/check_or_restore/<collectionId>', methods=['GET'])
 def restore_errorsList(collectionId):
+
+    errorObject = {}
 
     search = DatabaseManagement.readDatabase("dialogues_collections", {"id":collectionId}, {"document","errors", "gold"})
 
@@ -769,7 +776,7 @@ def restore_errorsList(collectionId):
         annotationFiles.annotatorErrors = search[0]["errors"]["errorsList"]
         annotationFiles.annotatorErrorsMeta = search[0]["errors"]["errorsMeta"]
 
-        responseObject = {
+        errorObject = {
             "errors" : search[0]["errors"]["errorsList"],
             "meta" : search[0]["errors"]["errorsMeta"]
         }
@@ -801,9 +808,9 @@ def restore_errorsList(collectionId):
                 } 
             })
         
-        responseObject = {"errors":annotationFiles.annotatorErrors}
+        errorObject = {"errors":annotationFiles.annotatorErrors}
 
-    return jsonify(responseObject)
+    return errorObject
 
 
 
@@ -1076,6 +1083,8 @@ def handle_annotations_import(collection_id):
 
     if request.method == "POST":
 
+        #import dialogues from a file
+
         dialoguesData = request.get_json()
 
         stringListOrJsonDict = dialoguesData["payload"]
@@ -1089,7 +1098,14 @@ def handle_annotations_import(collection_id):
         return jsonify(responseObject)
 
     else:
+
+        #import annotations for user
+
         responseObject = {"status":"fail"}
+
+        annotationFiles.annotatorErrors = {}
+        annotationFiles.annotatorErrorsMeta = {}
+        annotationFiles.wipe_view()
 
         collections = DatabaseManagement.readDatabase("annotated_collections", {"id":collection_id})
 
