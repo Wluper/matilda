@@ -65,7 +65,7 @@ select {
     line-height:50px;
     background:white;
     border:none;
-    display:inline-block !important;
+    display:inline-block;
     font-size:14px;
     border-radius: 1px;
     font-family: Montserrat;

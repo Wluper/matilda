@@ -4,7 +4,7 @@
 
 Vue.component('classification-annotation',{
 
-    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "interannotatorView"],
+    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "interannotatorView", "selectingText"],
 
 
     data () {
@@ -182,7 +182,7 @@ Vue.component('classification-annotation',{
 
 Vue.component('classification-string-annotation', {
 
-      props: ["classification_strings", "uniqueName", "classes", "info", "confidences", "currentId", "multilabelStringOptions", "accepted", "supervision"],
+      props: ["classification_strings", "uniqueName", "classes", "info", "confidences", "currentId", "multilabelStringOptions", "accepted", "supervision", "selectingText"],
 
       data () {
 
@@ -200,7 +200,8 @@ Vue.component('classification-string-annotation', {
       },
 
       created () {
-         if (this.multilabelStringOptions) {
+        annotationAppEventBus.$on("selected_text", this.updateFromSelection);
+        if (this.multilabelStringOptions) {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
             this.collapsed = "new";
          } else {
@@ -208,6 +209,14 @@ Vue.component('classification-string-annotation', {
                this.collapsed = "new";
             }
          }
+      },
+
+      beforeDestroyed() {
+        annotationAppEventBus.$off("selected_text", this.updateFromSelection);
+        if (this.multilabelStringOptions) {
+            adminEventBus.$off("switch_slot_values", this.switchSlotValue);
+        }
+
       },
 
       methods: {
@@ -347,14 +356,21 @@ Vue.component('classification-string-annotation', {
 
          },
 
-         selectWords: function(event,labelName,typeName=undefined) {
-             annotationAppEventBus.$emit("resume_annotation_tools");
-             //display feedbacks
+         selectWords: function(event,labelName,typeName=undefined,add=false) {
+             //annotationAppEventBus.$emit("resume_annotation_tools");
+             annotationAppEventBus.$emit("selecting_text", true );
+             //document.getElementById("selection-done-"+this.currentId).style.visibility = "visible";
+             document.getElementById("selection-done-"+this.currentId).onclick = this.updateSlot;
+             //display feedbacks 
+             
              if (typeName != undefined) {
                 var container = document.getElementById(typeName);
                 var inputField = container.querySelector("#"+labelName+"_input");
              } else {
                 var inputField = document.getElementById(labelName+"_input");
+             }
+             if (add != false) {
+                inputField.value = inputField.value + ",";
              }
              let activeTurn = document.getElementsByClassName("dialogue-turn-selected")[0];
              if (activeTurn != null) {
@@ -364,24 +380,27 @@ Vue.component('classification-string-annotation', {
              event.target.classList.add("active_button");
              inputField.classList.add("active_label");
              //events
+             /*
              document.getElementById("usr").onmouseup = this.updateSlot;
              document.getElementById("sys").onmouseup = this.updateSlot;
+             */
          },
 
          updateSlot: function(event) {
              console.log("=== Gathering text ===");
-             let text = event.target.value.substring(event.target.selectionStart, event.target.selectionEnd);
+             console.log(this.selectingText)
+             //let text = window.getSelection().toString();
              //checking if no text has been selected
-             if ((text == undefined) || (text == "")) {
+             if ((this.selectingText == undefined) || (this.selectingText == "")) {
                  annotationAppEventBus.$emit("resume_annotation_tools");
                  return;
              }  
              let activeLabel = document.getElementsByClassName("active_label")[0];
              let labelName = activeLabel.id.split("_input")[0];
-             let context = event.target.id;
+             //let context = event.target.id;
              //updating
-             let range = utils.get_token_range(event,text);
-             activeLabel.value += context.trim()+"["+range+"]["+text+"],";
+             //let range = utils.get_token_range(event,text);
+             activeLabel.value += this.selectingText;
              this.updateClassAndString(activeLabel, labelName);
              //put all back in place. Two possible parent view: interannotator and annotation
              annotationAppEventBus.$emit("resume_annotation_tools");
@@ -617,7 +636,6 @@ Vue.component('classification-string-annotation', {
                 <div class="text-container">
                     {{ info }}
                 </div>
-
                 <hr>
 
             </div>
@@ -636,7 +654,7 @@ Vue.component('classification-string-annotation', {
 
                 <label v-bind:for="labelName" class="multilabel-string-label">
                     <span v-if="checkedMethod(labelName)" class="bold-label"> {{labelName}} || {{get_confidence(labelName)}} 
-                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName+'_old')"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
+                      <button type="button" class="txt-sel-button" @click="selectWords($event,labelName,uniqueName+'_old',true)"><img src="assets/images/text_sel.svg"><span class="text-sel-span">+</span></button>
                     </span>
                     
                     <span v-else> {{labelName}} || {{get_confidence(labelName)}} 

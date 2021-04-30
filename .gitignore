@@ -18,3 +18,4 @@ web/server/error.log
 .vscode/launch.json
 matilda.log
 web/server/matilda.log
+configuration/conf.old.json

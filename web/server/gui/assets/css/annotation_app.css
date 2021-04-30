@@ -564,3 +564,24 @@ WluperDark: 0e181e
   background: #259af7;
   cursor: pointer;
 }
+
+.clickable-word:hover {
+    color:#117de2
+}
+
+.selected-word {
+    color:#117de2
+}
+
+.static-input {
+    color:#222;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    justify-self: center;
+    margin: 0;
+    border-radius: 2px;
+    outline: none;
+    border: 1px solid #e1e1e3;
+    padding: 10px 15px;
+}

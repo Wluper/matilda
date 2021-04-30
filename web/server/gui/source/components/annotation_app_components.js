@@ -22,6 +22,7 @@ Vue.component("annotation-app", {
             annotatedTurns: ["annotated"],
             annotationRate: '0%',
             readOnly:false,
+            selectingText:false,
             autoSave:JSON.parse(mainApp.autoSave),
         }
     },
@@ -78,6 +79,7 @@ Vue.component("annotation-app", {
         annotationAppEventBus.$on( "new_turn", this.append_new_turn );
         annotationAppEventBus.$on( "save_dialogue", this.save_dialogue );
         annotationAppEventBus.$on( "change_auto_save", this.change_auto_save );
+        annotationAppEventBus.$on( "selecting_text", this.select_text_mode );
     },
 
     beforeDestroyed() {
@@ -109,6 +111,7 @@ Vue.component("annotation-app", {
             annotationAppEventBus.$off( "new_turn", this.append_new_turn );
             annotationAppEventBus.$off( "save_dialogue", this.save_dialogue );
             annotationAppEventBus.$off( "change_auto_save", this.change_auto_save );
+            annotationAppEventBus.$off( "selecting_text", this.select_text_mode );
         },
 
         init: function() {
@@ -214,6 +217,7 @@ Vue.component("annotation-app", {
         },
 
         turn_update: function(event){
+            console.log(event);
             //turn 0 is meta-tags and global_slot reserved so it's skipped
             if (this.dCurrentId != 0) {
                 this.allDataSaved = false;
@@ -285,6 +289,7 @@ Vue.component("annotation-app", {
         },
 
         resume_annotation_tools: function(event) {
+            this.selectingText = false;
             console.log("Resuming annotation tools");
             //resuming label
             try {
@@ -319,6 +324,10 @@ Vue.component("annotation-app", {
         change_auto_save: function(value) {
             this.autoSave = value;
             databaseEventBus.$emit("change_option", "autoSave", value);
+        },
+
+        select_text_mode: function(event) {
+            this.selectingText = event;
         }
 
     },
@@ -337,7 +346,8 @@ Vue.component("annotation-app", {
                         v-bind:currentId="dCurrentId"
                         v-bind:metaTags="metaTags"
                         v-bind:autoSave="autoSave"
-                        v-bind:readOnly="readOnly">
+                        v-bind:readOnly="readOnly"
+                        v-bind:selectingText="selectingText">
         </dialogue-turns>
 
         <annotations v-bind:globalSlot="annotationFormat.global_slot"
@@ -348,7 +358,8 @@ Vue.component("annotation-app", {
                      v-bind:dialogueNonEmpty="dialogueNonEmpty"
                      v-bind:dTurns="dTurns"
                      v-bind:dialogueId="dialogueId"
-                     v-bind:readOnly="readOnly">
+                     v-bind:readOnly="readOnly"
+                     v-bind:selectingText="selectingText">
         </annotations>
 
         <input-box>
@@ -452,7 +463,7 @@ Vue.component('dialogue-turns',{
 
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turns","currentId", "primaryElementClass","metaTags", "autoSave", "readOnly"],
+    props : ["turns","currentId", "primaryElementClass","metaTags", "autoSave", "readOnly", "selectingText"],
 
     data: function() {
         return {
@@ -511,6 +522,7 @@ Vue.component('dialogue-turns',{
                        v-bind:turn="turn.string"
                        v-bind:currentId="currentId"
                        v-bind:myId="index"
+                       v-bind:selectingText="selectingText"
                        v-bind:style="{ maxWidth:maxWidth+'%' }">
             </dialogue-turn>
         </div>
@@ -602,12 +614,13 @@ Vue.component('dialogue-meta',{
 Vue.component('dialogue-turn',{
     // primaryElementClass is the class used to select the correct input field
     // to correctly set the focus when turns are changed with arrow keys or enter
-    props : ["turn","currentId","myId", "primaryElementClass"],
+    props : ["turn","currentId","myId", "primaryElementClass", "selectingText"],
     data: function (){
         return {
             guiMessages,
             maxWidth: mainApp.maxWidth,
             maxChars: mainApp.maxChars,
+            selectedWords:{"sys":{},"usr":{}}
         }
     },
     methods :{
@@ -622,7 +635,42 @@ Vue.component('dialogue-turn',{
         },
         delete_this_turn(event) {
             annotationAppEventBus.$emit("delete_turn", this.myId)
-        }
+        },
+        selection_done() {
+            var out = "";
+            for (dict in this.selectedWords) {
+                var start = 0;
+                var end = 0;
+                var string = "";
+                for (index in this.selectedWords[dict]) {
+                    if (string == "") {
+                        start = Number(index);
+                    }
+                    if (Number(index) > Number(end)+1) {
+                        //then it starts a new substring
+                        if (string != "") {
+                            out += dict+"["+start+","+end+"]["+string.slice(0,-1)+"],";
+                        }
+                        //prepare for next
+                        start = Number(index);
+                        string = "";
+                    }
+                    end = Number(index);
+                    string = string+this.selectedWords[dict][index]+" ";
+                }
+                if (string != "") {
+                    out += dict+"["+start+","+end+"]["+string.slice(0,-1)+"]";
+                }
+            }
+
+            //let outEvent = {name: "async", data: [["turn_ref", out]]}
+            //annotationAppEventBus.$emit('classification_string_updated', outEvent);
+            //console.log(out);
+            annotationAppEventBus.$emit("selecting_text", out);
+            //emptying dict
+            this.selectedWords = null;
+            this.selectedWords = {"sys":{},"usr":{}};
+        },
     },
     mounted(){
         if (this.currentId==this.myId){
@@ -651,6 +699,13 @@ Vue.component('dialogue-turn',{
     `
     <div v-if="check_if_selected()" class="dialogue-turn-selected" v-bind:style="{ maxWidth:maxWidth+'%' }">
 
+        <button type="button"
+            v-show="selectingText != false"
+            class="help-button btn btn-sm btn-primary"
+            v-on:click="selection_done()"
+            v-bind:id="'selection-done-'+currentId"
+            style="float:right">Done Selection</button>
+
         <div class="turn-header">
             <div class="active-turn-id">
                 {{guiMessages.selected.annotation_app.turnId}}: {{myId}}
@@ -665,13 +720,20 @@ Vue.component('dialogue-turn',{
 
         <div class="user-string-type-text">
             
-            <comm-textarea :id="stringType.name" v-if="stringType.data.length > maxChars" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
-            <!-- v-on:comm_input_update="turn_updated_string($event)" -->
-            </comm-textarea>  
+            <comm-textarea v-if="((selectingText != true) && (stringType.data.length >= maxChars))" :id="stringType.name" v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> 
+            </comm-textarea>
+
+            <comm-input v-blur v-if="((selectingText != true) && (stringType.data.length < maxChars))" v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" class="user-string-type-text" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> </comm-input>
             
-            <comm-input :id="stringType.name" v-else v-bind:inputClassName="primaryElementClass" v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly>
-            <!-- v-on:comm_input_update="turn_updated_string($event)" -->
-            </comm-input>  
+            <clickable-textdiv v-else
+                class="static-input"
+                v-bind:inputClassName="primaryElementClass" 
+                v-bind:inputValue="stringType.data" 
+                v-bind:uniqueName="stringType.name"
+                v-bind:selectedWords='selectedWords'
+                :id="stringType.name"> 
+                {{stringType.data}}
+            </clickable-textdiv>
         </div>   
 
         </div>
@@ -688,8 +750,14 @@ Vue.component('dialogue-turn',{
             </div>
 
             <div class="user-string-type-text">
-                <comm-input v-blur v-bind:inputClassName="primaryElementClass" v-bind:componentId="myId + stringType.name" class="user-string-type-text" v-bind:placeholder=" 'edit me' " v-bind:inputValue="stringType.data" v-bind:uniqueName="stringType.name" readonly> </comm-input>
-                <!-- v-on:comm_input_update="turn_updated_string($event)" -->
+                
+                <comm-input :id="stringType.name" 
+                    v-bind:inputClassName="primaryElementClass" 
+                    v-bind:inputValue="stringType.data" 
+                    v-bind:uniqueName="stringType.name" readonly>
+                    <!-- v-on:comm_input_update="turn_updated_string($event)" -->
+                </comm-input>  
+
             </div>
 
         </div>
@@ -714,7 +782,7 @@ Vue.component('dialogue-turn',{
 ********************************/
 
 Vue.component('annotations',{
-    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId", "readOnly"],
+    props : ["globalSlot","classifications", "classifications_strings", "currentId", "dialogueNonEmpty","globalSlotNonEmpty","dTurns", "dialogueId", "readOnly", "selectingText"],
 
     template:
     `
@@ -742,7 +810,8 @@ Vue.component('annotations',{
                                           v-bind:classes="classString.params"
                                           v-bind:info="classString.info"
                                           v-bind:currentId="currentId"
-                                          v-bind:supervision="readOnly">
+                                          v-bind:supervision="readOnly"
+                                          v-bind:selectingText="selectingText">
         </classification-string-annotation>
 
     </div>

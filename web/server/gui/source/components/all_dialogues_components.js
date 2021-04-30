@@ -33,11 +33,13 @@ Vue.component("all-dialogues", {
       },
 
       getAllDialogueIdsFromServer() {
+         document.body.style.cursor = "progress";
          backend.get_all_dialogue_ids_async()
             .then( (response) => {
                this.allDialogueMetadata = response;
                console.log(response);
                this.collectionAnnotationRate();
+               document.body.style.cursor = null;
                if ((mainApp.restored == false) && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database();
