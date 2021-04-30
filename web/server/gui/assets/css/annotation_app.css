@@ -72,7 +72,7 @@
 .is-saved {
     color: green;
     display: block;
-    text-align: right;
+    text-align: center;
     width: 100%;
 }
 
@@ -570,7 +570,8 @@ WluperDark: 0e181e
 }
 
 .selected-word {
-    color:#117de2
+    color:#117de2;
+    -webkit-text-stroke: 0.5px #0072ff52;
 }
 
 .static-input {
@@ -584,4 +585,10 @@ WluperDark: 0e181e
     outline: none;
     border: 1px solid #e1e1e3;
     padding: 10px 15px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
 }

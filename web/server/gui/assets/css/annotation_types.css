@@ -132,9 +132,9 @@
 }
 
 .active_label {
-    border:1px solid rgba(250, 250, 105, 0.48);
-    vertical-align:bottom;
-    background-color: rgb(255, 255, 182);
+    border: 1px solid #97c8ed;
+    vertical-align: bottom;
+    background-color: #3a9dd633;
 }
 
 .active_button {

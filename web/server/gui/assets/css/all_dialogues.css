@@ -174,8 +174,8 @@
     text-transform: uppercase;
     font-size: 9.7px;
     letter-spacing: 1px;
-    padding:4px 3px 2.5px 3.5px;
-    margin:13px 13px 10px 0px;
+    padding: 4px 5px 2.5px 5px;
+    margin: 13px 10px 10px 0px;
 }
 
 .not-visited {

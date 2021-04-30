@@ -376,7 +376,7 @@ Vue.component("annotation-app", {
 ********************************/
 
 Vue.component('dialogue-menu',{
-    props : ["turn","currentId", "changesSaved", "dialogueTitle","metaTags","annotationRate"],
+    props : ["turn","currentId", "changesSaved", "dialogueTitle", "metaTags", "annotationRate"],
 
     data () {
       return {

@@ -106,7 +106,7 @@ Vue.component("main-admin-view", {
 
         <user-bar v-bind:userName="userName"></user-bar>
         <div class="help-button-container">
-            <button class="help-button btn btn-sm btn-primary" @click="switchToAnnotation()">{{ guiMessages.selected.admin.annotation}}</button>
+            <button class="help-button btn btn-sm btn-primary" @click="switchToAnnotation()">{{ guiMessages.selected.admin.goToAnnotation}}</button>
         </div>
       </div>
       <div class="inner-wrap">
