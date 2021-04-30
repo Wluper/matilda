@@ -35,6 +35,8 @@ Vue.component("main-admin-view", {
         let ask = confirm("Do you want to log out?");
         if (ask == true) {
             localStorage.removeItem("remember");
+            databaseEventBus.$emit( "collection_active", null );
+            window.onbeforeunload = null;
             location.reload();
          }
     },
