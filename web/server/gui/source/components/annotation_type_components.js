@@ -454,7 +454,6 @@ Vue.component('classification-string-annotation', {
              for (var i=0; i<option.length; i++) {
                this.directUpdateClassAndString(option[i][1],option[i][0]);
              }
-             //TODO: filled labels showed higher in the list?
          },
 
          clearValue: function(event,labelName) {

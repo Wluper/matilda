@@ -659,14 +659,14 @@ Vue.component('dialogue-turn',{
                     string = string+this.selectedWords[dict][index]+" ";
                 }
                 if (string != "") {
-                    out += dict+"["+start+","+end+"]["+string.slice(0,-1)+"]";
+                    out += dict+"["+start+","+end+"]["+string.slice(0,-1)+"],";
                 }
             }
 
             //let outEvent = {name: "async", data: [["turn_ref", out]]}
             //annotationAppEventBus.$emit('classification_string_updated', outEvent);
             //console.log(out);
-            annotationAppEventBus.$emit("selecting_text", out);
+            annotationAppEventBus.$emit("selecting_text", out.slice(0,-1));
             //emptying dict
             this.selectedWords = null;
             this.selectedWords = {"sys":{},"usr":{}};

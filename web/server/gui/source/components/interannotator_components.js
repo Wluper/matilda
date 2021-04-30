@@ -232,12 +232,13 @@ Vue.component("interannotator-app", {
           // A list of dialogue IDs for which annotator names should be displayed
           showAnnotatorNamesForIds: [],
           // dialogues to be marked
-          dialoguesWithErrors: [],
+          dialoguesWithErrors: {},
+          errors: {},
           //Reference to the language data
           guiMessages,
       }
   },
-
+  
   mounted: function() {
       this.init();
   },
@@ -274,6 +275,7 @@ Vue.component("interannotator-app", {
               backend.get_collection_errors_async(this.displayingCollection)
                 .then( (response) => {
                     console.log(response);
+                    this.errors = response.errors;
                     this.get_dialogues_with_errors(response);
                     //this.errorList = response.errors
                     //this.metaDataList = response.meta;
@@ -284,12 +286,14 @@ Vue.component("interannotator-app", {
     get_dialogues_with_errors(errors) {
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
-                this.dialoguesWithErrors.push({dialogue});
-                document.getElementById(dialogue).setAttribute("class","int-listed-dialogue relevant");
-                document.getElementById(dialogue+"_count").textContent = "Errors: "+errors["errors"][dialogue].length;
+                console.log(dialogue);
+                this.dialoguesWithErrors[dialogue] = true;
+                //document.getElementById(dialogue).setAttribute("class","int-listed-dialogue relevant");
+                //document.getElementById(dialogue+"_count").textContent = "Errors: "+errors["errors"][dialogue].length;
             }
         }
         console.log("Errors found in",this.dialoguesWithErrors);
+        this.$forceUpdate();
         document.body.style.cursor = null;
     },
 
@@ -298,6 +302,23 @@ Vue.component("interannotator-app", {
             this.dialoguesWithErrors.push(id);
         }
         console.log(this.dialoguesWithErrors);
+    },
+
+    errorCheck: function(id) {
+        if (this.dialoguesWithErrors[id] == true) {
+            return {
+                opacity: `1`,
+            }
+        }
+    },
+
+    errorCount: function(id) {
+        console.log(this.errors);
+        if (this.errors != undefined) {
+            if (this.errors[id] != undefined) {
+                return "Errors: "+this.errors[id].length; 
+            }
+        }
     },
 
     dialogue_already_visited(id) {
@@ -459,7 +480,8 @@ Vue.component("interannotator-app", {
       <li class="int-listed-dialogue"
           v-for="(dat, index) in allDialogueMetadata"
           v-bind:id="dat[0]"
-          v-bind:key="dat[0]">
+          v-bind:key="dat[0]"
+          v-bind:style="errorCheck(dat[0])">
 
           <div class="int-el dialogue-list-single-item-container">
 
@@ -470,6 +492,7 @@ Vue.component("interannotator-app", {
                 </div>
 
                 <div class="error-count-space" v-bind:id="dat[0]+'_count'" v-on:click="clicked_dialogue(dat[0])">
+                {{errorCount(dat[0])}}
                 </div>
 
                 <div v-if="dialogue_already_visited(dat[0])"
