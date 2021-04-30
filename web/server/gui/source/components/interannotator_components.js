@@ -286,10 +286,7 @@ Vue.component("interannotator-app", {
     get_dialogues_with_errors(errors) {
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
-                console.log(dialogue);
                 this.dialoguesWithErrors[dialogue] = true;
-                //document.getElementById(dialogue).setAttribute("class","int-listed-dialogue relevant");
-                //document.getElementById(dialogue+"_count").textContent = "Errors: "+errors["errors"][dialogue].length;
             }
         }
         console.log("Errors found in",this.dialoguesWithErrors);
@@ -301,7 +298,6 @@ Vue.component("interannotator-app", {
         if (!this.dialoguesWithErrors.includes(id)) {
             this.dialoguesWithErrors.push(id);
         }
-        console.log(this.dialoguesWithErrors);
     },
 
     errorCheck: function(id) {
@@ -313,7 +309,6 @@ Vue.component("interannotator-app", {
     },
 
     errorCount: function(id) {
-        console.log(this.errors);
         if (this.errors != undefined) {
             if (this.errors[id] != undefined) {
                 return "Errors: "+this.errors[id].length; 
