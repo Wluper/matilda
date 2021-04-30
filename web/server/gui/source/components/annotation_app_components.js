@@ -579,11 +579,11 @@ Vue.component('dialogue-meta',{
     `
     <div>
         <div v-if="readOnly != true" class="conf-turn-container" v-bind:style="{ maxWidth:maxWidth+'%' }">
-            <h2>Annotation Preferences</h2>
+            <h2>{{guiMessages.selected.annotation_app.annotationPref}}</h2>
             <div class="annotation-options">
-                <div class="max-chars-option">Scroll-bar after: <input type="number" v-model="maxChars" min="0" class="max-chars-input" v-on:change="change_max_chars(maxChars)" /> chars</div>
-                <div class="turn-width-option">Turn Width: {{maxWidth}}%</div>
-                <div class="slot-coll-option">Auto-save on turn changed: <input type="checkbox" v-model="autoSave" v-on:change="auto_save_value($event)" /></div>
+                <div class="max-chars-option">{{guiMessages.selected.annotation_app.scrollAfter}}: <input type="number" v-model="maxChars" min="0" class="max-chars-input" v-on:change="change_max_chars(maxChars)" /> {{guiMessages.selected.annotation_app.chars}}</div>
+                <div class="turn-width-option">{{guiMessages.selected.annotation_app.turnWidth}}: {{maxWidth}}%</div>
+                <div class="slot-coll-option">{{guiMessages.selected.annotation_app.autoSave}}: <input type="checkbox" v-model="autoSave" v-on:change="auto_save_value($event)" /></div>
             </div>
             <input type="range" min="60" max="98" v-model="maxWidth" v-on:change="resize_turn_width(maxWidth)" class="slider" style="width:100%">
         </div>

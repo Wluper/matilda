@@ -435,7 +435,7 @@ Vue.component('help-general-config-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              Configuration Useful Info
+              {{guiMessages.selected.confGuide}}
             </slot>
           </div>
 
@@ -445,7 +445,7 @@ Vue.component('help-general-config-modal', {
             <slot name="body">
 
                <div id="annotation-info" style="font-size:14px;">
-                 <h4>Annotation</h4>
+                 <h4>{{guiMessages.selected.admin.annotation}}</h4>
                  {{guiMessages.selected.configuration_info_annotation_models[0]}}<br>
                  {{guiMessages.selected.configuration_info_annotation_models[1]}}<br>
                  {{guiMessages.selected.configuration_info_annotation_models[2]}}<br>

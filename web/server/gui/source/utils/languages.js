@@ -61,6 +61,7 @@ guiMessages = {
             size: "Size",
             loadedAnno: "Loaded annotation models",
             confirmSave: "Do you want to save the new configuration?",
+            confGuide: "Configuration Guide",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -147,6 +148,11 @@ guiMessages = {
             noTurn: "No turn selected. Please select one to annotate",
             rate: "Annotation rate",
             switchAnnotationView: "Expanded Slots View",
+            annotationPref:"Annotation Preferences",
+            turnWidth:"Turn Width",
+            scrollAfter:"Scroll-bar after",
+            chars:"characters",
+            autoSave:"Auto-save on turn changed",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -417,6 +423,7 @@ guiMessages = {
             size: "Dimensione",
             loadedAnno: "Modelli di annotazione caricati",
             confirmSave: "Vuoi salvare la nuova configurazione?",
+            confGuide: "Guida alla Configurazione",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -503,6 +510,11 @@ guiMessages = {
             noTurn: "Nessun turno selezionato, nessuna modifica effettuata.",
             rate: "Stima annotazione",
             switchAnnotationView: "Visuale Slot-Espansi",
+            annotationPref:"Preferenze di Annotazione",
+            turnWidth:"Larghezza finestra turni",
+            scrollAfter:"Scroll-bar dopo",
+            chars:"caratteri",
+            autoSave:"Auto-save al cambio di turno",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -743,6 +755,7 @@ guiMessages = {
             showLogs: "Show Logs",
             loadedAnno: "Loaded annotation models",
             confirmSave: "Do you want to save the new configuration?",
+            confGuide: "Configuration Guide",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -830,6 +843,11 @@ guiMessages = {
             noTurn: "Keine Runde ausgewählt. Bitte wählen Sie eine zum Kommentieren aus",
             rate: "Annotation Rate",
             switchAnnotationView: "Expanded Slots View",
+            annotationPref:"Annotation Preferences",
+            turnWidth:"Turn Width",
+            scrollAfter:"Scroll-bar after",
+            chars:"characters",
+            autoSave:"Auto-save on turn changed",
         },
         resolution_app: {
             errorId: "Error Id:",
