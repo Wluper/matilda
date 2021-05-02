@@ -136,22 +136,40 @@ Vue.component("annotation-app", {
                     if ((this.metaTags["collection"] == null) || (this.metaTags["collection"] == undefined)) {
                         this.metaTags["collection"] = "";
                     }
-                    this.annotationRate = this.metaTags["status"];
+                    //this.annotationRate = this.metaTags["status"];
                 })
 
-          // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
-              .then( (response) => {
-                  this.annotationFormat = response;
-                  if (response["status"] == "fail") {
-                        mainApp.activeCollection = null;
-                        databaseEventBus.$emit( "assignments_selected");
-                  }
-                  if (this.annotationFormat.global_slot != undefined) {
-                    this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
-                  }
-              });
+            // Step Two :: Get the Annotation Styles
+            backend.get_annotation_style_async(mainApp.activeCollection, this.dialogueId)
+                .then( (response) => {
+                    this.annotationFormat = response;
+                    if (response["status"] == "fail") {
+                            mainApp.activeCollection = null;
+                            databaseEventBus.$emit( "assignments_selected");
+                    }
+                    if (this.annotationFormat.global_slot != undefined) {
+                        this.globalSlotNonEmpty = this.annotationFormat.global_slot.labels.length;
+                    }
+                    this.calculate_annotation_rate_from_turns(this.dTurns, this.annotationFormat);
+                });
 
+        },
+
+        calculate_annotation_rate_from_turns: function(turnList, annotationFormat) {
+            let annotatedTurns = 0;
+            for (turn in turnList) {
+                for (element in turnList[turn]) {
+                    if (annotationFormat.hasOwnProperty(element)) {
+                        if ((annotationFormat[element]["label_type"] == "multilabel_classification_string") 
+                        || (annotationFormat[element]["label_type"] == "multilabel_classification")) {
+                            annotatedTurns++;
+                            this.turn_is_annotated(turn);
+                            break;
+                        }    
+                    }
+                }
+            }
+            this.update_annotation_rate(annotatedTurns);
         },
 
         remove_turn: function(event) {
@@ -219,20 +237,25 @@ Vue.component("annotation-app", {
         turn_update: function(event){
             console.log(event);
             //turn 0 is meta-tags and global_slot reserved so it's skipped
-            if (this.dCurrentId != 0) {
-                this.allDataSaved = false;
-                //update annotation rate
-                if (this.annotatedTurns[this.dCurrentId] != "annotated") {
-                    this.update_annotation_rate();
-                    this.turn_is_annotated(this.dCurrentId);
-                }
-                //update turn
-                utils.update_turn( this.dTurns[this.dCurrentId], event);
-                console.log("-----> Turn Updated", this.dCurrentTurn);
-
-            } else {
+            if (this.dCurrentId == 0) {
                 console.log(guiMessages.selected.annotation_app.noTurn);
+                return;
             }
+            //empty classifications are deleted
+            if (event.data.length == 0) {
+                delete this.dTurns[this.dCurrentId][event.name];
+                return;
+            }
+
+            this.allDataSaved = false;
+            //update annotation rate
+            if (this.annotatedTurns[this.dCurrentId] != "annotated") {
+                this.update_annotation_rate();
+                this.turn_is_annotated(this.dCurrentId);
+            }
+            //update turn
+            utils.update_turn( this.dTurns[this.dCurrentId], event);
+            console.log("-----> Turn Updated", this.dCurrentTurn);
         },
 
         turn_is_annotated: function(event) {
@@ -240,10 +263,14 @@ Vue.component("annotation-app", {
                 this.annotatedTurns[event] = "annotated";
         },
 
-        update_annotation_rate: function() {
+        update_annotation_rate: function(units=undefined) {
             let oldValue = Number(this.dTurns[0]["status"].slice(0,-1));
             let unitRate = (100 / (this.dTurns.length-1));
-            let newValue = ( Number(oldValue) + Number(unitRate) ).toFixed(1);
+            if (units != undefined) {
+                var newValue = ( Number(unitRate)*units ).toFixed(1);
+            } else {
+                var newValue = ( Number(oldValue) + Number(unitRate) ).toFixed(1);
+            }
             //small adjustments due to decimals removal and exceptions
             if (newValue >= 98) newValue = 100;
             else if (newValue < 0) newValue = 0;
@@ -845,7 +872,6 @@ Vue.component('input-box',{
         },
 
         save : function(event) {
-            console.log(event);
             annotationAppEventBus.$emit("save_dialogue", event)
         }
     },

@@ -466,7 +466,7 @@ Vue.component('classification-string-annotation', {
                  this.directUpdateClassAndString("none", labelName);
              } else {
                  console.log("cleaning");
-                 stringField.value = "";
+                 stringField.value = null;
                  this.updateClassAndString(stringField, labelName);
              }
          },

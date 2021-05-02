@@ -364,29 +364,6 @@
 
 }
 
-.user-string-type-text{
-    background-color: #ffffff!important;
-    border-radius: 2px;
-
-    height: 100%;
-
-    grid-column-start: 2;
-    grid-column-end: -1;
-
-}
-
-.user-string-type-text input{
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    justify-self: center;
-    margin: 0;
-    border-radius: 2px;
-    outline: none;
-    border: 1px solid #e1e1e3;
-    padding: 0 15px;
-}
-
 .resolution-global-slot {
     text-transform: capitalize;
     font-weight: bold;

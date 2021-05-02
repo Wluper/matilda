@@ -245,7 +245,7 @@ WluperDark: 0e181e
 }
 
 
-.user-string-type{
+.user-string-type {
     background-color: #ffffff !important;
     height: 45px;
     margin: 0 0 10px;
@@ -256,6 +256,10 @@ WluperDark: 0e181e
     min-height: 0;  /* NEW */
     min-width: 0;   /* NEW; needed for Firefox */
     overflow: hidden;
+}
+
+.user-string-type input:hover {
+    background-color: #ffffff !important;
 }
 
 .user-string-type:last-of-type {

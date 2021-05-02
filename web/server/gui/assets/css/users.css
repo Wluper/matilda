@@ -122,27 +122,6 @@
     box-shadow: none
 }
 
-.user-string-type-text{
-    background-color: #ffffff!important;
-    border-radius: 2px;
-    height: 100%;
-    grid-column-start: 2;
-    grid-column-end: -1;
-
-}
-
-.user-string-type-text input{
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    justify-self: center;
-    margin: 0;
-    border-radius: 2px;
-    outline: none;
-    border: 1px solid #e1e1e3;
-    padding: 0 15px;
-}
-
 .users-list-title-container {
     display: grid;
     grid-template: [row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 3fr 1fr;
