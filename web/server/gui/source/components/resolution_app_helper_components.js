@@ -3,8 +3,8 @@
 *************************************/
 
 Vue.component("resolution-menu", {
-    // props : [],
-    //
+     props : ["collectionId", "dialogueId"],
+    
     data () {
         return {
             guiMessages
@@ -22,6 +22,7 @@ Vue.component("resolution-menu", {
     `
     <div id="resolution-menu">
         <button v-on:click="go_back_to_all_dialogues($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
+        <div class="dialogue-name">{{collectionId}} - {{dialogueId}}</div>
     </div>
     `
 })
@@ -272,7 +273,8 @@ Vue.component("resolutions", {
             v-bind:uniqueName="error.name"
             v-bind:classes="annotationFormat"
             v-bind:multilabelStringOptions="error.options"
-            v-bind:accepted="metaList[0].accepted">
+            v-bind:errorId="errorId"
+            v-bind:metaList="metaList">
         </resolution-type-header>
 
         <div class="right">
@@ -357,6 +359,16 @@ Vue.component("annotation-component", {
             v-bind:accepted="metaList[0].accepted">
         </classification-string-annotation>
 
+        <resolution-global-slot
+            v-else-if="type=='multilabel_global_string'"
+            v-bind:classes="annotationFormat"
+            v-bind:predictions="predictions"
+            v-bind:uniqueName="uniqueName"
+            v-bind:labelName="predictions[0][0]"
+            v-bind:options="multilabelStringOptions"
+            v-bind:accepted="metaList[0].accepted">
+        </resolution-global-slot>
+
         <div v-else >
             {{guiMessages.selected.resolution_app.fail}}
         </div>
@@ -420,7 +432,7 @@ Vue.component("string-type-data", {
 
 Vue.component("resolution-type-header", {
     props :[
-        "multilabelStringOptions", "accepted", "uniqueName", "classification_strings", "classes"
+        "multilabelStringOptions", "metaList", "errorId", "uniqueName", "classification_strings", "classes"
     ],
 
     data() { 
@@ -461,7 +473,11 @@ Vue.component("resolution-type-header", {
          },
 
          switchSlotValue: function(optionIndex) {
-            adminEventBus.$emit("switch_slot_values", optionIndex);
+             if (this.uniqueName == "global_slot") {
+                adminEventBus.$emit("switch_global_values", optionIndex);
+             } else {
+                adminEventBus.$emit("switch_slot_values", optionIndex);
+             }
          }
 
     },
@@ -491,12 +507,18 @@ Vue.component("resolution-type-header", {
                 </div>
 
                 <div v-if="multilabelStringOptions" class="annotator-switch">
-                  <button v-if="accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
+                  <button v-if="metaList[errorId-1].accepted" class="switch-button" v-on:click="switchSlotValue('gold')">GOLD</button>
                   <template v-for="option,index in multilabelStringOptions">
-                      <button class="switch-button" v-on:click="switchSlotValue(index)">
-                        <template v-if="multilabelStringOptions.length > 2">{{guiMessages.selected.resolution_app.optionMin}}</template> 
-                        <template v-else>{{guiMessages.selected.resolution_app.option}}</template> 
-                        {{index+1}}</button>
+                      <button v-if="index == 0" class="switch-button">Prediction</button>
+                      <button v-else class="switch-button" v-on:click="switchSlotValue(index)">
+
+                        <template v-if="multilabelStringOptions.length > 3">
+                            {{guiMessages.selected.resolution_app.optionMin}}
+                        </template>
+                        <template v-else>
+                            {{guiMessages.selected.resolution_app.option}}
+                            </template> 
+                        {{index}}</button>
                   </template>
                 </div>
 
@@ -548,6 +570,73 @@ Vue.component("accept", {
     `
     <div id="accept">
         <button v-on:click="accept()" class="accept-button btn btn-sm- btn-primary"> {{guiMessages.selected.resolution_app.accept}}</button>
+    </div>
+    `
+});
+
+Vue.component("resolution-global-slot", {
+    props : ["predictions", "uniqueName", "options", "accepted", "labelName", "output"],
+
+    data() { 
+        return {
+            guiMessages,
+            info:"",
+            showInfo:false,
+            selected:0,
+            typeName:this.options[0][0][0],
+            typeValue:this.options[0][0][1],
+        }
+    },
+
+    created () {
+        console.log(this.predictions, this.uniqueName, this.options, this.accepted);
+        adminEventBus.$on("switch_global_values", this.switchGlobalValue);
+    },
+
+    beforeDestroyed() {
+        adminEventBus.$off("switch_global_values", this.switchGlobalValue);
+    },
+    // METHODS
+    methods: {
+
+        // function to switch between options
+
+        // function for actual saving, maybe in metaData
+
+        switchGlobalValue: function(optionIndex) {
+            console.log(optionIndex);
+            if (optionIndex == "gold") {
+                this.typeName = this.predictions[0][0];
+                this.typeValue = this.predictions[0][1];   
+            } else {
+                this.typeName = this.options[optionIndex][0][0];
+                this.typeValue = this.options[optionIndex][0][1];   
+            }
+        },
+
+        updateGlobalValue: function(event) {
+            annotationAppEventBus.$emit("global_string_updated", event.target.value);
+        }
+
+    },
+
+    template:
+    `
+    <div id="resolution-global-slot">
+        <div id="multilabel-global-header" class="classification-annotation">
+
+            <div class="multilabel-string-item-new-wrapper"
+                <div class="global-input-wrapper">
+                    <div class="single-annotation-header resolution-global-slot">
+                        {{labelName.replace(/_/g, ' ')}}
+                    </div>
+                    <input class="multilabel-string-input resolution-global-input" type="text" 
+                        v-bind:id="typeName" 
+                        v-model="typeValue"
+                        v-on:input="updateGlobalValue($event)">
+                </div>
+            </div>
+        </div>
     </div>
     `
 });

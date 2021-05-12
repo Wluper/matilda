@@ -19,7 +19,7 @@ Vue.component("all-dialogues", {
       }
    },
   created() {
-      allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer )
+      allDialoguesEventBus.$on( "refresh_dialogue_list", this.getAllDialogueIdsFromServer );
   },
   mounted () {
       this.init();
@@ -33,20 +33,25 @@ Vue.component("all-dialogues", {
       },
 
       getAllDialogueIdsFromServer() {
+         document.body.style.cursor = "progress";
          backend.get_all_dialogue_ids_async()
             .then( (response) => {
                this.allDialogueMetadata = response;
                console.log(response);
                this.collectionAnnotationRate();
+               document.body.style.cursor = null;
                if ((mainApp.restored == false) && (response.length == 0)) {
                   //if new session then recover from database
                   this.restore_session_from_database();
                }
-               mainApp.restored = true;
+               //with this commented the collection will always be
+               //loaded anew from the server
+               //mainApp.restored = true;
          });
       },
 
       collectionAnnotationRate() {
+          let tempRate = mainApp.collectionRate;
           let summatory = 0; 
           total_turns = 0;
           for (i=0; i < this.allDialogueMetadata.length; i++) {
@@ -64,7 +69,9 @@ Vue.component("all-dialogues", {
               mainApp.collectionRate = "0%";
               mainApp.collectionRate = "0%"
           }
-          //backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
+          if (mainApp.collectionRate != tempRate) {
+            backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
+          }
       },
 
       dialogue_already_visited(id) {
@@ -81,48 +88,32 @@ Vue.component("all-dialogues", {
 
       restore_session_from_database: function () {
          console.log("Ready to restore from database");
-         const mainContainer = document.getElementById("mainContainer");
-         mainContainer.style.cursor = "progress";
-         if (this.activeCollection != undefined) {
+         document.body.style.cursor = "progress";
+         if ((this.activeCollection != undefined) && (this.activeCollection != null)) {
             var doc = this.activeCollection;
          } else {
-            return
+            return;
          }
          backend.recover_dialogues(doc)
             .then( (response) => {
                console.log(response);
                allDialoguesEventBus.$emit("refresh_dialogue_list");
-               mainContainer.style.cursor = null;
+               document.body.style.cursor = null;
          });
-      },
-
-      handle_file_name_change : function(event){
-         console.log('---- CHANGING FILE NAME ----');
-         console.log(event);
-
-         // for some reason needs manual updating...
-         mainApp.userName = event.target.value;
-
-         backend.put_name("USER_"+event.target.value+".json")
-            .then( (response) => {
-
-               if (response) {
-                    console.log("Name Changed");
-               } else {
-                    alert('Server error, name not changed.')
-               }
-
-         })
       },
 
       download_all_dialogues_from_server(event) {
          backend.get_all_dialogues_async()
             .then( (response) => {
+               if ((response) == undefined) {
+                  alert("Server is offline or rebooted. Please log-in again.");
+                  return;
+               }
                let blob = new Blob([JSON.stringify(response, null, 4)], {type: 'application/json'});
                const url = window.URL.createObjectURL(blob)
                const link = document.createElement('a')
                link.href = url
-               fileName = "USER_" + mainApp.userName + "_"+utils.create_date()+".json"
+               fileName = mainApp.userName + "_"+utils.create_date()+".json";
                link.setAttribute('download', fileName )
                document.body.appendChild(link)
                link.click();

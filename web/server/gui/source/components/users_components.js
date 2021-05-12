@@ -67,7 +67,7 @@ Vue.component("users-view", {
                     alert(guiMessages.selected.admin.cantDeleteAdmin)
                     return
                 }
-                backend.del_db_entry_async(name,"users")
+                backend.del_db_entry_async({"id":name},"users")
                     .then( (response) => {
                         console.log(response);
                         if (response.data.status == "success") {
@@ -95,13 +95,13 @@ Vue.component("users-view", {
             <user-bar v-bind:userName="userName"></user-bar>
 
           <div class="help-button-container">
-                <button v-on:click="go_back($event)" class="back-button btn btn-sm btn-primary">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary">{{guiMessages.selected.admin.createUserButton}}</button>
+                <button v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
           </div>
         </div>
             <div class="inner-wrap">
                 <div style="padding-bottom:10px;">
                     <h2 class="list-title">{{guiMessages.selected.admin.users}}</h2>
-                    <button id="open_user_creation" v-on:click="showCreation = true" class="help-button btn btn-sm btn-primary button-title">{{guiMessages.selected.admin.createUserButton}}</button>
                 </div>
                 <ul class="user-list">
                     <li class="listed-user" v-for="name in allUsers" v-bind:id="name.userName">
@@ -236,11 +236,6 @@ Vue.component('users-creation-modal', {
             );
         },
 
-        show_password(event) {
-            event.target.setAttribute("type","text");
-            //event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
-        }, 
-
         close: function() {
             adminEventBus.$emit("clean_active_user");
             adminEventBus.$emit("users_updated");
@@ -270,7 +265,7 @@ Vue.component('users-creation-modal', {
                     <input v-else class="user-creation" id="create_username" type="text">
                     <br>
                     <label for="create_password">Password:</label>
-                    <input class="user-creation" id="create_password" type="password" v-on:click="show_password($event)">
+                    <input class="user-creation" id="create_password" type="password">
                     <br>
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">

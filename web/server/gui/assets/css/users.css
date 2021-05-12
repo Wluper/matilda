@@ -11,7 +11,7 @@
     margin-top:10%;
     font-family:CoreSansNR35Light;
     color:#888;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #3a9dd623;
     box-shadow: 0px 9px 20px 1px rgba(0,0,0,0.2);
 }
 
@@ -36,6 +36,18 @@
     padding:10%;
     padding-top:5%;
 }
+
+.login_form ::-webkit-input-placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
+  
+  .login_form :-ms-input-placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
+  
+  .login_form ::placeholder {
+    color: rgba(0, 0, 1, 0.30);
+  }
 
 .login_input {
     color:grey;
@@ -110,27 +122,6 @@
     box-shadow: none
 }
 
-.user-string-type-text{
-    background-color: #ffffff!important;
-    border-radius: 2px;
-    height: 100%;
-    grid-column-start: 2;
-    grid-column-end: -1;
-
-}
-
-.user-string-type-text input{
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    justify-self: center;
-    margin: 0;
-    border-radius: 2px;
-    outline: none;
-    border: 1px solid #e1e1e3;
-    padding: 0 15px;
-}
-
 .users-list-title-container {
     display: grid;
     grid-template: [row1-start] "title-zone config-container help-button-zone" [row1-end] / 1fr 3fr 1fr;
@@ -143,6 +134,7 @@
 .user-list-single-item-container {
     display: grid;
     grid-template: [row1-start] "info edit del" [row1-end] / 5fr 0.5fr 0.5fr;
+    border: 1px solid rgb(0 0 0 / 12%);
     border-left: 5px solid #d1d1d3;
     box-shadow: 0px 5px 3px rgba(0,0,0,0.05);
     transition: ease 175ms all;
@@ -201,6 +193,7 @@
     overflow:hidden;
 }
 .user-password input {
+    width:70%;
     color:#888;
     max-width: inherit;
 }
@@ -261,13 +254,12 @@
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus,
+input:-webkit-autofill:focus
 {
     color:grey;
     text-align:center;
     font-size:20px;
     line-height:1.7em;
-    margin-bottom:2%;
     border:1px solid #e6e6e6;
     width:70%;
     margin-left:auto;

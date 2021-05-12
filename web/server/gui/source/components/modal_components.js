@@ -320,3 +320,172 @@ Vue.component('message-modal', {
   </transition>
   `
 });
+
+Vue.component('help-config-modal', {
+
+  props:[
+    "showHelpConfig"
+  ],
+  
+  data() { 
+    return {
+      guiMessages,
+      stringType:guiMessages.selected.modal_annotationStyle[0],
+      multiClassType:guiMessages.selected.modal_annotationStyle[1],
+      multiStringType:guiMessages.selected.modal_annotationStyle[2],
+      globalType:guiMessages.selected.modal_annotationStyle[3],
+      
+      stringExample:guiMessages.en.modal_examples[0],
+      multiClassExample:guiMessages.en.modal_examples[1],
+      multiStringExample:guiMessages.en.modal_examples[2],
+      globalExample:guiMessages.en.modal_examples[3],
+
+      stringImg:guiMessages.en.modal_examples_img[0],
+      multiClassImg:guiMessages.en.modal_examples_img[1],
+      multiStringImg:guiMessages.en.modal_examples_img[2],
+      globalImg:guiMessages.en.modal_examples_img[3],
+    }
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              Info about Classification Labels
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+
+              <div id="all-types" v-if="showHelpConfig == 'true'">
+
+              </div>
+
+               <div id="use">
+                 <h3>Use</h3>
+                 <p v-if="showHelpConfig == 'stringType'">{{stringType}}</p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'">{{multiClassType}}</p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'">{{multiStringType}}</p>
+                 <p v-else-if="showHelpConfig == 'globalType'">{{globalType}}</p>
+               </div>
+
+               <div id="interface">
+                 <h3>Interface</h3>
+                 <p v-if="showHelpConfig == 'stringType'"><img :src="stringImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'"><img :src="multiClassImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'"><img :src="multiStringImg" class="annotation-img-example"/></p>
+                 <p v-else-if="showHelpConfig == 'globalType'"><img :src="globalImg" class="annotation-img-example"/></p>
+               </div>
+
+               <div id="output">
+                 <h3>Output</h3>
+                 <p v-if="showHelpConfig == 'stringType'">{{stringExample}}</p>
+                 <p v-else-if="showHelpConfig == 'multiClassType'">{{multiClassExample}}</p>
+                 <p v-else-if="showHelpConfig == 'multiStringType'">{{multiStringExample}}</p>
+                 <p v-else-if="showHelpConfig == 'globalType'">{{globalExample}}</p>
+               </div>
+
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              MATILDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+});
+
+
+Vue.component('help-general-config-modal', {
+
+  props:[
+    "showHelpGeneral"
+  ],
+  
+  data() { 
+    return {
+      guiMessages
+    }
+  },
+
+  template:
+  `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              {{guiMessages.selected.confGuide}}
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-body">
+            <slot name="body">
+
+               <div id="annotation-info" style="font-size:14px;">
+                 <h4>{{guiMessages.selected.admin.annotation}}</h4>
+                 {{guiMessages.selected.configuration_info_annotation_models[0]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[1]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[2]}}<br>
+                 {{guiMessages.selected.configuration_info_annotation_models[3]}}
+               </div>
+
+               <div id="database-info" style="font-size:14px;">
+                 <h4>Database</h4>
+                 <strong>{{guiMessages.selected.configuration_info_database[0]}}.</strong> {{guiMessages.selected.configuration_info_database[1]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[2]}}.</strong> {{guiMessages.selected.configuration_info_database[3]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[4]}}.</strong> {{guiMessages.selected.configuration_info_database[5]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[6]}}.</strong> {{guiMessages.selected.configuration_info_database[7]}} <br>
+                 <strong>{{guiMessages.selected.configuration_info_database[8]}}.</strong> {{guiMessages.selected.configuration_info_database[9]}} <br>
+               </div>
+
+               <div id="matilda-info" style="font-size:14px;">
+                 <h4>Matilda</h4>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[0]}}.</strong> {{guiMessages.selected.configuration_info_matilda[1]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[2]}}.</strong> {{guiMessages.selected.configuration_info_matilda[3]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[4]}}.</strong> {{guiMessages.selected.configuration_info_matilda[5]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[6]}}.</strong> {{guiMessages.selected.configuration_info_matilda[7]}}<br>
+                 <strong>{{guiMessages.selected.configuration_info_matilda[8]}}.</strong> {{guiMessages.selected.configuration_info_matilda[9]}}
+               </div>
+
+            </slot>
+          </div>
+
+          <hr>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              MATILDA
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `
+});

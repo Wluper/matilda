@@ -1,0 +1,4181 @@
+{
+    "Dialogue_b13": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_b13"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno",
+            "usr": "Buongiorno, sono alla ricerca di un impiego"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Sono qui per aiutarti! Raccontami, che tipo di impiego preferiresti?",
+            "usr": "Sono alla ricerca di un contratto a tempo indeterminato, possibilmente in Italia"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Perfetto. Che tipo di studi hai svolto?",
+            "usr": "Mi sono laureato 10 anni fa in Giurisprudenza all'Università di Milano con ottimi voti"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Molto bene. Hai avuto esperienze lavorative da quando ti sei laureato?",
+            "usr": "Certamente, ho cominciato con un tirocinio presso un ufficio legale specializzato nel settore finanziario, dopodichè mi hanno assunto per 5 anni in qualità di avvocato"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Interessante!",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Hai specificato che preferisci un lavoro in Italia, ma saresti disposto a trasferirti in un'altra città sul territorio nazionale?",
+            "usr": "Certamente, non ho problemi da quel punto di vista"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Molto bene. Attualmente non ho posizioni di lavoro aperte nel settore legale, possiamo comunque vedere se posso trovare un annuncio che possa interessarti in un altro ambito professionale?",
+            "usr": "Certamente, sono aperto ad altre possibilità di carriera, in particolare mi interessano impieghi che richiedano capacità di leadership"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Molto bene! Qualche domanda ancora: hai qualche tipo di esperienza nel settore aziendale, come la pianificazione del lavoro e del budget?",
+            "usr": "Non esattamente di questo tipo, ma ho un po' di dimestichezza almeno dal punto di vista economico per via del mio impiego precedente"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Grazie per le tue risposte! Mentre verifico le offerte, perché non mi dici in che tipo di azienda ti piacerebbe lavorare? Piccola, una start-up o una grande azienda?",
+            "usr": "Sono interessato a entrambe le opzioni"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Andrea, attualmente non ci sono annunci che offrono posizioni stabili. Avrei trovato un tirocinio post-laurea in un'azienda alimentare a Milano. Cercano una figura che ricopra diverse mansioni: dalla rendicontazione del budget alla sicurezza sul lavoro e quella alimentare, compreso il monitoraggio della qualità del servizio.",
+            "usr": "Come si chiama l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Compass Group Italia S.p.A.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Purtroppo, come sopra specificato, preferirebbero una persona giovane laureata da poco, ma l'azienda conta molti dipendenti (oltre 500!) e l'annuncio lascia intendere che stiano assumendo molte persone al momento!",
+            "usr": "Potresti lasciarmi il contatto per favore?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Puoi scrivere loro all'indirizzo info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Hai bisogno di altre informazioni? :)",
+            "usr": "Proverò a contattarli, spero che offrano posti più attinenti al mio profilo. Grazie mille per l'assistenza!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Non c'è di che! Buona giornata :)",
+            "usr": "Buona giornata anche a te!"
+        }
+    ],
+    "Dialogue_e10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_e10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "ciao",
+            "usr": "Ciao, cercavo un lavoro a tempo determinato, puoi aiutarmi?"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "ciao sara, tipo di istruzione hai seguito?",
+            "usr": "Mi sono diplomata all'istituto alberghiero."
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "pensi di proseguire con la formazione universitaria?",
+            "usr": "No, pensavo di fermarmi qui"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "conosci altre lingue?",
+            "usr": "Parlo sia il francese che l'inglese!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "come ti relazioni con le persone",
+            "usr": "Mi trovo bene a lavorare con il pubblico! Ho lavorato come receptionist per 6 mesi"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "hai altre esperienze lavorative",
+            "usr": "No, solo questa"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "dove vivi attualmente",
+            "usr": "in Toscana."
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "saresti disposta ad un eventuale trasferimento",
+            "usr": "Si, va bene!"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "hai degli hobbi in particolare?",
+            "usr": "No, però lavoro bene in team"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "descriviti un po?",
+            "usr": "Ho molta voglia di mettermi in gioco e di imparare cose nuove, inoltre sono anche ambiziosa."
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "ottimo, penso di aver trovato il lavoro che fa per te come Art Assistant",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "cosa ne pensi?",
+            "usr": "Potresti descriverlo?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Assistenza nella curatela e nell'organizzazione di esibizioni d'arte, di oggetti dal valore storico, di moda, di antichità e prodotti tecnologici. Accoglienza del visitatore, sia esso turista o studente. Assistenza nell'organizzazione e nella realizzazione di eventi culturali. Catalogazione e archiviazione. Marketing degli eventi culturali.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "cosa ne pensi?",
+            "usr": "Mi piace!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "allora le lascio una mail per contattare la struttura",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "info@azienda.com",
+            "usr": "Perfetto! Li contatto subito!"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "la struttura è il Museo d'Arte di Chianciano Terme",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "grazie per aver chattato con me",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "buona giornata smile",
+            "usr": "Grazie! Arrivederci e buon lavoro!"
+        }
+    ],
+    "Dialogue_e12": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_e12"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "ciao",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "ciao",
+            "usr": "Ciao, sto cercando lavoro nel campo dell'insegnamento"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "ciao, sei laureato? in cosa?",
+            "usr": "Sì, mi sono laureato in economia e marketing"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "quale materia durante il tuo percorso hai trovato più interessante?",
+            "usr": "L'ambito del marketing mi interessa molto di più"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "durante le superiori che istituto hai frequentato?",
+            "usr": "Mi sono diplomato al liceo scientifico"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "bene, conosci qualche lingua oltre l'italiano?",
+            "usr": "L'inglese molto bene e il cinese poco perché lo sto studiando ora"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "hai svolto dei lavori in team?",
+            "usr": "No, non ho esperienze in questo ambito"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "hai precedenti esperienze lavorative?",
+            "usr": "Un part time. Ripetizioni di economia e matematica"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": " ",
+            "usr": "Ho lavorato con ragazzi"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "dove vivi attualmente?",
+            "usr": "A pisa"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "saresti disposto ad un eventuale trasferimento",
+            "usr": "No, perché Pisa è una città che mi piace molto"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "hai degli hobby?",
+            "usr": "Sì, mi piace il calcio e lo sport in generale"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "ottimo avrei un lavoro adatto a tè",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "come Accounting&Finance Analyst",
+            "usr": "Di cosa si tratta?"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Qintesi S.p.A. cerca un tirocinante che faccia Analisi dei requisiti utente e dei processi esistenti. Definizione delle specifiche funzionali. Predisposizione della documentazione di supporto allo sviluppo delle soluzioni in ambito SAP.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "per la sede di milano",
+            "usr": "Mi piacerebbe trovare lavoro qui, anche se il lavoro sembra interessante"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "eh mi dispiace ma momentaneamente non ho altre offerte",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "spero di esserti stato utile",
+            "usr": "C'è qualcosa in zona?"
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "no purtroppo",
+            "usr": "Quale sarebbe lo stipendio?"
+        },
+        {
+
+            
+            "turn_id": 20,
+            "sys": "circa 700€ mensili",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 21,
+            "sys": "se vuole puo contattarli alla mail info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 22,
+            "sys": "per avere altre informazioni riguardante il lavoro",
+            "usr": "No, lo stipendio è troppo basso per trasferirmi a milano"
+        },
+        {
+
+            
+            "turn_id": 23,
+            "sys": "mi dispiace non posso esserti utile allora",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 24,
+            "sys": "una buona giornata smile",
+            "usr": "Ti ringrazio e buona giornata"
+        }
+    ],
+    "Dialogue_e13": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_e13"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "ciao",
+            "usr": "Ciao, ho bisogno di aiuto nel cercare lavoro"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "ciao Andrea, grazie per avermi scritto",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "potresti dirmi in cosa sei laureato o diplomato?",
+            "usr": "Sono laureato da 10 anni ormai in Giurisprudenza all'Università di Milano"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "durante le superiori che scuola hai frequentato?",
+            "usr": "Ho frequentato un liceo classico"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "momentaneamente vivi a milano? saresti disposto ad eventuale trasferimento?",
+            "usr": "Sì, al momento vivo a milano, ho possibilità di spostarmi ma preferirei comunque rimanere in Italia"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "attualmente lavori? se si che tipo di lavoro svolgi?",
+            "usr": "Attualmente lavoro come avvocato per uno studio legale, in cui mi occupo del settore investimenti"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "hai mai lavorato in team?",
+            "usr": "Assolutamente sì, anzi posso dire che è uno dei miei punti di forza"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "che tipo di contratto lavorativo preferiresti?",
+            "usr": "Preferirei un contratto a tempo indeterminato, considerato soprattutto il mio stato lavorativo corrente"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "hai degli hobby?",
+            "usr": "Il mio hobby principale è lo sport, gioco in una squadra di football americano con amici"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "parli altre lingue oltre l'italiano?",
+            "usr": "Certo, parlo molto bene italiano e tedesco"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "grazie per le risposte, potrei avere un lavoro in ambito finance le potrebbe interessare?",
+            "usr": "Assolutamente, di che si tratta?"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "si tratterebbe di Analizzare i requisiti utente e i processi esistenti. Definizione delle specifiche funzionali. Predisposizione della documentazione di supporto allo sviluppo delle soluzioni in ambito SAP.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "per un'azienda con sede a Milano",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Qintesi S.p.A.",
+            "usr": "Di che tipo di contratto si parla?"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "ecco, questa è la nota dolente",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "si parla di uno stage/tirocinio con finalità d'assunzione",
+            "usr": "Capisco, potrei avere comunque il loro contatto?"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Certamente, la mail per il contatto è info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "Ha bisogno di ulteriori informazioni?",
+            "usr": "Al momento no. Proverò a contattarli, nella speranza che aprano posizioni a tempo indeterminato. Ti ringrazio per l'aiuto"
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "Prego, una buona giornata :)",
+            "usr": "Buona giornata anche a te!"
+        }
+    ],
+    "Dialogue_h14": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_h14"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Ciao, sono Mattia, sarò il tuo Navigator di oggi, come posso aiutarti?",
+            "usr": "Ciao! Io sto cercando un lavoro ma non ho ancora nessuna esperienza in merito"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Che tipo di studi hai fatto finora?",
+            "usr": "Ho recentemente conseguito la laurea in informatica"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Perfetto, sarebbe un problema trasferirti a Torino per lavoro?",
+            "usr": "No no assolutamente! E comunque abito già abbastanza vicino."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "Hai trovato qualcosa di interessante?"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "sì, ho qui un annuncio per un posto di Ricercatore Junior in ambito Internet of Things e Cyber-Physical Systems applicati a robotica e automazione industriale",
+            "usr": "Mm interessante.. posso chiederti di cosa si tratta più nello specifico?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "In pratica entrarai a far parte di un team di ricerca internazionale dove ti occuperai di ricerca, progetto, sviluppo e integrazione IoT con soluzioni scalabili ed efficaci in diversi tipi di applicazioni e progetti pilota.",
+            "usr": "Molto bene! Richiedono delle competenze particolari per entrare a farne parte?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "l’attività si colloca in ambito di iniziative Europee per la Fabbrica del Futuro (FoF)",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "la laurea in informatica è sufficiente",
+            "usr": "Ah ok grazie"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "un po’ di esperienza nell’ambito di ricerca sarebbe apprezzata ma non è vincolante",
+            "usr": "Be speriamo non le diano molta importanza..."
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": " ",
+            "usr": "Posso chiederti di passarmi i loro contatti?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Certo, la sede di lavoro è presso Istituto Superiore MARIO BOELLA, a Torino. Puoi contattarli alla mail info@azienda.com",
+            "usr": "Ok  ti ringrazio slightly_smiling_face"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": " ",
+            "usr": "Posso ricontattarti se dovessero sorgermi altre domande?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Certo, se hai bisogno mi trovi sempre qui",
+            "usr": "Ottimo! Per intanto grazie ancora e buona giornata!!!"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Buona giornata anche a te e buona fortuna per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_h15": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_h15"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno,"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao, io sono Mattia e sarò il tuo Navigator di oggi. Come posso aiutarti?",
+            "usr": "Salve, mi chiamo Anna e sono una laureata in scienze della formaione e sono alla ricerca di un lavoro, Lei potrebbe assistermi nella ricerca?"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Certo, dammi pure del tu. Sarebbe un problema per te spostarti in altre città per lavoro?",
+            "usr": "No, se il lavoro è ben retribuito non ho nessun problema a spostarmi."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ottimo, ho qui un annuncio per un posto di lavoro come educatore scolastico per fornire assistenza a bambini e ragazzi con disabilità, in scuole che vanno dall’asilo alle superiori",
+            "usr": "Sembra perfetto!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": " ",
+            "usr": "Ho anche l'abilitazione a operatore di supporto a studenti disabili!"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Perfetto, lavorerai tramite la Cooperativa sociale Aldia, che gestisce il personale. La sede di lavoro è Pavia, in diverse scuole della città e dei dintorni",
+            "usr": "Benissimo, sapresti anche dirmi che tipo di contratto offrono?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Si tratta di un lavoro a tempo determinato ma non escludo che sia tranquillamente rinnovabile per altri progetti o all’inizio del nuovo anno scolastico",
+            "usr": "Sembra davver un'ottima opportunità. Immagino comunque che il contratto valga fino alla fine dell'anno scolastico corrente, giusto?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Sì, quello che ti farebbero adesso sì, ed eventualmente rinnovato per progetti estivi o a settembre",
+            "usr": "Benissimo, per quanto riguarda gli orari avete qualche informazione?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "No, non è specificato niente nell’annuncio ma immagino si tratti di orari scolastici, quindi la mattina o al massimo fino alle 16-16:30",
+            "usr": "Immaginavo. Un'ultima domanda: offrono la possibilità di un alloggio spesato? immagino di no, ma è sempre meglio chiedere..."
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Purtroppo non saprei proprio, ti conviene sentire direttamente loro via mail o in fase di colloquio",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "puoi contattarli alla mail info@azienda.com",
+            "usr": "Immaginavo, chiederò in fase di colloquio. Grazie mille per la Sua disponibilità!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Di niente, se avessi bisogno in futuro puoi sempre ricontattarmi",
+            "usr": "Grazie mille, la proposta che mi ha presentato sembra ottima, speriamo vada in porto!"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Figurati, buona fortuna per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_h16": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_h16"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Ciao, mi chiamo Mattia, come posso aiutarti?",
+            "usr": "Ciao Mattia, sto cercando una posizione lavorativa che posa essere in linea con i miei studi. Sono iscritta alla magistrale di Storia e forme delle arti visive, dello spettacolo e dei nuovi media, ma mi sono laureata alla triennale di economia aziendale"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Molto interessante! potrei avere qualcosa che fa per te, si tratta di uno stage presso CHANEL come assistente della Responsabile Qualità Prodotto per l’Italia",
+            "usr": "Cosa dovrei fare esattamente?"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "dovresti gestire i contatti con i fornitori italiani ed esteri, archiviare i risultati dei test di laboratorio ma soprattutto affiancare la Responsabile nella scrittura di report e creazione di presentazioni powerpoint",
+            "usr": "Bene, ho un'ottima conoscenza di Office e dovrei essere in grado di cavarmela..."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "E' richiesta la conoscenza di lingue straniere?"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Sarebbe sicuramente un motivo di scelta preferenziale, dato che alcuni fornitori sono esteri e potrebbe esserci bisogno di tradurre alcuni report e presentazioni anche in altre lingue",
+            "usr": "Posso sapere in quali lingue? Me la cavo con inglese e tedesco, ma non ne conosco altre..."
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Inglese sicuramente, il tedesco potrebbe essere utile e quasi sicuramente il francese",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "ma non è detto che tu sia l’unica assistente quindi non per forza dovresti parlarle tutte tu",
+            "usr": "Ok! Puoi dirmi se sono richieste altre competenze particolari?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "No, nient’altro, anche se l’uso del pacchetto Office sarà sicuramente tenuto di conto come preferenziale in fase di colloquio",
+            "usr": "Va bene! E invece posso sapere dove si trova l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "La sede di lavoro è a Milano ma essendo una grande azienda internazionale non escludo che abbiano altre sedi in giro per l’Europa dove potresti capitare per lavoro o magari in caso di promozione in futuro",
+            "usr": "Ho capito..  preferivo rimanere in zona Pisa, dove studio, però il lavoro è interessante, per cui prenderei seriamente in considerazione il trasferimento"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": " ",
+            "usr": "Mi puoi dire che tipo di contratto mi farebbero?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "si tratta di un Tirocino ma sono dell’idea che una volta formata una persona all’interno dell’azienda sarebbero portati a tenerla anche in futuro",
+            "usr": "Ah ecco, perché io avrei preferito un contratto a tempo determinato, ma se poi c'è prospettiva di inserimento mi va bene"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": " ",
+            "usr": "E invece posso sapere come si chiama l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "l’azienda è CHANEL Coordination S.r.l.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "puoi contattarli alla mail info@azienda.com",
+            "usr": "Grazie! Volevo chiederti proprio l'indirizzo mail"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": " ",
+            "usr": "Allora invio il curriculum e dico che mi avete indirizzato voi, giusto?"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "sì certo, fai pure così. Se avessi bisogno, puoi comunque ricontattarci in futuro",
+            "usr": "Va bene, grazie mille!"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": " ",
+            "usr": "Buon pomeriggio e buon lavoro!"
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "Figurati, buona fortuna per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_h17": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_h17"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao, mi chiamo Mattia, come posso aiutarti?",
+            "usr": "Buongiorno, sono una neolaureata in Ingegneria Elettronica. Starei cercando lavoro nel settore dei miei studi o in quello dello sviluppo software"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Forse ho qualcosa che può fare per te ma la sede di lavoro è a Monza. sarebbe un problema trasferirti là?",
+            "usr": "Se fosse possibile preferirei lavorare in Toscana. C'è qualche offerta disponibile in questa regione?"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Al momento no, purtroppo, per la Toscana non ho annunci",
+            "usr": "Va bene. Mi può dare più informazioni sull'offerta dell'azienda di Monza?"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Dovrai occuparti di studi di fattibilità per realizzare interventi di miglioramento strutturale e impiantistico (Infrastrutture, impianti produttivi ecc) ed elaborare miglioramenti sostenibili dal punto di vista di budget, tempi di lavorazione e sicurezza ambientale, il tutto interfacciandoti anche con ditte appaltatrici e fornitori",
+            "usr": "Mi sembra molto interessante, anche se forse non esattamente legato all'ingegneria elettronica. C'è qualche altra offerta più vicina a quest'ambito?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "purtroppo al momento no, ma gli annunci cambiano ogni poco, nel caso potremmo risentirci tra un paio di settimane e vedere se c’è qualche annuncio più adatto a quello che cerchi",
+            "usr": "Invece c'è per caso qualche posizione legata all'uso delle lingue?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": " ",
+            "usr": "In particolare dell'inglese?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "C’è un annuncio per un posto da stagista presso CHANEL Coordination S.r.L. cercano qualcuno da affiancare alla Responsabile Qualità Prodotto per occuparti di monitoraggio del database dei prodotti, gestione dei contatti e dei fornitori esteri e creazione e traduzione di report e presentazioni powerpoint",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "non ha molto a che fare conl’Ingegneria elettronica, però",
+            "usr": "No, probabilmente il primo lavoro che mi ha indicato è più attinente. Le posso chiedere più informazioni riguardanti la prima posizione che mi ha suggerito, per capire se mi possa interessare? In particolare, che dimensioni ha l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "L’azienda è la Basf Italia S.p.a. che conta più di 500 persone impiegate al momento. Il posto è un lavoro a tempo indeterminato e non richiedono esperienze pregresse",
+            "usr": "C'è per caso qualche informazione sulle soft skills richieste ai candidati?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "No, cercano neolaureati probabilmente per formarli internamente all’azienda",
+            "usr": "Capisco. Mi può dare gentilmente un recapito dell'azienda?"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Certo, puoi contattarli alla mail info@azienda.com",
+            "usr": "Perfetto, sa se oltre al CV è richiesta anche una lettera di presentazione?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "L’annuncio non lo specifica, ma se ne hai una non credo che possa fare male",
+            "usr": "Perfetto, allora penso che la manderò insieme al curriculum."
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": " ",
+            "usr": "La ringrazio molto per l'aiuto. Buona serata!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Di niente, buona fortuna!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_i14": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_i14"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buon pomeriggio!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buon pomeriggio. Posso esserle d'aiuto?",
+            "usr": "Si, sto cercando un lavoro slightly_smiling_face"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Mi parli un po' di lei. Esperienze lavorative precedenti?",
+            "usr": "Purtroppo no avendo conseguito la laurea in informatica da pochi mesi"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Capisco. Laurea triennale o anche magistrale?",
+            "usr": "Era un corso a ciclo unico"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "D'accordo. Allora guardo se ci sono offerte adatte a lei. Le piace il suo campo?",
+            "usr": "Si ho una vera e propria passione per quello che riguarda la programmazione!"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Cosa ne pensa di un lavoro come ricercatore junior in informatica presso l'Istituto Superiore Mario Boella?",
+            "usr": "Ok! Mi dica pure di che si tratta"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Nel caso in cui accettasse dovrà unirsi all’unità di ricerca IoT Service Management, per poi essere coinvolta in attività di ricerca e sviluppo di soluzioni IoT, in diversi progetti pilota. Queste attività si inseriscono nel contesto delle iniziative Europee sulla Fabbrica del Futuro (FoF)",
+            "usr": "Wow! Mi piace questo progetto!"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": " ",
+            "usr": "Di che tipo di contratto si tratterebbe?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Un contratto a tempo determinato",
+            "usr": "Ah ok... e dove si trova questo Istituto?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ha sede a Torino",
+            "usr": "Ok, come ultima cosa ti chiedo se hai il loro indirizzo e-mail"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Ce l'ho: info@azienda.com. Posso aiutarla in qualche altro modo?",
+            "usr": "No non credo penso di avere tutto il necessario... Ti ringrazio per il tuo aiuto!!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Si figuri! In bocca al lupo per tutto!",
+            "usr": "Grazie mille! Buona giornata! slightly_smiling_face"
+        }
+    ],
+    "Dialogue_i15": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_i15"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Salve, sono il suo navigator. Come posso aiutarla?",
+            "usr": "Salve, sto cercando un impiego come maestra delle elementari, potrebbe aiutarmi?"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Certo. Ha già avuto qualche esperienza?",
+            "usr": "Sì, ho svolto diversi periodi di tirocinio nel corso de i miei studi."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Quindi tirocini curriculari. Qual è il suo titolo di studio?",
+            "usr": "Esatto. Sono laureata in Scienze della formazione primaria e ho conseguito l'abilitazione all'insegnamento."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Capisco. Purtroppo non vedo annunci che combaciano perfettamente con il suo percorso. Posso offrirle un posto come receptionist presso un'azienda di Livorno, oppure uno stage nel campo delle risorse umane a Pescara",
+            "usr": "Preferirei evitare attività di stage che non rispechi il mio ambito di secializzazione. Potrebbe parlarmi di più dell'offerta di lavoro di receptionist?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Come preferisce. Si tratta di un lavoro a tempo determinato. Il suo compito sarà quello di accogliere il cliente al suo arrivo, assisterlo durante il soggiorno e gestirne la partenza. Tra le altre cose sarà responsabile della tenuta della cassa, di funzioni amministrativo-contabili, nonché funzioni di vigilanza e controllo.",
+            "usr": "Capisco, ha detto a tempo determinato, fanno anche sapere qualcosa sulla data di scadenza?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Purtroppo non è specificato nell'annuncio, dovrebbe chiederlo direttamente all'azienda. Ha bisogno dei contatti?",
+            "usr": "Sì grazie, mi potrebbero tornare utili."
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "L'e-mail dell'azienda è la seguente: info@azienda.com",
+            "usr": "Grazie mille. Sa se l'albergo è anche attualmente alla ricerca di personale per l'animazione o mini club?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Non sono informato, mi dispiace. Potrebbe chiedere anche questo via mail",
+            "usr": "Grazie , lo farò. Ho ancora qualche dubbio: offrono la possibilità di alloggio?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Suppongo di sì, vista la natura dell'azienda e del suo lavoro. In ogni caso, chieda anche questo direttamente a loro per sicurezza",
+            "usr": "Magnifico, chiederò comunque per sicurezza. Un'ultimissima domanda e poi La lascio andare: hanno bisogno che inizi da subito o inizierei con la stagione estiva?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Non mi sembra abbiano fretta, quindi potete concordare l'inizio durante un colloquio",
+            "usr": "Bene, contatterò l'azienda, mi sembra un buon lavor estivo che mi permetterebbe di tenermi occupata fino all'inizio del nuovo anno scolastico."
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Ottimo! Posso fare qualcos'altro per lei?",
+            "usr": "Per il momento no, grazie. La contatterò probabilmente verso l'inizio del nuovo anno scolastico per vedere se emergono nuove proposte in quell'ambito."
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Benissimo. Buona fortuna per il lavoro, allora!",
+            "usr": "Grazie mille e grazie ancora per la Sua disponibilità!"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Grazie a lei, buona giornata",
+            "usr": " "
+        }
+    ],
+    "Dialogue_i17": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_i17"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno. Posso aiutarla?",
+            "usr": "Buongiorno, sto cercando un impiego nel settore dello sviluppo software o dell'ingegneria elettronica"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Capisco. Ha avuto già altre esperienze lavorative?",
+            "usr": "No, mi sono laureata da meno di un anno e non ho mai lavorato nel settore."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Neanche tirocini curriculari durante il suo percorso di studi?",
+            "usr": "Ho fatto un tirocinio curriculare per i crediti della tesi. Non è stato in azienda ma in un gruppo di ricerca di un mio professore, ma ho avuto modo di fare esperienza con Java."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Benissimo. Mentre cerco l'offerta adatta a lei, mi racconterebbe come mai ha deciso di lavorare in quest'ambito?",
+            "usr": "Mi sono avvicinata al mondo della programmazione durante l'università, in particolare ho avuto modo di studiare e utilizzare C++ e Java per dei progetti. Mi affascina molto il modo di risolvere problemi di tutti i giorni grazie a dei programmi, e mi piacerebbe stare dal lato di chi li realizza."
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Ottimo. Allora, posso proporle un lavoro come ricercatore junior in informatica (nel campo dell'IoT) presso l'Istituto Superiore Mario Boella. Che ne pensa?",
+            "usr": "Sarebbe molto interessante. Che requisiti dovrei soddisfare per essere assunta?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "La sua laurea è più che sufficiente. In più dovrebbe dimostrare una certa attitudine alla creatività e la capacità di lavorare sia individualmente che in gruppo (sarà affiancata a gruppi internazionali)",
+            "usr": "Perfetto, ho un C1 in Inglese quindi interfacciarmi con persone di altri paesi non è un problema."
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": " ",
+            "usr": "Posso sapere più nel dettaglio quali siano gli scopi di questa ricerca?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Certamente. Le attività di ricerca si collocheranno nel contesto delle iniziative Europee sulla Fabbrica del Futuro (FoF) e su soluzioni tecnologiche in grado di combinare IoT e Cyber-Physical Systems per l’automazione industriale e la robotica",
+            "usr": "Immagino si dovranno usare dei linguaggi di programmazione. C'è qualche indicazione su quali siano?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "No, non è specificato nell'annuncio. Immagino siano quelli più gettonati, ma per sicurezza è meglio se chiede direttamente a loro",
+            "usr": "Va bene. È invece possibile sapere la dimensione  del centro di ricerca?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": " ",
+            "usr": "In termini di numero di ricercatori che ci lavorano"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Si tratta di un istituto abbastanza grande. Ci lavorano dalle 100 alle 250 persone",
+            "usr": "Va bene, perfetto. In che città si trova l'istituto?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "A Torino",
+            "usr": "Mi può dare un contatto di un referente, per poter mandare un CV e chiedere un colloquio?"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Certamente, può scrivere qui: info@azienda.com. Le serve altro?",
+            "usr": "No, grazie mille per l'aiuto. Buona giornata!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Buona giornata anche a lei!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_j20": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_j20"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Ciao"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao, come posso esserti utile?",
+            "usr": "Salve sono Giacomo"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": " ",
+            "usr": "stavo cercando una posizione lavorativa"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "per laureati in ingegneria elettronica"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "D'accordo, dammi un secondo che seleziono le offerte disponibili nel tuo campo",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Eccomi. Ho trovato qualcosa, ma per offrirti la soluzione migliore ti faccio qualche altra domanda",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "A che tipo di contratto sei interessato?",
+            "usr": "Preferirei un contratto a tempo determinato"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Va bene. In che tipo di azienda ti piacerebbe poterti inserire? Una più piccola o una medio/grande?",
+            "usr": "per quello non ho particolare esigenze"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "D'accordo. Sei disponibile anche a trasferirti oppure preferiresti rimanere nella tua città?",
+            "usr": "nessun problema per eventuali spostamenti"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ok restringo il campo di ricerca.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Ancora qualche domanda poi ci siamo.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Come te la cavi con il computer e il pacchetto office in particolare?",
+            "usr": "Ho ottime conoscenze"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": " ",
+            "usr": "di Linux"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Hai già avuto altre esperienze lavorative?",
+            "usr": "e pacchetto Offiche"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": " ",
+            "usr": "Non in questo ambito"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": " ",
+            "usr": "Office*"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Avrei trovato un'offerta di lavoro che potrebbe fare al caso tuo. Si richiede esperienza nella manutenzione di impianti elettrici, speciali, idraulici e termoidraulici. Che ne pensi?",
+            "usr": "Sono apertissimo a nuove esperienze"
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": " ",
+            "usr": "mi confermi che è a tempo determinato?"
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "In particolare questa posizione è a tempo indeterminato, pensi che sia un problema?",
+            "usr": "non sarei molto propenso, ma magari posso comunque fare apply e vedere cosa ne pensano loro, se me lo consiglia"
+        },
+        {
+
+            
+            "turn_id": 20,
+            "sys": "Direi di sì, comunque prova, non è una società molto grande ma potrebbero avere altre posizioni aperte.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 21,
+            "sys": "Vuoi il contatto dell'azienda?",
+            "usr": "dove si trova?"
+        },
+        {
+
+            
+            "turn_id": 22,
+            "sys": " ",
+            "usr": "si grazie"
+        },
+        {
+
+            
+            "turn_id": 23,
+            "sys": "A Marina di Bibbona (LI), è richiesta la vicinanza al luogo di lavoro quindi qualora non abitassi in zona dovresti trasferirti, ma non avresti problemi in tal senso.",
+            "usr": "sono di Pisa quindi no problem"
+        },
+        {
+
+            
+            "turn_id": 24,
+            "sys": "Lavoreresti in una realtà alberghiera, al Park Hotel Marinetta. Puoi contattarli a info@azienda.com",
+            "usr": "grazie"
+        },
+        {
+
+            
+            "turn_id": 25,
+            "sys": "Posso fare qualcos'altro per te?",
+            "usr": "al momento no"
+        },
+        {
+
+            
+            "turn_id": 26,
+            "sys": " ",
+            "usr": "mille grazie"
+        },
+        {
+
+            
+            "turn_id": 27,
+            "sys": " ",
+            "usr": "buona serata e buon lavoro"
+        },
+        {
+
+            
+            "turn_id": 28,
+            "sys": "Ciao e in bocca al lupo per la tua candidatura!",
+            "usr": "w il lupo!"
+        }
+    ],
+    "Dialogue_s7": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_s7"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno, sono Pierluigi e oggi sarò il tuo navigator, cosa posso fare per te?",
+            "usr": "Piacere Sara. Sto cercando lavoro in ambito delle scienze umane, in continuità con la mia laurea in Lettere Moderne e la mia esperienza come archivista. In più ho un'ottima conoscenza dell'inglese"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Conosci altre lingue oltre l'inglese?",
+            "usr": "Latino e greco antico"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Che tipo di forma contrattuale preferiresti?",
+            "usr": "Sono interessata a contratto a tempo indeterminato, la tipologia di stage e contratto a tempo determinato a seconda dell'offerta"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Quali erano le tue mansioni nel lavoro come archivista?",
+            "usr": "Digitalizzazione dell'archivio, studio e conservazione dei documenti"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Hai preferenze sul luogo in cui si svolgerà l'attività lavorativa?",
+            "usr": "Nessuna e sono disposta a spostarmi"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Hai mai avuto a che fare con la traduzione di testi in lingua francese?",
+            "usr": "Purtroppo no, sarei disposta a seguire un corso di francese ma per raggiungere un buon livello di traduzione mi occorrerebbe minimo un anno"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Preferiresti lavorare in una piccola, media o grande azienda?",
+            "usr": "Un'azienda media sarebbe l'ideale"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Ok, l'unica offerta che ho al momento disponibile per il tuo profilo è quella che richiede la conoscenza della lingua francese. Se non è un ostacolo per te o in ogni caso se ti interessa posso darti maggiori informazioni.",
+            "usr": "Sarei interessata ad avere maggiore informazioni, grazie"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "CHANEL Coordination S.r.l. cerca un/una Stagiaire Assistente Dipartimento Qualità Prodotto nella provincia di Milano. La risorsa dovrà occuparsi di affiancare la responsabile qualità prodotto, archiviare e consultare test di laboratorio. Supportare la responsabile nella redazione di presentazioni powerpoint e nella traduzione di reportistica in lingua inglese e francese.",
+            "usr": "Potrei chiederti i contatti dell'azienda?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Certo, questo è l'indirizzo email info@azienda.com",
+            "usr": "Per ora non ho altre domande da porle. La ringrazio e le auguro una buona giornata"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Grazie a lei, buona giornata e per qualsiasi altra informazione non esiti a contattarmi.",
+            "usr": "Volentieri, grazie"
+        }
+    ],
+    "Dialogue_s9": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_s9"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno, sto cercando lavoro."
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno, sono Pierluigi e oggi sarò il tuo Navigator, mi parli della tua formazione?",
+            "usr": "Sono laureata in Lingue e Letterature straniere."
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Quali lingue conosci oltre l'italiano?",
+            "usr": "Conosco bene l'inglese, il tedesco, il cinese e lo spagnolo."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Che tipo di forma contrattuale preferiresti?",
+            "usr": "Contratto a tempo determinato."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Dove preferiresti si svolegesse l'attività lavorativa?",
+            "usr": "Non ho preferenze, mi va benissimo qualsiasi città."
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Hai già avuto esperienze professionali?",
+            "usr": "Ho fatto la guida museale per due anni. Mi piacerebbe fare la guida turistica."
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Quali sono le tue soft-skills?",
+            "usr": "Sono una persona solare e ho un'ottima capacità comunicativa."
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Hai mai avuto a che fare con la traduzione di testi in lingua francese?",
+            "usr": "No, purtroppo no."
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Preferiresti lavorare in una piccola,media o grande azienda?",
+            "usr": "In una piccola azienda."
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ok, purtroppo al momento l'unica offerta che ho non corrisponde ad alcune tue esigenze/competenze. In particolare l'azienda conta più di 100 dipendenti. E' richiesta la conoscenza della lingua francese. Vorresti comunque maggiori informazioni?",
+            "usr": "Purtroppo non conosco il francese. Se non ci sono proposte in aziende piccole, vanno bene anche quelle più grandi."
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "No, al di là della dimensione dell'azienda non altre offerte.",
+            "usr": "Ok, grazie mille lo stesso. Buona giornata!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Buona giornata a te, per ulteriori informazioni non esitare a contattarmi.",
+            "usr": "Ok, grazie mille!"
+        }
+    ],
+    "Dialogue_t7": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_t7"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno!",
+            "usr": "Buongiorno! Piacere Sara"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao Sara, sono la tua Navigator, Alessia. Come posso esserti utile?",
+            "usr": "Sto cercando un'offerta lavorativa in ambito umanistico: sono laureata in Lettere Moderne alla Sapienza, ho lavorato in passato come archivista all'interno dell'Università e ho un livello alto di inglese"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ottimo, cerco tra le offerte di lavoro che ho a disposizione. Hai preferenze per il tipo di contratto?",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "Preferirei senza dubbio contratto a tempo indeterminato, ma va bene anche determinato o stage"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Tra le proposte che ho ci sarebbe uno stage per un'azienda che cerca personale per la scrittura di articoli per siti web. Che ne dici?",
+            "usr": "Potrebbe interessarmi. Dove si trova l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "L'azienda è la Human Value ed è di Milano. Avresti anche competenze per gestire un sito web?",
+            "usr": "Riguardo WorldPress non ho competenze, purtroppo"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Nessun problema, volevo saperne di più perché all'interno dell'azienda ci sono anche altre possibilità. La tua figura si occuperebbe in particolare di scrivere articoli per un portale web e di organizzare tutte le attività proposte dal sito in questione, di seguirle e di parteciparvi. Dovrebbe occuparsi anche di interviste. Se poi vuoi sfruttare anche le tue competenze linguistiche, posso darti altri dettagli.",
+            "usr": "Volentieri, grazie"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Conosci anche lo spagnolo?",
+            "usr": "No, ma sono disposta a seguire un corso per imparare la lingua"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Benissimo! Allora ci sarebbe anche la possibilità di svolgere lavoro di traduzione da e verso inglese e spagnolo. Non è specificato se c'è la possibilità di seguire un corso, né se si possa scegliere una delle due lingue, per questo ti consiglio di chiedere chiarimenti all'azienda. Sicuramente il tuo ottimo livello di inglese sarà indispensabile.",
+            "usr": "Nell'offerta sono specificate le ore settimanali?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "No, non ho dettagli in merito. Come informazione aggiuntiva posso dirti che sarai affiancata al team principale.",
+            "usr": "Ti ringrazio. Posso chiederti i contatti dell'azienda?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Certamente! Puoi mandare una mail all'indirizzo: info@humanvalue.com. Posso darti maggiori informazioni sull'azienda?",
+            "usr": "Si certo"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "La Human Value è un'azienda di consulenza e conta fino a 50 dipendenti, quindi è un ambiente di lavoro relativamente piccolo.",
+            "usr": "Sarebbe l'ideale. Potrei contattarti in futuro, nel caso avessi ulteriori domande?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Assolutamente. Contattami pure per qualsiasi necessità lavorativa. Sono a disposizione.",
+            "usr": "Ti ringrazio. Ti auguro una buona giornata"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Buona fortuna per il tuo lavoro!",
+            "usr": "Grazie e buon lavoro!"
+        }
+    ],
+    "Dialogue_t9": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_t9"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno",
+            "usr": "Buongiorno, mi chiamo Valentina e sto cercando un impiego."
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao Valentina, per oggi sarò la tua navigator. Sono Alessia e cercherò di venire incontro a tutte le tue esigenze. Iniziamo: raccontami di cosa ti occupi.",
+            "usr": "Sono laureata in lingue e ho fatto la guida museale per un anno."
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Hai avuto anche altre esperienze lavorative?",
+            "usr": "No, ho fatto solo la guida museale."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ok, ti andrebbe di lavorare in nord Italia?",
+            "usr": "Sì, mi andrebbe benissimo."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Bene, allora sarebbe disponibile un posto in uno stage per un'azienda di consulenza a Milano. Avrebbero bisogno di qualcuno che si occupasse di traduzione dall'italiano all'inglese/spagnolo e viceversa. Che ne pensi?",
+            "usr": "È molto interessante, ma preferirei rimanere nel settore turistico, se fosse possibile."
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Purtroppo al momento non posso accontentarti. Non ho a mia disposizione offerte di lavoro nel turismo. Però forse questa occasione potrebbe aiutarti: l'azienda cerca anche qualcuno che curi un sito web, scrivendo articoli, controllando il suo andamento e partecipando a tutti gli eventi ad esso legati. Potrebbe essere l'occasione per fare nuove conoscenze lavorative, per questo ti consiglieri comunque di contattare l'azienda e avere maggiori chiarimenti.",
+            "usr": "Ok grazie! Come si chiama l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "L'azienda è la Human Value e se preferisci posso darti qualche altra piccola informazione che la riguarda.",
+            "usr": "Sì, grazie!"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Per incoraggiarti posso dirti che l'ambiente di lavoro è piccolo, infatti i dipendenti sono al massimo 50; quindi non dovrebbe essere dispersivo e dovresti essere ben seguita. Inoltre saresti affiancata ad una figura già esperta del settore.",
+            "usr": "Ottimo, é una splendida notizia!"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": " ",
+            "usr": "Dove si trova l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "La sede è a Milano.",
+            "usr": "Perfetto! Hanno un indirizzo di contatto?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Subito! Puoi inviare una mail all'indirizzo info@humanvalue.com.",
+            "usr": "Perfetto, grazie mille! Buona giornata! :)"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Spero di essere stata di aiuto. In bocca al lupo per la tua carriera e buona giornata!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_u6": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_u6"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno, mi chiamo Eleonora e oggi sarò il tuo navigator, come posso esserti utile?",
+            "usr": "Buongiorno! Sono alla ricerca di un tirocinio formativo "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Va vene, parlami un po' di te, che studi hai fatto?",
+            "usr": "Sto frequentando il secondo anno magistrale di Lingue e Letterature Straniere "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "va bene, controllo. Hai una qualche preferenza nella regione nella quale si trova la sede di lavoro?",
+            "usr": "Se è possibile centro Italia, ma a mali estremi non ho problemi a spostarmi "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ti potrebbe interessare un tirocinio come stagista di risorse umane?",
+            "usr": "In cosa consisterebbe?"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Le mansioni che richiedono sono le seguenti:  accoglienza candidati, attività di front office, archiviazione, supporto nella ricerca del personale e infine in tutte le attività finalizzate al raggiungimento degli obiettivi aziendali.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Vengono richieste alcune competenze.",
+            "usr": "Ovvero?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Richiedono un'ottima conoscenza dei principali strumenti informatici, capacità di analisi e d'ascolto, organizzazione e  infine ottime doti relazionali.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Sei interessata a lavorare in una specifica regione in italia?",
+            "usr": "Nessuna in particolare in realtà, certo mi farebbe comodo in zona Abruzzo in quanto studio qui, ma come ho detto prima non avrei problemi a spostarmi"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "L'azienda che offre questo stage si trova a Pescara",
+            "usr": "È perfetto!"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Se ti interessa ti posso dare nome e contatto dell'azienda.",
+            "usr": "Prima sapresti dirmi se è necessaria una preparazione professionale a livello informatico? "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Richiedono una ottima conoscenza dei principali strumenti informatici.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Non specificano altro riguardo agli strumenti informatici.",
+            "usr": "Nel caso in cui questa non dovesse andare bene per via delle mie capacità informatiche, ci sarebbero altri tirocini?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "No, mi dispiace. Non ci sono altri tirocini.",
+            "usr": "Okay, ti ringrazio comunque. Se per caso dovessi avere nuovamente bisogno di un aiuto, posso rimettermi in contatto con te?"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Si certo. Sono sempre disponibile. Desideri comunque avere i contati dell'azienda che ricerca lo stagista per risorse umane?",
+            "usr": "Si, grazie! Magari chiedo qualche informazione in più per vedere se può comunque servire "
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Contatto dell'azienda: info@azienda.com",
+            "usr": "Grazie mille per la disponibilità! "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Figurati, in bocca al lupo per il lavoro!",
+            "usr": "Grazie ancora e buona giornata"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Buona giornata anche a lei!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_u7": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_u7"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno, mi chiamo Eleonora e oggi sarò il tuo navigator, come posso esserti utile?",
+            "usr": "Buongiorno Eleonora, piacere di conoscerti. Sono Sara e sto cercando lavoro in ambiente umanistico: sono laureata alla Sapienza in Lettere Moderne, ho lavorato come archivista presso l'Università in cui ho conseguito la laurea. Parlo perfettamente inglese"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "va bene. Controllo un attimo.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ti potrebbe interessare un tirocinio come stagista per risorse umane?",
+            "usr": "Si certo, in cosa consiste l'offerta lavorativa?"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Stanno cercando uno stagista che si occupi di:  accoglienza candidati, attività di front office, archiviazione, supporto nella ricerca del personale e in tutte le attività finalizzate al raggiungimento degli obiettivi aziendali.",
+            "usr": "Sono molto interessata all'offerta, ti potrei chiedere la sede dell'azienda?"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Si certo.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "L'azienda si trova a Pescara.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Lei è interessato a lavorare in un azienda piccola o preferisce un azienda grande?",
+            "usr": "In questo momento non ho preferenze a riguardo"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "L'azienda richiede che il candidato abbia alcune competenze.",
+            "usr": "Quali nello specifico?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "L'azienda richiede che il candidato possegga un'ottima conoscenza dei principali strumenti informatici, capacità di analisi e d'ascolto, organizzazione e ottime doti relazionali.",
+            "usr": "Per \"strumenti informatici\" si intende il pacchetto office?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Mi dispiace, ma non ho questa informazione.",
+            "usr": "Per caso nell'annuncio è specificato il totale delle ore settimanali?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "No mi dispiace, non dispongo di questa informazione.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Se vuole, le posso lasciare il contatto dell'azienda per chiedere maggiori informazioni.",
+            "usr": "Volentieri, la ringrazio"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Contatto azienda: info@azienda.com",
+            "usr": "Qualora avessi altri dubbi o domande, potrei contattarla nuovamente in futuro?"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Si certo. Sono sempre disponibile",
+            "usr": "La ringrazio, è stata gentilissima. Le auguro una buona giornata"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Figurati, buona giornata e in bocca al lupo per il lavoro!",
+            "usr": "Grazie mille!"
+        }
+    ],
+    "Dialogue_u8": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_u8"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno, mi chiamo Eleonora e oggi sarò il tuo navigator, come posso esserti utile?",
+            "usr": "Buongiorno, sono un neo laureato e cerco una prima esperienza nel mondo del lavoro"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Va vene, parlami un po' di te, che studi hai fatto?",
+            "usr": "Management del turismo, con un Erasmus a Barcellona di 6 mesi da Dicembre a Maggio"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Va bene, controllo un attimo. Preferisci lavorare in un azienda piccola o grande?",
+            "usr": "Possibilmente in una piccola, per iniziare ad ambientarmi nell’ambito lavorativo con calma"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "La tua laurea in che ambito rientra? umanistico, economico..?",
+            "usr": "Economico principalmente, ma non è del tutto esente da accezioni umanistiche."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Sei interessato a lavorare in una specifica regione in italia?",
+            "usr": "Non particolarmente, preferirei Piemonte o Lombardia ma non è un vincolo stretto."
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Ti potrebbe interessare uno stage in economia con sede Milano?",
+            "usr": "In cosa consisterebbero le mie tasks?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Potrai essere coinvolto in una delle seguenti attività: definizione delle strategie di business di breve e lungo termine / disegno e implementazione di strategie di sviluppo e gestione delle risorse umane / re-engineering dei processi contabili e finanziari, revisione dei modelli di controllo, introduzione di nuove procedure di Budgeting, Performance Reporting, tesoreria e contabilità / disegno e realizzazione di modelli distributivi e strategie commerciali supportate da logiche di Marketing innovative / progettazione di modelli operativi per i processi di approvvigionamento e acquisti, pianificazione della domanda, produzione, progettazione e distribuzione dei prodotti.",
+            "usr": "La scelta è decisamente vasta, il che è ottimo. Di che azienda si tratta?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "L'azienda si chiama Human Value.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Se le interessa le posso dare i contatti dell'azienda",
+            "usr": "Si, e vorrei anche chiedere se per caso vi è indicato se è uno stage retribuito o meno."
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "No, mi dispiace, non dispongo di questa informazione.",
+            "usr": "Allora chiederò loro direttamente. Come posso contattarla?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Le invio il contatto dell'azienda: info@azienda.com",
+            "usr": "Grazie mille per l’aiuto e la competenza!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Figurati e in bocca al lupo per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_u9": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_u9"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno, sto cercando un impiego."
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno, mi chiamo Eleonora e oggi sarò il tuo navigator, come posso esserti utile?",
+            "usr": "Buongiorno, sto cercando un lavoro come guida turistica."
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Va bene. Mi parli un po' di lei, che studi ha fatto?",
+            "usr": "Sono laureata in lingue."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Potrebbe essere interessata per un tirocinio come stagista per risorse umane?",
+            "usr": "Sì, sarei interessata."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Se vuole, le descrivo le mansioni che il candidato dovrà compiere.",
+            "usr": "Ok, grazie!"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "La risorsa si occuperà di mansioni quali accoglienza candidati, attività di front office, archiviazione, supporto nella ricerca del personale e in tutte le attività finalizzate al raggiungimento degli obiettivi aziendali.",
+            "usr": "Perfetto, grazie! Sono richieste delle lingue specifiche?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "No, non sono richieste delle lingue specifiche ma richiedono che il candidato possegga alcune competenze.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Se le interessa, gliele posso descrivere più nel dettaglio.",
+            "usr": "Sì, grazie mille."
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "L'azienda richiede un'ottima conoscenza dei principali strumenti informatici, capacità di analisi e d'ascolto, organizzazione e ottime doti relazionali.",
+            "usr": "Perfetto, grazie! Come si chiama la ditta?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "L'azienda si chiama Humangest spa e ha sede a Pescara.",
+            "usr": "Perfetto, grazie! Hanno un indirizzo di contatto?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Si certo, contatto azienda:info@azienda.com",
+            "usr": "Perfetto! Grazie mille per l'aiuto, buona giornata! :)"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Buona giornata e in bocca al lupo per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_v10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_v10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno Sara, sono la tua navigator. Come posso aiutarti?",
+            "usr": "Cerco un lavoro nel settore turistico"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ok. Puoi darmi qualche informazione sui tuoi studi pregressi?",
+            "usr": "Mi sono diplomata un anno fa all'istituto alberghiero!"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Hai qualche specializzazione rispetto a questo settore, o qualche skill particolarmente rilevante a tuo parere?",
+            "usr": "Parlo abbastanza bene francese e inglese, inoltre lavoro bene in team!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Ho capito. Rispetto all'ambito alberghiero, c'è un'area in cui ti senti più forte (es. cucina, sala bar, management, manutenzione tecnica,...)?",
+            "usr": "Tra questi direi sala bar...mi trovo bene a lavorare con il pubblico!"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Ok. Hai preferenze circa il tipo di contratto?",
+            "usr": "Cercherei un contratto a tempo determinato!"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "va bene. Puoi dirmi in che zona dell'Italia ti trovi?",
+            "usr": "Ora mi trovo in Toscana, però sono disposta a spostarmi."
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Va bene. Un'ultima domanda: preferiresti una grande azienda, oppure una piccola realtà?",
+            "usr": "Mi è indifferente."
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Va bene. Un attimo, mentre cerco le offerte per te",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Allora, offerte strettamente inerenti all'ambito alberghiero non ne ho. Posso però offrirti un'opportunità nel settore turistico, in un hotel a Marina di Bibbona",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Si tratta di un lavoro come responsabile della manutenzione",
+            "usr": "Va bene!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Bene slightly_smiling_face ti do qualche dettaglio in più",
+            "usr": "Si grazie!"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Bisognerà svolgere attività di manutenzione della conduzione degli impianti tecnici della struttura alberghiera, rapportandosi con la Direzione",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "E' richiesta una formazione più tecnica rispetto alla tua, ma direi che vale comunque la pena tentare",
+            "usr": "Sono d'accordo!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": " ",
+            "usr": "Mi puoi dare modo di contattarli?"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Certo. Manda il CV a info@azienda.com",
+            "usr": "Ottimo! Manderò una mail al più presto!"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Perfetto. Buona fortuna!",
+            "usr": "Grazie, buona giornata!"
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "A te",
+            "usr": " "
+        }
+    ],
+    "Dialogue_v11": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_v11"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Ciao! Sono la tua Navigator, sono qui per aiutarti con la ricerca del lavoro",
+            "usr": "Ciao piacere, sono Francesca! Volevo informazioni riguardo una stage nel campo dell’informatica se possibile "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao, scusa il ritardo, direi che ora possiamo incominciare",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ti faccio qualche domanda per conoscerti meglio. Sei già laureata?",
+            "usr": "Si, mi sono appena laureata nella triennale di design industriale, a Roma! "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "Nello specifico ho portato una tesi riguardo l’autonomazione di impianti rinnovabili, tema che mi sta molto a cuore "
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "interessante!",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "E questa sarebbe la prima esperienza lavorativa?",
+            "usr": "Si esatto, non ho nessuna esperienza purtroppo "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Non c'è problema, da qualche parte bisogna sempre iniziare",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Conosci anche delle lingue straniere?",
+            "usr": "Si molto bene l’inglese, possiedo il certificato di livello B1 "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Ho capito. Posso chiederti in che zona ti trovi?",
+            "usr": "Sono di Firenze e preferirei trovare qualcosa qua vicino, per stare con la mia famiglia "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ok. Di base, preferiresti una grande azienda oppure anche una di piccole dimensioni?",
+            "usr": "Non ho preferenze in realtà, però mi piace molto il lavoro di squadra quindi una grande forse fa più al caso mio! "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Ok. Un attimo mentre cerco la candidatura giusta per te",
+            "usr": "Ti ringrazio! Non avendo nessuna esperienza lavorativa non so bene come muovermi"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Nessun problema, sono qui per questo",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Allora, dato il tuo profilo, ti propongo un impiego come Junior Engineer Automation&Robotics",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Si tratta di una grande azienda, a Roma, per cui dovresti prevedere un trasferimento, almeno momentaneo",
+            "usr": "Capisco, purtroppo la posizione al momento ha priorità! "
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": " ",
+            "usr": "Non ci sono offerte più vicine? "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Avrei un'offerta a Marina di Bibbona (LI), come responsabile addetto alla manutenzione in un hotel. <E' un impiego di responsabilità ma mi sembra più lontano rispetto al tuo profilo",
+            "usr": "Si forse hai ragione! "
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": " ",
+            "usr": "Posso considerare il posto a Roma a questo punto"
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": " ",
+            "usr": "Se puoi inviarmi i loro dati contatto direttamente loro "
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "Il posto a roma è una stage post laurea. Ti permetterebbe di iniziare nel mondo del lavoro, e poi da lì puoi vedere",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 20,
+            "sys": "Scrivi pure a info@azienda.com",
+            "usr": "Bene, ti ringrazio per la disponibilità! Buona giornata "
+        },
+        {
+
+            
+            "turn_id": 21,
+            "sys": "Di nulla, a te",
+            "usr": " "
+        }
+    ],
+    "Dialogue_v13": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_v13"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno, sono la Navigator. Ti aiuterò nella tua ricerca di un impiego",
+            "usr": "Buongiorno, sono alla ricerca di un impiego, possibilmente nel settore giuridico e/o finanziario"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Va bene, puoi dirmi qualcosa di più sulla tua formazione?",
+            "usr": "Per quanto riguarda la formazione, l'ho conclusa 10 anni fa con la laurea in Giurisprudenza. Per lavoro ho anche acquisito esperienza nel settore finanziario"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ho capito. Avendo esperienza, immagino tu cerchi un lavoro a tempo indeterminato?",
+            "usr": "Esatto"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "In quale zona d'Italia ti trovi?",
+            "usr": "Correntemente mi trovo in Lombardia, però ho la possibilità di spostarmi, purchè sia in Italia"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Conosci delle lingue straniere?",
+            "usr": "Sì, parlo molto fluentemente sia inglese che tedesco"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Ok. Ti chiedo anche se hai preferenze circa la dimensione dell'azienda",
+            "usr": "Non ho preferenze, purchè ci siano opportunità di organizzare gruppi di persone"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Va bene, un attimo mentre cerco l'offerta adatta",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Allora, purtroppo non vedo molte offerte che valorizzino la tua esperienza. Quella più adatta è in realtà rivolta a dei neolaureati, però è in un'azienda di credito e assicurazioni - per cui potrebbe interessarti",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Si tratterebbe di un tirocinio",
+            "usr": "In cosa consiste questo lavoro?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Il tirocinio è in ambito amministrativo-contabile. Non ho altri dettagli",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Se sei interessato, posso darti il contatto dell'azienda",
+            "usr": "Certamente, lasciami pure il contatto"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Puoi scrivere a info@azienda.com",
+            "usr": "Ok, ti ringrazio. Proverò a contattarli, anche se non credo sia molto coerente con il mio profilo. Grazie lo stesso!"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Di nulla, buona fortuna!",
+            "usr": "Grazie, e arrivederci"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Arrivederci",
+            "usr": " "
+        }
+    ],
+    "Dialogue_w10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_w10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno! Cerco un lavoro a tempo determinato!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao! Mi presento: sono Martina, il tuo navigator. Ora vediamo se riesco a darti una mano. Quali sono i tuoi interessi?",
+            "usr": "Vorrei lavorare nel settore turistico, mi piace mettermi in gioco e imparare cose nuove!"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Bene! Ti piacerebbe anche occuparti di attività didattiche, quindi?",
+            "usr": "Cosa intendi?"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Chiedevo se ti piace insegnare: gestire ad esempio corsi, laboratori, lezioni all'aperto.",
+            "usr": "Non l'ho mai fatto, non saprei!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Nessun problema. Un'agenzia sta cercando una guida turistica che accetti di essere coinvolta in questo genere di attività, ma non è richiesta nessuna esperienza pregressa. Ti piace l'idea di lavorare in una grande città?",
+            "usr": "Sì! Di che città si tratta?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Si tratta di Roma. Potrebbe interessarti?",
+            "usr": "Sì!"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Benissimo! Dimmi, posso darti qualche informazione in più?",
+            "usr": "Il contratto sarebbe a tempo determinato?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Non viene specificato dall'annuncio. Probabilmente ci sono più posizioni aperte. Posso lasciarti un contatto dell'agenzia, così puoi chiedere a loro?",
+            "usr": "Si grazie!"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Va bene l'indirizzo di posta?",
+            "usr": "Benissimo."
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Allora, l'agenzia si chiama Munus e questa è l'email a cui puoi inviare la tua candidatura e chiedere informazioni: info@azienda.com",
+            "usr": "Perfetto! Grazie!"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Grazie a te! Posso aiutarti in qualcos'altro?",
+            "usr": "No, grazie! Buona giornata!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Grazie, buona giornata anche a te!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_w11": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_w11"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Ciao buongiorno! Sono Francesca e sto cercando informazioni su un possibile stage lavorativo "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno! Io sono Martina, il tuo navigator. Vediamo se riesco ad aiutarti!",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "In che ambito cerchi lo stage?",
+            "usr": "Mi appassiona molto il campo dell’informatica, ma non è una prerogativa "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Molto bene. Qual è il tuo titolo di studio?",
+            "usr": "Sono laureata in design industriale a Roma, una triennale di Ingegneria "
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Ho capito. Prima di proporti qualche annuncio vorrei avere qualche informazione in più su di te. Ti piacerebbe lavorare da remoto?",
+            "usr": "Si, potrebbe andare bene! Mi piacerebbe stare a Firenze, vicino alla mia famiglia, quindi con un lavoro del genere non avrei problemi! "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Perfetto. Allora ho bisogno di altre informazioni. Da quanto tempo sei laureata?",
+            "usr": "Da ottobre! Quindi 4 mesi "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Ok, posso chiederti anche quanti anni hai?",
+            "usr": "23"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Ok! Se ti può interessare il campo del marketing e delle vendite, avrei un tirocinio post laurea per un'azienda chimico-farmaceutica. Ti spiego meglio di che si tratta?",
+            "usr": "Si grazie mille! "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Saresti inserita in un progetto innovativo come informatore scientifico. Che ne pensi?",
+            "usr": "Mi piacerebbe moltissimo! Sono una studiosa è appassionata di tutto ciò che riguarda ricerca e scoperte "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Perfetto! Vuoi informazioni riguardanti l'azienda?",
+            "usr": "Si ti ringrazio, così posso mettermici in contatto  "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Ok! L'azienda si chiama Pharmanutra ed ha sede a Pisa. Vuoi che ti lasci anche un recapito email?",
+            "usr": "Sarebbe perfetto, grazie "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Bene. L'indirizzo email dell'azienda è questo: info@azienda.com",
+            "usr": "Sei stata molto dispobile Martina, ti ringrazio! Buona giornata "
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Buona giornata anche a te e grazie per avermi contattata! A presto",
+            "usr": " "
+        }
+    ],
+    "Dialogue_w12": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_w12"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buongiorno"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno, sono Martina e oggi sarò il tuo navigator! Come posso aiutarti?",
+            "usr": "Piacere Antonio, sono Antonio e cerco lavoro con un contratto possibilmente a tempo indeterminato"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ok. Vediamo se tra gli annunci ho qualcosa per te. In che ambito vorresti lavorare?",
+            "usr": "Cerco nel settore dell'insegnamento"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Cosa ti piacerebbe insegnare?",
+            "usr": "Le materie che sono più attinenti al mio percorso formativo sono economia, matematica e marketing"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": " ",
+            "usr": "Ho una laurea triennale in economia e marketing"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Ho capito. Da quanto sei laureato?",
+            "usr": "Da 6 mesi e ho 25 anni"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Ho capito. Se avessi a disposizione offerte in ambito marketing e non nell'insegnamento? Saresti interessato?",
+            "usr": "Le posso valutare anche perché è il mio settore ma per le mie esperienze e qualità professionali vorrei dedicarmi alla didattica"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Vediamo. Altrimenti posso proporti l'offerta di un'agenzia turistica di Roma, che prevede che il candidato si occupi anche della gestione di attività didattiche. Dimmi tu!",
+            "usr": "Sarei molto interessato, dimmi di più"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Molto bene! l'agenzia sta cercando una guida turistica che, come ti dicevo, sia disposta anche a gestire laboratori. Sarebbe un problema lavorare a Roma?",
+            "usr": "Non c'è problema, sono disponibile a trasferirmi"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": " ",
+            "usr": "Sono richieste particolari skills?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "No l'agenzia non specifica nessun particolare requisito dei candidati. Vuoi che ti passi un contatto a cui inviare la candidatura?",
+            "usr": "Dammi il contatto e vedo di contattarli"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": " ",
+            "usr": "Qual'e il nome specifico della posizione?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "E' questo: \"Addetto visite guidate e attività didattiche\"",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Il loro indirizzo email è: info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Posso darti qualche altra informazione?",
+            "usr": "Ottimo, sei stata esaustiva"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": " ",
+            "usr": "Parlo direttamente con loro"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Bene! In bocca al lupo per la tua candidatura allora! A presto!",
+            "usr": "Crepi! Buona giornata e buon lavoro. A presto"
+        }
+    ],
+    "Dialogue_w13": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_w13"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Ciao!",
+            "usr": "Ciao! Mi chiamo Andrea, e sono alla ricerca di un impiego, potresti darmi una mano?"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Benvenuto Andrea. Io sono Martina, il tuo navigator. Proverò ad aiutarti! Che tipo di impiego cerchi?",
+            "usr": "Allora, ho lavorato fino a poco fa come avvocato per conto di un ufficio legale che si occupa di investimenti, tuttavia sono adesso alla ricerca di un nuovo lavoro che possa fare leva sulle mie capacità di leadership"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ho capito! Da quanto tempo sei laureato quindi?",
+            "usr": "Mi sono laureato ormai 10 anni fa in Giurisprudenza all'Università Statale di Milano, con 108"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ho capito. Purtroppo non ho annunci adatti al tuo profilo. Se puoi lasciarmi qualche informazione in più su di te posso provare a ricontattarti più avanti, nel caso in cui ci siano offerte che fanno al caso tuo. Che ne pensi?",
+            "usr": "D'accordo"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Benissimo! Dunque, ti piacerebbe lavorare in una grande azienda o in una piccola realtà?",
+            "usr": "Avendo già lavorato in un piccolo studio, sono più interessato a spostarmi verso aziende più grandi"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Bene. Saresti disposto a lavorare in grandi città?",
+            "usr": "Certo, preferibilmente in Italia"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Perfetto. Sarebbe però un problema trasferirti all'estero?",
+            "usr": "Di che paese si tratta?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Non ho annunci al momento, ma immagino che potrebbero aprirsi posizioni in altri paesi dell'Unione Europea.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "In che settore ti piacerebbe lavorare?",
+            "usr": "Ho maggiore confidenza nel settore giuridico e quello economico, ma posso spostarmi anche in ambiti simili, purchè rientri nei requisiti"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Va bene. Non hai preferenze invece sul settore dell’azienda?",
+            "usr": "Non saprei dirti in questo momento"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Va bene. Penso di aver raccolto abbastanza informazioni. Ti contatterò quando ci saranno annunci compatibili con il tuo profilo. Grazie per avermi contattata e a presto!",
+            "usr": "Va bene, grazie a te!"
+        }
+    ],
+    "Dialogue_x10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_x10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Buondì!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno Sara,\nSono Martina, tuo Navigator per oggi",
+            "usr": "Ciao Martina, cerco un lavoro nel settore turistico!"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Ottimo, nello specifico cosa ti piacerebbe fare?",
+            "usr": "Non ho particolari richieste!"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Mi racconti qualcosa rispetto al tuo percorso formativo?",
+            "usr": "Mi sono diplomata all'istituto alberghiero un anno fa!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Quali lingue straniere conosci? E a che livello?",
+            "usr": "Conosco abbastanza bene sia il francese che l'inglese!"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Per quanto riguarda le tue conoscenze in ambito informatico, quali strumenti conosci?",
+            "usr": "I più basilari...Word, Excel, Power Point!"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Quali credi che siano i tuoi punti di forza?",
+            "usr": "Ho voglia di mettermi in gioco, imparare cose nuove, lavoro bene in team ma sono anche ambiziosa!"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Hai qualche preferenza a livello geografico?",
+            "usr": "No, nessuna!"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "E rispetto al contesto hai qualche preferenza? Ti piacerebbe un'azienda di piccole o grandi dimensioni?",
+            "usr": "Preferisco di grandi dimensioni ma mi posso adattare!"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Credo proprio di avere un'opportunità che rispecchia la tua richiesta",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Si tratta di uno stage come segretaria di ricevimento",
+            "usr": "Oh sarebbe perfetto!"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Saresti coinvolta in varie attività tra cui l'accoglienza di clienti, il supporto durante il loro soggiorno, la gestione delle operazioni di checkin e checkout",
+            "usr": "Benissimo! Come si chiama l'azienda?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "L'azienda si chiama NH Italia e la posizione é basata su Milano",
+            "usr": "Mi puoi dare un loro contatto?"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Certamente, ecco l'indirizzo email a cui contattarli: info@azienda.com",
+            "usr": "Benissimo, grazie Martina!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Figurati, é un piacere!",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Posso aiutarti in qualche altro modo?",
+            "usr": "No, va bene così! Buona giornata!"
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Grazie, buona giornata anche a te",
+            "usr": " "
+        }
+    ],
+    "Dialogue_x11": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_x11"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Ciao buongiorno, sono Francesca, piacere! Sto cercando informazioni riguardo un stage post laurea, puoi aiutarmi? "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno Francesca, Sono Martina il tuo Navigator per la giornata di oggi",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Certamente, puoi darmi qualche dettaglio rispetto al tuo percorso di studi?",
+            "usr": "Mi sono da poco laureata alla triennale di Ingegneria a Roma, corso di Design industriale  "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "La tesi che ho proposto riguardava l’autonomazione di impianti rinnovabili  "
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Adesso cosa ti piacerebbe fare?",
+            "usr": "La priorità al momento è trovare un posto di lavoro vicino Firenze, per stare con la mia famiglia! Preferirei uno stage, è solo in seguito, magari, un contratto vero e proprio "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": " ",
+            "usr": "Per quanto riguarda l’ambito non ho richieste specifiche, sono una studiosa e mi appassiono a tutto ciò che riguarda ricerca e innovazione "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Perfetto! Con quali strumenti informatici hai avuto modo di lavorare?",
+            "usr": "Conosco bene il pacchetto Office e vari programmi di grafica al computer "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Hai anche dimestichezza con il disegno meccanico?",
+            "usr": "Si conosco perfettamente AutoCAD e SketchUp"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "A quale livello conosci la lingua inglese?",
+            "usr": "Ho la certificazione del B1 "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Preferiresti lavorare in una piccola o grande azienda?",
+            "usr": "Preferirei una grande azienda ma non è una prerogativa "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Avrei un'interessante opportunità in una piccola azienda biomedica di Pisa",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Si tratta di un inserimento a tempo determinato come tecnica addetta alla produzione e al collaudo",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Cosa ne pensi?",
+            "usr": "Preferirei uno stage in realtà, però mi sembra davvero molto interessante come lavoro "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": " ",
+            "usr": "Quando dovrei cominciare? Necessitano di disponibilità immediata? "
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Al momento non ho questa informazione, ma se vuoi posso contattare l'azienda e farti sapere",
+            "usr": "Te ne sarei grata "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": " ",
+            "usr": "Oppure puoi mandarmi il loro indirizzo così li contatto io "
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Certo, possiamo fare così",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "Questo il loro indirizzo email: info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": "Quando li contatti puoi fare riferimento a me",
+            "usr": "Perfetto Martina, grazie mille! "
+        },
+        {
+
+            
+            "turn_id": 20,
+            "sys": " ",
+            "usr": "Buona giornata "
+        },
+        {
+
+            
+            "turn_id": 21,
+            "sys": "Grazie, buona giornata anche a te e buona fortuna per il lavoro!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_x12": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_x12"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buongiorno,",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Sono Martina il tuo Navigator per oggi.\nCome posso aiutarti?",
+            "usr": "Buongiorno Martina, sono Antonio e cerco lavoro indifferentemente dalla tipologia di contratto. Valuterei varie posizioni"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Piacere di conoscerti!",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Cosa ti piacerebbe fare?",
+            "usr": "Vorrei insegnare ma valuterei anche altre opzioni se attinenti al mio ambito di studi"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Cosa hai studiato?",
+            "usr": "Mi sono laureato in economia e marketing a Torino"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Quando hai concluso il percorso di studi?",
+            "usr": "Sono neolaureato visto che mi sono laureato 6 mesi fa. Ora ho 25 anni"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Oltre all'ambito economico, quali sono gli altri settori di tuo interesse?",
+            "usr": "Questo è il mio ambito, ho fatto ripetizioni part time anche in matematica oltre economia"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": " ",
+            "usr": "Conosco molto bene l'inglese e studio il cinese se ti può interessare"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "In quale città stai cercando lavoro?",
+            "usr": "Sono originario di Milano e ho studiato a Torino quindi preferirei in zona"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Potrebbe interessarti anche un lavoro da remoto?",
+            "usr": "Mi intriga l'idea di lavorare da casa soprattutto in questo periodo in cui gira l'influenza ahahah"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Preferiresti lavorare in un contesto di piccole o grandi dimensioni?",
+            "usr": "In un'azienda di grandi dimensioni"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": " ",
+            "usr": "Ma vorrei fare carriera quindi valuterei"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Quali sono i punti di forza che caratterizzano la tua persona?",
+            "usr": "Mi ritengono una persona affidabile e paziente, inoltre ho ottime capacità di problem solving"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Visti i tuoi interessi credo di avere un'opportunità che fa al caso tuo",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Si tratta di uno stage in un'azienda farmaceutica con sede a Pisa",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Stanno cercando una figura da coinvolgere in un progetto di informazione scientifica da remoto",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 17,
+            "sys": "Cosa te ne pare?",
+            "usr": "Mi interessa molto la proposta, richiedono qualche skill in particolare?"
+        },
+        {
+
+            
+            "turn_id": 18,
+            "sys": "Niente in particolare se non un interesse per il Marketing e possibilmente anche per il settore farmaceutico",
+            "usr": "Sarei disponibile a trasferirmi proprio perché l'ambito mi interessa molto"
+        },
+        {
+
+            
+            "turn_id": 19,
+            "sys": " ",
+            "usr": "Conosci qualcuno che ci lavora? Per avere un feedback"
+        },
+        {
+
+            
+            "turn_id": 20,
+            "sys": "Personalmente non conosco nessuno. Però su Glassdoor trovi varie recensioni da parte di dipendenti o ex dipendeti dell'azienda che potresti vedere",
+            "usr": "Molto utile, non conoscevo questo sito. Gli do un'occhiata"
+        },
+        {
+
+            
+            "turn_id": 21,
+            "sys": "Se cerchi Pharmanutra ti usciranno tutte le informazioni!",
+            "usr": "Ho appena controllato, ne parlano bene"
+        },
+        {
+
+            
+            "turn_id": 22,
+            "sys": " ",
+            "usr": "Mi sarei trasferito solo per un'azienda seria e che mi dia tanto a livello professionale"
+        },
+        {
+
+            
+            "turn_id": 23,
+            "sys": " ",
+            "usr": "Sei stata gentilissima, grazie per avermi dato una mano"
+        },
+        {
+
+            
+            "turn_id": 24,
+            "sys": " ",
+            "usr": "Se farò carriera sarà anche merito tuo. Buona giornata"
+        },
+        {
+
+            
+            "turn_id": 25,
+            "sys": "Hai bisogno di qualche altra informazione?",
+            "usr": "No, ho letto sul portale che mi hai detto varie informazioni e sento direttamente loro per candidarmi"
+        },
+        {
+
+            
+            "turn_id": 26,
+            "sys": "Perfetto, buona fortuna per il lavoro!",
+            "usr": "Gentilissima! Buona giornata Martina"
+        }
+    ],
+    "Dialogue_x13": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_x13"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Ciao, mi chiamo Martina e per oggi sarò il tuo Navigator",
+            "usr": "Ciao Martina! Sono alla ricerca di un lavoro in Italia"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao Andrea, piacere di conoscerti",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Che tipologia di lavoro stai cercando?",
+            "usr": "Ti posso dire che ho un background in giurisprudenza e in economia, ma più in generale cerco un lavoro che mi dia maggiori opportunità di carriera"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Tra l'ambito economico e quello giuridico quale preferisci?",
+            "usr": "Essendo laureato in Giurisprudenza ti direi la prima, ma non voglio limitarmi a quello"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Perfetto. Hai qualche preferenza a livello geografico?",
+            "usr": "Non ho problemi a spostarmi, purchè sia in Italia"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Preferisci una realtà di piccole o grandi dimensioni?",
+            "usr": "Forse proverei con un'azienda grande, sto cercando qualcosa che mi dia la possibilità di organizzare gruppi di persone"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Mentre controllo le opportunità che ho, raccontami qualcosa di te! Quali sono i tuoi punti di forza?",
+            "usr": "Ti posso dire che nei miei precedenti impieghi sono stato spesso apprezzato per il mio carisma e la mia capacità di leadership. Personalmente, mi ritengo una persona abbastanza ambiziosa"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Al momento l'unica cosa che posso offrirti é uno stage come assistente notarile in uno studio privato",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Potrebbe essere di tuo interesse?",
+            "usr": "Come si chiama questo studio?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Studio Davini Bertaccini, si trova a Massa",
+            "usr": "Quali sono le mansioni richieste?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "La persona supporterà il notaio in tutte le sue attività",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Nello specifico nello svolgimento delle pratiche notarili, nella redazione degli atti e negli adempimenti post stipula. Inoltre seguirà le attività di segreteria dello studio",
+            "usr": "Ok, ho capito. Avendo ormai 36 anni e più di 5 anni di esperienze lavorative, penso che uno stage non faccia molto al caso mio"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Se vuoi lasciarmi un tuo riferimento, contatto altri colleghi e verifico se hanno delle opportunità più in linea con il tuo profilo",
+            "usr": "Certamente, la mia email è andrea@email.com"
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Perfetto, ti faccio sapere appena possibile",
+            "usr": "Ok, ti ringrazio"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "A presto!",
+            "usr": "Arrivederci!"
+        }
+    ],
+    "Dialogue_y10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_y10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Salve, sarei alla ricerca di un lavoro a tempo determinato!"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buongiorno! Ora controlliamo insieme le posizioni aperte.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Può dirmi che tipo di formazione ha?",
+            "usr": "Mi sono diplomata all'istituto alberghiero"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ok. Ha già fatto delle esperienze lavorative dopo il conseguimento del diploma?",
+            "usr": "Sì, ho lavorato per 6 mesi facendo la receptionst in un ristorante."
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Ottimo.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Al momento sta proseguendo gli studi oppure sta solo cercando un lavoro?",
+            "usr": "Sto solo cercando lavoro!"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "D’accordo, purtroppo non mi risultano posizioni aperte con contratto a tempo determinato adatte al suo profilo.",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Sarebbe disposta a prendere in considerazione altri tipi di contratto?",
+            "usr": "Si, va bene."
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "In questo caso Business Community HR ha una posizione aperta per uno stage come addetto alla tesoreria. Potrebbe interessarle?",
+            "usr": "Cercavo qualcosa nel settore turistico, c'è nulla?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "No, spiacente, al momento non ci sono posizioni aperte nel settore turistico.",
+            "usr": "Qualche lavoro che preveda di lavorare con il pubblico?"
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Controllo subito.",
+            "usr": "Grazie."
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Sfortunatamente le posizioni aperte richiedono una laurea triennale.",
+            "usr": "Che peccato!"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Vuole maggiori informazioni sullo stage?",
+            "usr": "Si, grazie."
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Come addetto alla tesoreria si dovrà occupare della gestione e della rendicontazione del denaro dell’azienda. Tra le altre mansioni dovrà elaborare i flussi di cassa dell’azienda e le previsioni di spesa, oltre agli scostamenti rispetto alle previsioni. Dovrà inoltre redigere dei report sulla situazione finanziaria.",
+            "usr": "Mmh non fa proprio per me! Potresti contattarmi in futuro nel caso trovassi offerte nel settore turistico?"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Certo, non appena si apriranno delle posizioni nel settore la contatterò.",
+            "usr": "Grazie! A presto allora!"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Di nulla, le auguro una buona giornata!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_y11": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_y11"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buon pomeriggio",
+            "usr": "Salve buon pomeriggio, mi interessava intraprendere uno stage, potrebbe darmi qualche informazione?"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buon pomeriggio, cerco subito se abbiamo posizioni aperte. Nel frattempo mi parli un po’ di lei: che tipo di  studi ha fatto?",
+            "usr": "Mi sono appena laureata in design industriale, una triennale di Ingegneria "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": " ",
+            "usr": "La mia tesi trattava dell’automazione di sistemi industriali per fonti rinnovabili "
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Molto interessante! La sua laurea ha a che fare con la robotica o con l’elettronica?",
+            "usr": "Si è molto connessa all’elettronica, un po’ meno alla robotica ma sono entrambe discipline che mi appassionano "
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Ok, posso chiederle se sta considerando anche altri tipi di contratto oltre agli stage?",
+            "usr": "Preferirei uno stage ma sono ben disposta anche a altre tipologie"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "D’accordo. In che tipo di azienda le piacerebbe lavorare?",
+            "usr": "Non ho specifiche preferenze, ma mi piacerebbe molto una grande azienda, prediligo il lavoro di gruppo!"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Bene, durante i suoi studi ha fatto qualche esperienza lavorativa?",
+            "usr": "No purtroppo! "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Che tipo di abilità e skills ha avuto modo di apprendere durante i suoi studi?",
+            "usr": "Il lavoro di squadra sicuramente, mi piacerebbe avere un lavoro che mi faccia rapportare con persone! Mi descriverei come una ragazza disponibile ma al tempo stesso decisa "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Ha avuto modo di lavorare in laboratorio durante la sua formazione? Mi interessa sapere se ha esperienza con la circuiteria elettronica.",
+            "usr": "Si ho frequentato vari corsi nella triennale nell’ambito dell’elettronica "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ok. SELENIA ITALIA di Andrea Posarelli sta cercando un neolaureato in ingegneria elettronica che occupi la posizione di tecnico addetto alla produzione e collaudo.",
+            "usr": "Perfetto! Se mi mandi il loro recapito posso contattarlo  "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Certo, l’azienda è contattabile alla mail info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Desidera maggiori informazioni sulla posizione per cui si candida?",
+            "usr": "Al momento no, posso scriverti in futuro se avessi bisogno? "
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Certo, resto qui a disposizione.",
+            "usr": "Grazie mille per tutto! Buona giornata "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Di nulla, buona giornata a lei!",
+            "usr": " "
+        }
+    ],
+    "Dialogue_z10": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_z10"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": " ",
+            "usr": "Ciao, cerco un lavoro a tempo determinato, mi puoi aiutare?"
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Ciao! Certo, in che ambito stai cercando?",
+            "usr": "Vorrei lavorare nel settore turistico!"
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Benissimo, controllo tra le nostre offerte, Hai un'area di ricerca prestabilita?",
+            "usr": "Se possibile vorrei lavorare nella provincia di Milano."
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": "Ok, lasciami controllare le offerte che abbiamo a disposizione e ti dico",
+            "usr": "Ok!"
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Purtroppo non abbiamo offerte nel tuo settore. Ne abbiamo però una su Milano, come consulente. Se puoi essere interessata te ne parlo subito",
+            "usr": "Di cosa si tratterebbe?"
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Lavoreresti come consulente nell'ambito dei processi aziendali, ti occuperesti di reportistica, sistemi di Governance, Risk e Compliance",
+            "usr": "Sarebbe prevista formazione?"
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "In realtà l'azienda sta cercando un laureato con esperienza, che non credo sia il tuo caso. Ma potresti comunque scrivere loro una mail per capire se sono interessati al tuo profilo",
+            "usr": "Non c'è nessun'altra offerta, anche in altri settori?"
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Purtroppo non a Milano. Abbiamo offerte in Toscana, a Roma e in Piemonte, oltre ad una all'estero",
+            "usr": "Le offerte nelle altre zone sarebbero più inerenti al mio settore?"
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Purtroppo come ti ho detto non abbiamo offerte relative al tuo settore. Ci sono però delle offerte in cui non sono specificate skill pregresse, per cui è probabile che sia l'azienda stessa a occuparsi della formazione",
+            "usr": "Tra queste, potresti trovarmi quelle che non richiedono di avere una laurea?"
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "Ci sarebbe un tirocinio come addetto alla tesoreria. L'azienda di trova a Roma. Può interessarti?",
+            "usr": "In realtà non è proprio quello che cerco."
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": "Quali altri settori considereresti, oltre a quello turistico?",
+            "usr": "Sono disposta ad adattarmi, ma non avendo una laurea, che offerte rimangono?"
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Purtroppo sono in quello che ti ho indicato, a Roma, non viene espressamente richiesta la laurea. Se vuoi ti do il loro contatto e capite se l'offerta può interessarti e tu puoi interessare all'azienda",
+            "usr": "Si, va bene!"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Ok, la loro mail è info@azienda.com",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "L'azienda si chiama Business Community HR e si occupa di gestione delle risorse umane, principalmente",
+            "usr": "Bene, li contatterò!"
+        },
+        {
+
+            
+            "turn_id": 15,
+            "sys": "Ottimo! Ti servono altre informazioni?",
+            "usr": "No, grazie! Buon proseguimento!"
+        },
+        {
+
+            
+            "turn_id": 16,
+            "sys": "Grazie a te e buona fortuna nella ricerca! Se dovesse andare male ricontattaci, magari nel frattempo ci arriva qualche altra offerta slightly_smiling_face",
+            "usr": "Gentilissima! Grazie."
+        }
+    ],
+    "Dialogue_z11": [
+        {
+            "ID": [
+                [
+                    "dialogue_id",
+                    "Dialogue_z11"
+                ]
+            ],
+
+            
+            "turn_id": 1,
+            "sys": "Buonasera!",
+            "usr": "Ciao buonasera, volevo informazioni riguardo uno stage lavorativo "
+        },
+        {
+
+            
+            "turn_id": 2,
+            "sys": "Buonasera! In che ambito sta cercando?",
+            "usr": "Mi piacerebbe lavorare nel settore informatico "
+        },
+        {
+
+            
+            "turn_id": 3,
+            "sys": "Sarebbe eventualmente disposta a trasferirsi all'estero?",
+            "usr": "In realtà preferirei di no, o al massimo per brevi periodi!"
+        },
+        {
+
+            
+            "turn_id": 4,
+            "sys": " ",
+            "usr": "Vorrei cercare un poso di lavoro vicino Firenze, per stare con la mia famiglia "
+        },
+        {
+
+            
+            "turn_id": 5,
+            "sys": "Purtroppo nel suo ambito abbiamo solo un'offerta come software engineer, ma all'estero",
+            "usr": " "
+        },
+        {
+
+            
+            "turn_id": 6,
+            "sys": "Se è invece disposta a valutare altri ambiti, ci sarebbe una proposta a Pistoia",
+            "usr": "Il luogo al momento ha priorità assoluta! Di cosa si tratterebbe il lavoro di Pistoia? "
+        },
+        {
+
+            
+            "turn_id": 7,
+            "sys": "Sarebbe un lavoro da assistente capocommessa in una ditta che si occupa di edilizia. Se vuoi ti spiego meglio la posizione",
+            "usr": "Si ti ringrazio! Potrebbe piacermi "
+        },
+        {
+
+            
+            "turn_id": 8,
+            "sys": "Come ti ho detto si tratta di un'azienda di edilizia. Tu ti occuperesti delle loro commesse, dallo studio di fattibilità alle gare d'appalto, soprattutto per l'aspetto documentale. Si occupano anche del lavoro produttivo in cantiere.",
+            "usr": "Capisco, interessante! Non sono automunita, sai se potrebbe essere un problema? "
+        },
+        {
+
+            
+            "turn_id": 9,
+            "sys": "Non sono indicate richieste particolare dall'azienda, ma se vuoi chiedere direttamente potrei darti il loro contatto",
+            "usr": "Sai dirmi che tipologia di contratto propongono? "
+        },
+        {
+
+            
+            "turn_id": 10,
+            "sys": "All'inizio si tratterebbe di uno stage, ma l'azienda è grande (avrà un 100-250 dipendenti) per cui è probabile che poi ti chiedano di restare, se tutto va bene",
+            "usr": "Mi sembra perfetto! "
+        },
+        {
+
+            
+            "turn_id": 11,
+            "sys": " ",
+            "usr": "Puoi girarmi il loro contatto? "
+        },
+        {
+
+            
+            "turn_id": 12,
+            "sys": "Certo! La loro mail è info@azienda.com",
+            "usr": "Ti ringrazio! Essendo la mia prima esperienza lavorativa potrei avere qualche dubbio riguardo il colloquio! Posso contattare te oppure puoi indicarmi a chi rivolgermi?"
+        },
+        {
+
+            
+            "turn_id": 13,
+            "sys": "Puoi tranquillamente contattare me. Considera comunque che l'azienda non ci ha indicato skill o esperienze pregresse come necessarie, per cui è possibile che si occupino loro della formazione.",
+            "usr": "Perfetto, sei stata molto disponibile, ti ringrazio! Buona giornata Silvia, a presto! "
+        },
+        {
+
+            
+            "turn_id": 14,
+            "sys": "Grazie a te, spero tu abbia fortuna nella ricerca! Se per qualche motivo questo non fosse il lavoro giusto ricontattaci!",
+            "usr": " "
+        }
+    ]
+}

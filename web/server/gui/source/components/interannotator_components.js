@@ -52,6 +52,7 @@ Vue.component("interannotator-view", {
     },
 
     getAllCollectionIdsFromServer() {
+        document.body.style.cursor = "progress";
         backend.get_collections_ids_async("dialogues_collections")
             .then( (response) => {
                 this.allCollectionsMetadata = response;
@@ -60,7 +61,7 @@ Vue.component("interannotator-view", {
     },
 
     count_errors() {
-        for (i=0; i < this.allCollectionsMetadata.length-1; i++) {
+        for (i=0; i < this.allCollectionsMetadata.length; i++) {
             var count = 0;
             var resolved = 0;
             if (this.allCollectionsMetadata[i]["errors"]["errorsMeta"] != undefined) {
@@ -76,7 +77,8 @@ Vue.component("interannotator-view", {
             this.allCollectionsMetadata[i]["errors"]["found"] = count; 
             this.allCollectionsMetadata[i]["errors"]["resolved"] = resolved;  
         }
-        console.log(this.allCollectionsMetadata);
+        console.log("Error count",this.allCollectionsMetadata);
+        document.body.style.cursor = null;
     },
 
     dialogue_already_visited(id) {
@@ -85,23 +87,18 @@ Vue.component("interannotator-view", {
 
     clicked_collection(clickedCollection) {
         //load in interannotator all the annotated versions of the same collection
-        mainContainer.style.cursor = "progress";
-        backend.del_all_dialogues_async("admin")
+        document.body.style.cursor = "progress";
+        backend.admin_import_for_interannotation(clickedCollection)
             .then( (response) => {
+                console.log("===== LOADING ANNOTATED COLLECTIONS FOR",clickedCollection," =====");
                 console.log(response);
-                backend.admin_import_all_annotations(clickedCollection)
-                    .then( (response) => {
-                        console.log("===== LOADING ANNOTATED COLLECTIONS FOR",clickedCollection," =====");
-                        console.log(response);
-                        mainContainer.style.cursor = null;
-                        if (response.data.status == "fail") {
-                            alert(guiMessages.selected.admin.importConflictsResult);
-                            return;
-                        } else {
-                          adminEventBus.$emit("conflicts_on_collection", clickedCollection);
-                        }
-                    }
-                );
+                document.body.style.cursor = null;
+                if (response.data.status == "fail") {
+                    alert(guiMessages.selected.admin.importConflictsResult);
+                    return;
+                } else {
+                    adminEventBus.$emit("conflicts_on_collection", clickedCollection);
+                }
             }
         );
     },
@@ -128,8 +125,7 @@ Vue.component("interannotator-view", {
   `
   <div class="all-dialogues-container" id="listedDialoguesContainer">
 
-    <agreement-modal
-        v-if="showAgreement" @close="showAgreement = false">
+    <agreement-modal v-if="showAgreement" @close="showAgreement = false">
     </agreement-modal>
 
     <div class="dialogue-list-title-container">
@@ -170,17 +166,25 @@ Vue.component("interannotator-view", {
                           <span v-else>{{name.gold}}</span>
                 </div>
 
-                <div v-if="show_annotators(name.id)"
-                     class="int-coll-num-turns-clicked"
-                     v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
-                </div>
+                <template v-if="name.assignedTo.length == 1">
+                    <div class="int-coll-num-turns static-num-turns" style="padding-right:10px;">
+                        {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo[0] }}
+                    </div>
+                </template>
 
-                <div v-else
-                     class="int-coll-num-turns"
-                     v-on:click="toggle_show_annotators(name.id)">
-                    {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo.length }}
-                </div>
+                <template v-else>
+                    <div v-if="show_annotators(name.id)"
+                         class="int-coll-num-turns-clicked"
+                         v-on:click="toggle_show_annotators(name.id)">
+                        {{ guiMessages.selected.admin.to }}: {{ name.assignedTo.join(", ") }}
+                    </div>
+
+                    <div v-else
+                         class="int-coll-num-turns"
+                         v-on:click="toggle_show_annotators(name.id)">
+                        {{ guiMessages.selected.admin.assignedTo }}: {{ name.assignedTo.length }}
+                    </div>
+                </template>
 
             </div>
 
@@ -223,12 +227,13 @@ Vue.component("interannotator-app", {
           // A list of dialogue IDs for which annotator names should be displayed
           showAnnotatorNamesForIds: [],
           // dialogues to be marked
-          dialoguesWithErrors: [],
+          dialoguesWithErrors: {},
+          errors: {},
           //Reference to the language data
           guiMessages,
       }
   },
-
+  
   mounted: function() {
       this.init();
   },
@@ -257,37 +262,47 @@ Vue.component("interannotator-app", {
     },
 
     getAllDialogueIdsFromServer() {
-        backend.get_all_dialogue_ids_async("admin")
+        document.body.style.cursor = "progress";
+        backend.get_all_dialogue_ids_async("admin", this.displayingCollection)
           .then( (response) => {
               console.log(response);
-              this.allDialogueMetadata = response;
-              backend.get_collection_errors_async(this.displayingCollection)
-                .then( (response) => {
-                    console.log(response);
-                    this.get_dialogues_with_errors(response);
-                    //this.errorList = response.errors
-                    //this.metaDataList = response.meta;
-              });
+              this.allDialogueMetadata = response["metadata"];
+              this.errors = response["errorList"];
+              this.get_dialogues_with_errors(this.errors);
         });
     },
 
     get_dialogues_with_errors(errors) {
         for (dialogue in errors["errors"]) {
             if (errors["errors"][dialogue].length != 0) {
-                this.dialoguesWithErrors.push(dialogue);
-                this.dialoguesWithErrors.forEach( element => 
-                    document.getElementById(element).setAttribute("class","int-listed-dialogue relevant")
-                );
+                this.dialoguesWithErrors[dialogue] = true;
             }
         }
         console.log("Errors found in",this.dialoguesWithErrors);
+        this.$forceUpdate();
+        document.body.style.cursor = null;
     },
 
     fill_list(id) {
         if (!this.dialoguesWithErrors.includes(id)) {
             this.dialoguesWithErrors.push(id);
         }
-        console.log(this.dialoguesWithErrors);
+    },
+
+    errorCheck: function(id) {
+        if (this.dialoguesWithErrors[id] == true) {
+            return {
+                opacity: `1`,
+            }
+        }
+    },
+
+    errorCount: function(id) {
+        if (this.errors["errors"] != undefined) {
+            if (this.errors["errors"][id] != undefined) {
+                return "Errors: "+this.errors["errors"][id].length; 
+            }
+        }
     },
 
     dialogue_already_visited(id) {
@@ -341,13 +356,18 @@ Vue.component("interannotator-app", {
                 console.log('THE READER VALUE', reader)
                 console.log('THE EVENT VALUE', event)
                 text = reader.result
-                backend.import_new_dialogue_from_json_string_async(text, file.name)
+                backend.admin_import_for_interannotation(this.displayingCollection, text)
                     .then( (response) => {
-
-                        if ('error' in response.data) {
+                        if (response.data["error"] != undefined) {
                             alert(`JSON file \"${file.name}\" is not in the correct format. Error from the server: ${response.data.error}`)
                         } else {
-                            this.getAllDialogueIdsFromServer();
+                            backend.get_collection_errors_async(this.displayingCollection)
+                            .then( (response) => {
+                                console.log(response);
+                                this.get_dialogues_with_errors(response);
+                                //this.errorList = response.errors
+                                //this.metaDataList = response.meta;
+                          });
                         }
 
                     });
@@ -377,7 +397,7 @@ Vue.component("interannotator-app", {
     },
 
     wipe_cache() {
-        if (confirm(guiMessages.selected.admin.wipeCache)) {
+        if (confirm(guiMessages.selected.resolution_app.buttonWipeCache)) {
             backend.update_collection_async(this.displayingCollection, "dialogues_collections", {"errors":{}})
                 .then( (response) => {
                     console.log(response);
@@ -427,12 +447,25 @@ Vue.component("interannotator-app", {
         <h2 class="list-title">{{guiMessages.selected.admin.dataItems}}</h2>
         <button class="btn btn-sm button-title" @click="wipe_cache()">{{ guiMessages.selected.admin.button_wipeCache}}</button>
         <button class="help-button btn btn-sm button-title" style="margin-right:5px;" @click="download_gold()">{{ guiMessages.selected.admin.button_downloadGold}}</button>
+        <!--
+        <input type="file"
+            id="fileInput"
+            name="fileInput"
+            accept=".txt, .json"
+        v-on:change="open_file($event)">
+        <label for="fileInput"
+            id="fileInputLabel"
+            class="btn btn-sm button-title">
+            {{ guiMessages.selected.admin.button_upload }}
+        </label>
+        -->
     <ul class="dialogue-list">
 
       <li class="int-listed-dialogue"
           v-for="(dat, index) in allDialogueMetadata"
           v-bind:id="dat[0]"
-          v-bind:key="dat[0]">
+          v-bind:key="dat[0]"
+          v-bind:style="errorCheck(dat[0])">
 
           <div class="int-el dialogue-list-single-item-container">
 
@@ -442,7 +475,8 @@ Vue.component("interannotator-app", {
                     {{dat[0]}}
                 </div>
 
-                <div class="filler-space" v-on:click="clicked_dialogue(dat[0])">
+                <div class="error-count-space" v-bind:id="dat[0]+'_count'" v-on:click="clicked_dialogue(dat[0])">
+                {{errorCount(dat[0])}}
                 </div>
 
                 <div v-if="dialogue_already_visited(dat[0])"
@@ -451,17 +485,25 @@ Vue.component("interannotator-app", {
                      {{ guiMessages.selected.admin.visited }}
                 </div>
 
-                <div v-if="show_annotators(dat[0])"
-                     class="dialogue-num-turns"
-                     v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
-                </div>
+                <template v-if="dat[1].length == 1">
+                  <div class="dialogue-num-turns">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1][0] }}
+                  </div>
+                </template>
 
-                <div v-else
-                     class="dialogue-num-turns"
-                     v-on:click="toggle_show_annotators(dat[0])">
-                    {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].length }}
-                </div>
+                <template v-else>
+                  <div v-if="show_annotators(dat[0])"
+                       class="dialogue-num-turns"
+                       v-on:click="toggle_show_annotators(dat[0])">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].join(", ") }}
+                  </div>
+
+                  <div v-else
+                       class="dialogue-num-turns"
+                       v-on:click="toggle_show_annotators(dat[0])">
+                      {{ guiMessages.selected.admin.actualAnnotators }}: {{ dat[1].length }}
+                  </div>
+                </template>
 
             </div>
 

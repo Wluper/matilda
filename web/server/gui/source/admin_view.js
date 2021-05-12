@@ -35,6 +35,8 @@ Vue.component("main-admin-view", {
         let ask = confirm("Do you want to log out?");
         if (ask == true) {
             localStorage.removeItem("remember");
+            databaseEventBus.$emit( "collection_active", null );
+            window.onbeforeunload = null;
             location.reload();
          }
     },
@@ -74,9 +76,15 @@ Vue.component("main-admin-view", {
     },
 
     switchToAnnotation() {
-        console.log('--- BACK TO ANNOTATION VIEW ----');
+        console.log('--- ANNOTATION VIEW ----');
         databaseEventBus.$emit("assignments_selected");
     },
+
+    switchToConfiguration() {
+        console.log('--- CONFIGURATION VIEW ----');
+        this.view = 'configuration';
+    },
+
 
 
     open_file(event){
@@ -98,19 +106,21 @@ Vue.component("main-admin-view", {
 
         <user-bar v-bind:userName="userName"></user-bar>
         <div class="help-button-container">
-            <button class="help-button btn btn-sm btn-primary" @click="switchToAnnotation()">{{ guiMessages.selected.admin.annotation}}</button>
+            <button class="help-button btn btn-sm btn-primary" @click="switchToAnnotation()">{{ guiMessages.selected.admin.goToAnnotation}}</button>
         </div>
       </div>
       <div class="inner-wrap">
         <div class="admin-panel">
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToUsersManagement()">{{ guiMessages.selected.admin.userButton }}</button>
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.admin.dataManagement}}</button>
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToSupervision()">{{ guiMessages.selected.admin.supervision}}</button>
-          <button class="help-button btn btn-sm btn-primary panel" @click="switchToConflicts()">{{ guiMessages.selected.admin.interAnno }}</button>
+          <button class="btn btn-sm btn-primary panel" @click="switchToUsersManagement()">{{ guiMessages.selected.admin.userButton }}</button>
+          <button class="btn btn-sm btn-primary panel" @click="switchToCollection()">{{ guiMessages.selected.admin.dataManagement}} </button>
+          <button class="btn btn-sm btn-primary panel" @click="switchToSupervision()">{{ guiMessages.selected.admin.supervision}}</button>
+          <button class="btn btn-sm btn-primary panel" @click="switchToConflicts()">{{ guiMessages.selected.admin.interAnno }}</button>
+          <button class="btn btn-sm btn-primary panel" @click="switchToConfiguration()">{{ guiMessages.selected.admin.configPage }}</button>
           <p>{{guiMessages.selected.admin_panel[1]}}</p>
           <p>{{guiMessages.selected.admin_panel[2]}}</p>
           <p>{{guiMessages.selected.admin_panel[3]}}</p>
           <p>{{guiMessages.selected.admin_panel[0]}}</p>
+          <p>{{guiMessages.selected.admin_panel[5]}}</p>
         </div>
       </div>
     </div>
@@ -143,6 +153,10 @@ Vue.component("main-admin-view", {
       v-bind:collectionId="displayingCollection"
       v-bind:dialogueId="displayingDialogue">
   </resolution-app>  
+
+  <configuration-view v-else-if="view === 'configuration'" 
+      v-bind:userName="userName">
+  </configuration-view>  
 </div>
   `
 

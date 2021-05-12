@@ -35,6 +35,7 @@
 
 .soft-text {
     font-size: 11px;
+    color: #259af7e0;
 }
 
 .multilabel-string-item-wrapper {
@@ -44,6 +45,10 @@
                    / 1fr 9fr;
     padding: 0px;
     padding-bottom:5px;
+}
+
+.multilabel-string-item-new-wrapper {
+    font-size:15px;
 }
 
 .multilabel-string-checkbox-container {
@@ -127,13 +132,22 @@
 }
 
 .active_label {
-    border:1px solid rgba(250, 250, 105, 0.48);
-    vertical-align:bottom;
-    background-color: rgb(255, 255, 182);
+    border: 1px solid #97c8ed;
+    vertical-align: bottom;
+    background-color: #3a9dd633;
 }
 
 .active_button {
     background-color: #259af7ad !important;
+}
+
+.multilabel-string-item-selector {
+    margin-bottom: 5px;
+    width: 48%;
+    font-size: 14px;
+    border-color: #e1e1e3;
+    color: rgb(0 0 0 / 91%);
+    font-family: 'CoreSansNR35Light';
 }
 
 .txt-sel-button {
@@ -189,14 +203,18 @@
     border:1px solid rgba(0,0,0,0.1);
     margin-top:5px;
     display:block;
+    width:-webkit-fill-available;
+    width:-moz-available;
 }
 
 .global-label {
     cursor: pointer;
+    text-transform:capitalize;
 }
 
 .supervision_readonly {
     opacity:0.7;
+    /*pointer-events:none;*/
 }
 
 #supervision #multilabel-string-header, 
