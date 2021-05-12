@@ -12,7 +12,7 @@ Vue.component("datamanagement-view", {
             userList:{},
             userName: mainApp.userName,
             allUsers:[],
-            selectedCollection:"",
+            selectedCollection:[],
             allEntriesNamedMetadata:{},
             tIndex:"",
         }
@@ -142,10 +142,10 @@ Vue.component("datamanagement-view", {
         },
 
         switch_view(clickedUser) {
-            if ( this.selectedCollection == "" ) {
+            if ( this.selectedCollection.length == 0 ) {
                 console.log("switching from collection to user view");
                 this.showUser = clickedUser;
-                this.selectedCollection = "";
+                this.selectedCollection = [];
                 this.allEntriesNamedMetadata = [];
                 this.tIndex = "";
                 this.status = "users";
@@ -158,8 +158,8 @@ Vue.component("datamanagement-view", {
         },
 
         reset_view() {
-            if (this.selectedCollection != "") {
-                this.selectedCollection = "";
+            if (this.selectedCollection.length != 0) {
+                this.selectedCollection = [];
             } else {
                 this.showUser = "all";
             }
@@ -188,7 +188,7 @@ Vue.component("datamanagement-view", {
 
             <div class="inner-wrap" v-if="status != 'creation' && status != 'collection'">
                 <div>
-                    <template v-if="selectedCollection != ''">
+                    <template v-if="selectedCollection.length != 0">
                         <h2 class="list-title">
                             {{guiMessages.selected.collection.annotatorToCollection}}
                         </h2>
@@ -228,7 +228,7 @@ Vue.component("datamanagement-view", {
                             </div>
                             <input type="radio" class="user-checkbox radio-primary" v-bind:id="'coll_'+collection.id" v-bind:value="collection.id" v-model="selectedCollection.id">
                             
-                            <div v-if="selectedCollection == ''" class="entry-info" v-on:click="clicked_entry(collection.id, index)" style="opacity:1;">
+                            <div v-if="selectedCollection.length == 0" class="entry-info" v-on:click="clicked_entry(collection.id, index)" style="opacity:1;">
                                 <div class="entry-id">
                                     <span>ID:</span> {{collection.id}}
                                 </div>

@@ -236,11 +236,6 @@ Vue.component('users-creation-modal', {
             );
         },
 
-        show_password(event) {
-            event.target.setAttribute("type","text");
-            //event.target.setAttribute("onclick","javascript:this.setAttribute('type','password'); this.onclick = null")
-        }, 
-
         close: function() {
             adminEventBus.$emit("clean_active_user");
             adminEventBus.$emit("users_updated");
@@ -270,7 +265,7 @@ Vue.component('users-creation-modal', {
                     <input v-else class="user-creation" id="create_username" type="text">
                     <br>
                     <label for="create_password">Password:</label>
-                    <input class="user-creation" id="create_password" type="password" v-on:click="show_password($event)">
+                    <input class="user-creation" id="create_password" type="password">
                     <br>
                     <label for="create_email">Email:</label>
                     <input class="user-creation" id="create_email" type="text">
