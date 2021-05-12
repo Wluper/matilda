@@ -7,7 +7,7 @@
             "lida_model.json",
             "unipi_model_v2.json"
         ],
-        "docker": false,
+        "docker": true,
         "session_guard": true,
         "full_log": false
     },
@@ -19,6 +19,6 @@
             "username": null,
             "password": null
         },
-        "optional_uri": null
+        "optional_uri": "mongodb://mongo:27017/?retryWrites=true&w=majority"
     }
 }
