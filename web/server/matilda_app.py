@@ -150,7 +150,8 @@ def handle_configuration_file(annotationStyle=None, option=None):
         data = request.get_json()
 
         newFile = data["json"]
-        newFile = json.loads(newFile)
+        if type(newFile) != dict:
+            newFile = json.loads(newFile)
 
         #normalize name
         if ".json" in annotationStyle:
