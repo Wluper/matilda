@@ -19,6 +19,6 @@
             "username": null,
             "password": null
         },
-        "optional_uri": null
+        "optional_uri": "mongodb://mongo:27017/?retryWrites=true&w=majority"
     }
 }
