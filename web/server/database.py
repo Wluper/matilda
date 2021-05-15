@@ -45,7 +45,7 @@ class DatabaseManagement(object):
 		logging.info(" * MATILDA: Connecting to database "+str(databaseURI))
 		client.server_info()
 	except Exception as e: 
-		logging.warning(" * "+e+"\n * Connecting Errror. Trying again with legacy configuration...")
+		logging.warning(" * "+str(e)+"\n * Connecting Errror. Trying again with legacy configuration...")
 		conf["database"]["optional_uri"] = None
 		databaseURI = database_uri_compose(conf["database"])
 		client = MongoClient(databaseURI)
