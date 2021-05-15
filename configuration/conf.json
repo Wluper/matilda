@@ -9,10 +9,10 @@
         ],
         "docker": false,
         "session_guard": true,
-        "full_log": false
+        "full_log": true
     },
     "database": {
-        "name": "matilda",
+        "name": "matilda_wsgi",
         "legacy_configuration": {
             "address": "localhost",
             "port": 27017,

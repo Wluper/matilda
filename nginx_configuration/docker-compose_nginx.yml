@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3'
 services:
   mongo:
     image: mongo:latest
@@ -13,7 +13,7 @@ services:
     ports:
       - 27017:27017
   matilda:
-    image: davivcu/matilda:multimodel
+    image: davivcu/matilda:latest
     volumes: 
       - ./configuration:/configuration
     restart: always
@@ -26,8 +26,8 @@ services:
   nginx:
     image: nginx
     volumes:
-      - ./nginx_configuration/conf.d:/etc/nginx/conf.d
-      - ./nginx_configuration/make-ssl-certs.sh:/docker-entrypoint.d/40-make-ssl-certs.sh
+      - ./nginx_configuration:/etc/nginx/conf.d
+      - ./nginx_configuration/make-ssl-certs.sh:/docker-entrypoint.d/make-ssl-certs.sh
     restart: always
     networks:
       - nginx_net
