@@ -57,6 +57,7 @@ class Configuration(object):
             __DEFAULT_PATH = "configuration/"
             DEFAULT_PATH = __DEFAULT_PATH
             DOCKER = True
+            logging.info(" * MATILDA: Running on Docker")
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:

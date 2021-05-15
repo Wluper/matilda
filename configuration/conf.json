@@ -7,7 +7,6 @@
             "lida_model.json",
             "unipi_model_v2.json"
         ],
-        "docker": false,
         "session_guard": true,
         "full_log": true
     },
