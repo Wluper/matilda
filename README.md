@@ -147,9 +147,6 @@ You can test it's running by:
 Each option you chose before you can now simply navigate to http://localhost:5000 if you installed the server locally
 or navigate to the remote server address.
 Keep in mind you may need to open the correct ports on your firewall(s) in order to reach the server.
-
-HTTP Requests from your client may not reach your server in some configuration environment,
-in those few cases please check and edit the backend address in MATILDA's file `/web/server/gui/source/utils/backend.js`.
 Other configuration options are exposed in `/Configuration/conf.json`.
 
 ### First username and password
@@ -166,19 +163,23 @@ All configuration changes that you may wish to make to MATILDA network and datab
 There you can change:
    - App ports (default 5000) and address (127.0.0.1)
    - Database location with address:port combination (127.0.0.1:27017) or mongoDB URI (mongodb://mongo:27017/?retryWrites=true&w=majority)
-   - The annotation models you want to be available inside MATILDA. The json files you are referring to must be included in the Configuration folder.
+   - The annotation models you want to be available inside MATILDA. The json files you are referring to, the models, must be included in the Configuration folder.
+   - Whether or not enforce session security (which is strongly advised) with the session_guard parameter.
+   - The event logging level saved in `/web/server/matilda.log` file.
 
-If you are using the Docker version you can also perform additional configuration with `/Configuration/gunicorn_run.sh`.
+If you are using the Docker version you can also perform additional configuration with `/Configuration/gunicorn_run.sh` in order to set the workers number and other gunicorn options.
 
 ### Annotation Models
 
 All configuration changes that you may wish to make to MATILDA's annotation model can be done by editing the json file
 `/Configuration/lida_model.json` or by adding a new one. This script contains a configuration dictionary that describes
-which labels will appear in MATILDA's front end.
+which labels will appear in MATILDA's annotation interface.
 You can also add an entire new annotation model file and put a reference to it in the `/Configuration/conf.json` file in
 order to instruct the program to load it on start.
 
-You can currently add three different types of new labels to MATILDA:
+## 3. Advanced Configuration
+
+Any annotation model has up to four different types of labels in MATILDA:
 
 1. `multilabel_classification` :: will display as checkboxes which you can
    select one or more of.
@@ -191,9 +192,9 @@ You can currently add three different types of new labels to MATILDA:
 3. `string` :: will display underneath the user's utterance as a string
    response. This is the label field that would be used for a response to the
    user's query.
-
-
-## 3. Advanced Configuration
+   
+4. `global_classification_string` :: similar to multilabel_classification_string
+   but it's not dialogue turn-related, it refers to the entire dialogue.
 
 ### New Labels
 
