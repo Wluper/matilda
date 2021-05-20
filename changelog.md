@@ -12,18 +12,18 @@
 
 ## 1.5
 
-Configuration view in Admin Panel
-Supervision annotation rate bars
-Supervision view now allows to upload an already annotated dialogue collection
-Inter-annotator stats for multilabel-string-classification
-Annotation Rate for single dialogue is calculated anew when entering dialogue annotation mode
+- Configuration view in Admin Panel
+- Supervision annotation rate bars
+- Supervision view now allows to upload an already annotated dialogue collection
+- Inter-annotator stats for multilabel-string-classification
+- Annotation Rate for single dialogue is calculated anew when entering dialogue annotation mode
 
 ## 1.4
 
-Dialogue annotation view displays few annotation customizable options: 
-  resizable layout, useful for very large or very small screen layouts. 
-  Character limit for turn utterances with scroll-bar.
-  Auto-save on turn change.
+- Dialogue annotation view displays few annotation customizable options: 
+  - Resizable layout, useful for very large or very small screen layouts. 
+  - Character limit for turn utterances with scroll-bar.
+  - Auto-save on turn change.
 
 
 ## Citation
