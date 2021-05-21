@@ -528,6 +528,13 @@ async function load_dialogues(doc) {
     try {
 
         var response = await axios.put(apiLink)
+
+        if (response["data"]["error"] != undefined) {
+            alert(response["data"]["error"])
+            if (response["data"]["status"] == "logout") {
+                mainApp.force_logout()
+            }
+        }
         return response
     
     } catch(error) {

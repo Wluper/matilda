@@ -15,7 +15,7 @@ from collections import defaultdict
 # >>>> Local <<<<
 from dummy_models import TypeDummyModel, BeliefStateDummyModel, PolicyDummyModel, SysDummyModel
 
-#logging.basicConfig(filename='matilda.log', level=logging.DEBUG, format='%(asctime)s VALIDATOR %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', style='%')
+logging.basicConfig(filename='matilda.log', level=logging.DEBUG, format='%(asctime)s VALIDATOR %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', style='%')
 
 ##############################################
 #                  CONFIG Dict
@@ -47,7 +47,6 @@ class Configuration(object):
     """
 
     DEFAULT_PATH = ""
-    DOCKER = False
 
     #importing json configuration file
     try: 
@@ -56,8 +55,6 @@ class Configuration(object):
             conf = json.load(json_file)
             __DEFAULT_PATH = "configuration/"
             DEFAULT_PATH = __DEFAULT_PATH
-            DOCKER = True
-            logging.info(" * MATILDA: Running on Docker")
     except:
         #standalone
         with open('../../configuration/conf.json') as json_file:
@@ -111,13 +108,13 @@ class Configuration(object):
                             message = ("ERROR1: Label \'{}\' is listed as \"required\" in the " \
                                     "config.py file, but is missing from the provided " \
                                     "dialogue in turn {}.".format(labelName, i))
-                            logger.info(message, turn)
+                            logging.info(message, turn)
                             return message
 
                         if info["required"] and not turn[labelName]:
                             message = ("ERROR2: Required label, \'{}\', does not have a value " \
                                 "provided in the dialogue in turn {}".format(labelName, i))
-                            logger.info(message, turn)
+                            logging.info(message, turn)
                             return message
 
                         if info["required"] and ("multilabel_classification" == info["label_type"]):
@@ -128,11 +125,11 @@ class Configuration(object):
                                 message = "ERROR3: One of the provided labels in the list: " \
                                    "\'{}\' is not in allowed list according to " \
                                    "config.py in turn {}".format(providedLabels, i)
-                                logger.info(message, turn)
+                                logging.info(message, turn)
                                 return message
         except:
             message = "ERROR4: dialogue in list couldn't validate with the current annotation style model"
-            logger.info(message)
+            logging.info(message)
             return message
             
         return dialogue

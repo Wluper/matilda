@@ -84,8 +84,6 @@ def handle_configuration_file(annotationStyle=None, option=None):
                     for setting in section:
                         responseObject[setting][section] = setting
 
-            responseObject["app"]["docker"] = Configuration.DOCKER
-
             #default mongodb databases not listed
             ignoreList = ["admin","config","local"]
 
@@ -591,10 +589,16 @@ def handle_switch_collection_request(user, doc):
 
         #import and format new dialogues
         for docCollection in docRetrieved:
-            __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+            annotationStyle = retrieve_annotation_style_name(doc)
+            if annotationStyle != False:
+                __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+            else:
+                responseObject["error"] = "The linked annotation model is not currently loaded."
+                return jsonify( responseObject )
 
-        dialogueFile.change_collection(user, doc)
-        responseObject["status"] = "success"
+        if responseObject["status"] != "error":
+            dialogueFile.change_collection(user, doc)
+            responseObject["status"] = "success"
 
         return jsonify( responseObject )
 
@@ -1198,6 +1202,11 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
 
     annotationStyle = retrieve_annotation_style_name(fileName)
 
+    if annotationStyle == False:
+        currentResponseObject["error"] = "The selected annotation style is no more in the database."
+        currentResponseObject["status"] = "error" 
+        return currentResponseObject
+
     for dialogue_name, dialogue in dialogueDict.items():
 
         dialogue = Configuration.validate_dialogue(annotationStyle,dialogue)
@@ -1365,10 +1374,16 @@ def retrieve_annotation_style_name(collection):
     annotationStyle = search[0]["annotationStyle"]
 
     #if annotation model name not valid or empty system falls back to default model
-    if len(annotationStyle) <= 1:
+    if len(annotationStyle) == 0:
         annotationStyle = Configuration.annotation_styles[0]
 
-    return annotationStyle
+    try:
+        print(Configuration.annotation_styles[annotationStyle])
+        return annotationStyle
+    except:
+        logging.warning(" * The annotation style referenced is not loaded. Maybe it was deleted?")
+        return False
+    
 
 ################################
 # STATIC METHODS

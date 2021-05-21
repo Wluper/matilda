@@ -435,7 +435,7 @@ Vue.component('help-general-config-modal', {
 
           <div class="modal-header">
             <slot name="header">
-              {{guiMessages.selected.confGuide}}
+              {{guiMessages.selected.admin.confGuide}}
             </slot>
           </div>
 

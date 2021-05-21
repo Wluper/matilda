@@ -305,7 +305,7 @@ var mainApp = new Vue({
                   v-bind:userName="userName">
       </main-admin-view>
 
-      <all-dialogues v-else
+      <all-dialogues v-else 
                    v-bind:alreadyVisited="alreadyVisited"
                    v-bind:collectionRate="collectionRate">
       </all-dialogues>

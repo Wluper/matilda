@@ -237,7 +237,6 @@ Vue.component("configuration-view", {
                     <h2 class="list-title" style="margin-bottom:6.5%;">Matilda</h2>
                     <h4>{{guiMessages.selected.database.location}}: <span>{{settings.app.address}}</span></h4>
                     <h4>{{guiMessages.selected.database.port}}: <span>{{settings.app.port}}</span></h4>
-                    <h4>Docker: <span>{{settings.app.docker}}</span></h4>
                     <h4>Session Guard: <span>{{settings.app.session_guard}}</span></h4>
                     <h4>Full Server log: <span><input type="checkbox" v-model="settings.app.full_log" id="full_logs" v-on:change="change_logs(settings.app.full_log)"/></span></h4>
                     <button class="grey-compact-button" v-on:click="inspectingLogs = true">Show Logs</button>

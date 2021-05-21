@@ -32,7 +32,7 @@ Vue.component("database-header", {
                 <user-bar v-bind:userName="userName"></user-bar>
                 <div class="help-button-container">
                     <button v-if="role == 'administrator'" class="btn-mid btn btn-sm btn-primary" @click="admin_panel_clicked()">{{guiMessages.selected.admin.button_admin}}</button>
-                    <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.admin.annotation}}</button>
+                    <!-- <button v-if="activeColl != null" v-on:click="go_back($event)" class="back-button btn btn-sm">{{guiMessages.selected.admin.annotation}}</button> -->
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
@@ -160,8 +160,12 @@ Vue.component("collection-view", {
                         .then( (response) => {
                             console.log("==== DIALOGUES IMPORT ====");
                             console.log(response);
+                            if (response.data.error) {
+                                document.body.style.cursor = null;
+                                return;
+                            }
                             if (response.data.created == true) {
-                                console.log("=== CREATED NEW DOCUMENT ====")
+                                console.log("=== CREATED NEW DOCUMENT FOR ANNOTATOR ====")
                             }
                             databaseEventBus.$emit("collection_active", clickedEntry);
                             document.body.style.cursor = null;
@@ -271,7 +275,7 @@ Vue.component("collection-view", {
                 </ul>
 
                 <ul class="annotation-list">
-                <h2 class="list-title">{{guiMessages.selected.lida.assignedColl}}</h2>
+                    <h2 class="list-title">{{guiMessages.selected.lida.assignedColl}}</h2>
                     <li class="listed-entry" v-for='name in allEntryMetadata' v-bind:id="name.id">
                         
                         <div v-if="name.id == activeCollection" class="entry-list-single-item-container" style="opacity:0.3">
@@ -286,7 +290,7 @@ Vue.component("collection-view", {
                                     <span>{{guiMessages.selected.collection.collAssi}}:</span> {{name.assignedTo.join(", ")}}
                                 </div>
                                 <div class="entry-date">
-                                    {{name.lastUpdate.slice(0,-3)}}
+                                    {{name.lastUpdate.slice(0,-3)}} <br>
                                     <span id="activeAnnotationStyle" style="display: contents;">{{name.annotationStyle.split(".")[0]}}</span>
                                 </div>
                             </div>
@@ -305,7 +309,7 @@ Vue.component("collection-view", {
                                     <span style="color: #087fdd; font-weight: 100;">{{name.assignedTo.join(", ")}}</span>
                                 </div>
                                 <div class="load-entry-date">
-                                    {{name.lastUpdate.slice(0,-3)}}
+                                    {{name.lastUpdate.slice(0,-3)}} <br>
                                     {{name.annotationStyle.split(".")[0]}}
                                 </div>
                             </div>
