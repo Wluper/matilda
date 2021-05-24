@@ -589,6 +589,7 @@ WluperDark: 0e181e
     outline: none;
     border: 1px solid #e1e1e3;
     padding: 10px 15px;
+    overflow-y: scroll;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
