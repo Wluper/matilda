@@ -254,8 +254,12 @@
     background-color: rgb(0 0 0 / 10%);
 }
 
-.container-bar .annotated-bar:nth-child(2n) {
-    border-left:4px solid black;
+.container-bar .annotated-bar:nth-child(1) {
+    border-left:none;
+}
+
+.container-bar .annotated-bar:nth-child(n) {
+    border-left:4px solid #000000ab;
 }
 
 .annotated-fill {
