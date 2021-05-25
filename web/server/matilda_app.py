@@ -1204,10 +1204,10 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
 
     annotationStyle = retrieve_annotation_style_name(fileName)
 
-    if annotationStyle == False:
-        currentResponseObject["error"] = "The selected annotation style is no more in the database."
-        currentResponseObject["status"] = "error" 
-        return currentResponseObject
+    #if annotationStyle == False:
+    #    currentResponseObject["error"] = "The selected annotation style is no more in the database."
+    #    currentResponseObject["status"] = "error" 
+    #    return currentResponseObject
 
     for dialogue_name, dialogue in dialogueDict.items():
 
