@@ -589,12 +589,14 @@ def handle_switch_collection_request(user, doc):
 
         #import and format new dialogues
         for docCollection in docRetrieved:
-            annotationStyle = retrieve_annotation_style_name(doc)
-            if annotationStyle != False:
-                __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
-            else:
-                responseObject["error"] = "The linked annotation model is not currently loaded."
-                return jsonify( responseObject )
+            __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+            
+            #annotationStyle = retrieve_annotation_style_name(doc)
+            #if annotationStyle != False:
+            #    __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+            #else:
+            #    responseObject["error"] = "The linked annotation model is not currently loaded."
+            #    return jsonify( responseObject )
 
         if responseObject["status"] != "error":
             dialogueFile.change_collection(user, doc)
