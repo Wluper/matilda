@@ -1380,8 +1380,11 @@ def retrieve_annotation_style_name(collection):
         annotationStyle = Configuration.annotation_styles[0]
 
     try:
-        print(Configuration.annotation_styles[annotationStyle])
-        return annotationStyle
+        if annotationStyle in Configuration.annotation_styles:
+            return annotationStyle
+        else:
+            logging.warning(" * The annotation style referenced is not loaded. Maybe it was deleted?")
+        return False
     except:
         logging.warning(" * The annotation style referenced is not loaded. Maybe it was deleted?")
         return False

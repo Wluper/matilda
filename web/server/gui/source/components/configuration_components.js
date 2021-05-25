@@ -396,8 +396,9 @@ Vue.component("create-annotation-model", {
                 .then( (response) => {
                     if (response.data.status == "done") {
                         this.changesSaved = 'true';
-                        alert("Upload OK");
                         databaseEventBus.$emit("annotation_styles_changed");
+                        
+                        alert("Upload OK");
                     } else {
                         alert(response.data.error);
                     }
