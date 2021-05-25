@@ -91,7 +91,7 @@ Vue.component("supervision-view", {
 
       gridStyle(columnNum) {
          return {
-            gridTemplateColumns: `repeat(${columnNum}, minmax(100px, 1fr))`,
+            gridTemplateColumns: `repeat(${columnNum}, minmax(0px, 1fr))`,
             display: 'grid'
          }
       },
