@@ -70,7 +70,7 @@ Vue.component("all-dialogues", {
               mainApp.collectionRate = "0%"
           }
           if (mainApp.collectionRate != tempRate) {
-            backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate}, false);
+            backend.update_collection_fields(mainApp.activeCollection,{"status":mainApp.collectionRate});
           }
       },
 

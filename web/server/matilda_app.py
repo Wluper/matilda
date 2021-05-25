@@ -591,12 +591,12 @@ def handle_switch_collection_request(user, doc):
         for docCollection in docRetrieved:
             __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
             
-            #annotationStyle = retrieve_annotation_style_name(doc)
-            #if annotationStyle != False:
-            #    __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
-            #else:
-            #    responseObject["error"] = "The linked annotation model is not currently loaded."
-            #    return jsonify( responseObject )
+            annotationStyle = retrieve_annotation_style_name(doc)
+            if annotationStyle != False:
+                __add_new_dialogues_from_json_dict(user, doc, responseObject, dialogueDict=docCollection["document"])
+            else:
+                responseObject["error"] = "The linked annotation model is not currently loaded."
+                return jsonify( responseObject )
 
         if responseObject["status"] != "error":
             dialogueFile.change_collection(user, doc)
@@ -1204,10 +1204,10 @@ def __add_new_dialogues_from_json_dict(user, fileName, currentResponseObject, di
 
     annotationStyle = retrieve_annotation_style_name(fileName)
 
-    #if annotationStyle == False:
-    #    currentResponseObject["error"] = "The selected annotation style is no more in the database."
-    #    currentResponseObject["status"] = "error" 
-    #    return currentResponseObject
+    if annotationStyle == False:
+        currentResponseObject["error"] = "The selected annotation style is no more in the database."
+        currentResponseObject["status"] = "error" 
+        return currentResponseObject
 
     for dialogue_name, dialogue in dialogueDict.items():
 
@@ -1383,10 +1383,10 @@ def retrieve_annotation_style_name(collection):
         if annotationStyle in Configuration.annotation_styles:
             return annotationStyle
         else:
-            logging.warning(" * The annotation style referenced is not loaded. Maybe it was deleted?")
+            logging.warning(" * The annotation style "+annotationStyle+" referenced is not loaded. Maybe it was deleted?")
         return False
     except:
-        logging.warning(" * The annotation style referenced is not loaded. Maybe it was deleted?")
+        logging.warning(" * The annotation style "+annotationStyle+" referenced is not passing the new check. Maybe it was changed since last reboot?")
         return False
     
 
