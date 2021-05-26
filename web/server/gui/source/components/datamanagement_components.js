@@ -246,10 +246,16 @@ Vue.component("datamanagement-view", {
                                         <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
                                     </span>
 
+                                    <span v-else-if="collection.assignedTo.length > 3">
+                                    Assigned: 
+                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
+                                    </span>
+
                                     <span v-else v-on:click="toggle_user_list(collection.id)">
                                     Assigned: 
                                         <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
+
                                 </div>
 
                                 <div class="entry-data" style="display:block;">
@@ -274,6 +280,11 @@ Vue.component("datamanagement-view", {
                                     <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
                                     Assigned: 
                                         <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
+                                    </span>
+
+                                    <span v-else-if="collection.assignedTo.length > 3">
+                                    Assigned: 
+                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
 
                                     <span v-else v-on:click="toggle_user_list(collection.id)">
@@ -479,7 +490,12 @@ Vue.component('collection-users-reverse', {
                                             Gold: <span class="gold-false">False</span>
                                         </template>
                                     </div>
-                                    <div class="entry-assigned">
+
+                                    <div v-if="collection.assignedTo.length > 3" class="entry-assigned">
+                                        <span>Assigned: <span class="gold-true">{{collection.assignedTo.length}}</span> </span>
+                                    </div>
+
+                                    <div v-else class="entry-assigned">
                                         <span>Assigned: <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> </span>
                                     </div>
                                     <div class="entry-data" style="display:block;">
