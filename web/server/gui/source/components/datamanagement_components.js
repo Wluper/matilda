@@ -241,14 +241,18 @@ Vue.component("datamanagement-view", {
                                     </template>
                                 </div>
                                 <div class="entry-assigned">
-                                    <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                    <span v-if="collection.assignedTo.length > 4">
                                     Assigned: 
-                                        <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
+                                    <span class="gold-true">
+                                        {{collection.assignedTo[0]}}
+                                        {{collection.assignedTo[1]}}
+                                        {{collection.assignedTo[2]}} 
+                                        and {{collection.assignedTo.length-3}} more</span>
                                     </span>
 
-                                    <span v-else-if="collection.assignedTo.length > 3">
+                                    <span v-else-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
                                     Assigned: 
-                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
+                                        <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
                                     </span>
 
                                     <span v-else v-on:click="toggle_user_list(collection.id)">
@@ -277,14 +281,19 @@ Vue.component("datamanagement-view", {
                                     </template>
                                 </div>
                                 <div class="entry-assigned">
-                                    <span v-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
+                                
+                                    <span v-if="collection.assignedTo.length > 4">
+                                    Assigned: 
+                                        <span class="gold-true">
+                                        {{collection.assignedTo[0]}}
+                                        {{collection.assignedTo[1]}}
+                                        {{collection.assignedTo[2]}} 
+                                        and {{collection.assignedTo.length-3}} more</span>
+                                    </span>
+                                
+                                    <span v-else-if="userList[collection.id] != true" v-on:click="toggle_user_list(collection.id)" class="open-close">
                                     Assigned: 
                                         <span class="gold-true">{{collection.assignedTo.join(", ")}}</span> 
-                                    </span>
-
-                                    <span v-else-if="collection.assignedTo.length > 3">
-                                    Assigned: 
-                                        <span class="gold-false">{{collection.assignedTo.length}}</span>
                                     </span>
 
                                     <span v-else v-on:click="toggle_user_list(collection.id)">

@@ -92,6 +92,12 @@
     float:left;
 }
 
+.collection-list .entry-assigned {
+    max-width: 27em;
+    overflow: hidden;
+    height: 1em;
+}
+
 .annotation-list .listed-entry {
     margin: 10px 0;
     color: white;

@@ -153,6 +153,7 @@ guiMessages = {
             scrollAfter:"Scroll-bar with sentence longer than",
             chars:"characters",
             autoSave:"Auto-save on turn changed",
+            doneSelection:"Selection done",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -515,6 +516,7 @@ guiMessages = {
             scrollAfter:"Scroll-bar con frasi più lunghe di",
             chars:"caratteri",
             autoSave:"Auto-save al cambio di turno",
+            doneSelection: "Selezione completata",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -848,6 +850,7 @@ guiMessages = {
             scrollAfter:"Scroll-bar after",
             chars:"characters",
             autoSave:"Auto-save on turn changed",
+            doneSelection: "Selction done",
         },
         resolution_app: {
             errorId: "Error Id:",

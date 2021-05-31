@@ -731,7 +731,7 @@ Vue.component('dialogue-turn',{
             class="help-button btn btn-sm btn-primary"
             v-on:click="selection_done()"
             v-bind:id="'selection-done-'+currentId"
-            style="float:right">Done Selection</button>
+            style="float:right">{{guiMessages.selected.annotation_app.doneSelection}}</button>
 
         <div class="turn-header">
             <div class="active-turn-id">
