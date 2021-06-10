@@ -535,7 +535,7 @@ Vue.component('configuration-show-logs', {
  
           <div class="modal-header">
             <slot name="header">
-              <strong>MATILDA LAST 30 LOGS</strong>
+              <strong>MATILDA LAST 50 EVENT LOGS</strong>
             </slot>
           </div>
  
