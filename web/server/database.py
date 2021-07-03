@@ -139,6 +139,11 @@ class DatabaseManagement(object):
 
 		DatabaseManagement.selected(collection).update(searchFields, { "$set": updateFields })
 
+	def updateDocs(searchFields, collection, updateFields):
+		
+		DatabaseManagement.selected(collection).update_many(searchFields, { "$set": updateFields })
+
+
 	def pullFromDoc(doc_id, collection, field):
 
 		value = field["dialogue"]
@@ -169,7 +174,6 @@ class DatabaseManagement(object):
 
 
 	def dumpDatabase():
-
 		collections = DatabaseManagement.db.collection_names()
 		dump = {}
 		for i, collection_name in enumerate(collections):

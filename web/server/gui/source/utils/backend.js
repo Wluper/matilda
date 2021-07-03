@@ -370,31 +370,6 @@ async function get_single_dialogue_async(id, collection, supervision) {
 
 }
 
-
-
-async function post_empty_dialogue(collection) {
-
-    try {
-
-        if (collection == undefined) {
-            var response = await RESTdialogues("POST", null, null);
-        } else {
-            var response = await RESTdialogues("POST", null, null, collection);
-        }
-
-        console.log(response)
-
-        return response.data.id
-
-    } catch(error) {
-
-        console.log(error);
-        alert(error);
-    }
-
-}
-
-
 async function post_new_dialogues_from_string_lists_async(stringLists) {
 
     try {
@@ -503,7 +478,7 @@ async function del_all_dialogues_async(admin) {
 
 async function recover_dialogues(id) {
 
-const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${id}`
+    const apiLink = API_BASE+"/"+mainApp.userName+`/annotations_recover/${id}`
 
     try {
 
@@ -650,10 +625,7 @@ async function update_annotations(activeColl,fields,backup) {
 
 }
 
-async function update_collection_fields(activeColl,fields, annotator) {
-
-    if (annotator == undefined)
-        annotator = mainApp.userName;
+async function update_collection_fields(activeColl,fields, annotator=mainApp.userName) {
 
     var apiLink = API_BASE+"/"+annotator+`/database/fields/${activeColl}`
 
@@ -1045,25 +1017,6 @@ async function put_error_async(listOfErrors){
     }
 }
 
-/*
-async function admin_post_empty_dialogue() {
-
-    const apiLink = API_BASE+"/dialogues";
-
-    try {
-        var response = await axios.post( apiLink, null, null )
-
-        console.log(response)
-
-        return response.data.id
-
-    } catch(error) {
-
-        console.log(error)
-    }
-}
-*/
-
 async function admin_import_for_interannotation(collection, newFile=undefined) {
 
     var apiLink = API_BASE+`/interannotation_import/${collection}`
@@ -1084,6 +1037,27 @@ async function admin_import_for_interannotation(collection, newFile=undefined) {
     }
     return false;
 }
+
+
+async function admin_change_dialogue_content(activeColl, fields) {
+
+    var apiLink = API_BASE+"/"+mainApp.userName+`/database/content/${activeColl}`
+
+    try {
+
+        var response = await axios.put(apiLink, fields)
+
+        console.log("======== UPDATING DATABASE ========")
+        console.log(response)
+        return response
+
+    } catch(error) {
+
+        console.log(error);
+        alert(guiMessages.selected.lida.connectionError)
+    }
+}
+
 
 async function import_new_dialogues_from_string_lists_async(stringLists) {
 
@@ -1178,7 +1152,7 @@ backend =
     load_dialogues                              : load_dialogues,
     recover_dialogues                           : recover_dialogues,
 
-    post_empty_dialogue                         : post_empty_dialogue,
+    admin_change_dialogue_content               : admin_change_dialogue_content,
     post_new_dialogues_from_string_lists_async  : post_new_dialogues_from_string_lists_async,
     post_new_dialogue_from_json_string_async    : post_new_dialogue_from_json_string_async,
 

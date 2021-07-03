@@ -322,7 +322,7 @@ Vue.component("annotation-component", {
     // METHODS
     methods:{
         turn_updated_string : function(event) {
-            annotationAppEventBus.$emit("turn_updated_string", event )
+            //annotationAppEventBus.$emit("turn_updated_string", event )
         },
 
         log_myself : function() {

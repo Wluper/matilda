@@ -704,6 +704,7 @@ Vue.component("supervision-annotation-app", {
 
     created () {
         annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
+        annotationAppEventBus.$on("turn_updated_string", this.content_update );
     },
 
     // METHODS
@@ -713,6 +714,7 @@ Vue.component("supervision-annotation-app", {
             console.log("==================================");
             console.log("==================================");
             annotationAppEventBus.$off( "update_turn_id", this.id_updated_from_ids_list );
+            annotationAppEventBus.$off( "turn_updated_string", this.content_update );
             adminEventBus.$emit("supervision_go_back_to_dialogues");
         },
 
@@ -795,7 +797,20 @@ Vue.component("supervision-annotation-app", {
             this.resume_annotation_tools();
         },
 
-        turn_update: function(event){
+        content_update: function(){
+            this.allDataSaved = false;
+            let out = {
+               //.textContent apparently retrieves the old string instead
+               sys: document.getElementById("sys_editable").value,
+               usr: document.getElementById("usr_editable").value,
+               dialogue: this.dialogueId,
+               turn: this.dCurrentId
+            };
+            backend.admin_change_dialogue_content(this.selectedCollection,out) 
+               .then((response) => {
+                  console.log("Turn "+this.dCurrentId+" updated correctly in the database.");
+                  this.allDataSaved = true;
+               });
         },
 
         turn_is_annotated: function(event) {
@@ -826,36 +841,36 @@ Vue.component("supervision-annotation-app", {
     template:
     `
     <div id="supervision">
-    <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
+      <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
-        <dialogue-menu v-bind:changesSaved="allDataSaved"
-                       v-bind:dialogueTitle="dialogueId"
-                       v-bind:annotationRate="annotationRate">
-        </dialogue-menu>
+         <dialogue-menu v-bind:changesSaved="allDataSaved"
+                        v-bind:dialogueTitle="dialogueId"
+                        v-bind:annotationRate="annotationRate">
+         </dialogue-menu>
 
-        <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
-                        v-bind:turns="dTransformedTurns"
+         <dialogue-turns v-bind:primaryElementClass="primaryElementClassName"
+                           v-bind:turns="dTransformedTurns"
+                           v-bind:currentId="dCurrentId"
+                           v-bind:metaTags="metaTags"
+                           v-bind:readOnly="readOnly">
+         </dialogue-turns>
+
+         <annotations v-bind:globalSlot="annotationFormat.global_slot"
+                        v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
+                        v-bind:classifications="dCurrentTurn.multilabel_classification"
+                        v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
                         v-bind:currentId="dCurrentId"
-                        v-bind:metaTags="metaTags"
+                        v-bind:dialogueNonEmpty="dialogueNonEmpty"
+                        v-bind:dTurns="dTurns"
+                        v-bind:dialogueId="dialogueId"
                         v-bind:readOnly="readOnly">
-        </dialogue-turns>
+         </annotations>
 
-        <annotations v-bind:globalSlot="annotationFormat.global_slot"
-                     v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
-                     v-bind:classifications="dCurrentTurn.multilabel_classification"
-                     v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"
-                     v-bind:currentId="dCurrentId"
-                     v-bind:dialogueNonEmpty="dialogueNonEmpty"
-                     v-bind:dTurns="dTurns"
-                     v-bind:dialogueId="dialogueId"
-                     v-bind:readOnly="readOnly">
-        </annotations>
+         <input-box>
+         </input-box>
 
-        <input-box>
-        </input-box>
-
+         </div>
       </div>
-    </div>
     </div>
     `
 });

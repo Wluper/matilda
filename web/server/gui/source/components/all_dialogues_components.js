@@ -191,30 +191,7 @@ Vue.component("all-dialogues", {
         </li>
 
       </ul>
-      <!--
-      <ul class="btn-set">
-        <li><button class="add-dialogue-button btn btn-sm" v-on:click="create_new_dialogue()">{{ guiMessages.selected.lida.button_newDialogue }}</button></li>
-        <li><button class="add-dialogue-button btn btn-sm" v-on:click="clean_dialogues()">{{ guiMessages.selected.lida.button_wipeDialogues }}</button></li>
-        <li>
-          
-              <input type="file"
-                     id="fileInput"
-                     name="fileInput"
-                     accept=".txt, .json"
-                     v-on:change="open_file($event)">
 
-              <label for="fileInput"
-                     id="fileInputLabel"
-                     class="btn btn-sm">
-                     {{ guiMessages.selected.admin.button_upload}}
-              </label>
-        </li>
-      </ul>
-      -->
-      
-
-  
-      
     </div>
   </div>
   `

@@ -65,7 +65,7 @@ var mainApp = new Vue({
 
     setTurnWidth : function(){
         if ((localStorage["turnWidth"] == null) || (localStorage["turnWidth"] == undefined)) {
-            localStorage.setItem("turnWidth", 80);
+            localStorage.setItem("turnWidth", 87);
             return localStorage["turnWidth"];
         } else {
             return localStorage["turnWidth"];
@@ -74,7 +74,7 @@ var mainApp = new Vue({
 
     setMaxChars : function(){
         if (localStorage["maxChars"] == null) {
-            localStorage.setItem("maxChars", 80);
+            localStorage.setItem("maxChars", 90);
             return localStorage["maxChars"];
         } else {
             return localStorage["maxChars"];

@@ -359,6 +359,7 @@ select {
 
 #supervision #dialogue-menu {
     height:3em;
+    grid-column-start: 1;
 }
 
 #supervision #dialogue-menu .back-button {

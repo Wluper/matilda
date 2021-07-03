@@ -4,7 +4,7 @@
 
 Vue.component('classification-annotation',{
 
-    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "interannotatorView", "selectingText"],
+    props: ["classification", "classFormat", "uniqueName", "info", "turn", "confidences", "supervision", "selectingText"],
 
 
     data () {
@@ -129,7 +129,7 @@ Vue.component('classification-annotation',{
 
         <div v-else class="classification-annotation">
 
-            <div class="single-annotation-header" v-if="!interannotatorView">
+            <div class="single-annotation-header" v-if="!supervision">
                 <div class="sticky space collapsor" v-on:click="toggleCollapse()">
                     {{uniqueName.replace(/_/g, ' ')}}
                 </div>
@@ -205,7 +205,7 @@ Vue.component('classification-string-annotation', {
             adminEventBus.$on("switch_slot_values", this.switchSlotValue);
             this.collapsed = "new";
          } else {
-            if ((this.classes.length > 1) && (this.slotView == "new")) {
+            if ((this.classes.length > 1 || this.supervision) && (this.slotView == "new")) {
                this.collapsed = "new";
             }
          }
@@ -544,7 +544,7 @@ Vue.component('classification-string-annotation', {
                 
                 <div class="multilabel-string-item-new-wrapper" v-bind:id="uniqueName+'_container'">
 
-                    Label: <select v-model="selectedLabel" class="multilabel-string-item-selector" v-on:change="resetLabels(selectedLabel)">
+                    <label v-if="!supervision">Label:</label> <select v-if="!supervision" v-model="selectedLabel" class="multilabel-string-item-selector" v-on:change="resetLabels(selectedLabel)">
                         <option></option>
                         <template v-for="labelName in classes">
                             <option v-if="checkedMethod(labelName)">{{labelName}}</option>
@@ -573,7 +573,7 @@ Vue.component('classification-string-annotation', {
                         <img src="assets/images/text_sel.svg"></button>
                     </template>
 
-                    <!-- already valorized labels -->
+                    <!-- already filled labels -->
                     
                     <template v-if="classification_strings.length > 0">
                         <template v-for="labelName in classification_strings">
@@ -582,18 +582,24 @@ Vue.component('classification-string-annotation', {
                                 <label>{{labelName[0]}}</label> <br>
                                 
                                 <input type="checkbox"
+                                     v-if="!supervision"
                                      class="multilabel-string-checkbox"
                                      v-bind:id="labelName[0]"
                                      v-bind:value="labelName[0]"
                                      v-bind:checked="checkedMethod(labelName[0])"
                                      v-on:click="clearValue($event,labelName[0])">
                                 
-                                <input v-bind:id="labelName[0]+'_input'" class="multilabel-string-input" style="width: 80%;"
+                                <input v-if="!supervision"
+                                    v-bind:id="labelName[0]+'_input'" class="multilabel-string-input" style="width: 80%;"
                                     v-bind:value="getStringPart(labelName[0])"
                                     v-on:input="updateClassAndString($event, labelName[0])">
-                                </input>
+
+                                <input v-else
+                                    v-bind:id="labelName[0]+'_input'" class="multilabel-string-input" style="width: 100%;"
+                                    v-bind:value="getStringPart(labelName[0])" readonly>
                         
                                 <button type="button" 
+                                    v-if="!supervision"
                                     class="txt-sel-button" @click="selectWords($event,labelName[0],uniqueName+'_container')" 
                                     style="width: 10%; line-height: 17px; margin-bottom: 0px; padding-bottom: 2px;">
                                 <img src="assets/images/text_sel.svg"></button>
@@ -675,7 +681,7 @@ Vue.component('classification-string-annotation', {
 
 Vue.component('classification-global-annotation',{
 
-    props: ["globals", "info", "turn", "dTurns", "dialogueId"],
+    props: ["globals", "info", "turn", "dTurns", "dialogueId", "supervision"],
 
 
     data () {
@@ -803,8 +809,13 @@ Vue.component('classification-global-annotation',{
 
             <div v-for="labelName in globals.labels" class="global-input-wrapper">
 
-                <label v-bind:for="labelName" class="global-label">{{labelName}}</label>
-                <input class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)" v-on:blur="updateValue($event)">
+                <label v-bind:for="labelName" class="global-label">
+                    {{labelName}}
+                </label>
+                <input v-if="!supervision"
+                    class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)" v-on:blur="updateValue($event)">
+                <input v-else
+                    class="global-input" type="text" v-bind:id="labelName" v-bind:value="getActualValue(labelName)" v-on:click="stopAnnotation()" v-on:keyup.enter="updateValue($event)" v-on:blur="updateValue($event)" style="border-color:transparent;">
 
             </div>
 

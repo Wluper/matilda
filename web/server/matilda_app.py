@@ -488,8 +488,23 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
 
             if mode == "annotations":
                 responseObject = DatabaseManagement.storeAnnotations( user, activecollection, values )
-            else:
+            elif mode == "fields":
                 responseObject = DatabaseManagement.updateAnnotations( user, activecollection, values )
+            elif mode == "content":
+                responseObject = {"status":"success"}
+                DatabaseManagement.updateDoc({
+                    "id":activecollection}, 
+                    "dialogues_collections", 
+                    {"document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
+                    "document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
+                )
+                DatabaseManagement.updateDocs({
+                    "id":activecollection, "fromCollection":activecollection}, 
+                    "annotated_collections", 
+                    {"document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
+                    "document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
+                )
+                responseObject = {"status":"success"}
 
         #if request.method == "GET":
         #    responseObject = DatabaseManagement.getDatabaseIds()

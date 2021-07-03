@@ -330,16 +330,6 @@ Vue.component("interannotator-app", {
 
     },
 
-    create_new_dialogue(event) {
-
-        backend.admin_post_empty_dialogue()
-            .then( (newDialogueId) => {
-
-                this.allDialogueMetadata.push({id: newDialogueId, num_turns: 0});
-
-            });
-    },
-
     open_file(event){
         let file = event.target.files[0];
         this.handle_file(file);

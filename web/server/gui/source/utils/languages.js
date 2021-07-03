@@ -132,7 +132,6 @@ guiMessages = {
             dataManagementTitle:"Select a user or a collection",
             collectionToAnnotator:"Assign collections to selected user",
             annotatorToCollection:"Assign annotators to selected collection"
-
         },
         annotation_app: {
             turnId: "Turn Id",
@@ -154,6 +153,8 @@ guiMessages = {
             chars:"characters",
             autoSave:"Auto-save on turn changed",
             doneSelection:"Selection done",
+            doneEditing: "Turn editing done",
+            confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -217,9 +218,9 @@ guiMessages = {
             the annotator_config.py file in the "server" folder.
             `,
             `
-            By default, the only required key-value pair in each turn
-            is called "usr" and should be the user's query as
-            a string.
+            By default, the only two required key-value pairs in each turn
+            are called "usr" and "sys". 
+            They should be the user's and system's query as a string.
             `
         ],
         modal_agreementScores:
@@ -262,8 +263,8 @@ guiMessages = {
         ],
         modal_annotationStyle:
         [
-            `String usually are used to represent the utterances in the dialogue. There should be at least one for turn, so the default value for
-            required field in this category is set to true. The String category is shown in interface as a read-only text-area.`,
+            `String usually are used to represent the utterances in the dialogue. There should be two for turn and their names should be "usr" and "sys".
+            The String category is shown in interface as a read-only text-area.`,
             `Multilabel Classification are used to identify if a certain characteristic is present on the selected turn or not. 
             The labels you may insert in this category don't have a value, they are just selected or unselected. In interface Multilabel Classification
             is shown as a group of checkboxes the annotators can mark.`,
@@ -517,6 +518,8 @@ guiMessages = {
             chars:"caratteri",
             autoSave:"Auto-save al cambio di turno",
             doneSelection: "Selezione completata",
+            doneEditing: "Modifica turno completata",
+            confirmEditing: "Questa operazione cambierà il contenuto del turno selezionato per tutti gli annotatori. Non influirà su eventuali annotazioni associate.",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -851,6 +854,8 @@ guiMessages = {
             chars:"characters",
             autoSave:"Auto-save on turn changed",
             doneSelection: "Selction done",
+            doneEditing: "Turn editing done",
+            confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected."
         },
         resolution_app: {
             errorId: "Error Id:",
