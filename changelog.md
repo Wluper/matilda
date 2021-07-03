@@ -15,6 +15,7 @@
 - Configuration view in Admin Panel
 - Supervision annotation rate bars
 - Supervision view now allows to upload an already annotated dialogue collection
+- Supervision view now allows to edit turn utterances of collections
 - Inter-annotator stats for multilabel-string-classification
 - Annotation Rate for single dialogue is calculated anew when entering dialogue annotation mode
 
