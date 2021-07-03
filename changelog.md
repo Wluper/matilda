@@ -23,8 +23,8 @@
 
 - Dialogue annotation view displays few annotation customizable options: 
   - Resizable layout, useful for very large or very small screen layouts. 
-  - Character limit for turn utterances with scroll-bar.
-  - Auto-save on turn change.
+  - Character limit for long utterances: after that number of character a scroll-bar will be shown.
+  - Auto-save on turn change on/off switch.
 
 
 ## Citation
