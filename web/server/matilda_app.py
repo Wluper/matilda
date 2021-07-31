@@ -396,7 +396,7 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
     #retrieve and load correct annotation style
     annotationStyle = retrieve_annotation_style_name(collection)
 
-    #return data for the right view
+    #return data for the correct view
     if supervisor:
         dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
         Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
@@ -491,21 +491,46 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
             elif mode == "fields":
                 responseObject = DatabaseManagement.updateAnnotations( user, activecollection, values )
             elif mode == "content":
-                responseObject = {"status":"success"}
                 DatabaseManagement.updateDoc({
                     "id":activecollection}, 
                     "dialogues_collections", 
-                    {"document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
-                    "document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
+                    {"document."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
+                    "document."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
                 )
                 DatabaseManagement.updateDocs({
                     "id":activecollection, "fromCollection":activecollection}, 
                     "annotated_collections", 
-                    {"document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
-                    "document"+"."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
+                    {"document."+str(values["dialogue"])+"."+str(values["turn"])+".usr":values["usr"],
+                    "document."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
                 )
+                # update the viewed collection in the dialogue source to keep the gui in sync
+                docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":user})
+                __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
                 responseObject = {"status":"success"}
-
+            
+            elif mode == "new_turn":
+                # retrive the dialogue
+                collection = DatabaseManagement.readDatabase("dialogues_collections",{"id":activecollection},{"document":1, "_id":0})
+                dialogue = collection[0]["document"][str(values["dialogue"])]
+                # add the empty turn
+                dialogue.insert(values["turn"],{"usr":"","sys":""})
+                # update database
+                DatabaseManagement.updateDoc({
+                    "id":activecollection}, 
+                    "dialogues_collections", 
+                    {"document."+str(values["dialogue"]):dialogue}
+                )
+                DatabaseManagement.updateDocs({
+                    "id":activecollection, "fromCollection":activecollection}, 
+                    "annotated_collections", 
+                    {"document."+str(values["dialogue"]):dialogue}
+                )
+                # update the viewed collection in the dialogue source to keep the gui in sync
+                docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":user})
+                __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
+                
+                responseObject = {"status":"success", "dialogue":dialogue}
+        
         #if request.method == "GET":
         #    responseObject = DatabaseManagement.getDatabaseIds()
 

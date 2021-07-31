@@ -75,6 +75,8 @@ guiMessages = {
             drop:"Drop Files Anywhere to Upload!",
             buttonCollections:"Collections",
             connectionError: "Couldn't connect to server, check that it's running or the address in backend_config",
+            genericError: "Server Error. Something went wrong.",
+            serverError: "Server Error. The server received your request but couldn't process it correctly.",
             backupDone:"Backup done.",
             backupPost:"Backup postponed: nothing to save.",
             backupFailed:"Backup failed.",
@@ -154,6 +156,7 @@ guiMessages = {
             autoSave:"Auto-save on turn changed",
             doneSelection:"Selection done",
             doneEditing: "Turn editing done",
+            sendEmptyTurn: "Add a new empty turn",
             confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
         },
         resolution_app: {
@@ -439,7 +442,9 @@ guiMessages = {
             drop:"Rilascia i file per caricarli!",
             buttonCollections: "Collezioni",
             button_downloadAll: "Scarica i dati",
-            connectionError:"Impossibile connettersi al server, controlla che sia in funzione o verifica l'indirizzo in backend_config",
+            connectionError:"Impossibile connettersi al server, controlla che sia in funzione o verificane l'indirizzo.",
+            serverError:"Server Error. Il server ha ricevuto la tua richiesta ma non ha potuto processarla correttamente.",
+            genericError: "Server Error. Qualcosa è andato storto.",
             backupDone:"Backup completato.",
             backupPost:"Backup postposto: niente da salvare.",
             backupFailed:"Backup fallito.",
@@ -519,6 +524,7 @@ guiMessages = {
             autoSave:"Auto-save al cambio di turno",
             doneSelection: "Selezione completata",
             doneEditing: "Modifica turno completata",
+            sendEmptyTurn: "Aggiungi un nuovo turno vuoto",
             confirmEditing: "Questa operazione cambierà il contenuto del turno selezionato per tutti gli annotatori. Non influirà su eventuali annotazioni associate.",
         },
         resolution_app: {
@@ -775,6 +781,8 @@ guiMessages = {
             button_downloadAll: "Daten herunterladen",
             buttonCollections: "Sammlungen",
             connectionError: "Es konnte keine Verbindung zum Server hergestellt werden. Überprüfen Sie, ob der Server ausgeführt wird, oder die Adresse in backend_config.",
+            serverError: "Server Error. The server received your request but couldn't process it correctly.",
+            genericError: "Server Error. Something went wrong.",
             backupDone: "Sicherung abgeschlossen.",
             backupPost: "Backup verschoben: nichts zu speichern.",
             backupFailed: "Sicherung fehlgeschlagen.",
@@ -855,6 +863,7 @@ guiMessages = {
             autoSave:"Auto-save on turn changed",
             doneSelection: "Selction done",
             doneEditing: "Turn editing done",
+            sendEmptyTurn: "Add a new empty turn",
             confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected."
         },
         resolution_app: {

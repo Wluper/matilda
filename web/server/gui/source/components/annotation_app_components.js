@@ -706,6 +706,11 @@ Vue.component('dialogue-turn',{
                 this.editing = false;
             }
         },
+        send_new_empty_turn: function() {
+            if (confirm(guiMessages.selected.annotation_app.confirmEditing)) {
+                annotationAppEventBus.$emit("new_empty_turn");
+            }
+        }
     },
     mounted(){
         if (this.currentId==this.myId){
@@ -742,9 +747,14 @@ Vue.component('dialogue-turn',{
         </button>
 
         <button type="button"
-            v-if="editing == true" class="help-button btn btn-sm btn-primary"
-            v-on:click="send_new_turn(currentId)" v-bind:id="'editing-done-'+currentId"
-            style="float:right; background-color:red; box-shadow: 0 2px darkred;">
+            v-if="readOnly == true" class="help-button btn btn-sm btn-primary turn-editing-btn"
+            v-on:click.stop="send_new_empty_turn(currentId)" v-bind:id="'send-empty-turn-'+currentId" style="margin-right:0">
+                {{guiMessages.selected.annotation_app.sendEmptyTurn}}
+        </button>
+
+        <button type="button"
+            v-if="editing == true" class="help-button btn btn-sm btn-primary turn-editing-btn"
+            v-on:click="send_new_turn(currentId)" v-bind:id="'editing-done-'+currentId" style="margin-right: 25%;">
                 {{guiMessages.selected.annotation_app.doneEditing}}
         </button>
 

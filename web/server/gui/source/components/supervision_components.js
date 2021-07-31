@@ -34,6 +34,11 @@ Vue.component("supervision-view", {
       go_back : function(){
          console.log("==================================");
          if (this.mode == "supervision-annotating") {
+            //manually resetting event listener
+            annotationAppEventBus._events["new_empty_turn"] = null;
+            annotationAppEventBus._events["selected_text"] = null;
+            annotationAppEventBus._events["turn_updated_string"] = null;
+            annotationAppEventBus._events["update_turn_id"] = null;
             this.mode = "supervision-dialogues-list";
          } else if (this.mode == "supervision-dialogues-list") {
             this.mode = "supervision-annotators-list";
@@ -648,9 +653,7 @@ Vue.component("supervision-dialogues", {
 
 Vue.component("supervision-annotation-app", {
 
-    props: [
-      "dialogueId","selectedCollection"
-    ],
+    props: ["dialogueId","selectedCollection"],
 
     data () {
         return {
@@ -704,19 +707,12 @@ Vue.component("supervision-annotation-app", {
 
     created () {
         annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
-        annotationAppEventBus.$on("turn_updated_string", this.content_update );
+        annotationAppEventBus.$on("turn_updated_string", this.content_update);
+        annotationAppEventBus.$on("new_empty_turn", this.send_new_empty_turn);
     },
 
     // METHODS
     methods:{
-        go_back : function(){
-            console.log("==================================");
-            console.log("==================================");
-            console.log("==================================");
-            annotationAppEventBus.$off( "update_turn_id", this.id_updated_from_ids_list );
-            annotationAppEventBus.$off( "turn_updated_string", this.content_update );
-            adminEventBus.$emit("supervision_go_back_to_dialogues");
-        },
 
         init: function() {
             // Step One :: Download a Single Dialogue
@@ -806,9 +802,8 @@ Vue.component("supervision-annotation-app", {
                dialogue: this.dialogueId,
                turn: this.dCurrentId
             };
-            backend.admin_change_dialogue_content(this.selectedCollection,out) 
+            backend.admin_change_dialogue_content(this.selectedCollection, out, "content") 
                .then((response) => {
-                  console.log("Turn "+this.dCurrentId+" updated correctly in the database.");
                   this.allDataSaved = true;
                });
         },
@@ -821,7 +816,18 @@ Vue.component("supervision-annotation-app", {
         update_annotation_rate: function(annotations, turnTot) {
         },
 
-        append_new_turn: function(event){
+        send_new_empty_turn: function(){
+           this.allDataSaved = false;
+            backend.admin_change_dialogue_content(this.selectedCollection, {dialogue:this.dialogueId,turn:this.dCurrentId}, "new_turn") 
+            .then((response) => {
+               this.allDataSaved = true;
+               //reload dialogue
+               this.dTurns = response.data.dialogue;
+               this.metaTags = response.data.dialogue[0];
+               this.$forceUpdate();
+               console.log(this.dTurns);
+               //the event binding, in order to work properly, should be moved on the root component of the view (supervision-view) 
+            });
         },
 
         focus_on_new_query_box: function() {
@@ -840,7 +846,7 @@ Vue.component("supervision-annotation-app", {
 
     template:
     `
-    <div id="supervision">
+    <div id="supervision" ref="supervision_single_dialogue_view">
       <div v-on:keyup.enter="change_turn(1)" id="annotation-app">
 
          <dialogue-menu v-bind:changesSaved="allDataSaved"

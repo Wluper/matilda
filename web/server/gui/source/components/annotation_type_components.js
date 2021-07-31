@@ -111,14 +111,12 @@ Vue.component('classification-annotation',{
     `
     <div>
 
-        <div v-if="collapsed"
-             class="classification-annotation">
+        <div v-if="collapsed" class="classification-annotation">
 
             <div class="sticky space collapsor"
                  v-on:click="toggleCollapse()"
                  v-on:mouseover="turnSeparatorWhite()"
                  v-on:mouseout="turnSeparatorGrey()">
-
                 {{uniqueName.replace(/_/g, ' ')}}
                 <br><hr v-bind:id="uniqueName + '-collapsed-separator'">
 

@@ -597,3 +597,10 @@ WluperDark: 0e181e
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
 }
+
+.turn-editing-btn {
+    float:right; 
+    background-color:red; 
+    box-shadow: 0 2px darkred; 
+    margin-top: -0.5%;
+}

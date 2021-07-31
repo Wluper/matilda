@@ -199,6 +199,27 @@ function get_token_range(event,selectionText) {
     return range
 }
 
+function handle_error_message(error) {
+    if (error.request) {
+        alert(guiMessages.selected.lida.connectionError)
+    } else if (error.response) {
+        alert(guiMessages.selected.lida.serverError)
+    } else {
+        alert(guiMessages.selected.lida.genericError+" "+error)
+        console.log(error);
+    }
+}
+
+function handle_auth_rejection(response) {
+    if (response["data"]["error"] != undefined) {
+        alert(response["data"]["error"])
+        if (response["data"]["status"] == "logout") {
+            mainApp.force_logout()
+        }
+    } else {
+        return false
+    }
+}
 
 utils =
 {
@@ -207,5 +228,8 @@ utils =
     get_turn_data : get_turn_data,
     get_all_turns_data : get_all_turns_data,
     create_date  : create_date,
-    get_token_range : get_token_range
+    get_token_range : get_token_range,
+
+    handle_error_message : handle_error_message,
+    handle_auth_rejection : handle_auth_rejection
 }
