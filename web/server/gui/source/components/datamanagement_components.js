@@ -645,7 +645,7 @@ Vue.component('collection-entry-details', {
   ` 
   <div class="inner-wrap">
     <div id="collection-editing">
-        <div id="collection-fields" class="collection-list two-columns">
+        <div id="collection-fields" class="collection-list two-columns tc-no-min">
             <h2>{{guiMessages.selected.admin.editButton}}: {{entry.id}}</h2>
             <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
                 <input class="collection-input" type="text" v-model="entry.title" :placeholder="guiMessages.selected.collection.empty">
@@ -661,7 +661,7 @@ Vue.component('collection-entry-details', {
                 <textarea id="gold_expanded" v-on:click="show_gold(false)" style="height:104px; display:none">{{showGold.code}}</textarea>
         </div>
 
-        <ul class="collection-user-list two-columns">
+        <ul class="collection-user-list two-columns tc-no-min">
             <h2>{{guiMessages.selected.admin.assignedTo}}</h2>
             <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
                 <div class="entry-list-single-item-container">
@@ -872,7 +872,7 @@ Vue.component('collection-creation', {
                 </textarea>
             </div>
 
-            <ul class="collection-user-list two-columns">
+            <ul class="collection-user-list two-columns tc-no-min">
             <h2>{{guiMessages.selected.admin.assignedTo}}</h2>
             <li class="listed-entry collection-users" v-for="user in allUsers" v-bind:id="'user_'+user.id">
                 <div class="entry-list-single-item-container">

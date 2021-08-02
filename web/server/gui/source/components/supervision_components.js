@@ -300,9 +300,14 @@ Vue.component("supervision-collection", {
 
    template:
    `  <div id="annotated_wrap" class="inner-wrap">
+
+      <h2 class="list-title-left" style="margin-top:3%;">
+         <span class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</span>
+         <span class="button-title" style="margin-top:0;">Annotation style: {{selectedAnnotationStyle.split(".")[0]}}</span>
+      </h2>
+
          <ul class="dialogue-list">
             <li id="annotated_list">
-               <h2 class="list-title-left">{{guiMessages.selected.admin.annotationInProgress}} {{selectedCollection}}</h2>
                <div class="entry-list-single-item-container" v-for="(name, index) in annotatedCollections">
 
                <div class="supervisor-btn-container">
@@ -328,7 +333,7 @@ Vue.component("supervision-collection", {
                         </div>
                      </div>
                      <div class="entry-assigned">
-                        Done: <span v-if="name.done" class="gold-true">{{name.done}}</span>
+                        {{guiMessages.selected.annotation_app.done}}: <span v-if="name.done" class="gold-true">{{name.done}}</span>
                               <span v-else class="gold-false">{{name.done}}</span>
                      </div>
                      <div class="entry-date">
@@ -339,8 +344,6 @@ Vue.component("supervision-collection", {
             </li>
          </ul>
          <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
-         <h3 style="color: rgba(0,0,0,0.62);">Annotation style: {{selectedAnnotationStyle.split(".")[0]}}</h3>
-         
          <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
          <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>

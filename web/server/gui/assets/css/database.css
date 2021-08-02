@@ -487,6 +487,10 @@ input:not(:checked) + div {
     padding-right: 1%;
 }
 
+.tc-no-min {
+    height:auto;
+}
+
 .two-columns .listed-entry {
     width:100% !important;
     float:none !important;

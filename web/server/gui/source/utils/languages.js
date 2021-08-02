@@ -158,6 +158,7 @@ guiMessages = {
             doneEditing: "Turn editing done",
             sendEmptyTurn: "Add a new empty turn",
             confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
+            done: "Done",
         },
         resolution_app: {
             errorId: "Error Id:",
@@ -526,6 +527,7 @@ guiMessages = {
             doneEditing: "Modifica turno completata",
             sendEmptyTurn: "Aggiungi un nuovo turno vuoto",
             confirmEditing: "Questa operazione cambierà il contenuto del turno selezionato per tutti gli annotatori. Non influirà su eventuali annotazioni associate.",
+            done: "Completato",
         },
         resolution_app: {
             errorId: "Id Conflitto:",
@@ -864,7 +866,8 @@ guiMessages = {
             doneSelection: "Selction done",
             doneEditing: "Turn editing done",
             sendEmptyTurn: "Add a new empty turn",
-            confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected."
+            confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
+            done:"Done",
         },
         resolution_app: {
             errorId: "Error Id:",

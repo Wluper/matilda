@@ -59,7 +59,7 @@ sessionGuard = jsonConf["session_guard"]
 
 @MatildaApp.route('/')
 def welcome():
-    return render_template("index.html")
+    return render_template("index.html")  
 
 ##############################################
 #  FUNCTION HANDLERS
@@ -1664,6 +1664,7 @@ class Models:
 @MatildaApp.before_request
 def guard():
     requestedUri = request.path
+    #except this routes
     if (requestedUri != "/" 
     and requestedUri != "/login"
     and requestedUri != "/favicon.ico"
