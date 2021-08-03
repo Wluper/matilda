@@ -74,7 +74,7 @@ var mainApp = new Vue({
 
     setMaxChars : function(){
         if (localStorage["maxChars"] == null) {
-            localStorage.setItem("maxChars", 90);
+            localStorage.setItem("maxChars",100);
             return localStorage["maxChars"];
         } else {
             return localStorage["maxChars"];

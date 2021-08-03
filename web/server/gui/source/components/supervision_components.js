@@ -289,9 +289,7 @@ Vue.component("supervision-collection", {
 
       freeze(clicked, doneValue) {
          if (confirm(guiMessages.selected.collection.freeze)) {
-            var done = false;
-            if (doneValue != true)
-               done = true;
+            var done = (doneValue != true) ? true : false;
             backend.update_collection_fields(this.selectedCollection, {"done":done}, clicked)
                .then((response) => {
                   console.log("=== NEW ANNOTATION LOADED CORRECTLY ==== ")
@@ -409,7 +407,7 @@ Vue.component('supervisor-upload-modal', {
             alert('Only .json files are supported.')
          }
       },
-
+      
       add_annotated: function() {
          //check for empty fields
          if (this.newDocument == {}) {

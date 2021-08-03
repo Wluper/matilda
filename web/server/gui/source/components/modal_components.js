@@ -441,7 +441,7 @@ Vue.component('help-general-config-modal', {
 
           <hr>
 
-          <div class="modal-body">
+          <div class="modal-body" style="margin:0 0 20px 0;">
             <slot name="body">
 
                <div id="annotation-info" style="font-size:14px;">
