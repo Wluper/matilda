@@ -121,9 +121,11 @@ Vue.component("supervision-view", {
             this.showAnnotatorNamesForIds.push(dialogueName)
          }
       },
+
       show_annotators(dialogueName){
          return this.showAnnotatorNamesForIds.includes(dialogueName)
-      },
+      }
+
    },
    template:
    `
@@ -200,6 +202,7 @@ Vue.component("supervision-view", {
 
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
       v-bind:selectedCollection="selectedCollection"
+      v-bind:selectedAnnotator="selectedAnnotator"
       v-bind:dialogueId="displayingDialogue">
    </supervision-annotation-app>
 </div>
@@ -295,7 +298,8 @@ Vue.component("supervision-collection", {
                   this.get_all_annotated_collections(this.selectedCollection);
             });
          }
-      },
+      }
+
    },
 
    template:
@@ -586,7 +590,6 @@ Vue.component("supervision-dialogues", {
       },
 
       clicked_dialogue(clickedDialogue) {
-         //if collection is freezed dialogues can't be opened
          adminEventBus.$emit("dialogue_selected", this.supervisionDialogueMetadata[clickedDialogue].id)
       }, 
 
@@ -603,6 +606,19 @@ Vue.component("supervision-dialogues", {
                link.click();
          });
       },
+
+      add_dialogue(){
+         let params = {
+            "new_dialogue_name":"new_dialogue5", 
+            "selected_annotator":this.selectedAnnotator
+         }
+         backend.admin_change_dialogue_content(this.Su_activeCollection, params, "new_dialogue")
+            .then((response) => {
+               this.getAllDialogueIdsFromServer();
+            }
+         );
+      }
+
   },
 
   template:
@@ -615,7 +631,7 @@ Vue.component("supervision-dialogues", {
          <span class="button-title" style="margin-top:0;">{{collectionRate}} {{guiMessages.selected.lida.annotated}} {{guiMessages.selected.lida.annotatedBy}} {{selectedAnnotator}}</span>
       </h2>
 
-      <ul class="dialogue-list">
+      <ul class="dialogue-list" style="padding:0;">
 
         <li class="listed-dialogue"
             v-for="(dat, index) in supervisionDialogueMetadata"
@@ -649,6 +665,7 @@ Vue.component("supervision-dialogues", {
             </div>
         </li>
       </ul>
+      <button id="add_new_dialogue" v-on:click="add_dialogue()" class="help-button btn btn-sm btn-primary" style="margin-bottom:4%">{{guiMessages.selected.admin.addDialogue}}</button>
     </div>
   </div>
   `
@@ -656,7 +673,7 @@ Vue.component("supervision-dialogues", {
 
 Vue.component("supervision-annotation-app", {
 
-    props: ["dialogueId","selectedCollection"],
+    props: ["dialogueId","selectedCollection","selectedAnnotator"],
 
     data () {
         return {
@@ -803,12 +820,19 @@ Vue.component("supervision-annotation-app", {
                sys: document.getElementById("sys_editable").value,
                usr: document.getElementById("usr_editable").value,
                dialogue: this.dialogueId,
-               turn: this.dCurrentId
+               turn: this.dCurrentId,
+               selected_annotator: this.selectedAnnotator
             };
             backend.admin_change_dialogue_content(this.selectedCollection, out, "content") 
                .then((response) => {
                   this.allDataSaved = true;
-               });
+                  //reload dialogue
+                  this.dTurns = response.data.dialogue;
+                  this.metaTags = response.data.dialogue[0];
+                  this.$forceUpdate();
+                  console.log(this.dTurns);
+               }
+            );
         },
 
         turn_is_annotated: function(event) {
@@ -820,17 +844,22 @@ Vue.component("supervision-annotation-app", {
         },
 
         send_new_empty_turn: function(){
-           this.allDataSaved = false;
-            backend.admin_change_dialogue_content(this.selectedCollection, {dialogue:this.dialogueId,turn:this.dCurrentId}, "new_turn") 
-            .then((response) => {
-               this.allDataSaved = true;
-               //reload dialogue
-               this.dTurns = response.data.dialogue;
-               this.metaTags = response.data.dialogue[0];
-               this.$forceUpdate();
-               console.log(this.dTurns);
-               //the event binding, in order to work properly, should be moved on the root component of the view (supervision-view) 
-            });
+            this.allDataSaved = false;
+            let params = {
+               dialogue:this.dialogueId,
+               turn:this.dCurrentId,
+               selected_annotator: this.selectedAnnotator
+            }
+            backend.admin_change_dialogue_content(this.selectedCollection, params, "new_turn") 
+               .then((response) => {
+                  this.allDataSaved = true;
+                  //reload dialogue
+                  this.dTurns = response.data.dialogue;
+                  this.metaTags = response.data.dialogue[0];
+                  this.$forceUpdate();
+                  console.log(this.dTurns);
+               }
+            );
         },
 
         focus_on_new_query_box: function() {
