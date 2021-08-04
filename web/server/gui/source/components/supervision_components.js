@@ -24,7 +24,7 @@ Vue.component("supervision-view", {
 
    created () {
       adminEventBus.$on("annotator_selected", this.clicked_annotator);
-      adminEventBus.$on("dialogue_selected", this.load_in_dialogue_in_supervision);
+      adminEventBus.$on("dialogue_su_selected", this.load_in_dialogue_in_supervision);
       adminEventBus.$on("supervision_go_back_to_dialogues", this.clear_view);
       annotationAppEventBus.$on("go_back", this.clear_view );
    },
@@ -39,6 +39,7 @@ Vue.component("supervision-view", {
             annotationAppEventBus._events["selected_text"] = null;
             annotationAppEventBus._events["turn_updated_string"] = null;
             annotationAppEventBus._events["update_turn_id"] = null;
+            annotationAppEventBus._events["delete_turn"] = null;
             this.mode = "supervision-dialogues-list";
          } else if (this.mode == "supervision-dialogues-list") {
             this.mode = "supervision-annotators-list";
@@ -48,7 +49,7 @@ Vue.component("supervision-view", {
             this.selectedCollection = "";
          } else {
             adminEventBus.$off("annotator_selected", this.clicked_annotator);
-            adminEventBus.$off("dialogue_selected", this.load_in_dialogue_in_supervision);
+            adminEventBus.$off("dialogue_su_selected", this.load_in_dialogue_in_supervision);
             adminEventBus.$off("supervision_go_back_to_dialogues", this.clear_view);
             annotationAppEventBus.$off("go_back", this.clear_view );
             adminEventBus.$emit("go_back");
@@ -151,11 +152,11 @@ Vue.component("supervision-view", {
                      {{name.id}}
                   </div>
 
-                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
+                  <div class="errors-space">
                      {{guiMessages.selected.admin.dataItems}}:<span class="gold-false">{{name.documentLength}}</span>
                   </div>
 
-                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
+                  <div class="gold-space">
                      Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
@@ -255,12 +256,15 @@ Vue.component("supervision-collection", {
                      this.missingAnnotations.push(this.allAnnotators[annotatorIndex]);
                   }
                }
-               console.log(this.missingAnnotations)
+               console.log(this.missingAnnotations);
                document.body.style.cursor = null;
+               if (this.annotatedCollections.length == 0) {
+                  document.getElementById("annotated_list").innerHTML = "<h2 style='color:rgb(0 0 0 /58%);text-align:center;margin-top:5%;'>"+guiMessages.selected.admin.noAnnotations+"</h2>"
+               }
             }  
          );
         console.log(this.allAnnotators);
-        // TO DO:
+        // TODO:
         // distinguish between produced annotations, 
         // annotations from dis-assigned annotators,
         // annotations not yet produced.
@@ -345,7 +349,7 @@ Vue.component("supervision-collection", {
                </div>
             </li>
          </ul>
-         <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">Also assigned to: {{this.missingAnnotations.join(", ")}}</h3>
+         <h3 v-if="this.missingAnnotations.length > 0" style="color: rgba(0,0,0,0.62);">{{guiMessages.selected.annotation_app.alsoAssignedTo}}: {{this.missingAnnotations.join(", ")}}</h3>
          <button type="button" class="btn btn-sm btn-primary button-title" v-on:click="uploading = true" style="margin-top:-3.5em;">{{guiMessages.selected.admin.newAnnotations}}</button>
          <supervisor-upload-modal v-if="uploading" v-bind:selectedCollection="selectedCollection"  @close="uploading = false"></supervisor-upload-modal>
       </div>
@@ -578,7 +582,7 @@ Vue.component("supervision-dialogues", {
           if (this.collectionRate != this.savedAnnotationRate) {
             backend.update_collection_fields(this.Su_activeCollection, {"status":this.collectionRate}, this.selectedAnnotator)
                .then( (response) => {
-                  console.log("annotation rate silently updated from saved"+this.savedAnnotationRate+" to calculated"+this.collectionRate);
+                  console.log("annotation rate silently updated from saved "+this.savedAnnotationRate+" to calculated "+this.collectionRate);
             });
           }
       },
@@ -588,7 +592,7 @@ Vue.component("supervision-dialogues", {
       },
 
       clicked_dialogue(clickedDialogue) {
-         adminEventBus.$emit("dialogue_selected", this.supervisionDialogueMetadata[clickedDialogue].id)
+         adminEventBus.$emit("dialogue_su_selected", this.supervisionDialogueMetadata[clickedDialogue].id)
       }, 
 
       download_all_dialogues_from_server(event) {
@@ -727,6 +731,7 @@ Vue.component("supervision-annotation-app", {
         annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
         annotationAppEventBus.$on("turn_updated_string", this.content_update);
         annotationAppEventBus.$on("new_empty_turn", this.send_new_empty_turn);
+        annotationAppEventBus.$on("delete_turn", this.send_delete_turn);
     },
 
     // METHODS
@@ -853,7 +858,28 @@ Vue.component("supervision-annotation-app", {
                   this.allDataSaved = true;
                   //reload dialogue
                   this.dTurns = response.data.dialogue;
-                  this.metaTags = response.data.dialogue[0];
+                  this.$forceUpdate();
+                  console.log(this.dTurns);
+               }
+            );
+        },
+
+        send_delete_turn: function(event){
+           if ((event== 1) && (this.dTurns.length <= 2)) {
+               alert(guiMessages.selected.admin.lastTurn)
+               return;
+           }
+            this.allDataSaved = false;
+            let params = {
+               dialogue:this.dialogueId,
+               turn:event,
+               selected_annotator: this.selectedAnnotator
+            }
+            backend.admin_change_dialogue_content(this.selectedCollection, params, "remove_turn") 
+               .then((response) => {
+                  this.allDataSaved = true;
+                  //reload dialogue
+                  this.dTurns = response.data.dialogue;
                   this.$forceUpdate();
                   console.log(this.dTurns);
                }

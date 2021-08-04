@@ -63,6 +63,7 @@ guiMessages = {
             loadedAnno: "Loaded annotation models",
             confirmSave: "Do you want to save the new configuration?",
             confGuide: "Configuration Guide",
+            noAnnotations: "No users started to annotate this collection yet.",
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -158,7 +159,10 @@ guiMessages = {
             doneSelection:"Selection done",
             doneEditing: "Turn editing done",
             sendEmptyTurn: "Add a new empty turn",
+            deleteTurn: "Delete turn",
             confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
+            lastTurn: "The last turn of the dialogue can't be deleted. Please go back to the dialogue list and delete the dialogue instead.",
+            alsoAssignedTo: "Also assigned to",
             done: "Done",
         },
         resolution_app: {
@@ -432,6 +436,7 @@ guiMessages = {
             loadedAnno: "Modelli di annotazione caricati",
             confirmSave: "Vuoi salvare la nuova configurazione?",
             confGuide: "Guida alla Configurazione",
+            noAnnotations: "Nessun utente ha iniziato ad annotare questa collezione.",
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -528,7 +533,10 @@ guiMessages = {
             doneSelection: "Selezione completata",
             doneEditing: "Modifica turno completata",
             sendEmptyTurn: "Aggiungi un nuovo turno vuoto",
+            sendDeleteTurn: "Elimina turno",
             confirmEditing: "Questa operazione cambierà il contenuto del turno selezionato per tutti gli annotatori. Non influirà su eventuali annotazioni associate.",
+            lastTurn: "L'ultimo turno di un dialogo non può essere eliminato. Puoi tornare indietro alla lista dei dialoghi ed eliminare l'intero dialogo.",
+            alsoAssignedTo: "Assegnato anche a",
             done: "Completato",
         },
         resolution_app: {
@@ -772,6 +780,7 @@ guiMessages = {
             loadedAnno: "Loaded annotation models",
             confirmSave: "Do you want to save the new configuration?",
             confGuide: "Configuration Guide",
+            noAnnotations: "No users started to annotate this collection yet.",
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -869,7 +878,10 @@ guiMessages = {
             doneSelection: "Selction done",
             doneEditing: "Turn editing done",
             sendEmptyTurn: "Add a new empty turn",
+            sendDeleteTurn: "Delete turn",
             confirmEditing: "This will change the turn content of this collection for every annotator. The annotation associated to this turn will not be affected.",
+            lastTurn: "The last turn of the dialogue can't be deleted. Please go back to the dialogue list and delete the dialogue instead.",
+            alsoAssignedTo: "Also assigned to",
             done:"Done",
         },
         resolution_app: {

@@ -979,6 +979,7 @@ async function admin_import_for_interannotation(collection, newFile=undefined) {
 
 async function admin_change_dialogue_content(activeColl, fields, mode) {
 
+    document.body.style.cursor = "progress";
     var apiLink = API_BASE+"/"+mainApp.userName+`/database/${mode}/${activeColl}`
 
     try {
@@ -988,12 +989,14 @@ async function admin_change_dialogue_content(activeColl, fields, mode) {
         if (utils.handle_auth_rejection(response) === false) {
             console.log("======== UPDATING DATABASE ========")
             console.log(response)
+            document.body.style = null;
             return response
         }
 
     } catch(error) {
 
         utils.handle_error_message(error);
+        document.body.style = null;
     }
 }
 

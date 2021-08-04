@@ -658,9 +658,6 @@ Vue.component('dialogue-turn',{
         update_id(){
             annotationAppEventBus.$emit("update_turn_id", this.myId)
         },
-        delete_this_turn(event) {
-            annotationAppEventBus.$emit("delete_turn", this.myId)
-        },
         selection_done() {
             var out = "";
             for (dict in this.selectedWords) {
@@ -699,6 +696,11 @@ Vue.component('dialogue-turn',{
         editing_mode: function() {
             console.log("Editing turn content...");
             this.editing = true;
+        },
+        delete_this_turn(event) {
+            if (confirm(guiMessages.selected.annotation_app.confirmEditing)) {
+                annotationAppEventBus.$emit("delete_turn", this.myId)
+            }
         },
         send_new_turn: function() {
             if (confirm(guiMessages.selected.annotation_app.confirmEditing)) {
@@ -744,6 +746,12 @@ Vue.component('dialogue-turn',{
             v-on:click="selection_done()" v-bind:id="'selection-done-'+currentId"
             style="float:right">
                 {{guiMessages.selected.annotation_app.doneSelection}}
+        </button>
+
+        <button type="button"
+            v-if="readOnly == true" class="help-button btn btn-sm btn-primary turn-editing-btn"
+            v-on:click.stop="delete_this_turn(currentId)" v-bind:id="'delete-turn-'+currentId" style="margin-left:1%">
+                {{guiMessages.selected.annotation_app.sendDeleteTurn}}
         </button>
 
         <button type="button"
