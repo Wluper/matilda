@@ -152,11 +152,11 @@ Vue.component("supervision-view", {
                      {{name.id}}
                   </div>
 
-                  <div class="errors-space">
+                  <div class="errors-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      {{guiMessages.selected.admin.dataItems}}:<span class="gold-false">{{name.documentLength}}</span>
                   </div>
 
-                  <div class="gold-space">
+                  <div class="gold-space" v-on:click="clicked_collection(name.id, name.assignedTo, index)">
                      Gold: <span v-if="name.gold" class="gold-true">True</span>
                      <span v-else>False</span>
                   </div>
@@ -725,13 +725,15 @@ Vue.component("supervision-annotation-app", {
         console.log("==================================");
         console.log("I am being destroyed");
         console.log(this.dialogueId);
+        databaseEventBus.$off("load_dialogue_editor", this.init );
     },
 
     created () {
-        annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
-        annotationAppEventBus.$on("turn_updated_string", this.content_update);
-        annotationAppEventBus.$on("new_empty_turn", this.send_new_empty_turn);
-        annotationAppEventBus.$on("delete_turn", this.send_delete_turn);
+         databaseEventBus.$on("load_dialogue_editor", this.init);
+         annotationAppEventBus.$on("update_turn_id", this.id_updated_from_ids_list);
+         annotationAppEventBus.$on("turn_updated_string", this.content_update);
+         annotationAppEventBus.$on("new_empty_turn", this.send_new_empty_turn);
+         annotationAppEventBus.$on("delete_turn", this.send_delete_turn);
     },
 
     // METHODS
