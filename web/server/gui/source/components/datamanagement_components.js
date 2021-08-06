@@ -15,6 +15,7 @@ Vue.component("datamanagement-view", {
             selectedCollection:[],
             allEntriesNamedMetadata:{},
             tIndex:"",
+            dialogueEditor:false,
         }
     },
 
@@ -22,6 +23,7 @@ Vue.component("datamanagement-view", {
         databaseEventBus.$on("collections_changed", this.init );
         databaseEventBus.$on("creation_completed", this.reset_view );
         databaseEventBus.$on("entry_selected", this.inspect_entry );
+        adminEventBus.$on("open_dialogue_editor", this.open_dialogue_editor );
     },
 
     mounted () {
@@ -53,6 +55,7 @@ Vue.component("datamanagement-view", {
                 databaseEventBus.$off("collections_changed", this.init );
                 databaseEventBus.$off("creation_completed", this.reset_view );
                 databaseEventBus.$off("entry_selected", this.inspect_entry );
+                adminEventBus.$off("open_dialogue_editor", this.open_dialogue_editor );
                 adminEventBus.$emit("go_back");
             }
         },
@@ -96,7 +99,7 @@ Vue.component("datamanagement-view", {
         },
 
         clicked_active() {
-            adminAppEventBus.$emit("go_back");
+            adminEventBus.$emit("go_back");
         },
 
         clicked_user() {
@@ -168,6 +171,17 @@ Vue.component("datamanagement-view", {
             this.status = "collections";
             this.init();
         },
+
+        open_dialogue_editor() {
+            console.log(this.dialogueEditor);
+            this.dialogueEditor = 'open';
+        },
+
+        quit_dialogue_editor() {
+            console.log(this.dialogueEditor);
+            this.dialogueEditor = false;
+            adminEventBus.$emit("go_back_from_editor", "");
+        }
     },
     template:
     `
@@ -181,7 +195,8 @@ Vue.component("datamanagement-view", {
                             {{guiMessages.selected.collection.create}}
                     </button> 
                     <button class="help-button btn btn-sm" @click="showHelpColl = true">{{ guiMessages.selected.database.showHelp }}</button>
-                    <button v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
+                    <button v-if="dialogueEditor == 'open'" v-on:click="quit_dialogue_editor()" class="back-button btn btn-sm">{{guiMessages.selected.admin.backFromEditor}}</button> 
+                    <button v-else v-on:click="go_back()" class="back-button btn btn-sm">{{guiMessages.selected.annotation_app.backToAll}}</button>
                 </div>
                 <help-collection-modal v-if="showHelpColl" @close="showHelpColl = false"></help-collection-modal>
             </div>
@@ -562,11 +577,20 @@ Vue.component('collection-entry-details', {
             changesSaved:"",
             showGold: {boo: false, code:""},
             clickedDialogueToEdit: "",
+            selectedAnnotator:"_matilda_editor_",
          }
    },
 
    mounted () {
       this.init();
+   },
+
+   created () {
+        adminEventBus.$on("go_back_from_editor", this.clicked_entry);
+   },
+
+   beforeDestroyed () {
+        adminEventBus.$off("go_back_from_editor", this.clicked_entry);
    },
 
    methods: {
@@ -576,7 +600,7 @@ Vue.component('collection-entry-details', {
                   .then( (response) => {
                      console.log("Collection details",response[0]);
                      this.entry = response[0];
-                     this.checkedUsers = response[0]["assignedTo"]
+                     this.checkedUsers = response[0]["assignedTo"];
                      document.body.style.cursor = null;
                      this.showGold.boo = this.check_if_gold(this.entry);
             });
@@ -643,13 +667,18 @@ Vue.component('collection-entry-details', {
         },
 
         clicked_entry(clickedDialogue) {
+            // this function is used to communicate the choosen dialogue to the editor component
+            // and also to close the editor by sending an empty id\\\\\\
             this.clickedDialogueToEdit = clickedDialogue;
+            databaseEventBus.$emit("load_dialogue_editor", clickedDialogue);
+            if (clickedDialogue != "")
+                adminEventBus.$emit("open_dialogue_editor");
         }
   },
   template:
   ` 
   <div class="inner-wrap">
-    <div id="collection-editing">
+    <div id="collection-editing" v-if="clickedDialogueToEdit == ''">
         <div id="collection-fields" class="collection-list two-columns tc-no-min">
             <h2>{{guiMessages.selected.admin.editButton}}: {{entry.id}}</h2>
             <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
@@ -706,7 +735,7 @@ Vue.component('collection-entry-details', {
                     <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
                     </div>
-                    <div class="dialogue-entry-info" v-on:click="clicked_entry(name)">
+                    <div class="dialogue-entry-info" v-on:click.stop.once="clicked_entry(name)">
                         <div class="entry-id">
                             {{name}}
                         </div>
@@ -722,6 +751,16 @@ Vue.component('collection-entry-details', {
             v-bind:selectedDialogue="clickedDialogueToEdit">
         </reduced-supervision-view>
     </div>
+    
+    <!-- Dialogue content editor -->
+    <div id="supervision-absolute-container" v-if="clickedDialogueToEdit != ''">
+        <supervision-annotation-app
+            v-bind:dialogueId="clickedDialogueToEdit"
+            v-bind:selectedCollection="selectedCollection"
+            v-bind:selectedAnnotator="selectedAnnotator">
+        </supervision-annotation-app>
+    </div>
+
  </div>
   `
 });
