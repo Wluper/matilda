@@ -11,7 +11,7 @@
         "full_log": true
     },
     "database": {
-        "name": "matilda_wsgi",
+        "name": "matilda_wsgi_dev",
         "legacy_configuration": {
             "address": "localhost",
             "port": 27017,

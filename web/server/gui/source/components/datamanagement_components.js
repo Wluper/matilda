@@ -323,10 +323,10 @@ Vue.component("datamanagement-view", {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="admin-true">Administrator</span>
+                                        {{guiMessages.selected.admin.role}}: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="admin-false">Annotator</span>
+                                        {{guiMessages.selected.admin.role}}: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -529,10 +529,10 @@ Vue.component('collection-users-reverse', {
                                     </div>
                                     <div class="entry-annotated">
                                         <template v-if="user.role == 'administrator'">
-                                        Role: <span class="admin-true">Administrator</span>
+                                        {{guiMessages.selected.admin.role}}: <span class="admin-true">Administrator</span>
                                         </template>
                                         <template v-else>
-                                        Role: <span class="admin-false">Annotator</span>
+                                        {{guiMessages.selected.admin.role}}: <span class="admin-false">Annotator</span>
                                         </template>
                                     </div>
                                 </label>
@@ -560,7 +560,8 @@ Vue.component('collection-entry-details', {
             role: mainApp.role,
             checkedUsers:[],
             changesSaved:"",
-            showGold: {boo: false, code:""}
+            showGold: {boo: false, code:""},
+            clickedDialogueToEdit: "",
          }
    },
 
@@ -639,6 +640,10 @@ Vue.component('collection-entry-details', {
                     }
                 )
             }
+        },
+
+        clicked_entry(clickedDialogue) {
+            this.clickedDialogueToEdit = clickedDialogue;
         }
   },
   template:
@@ -673,10 +678,10 @@ Vue.component('collection-entry-details', {
                             </div>
                             <div class="entry-annotated">
                                 <template v-if="user.role == 'administrator'">
-                                    Role: <span class="gold-true">Administrator</span>
+                                    {{guiMessages.selected.admin.role}}: <span class="gold-true">Administrator</span>
                                 </template>
                                 <template v-else>
-                                    Role: <span class="gold-false">Annotator</span>
+                                    {{guiMessages.selected.admin.role}}: <span class="gold-false">Annotator</span>
                                 </template>
                             </div>
                         </label>
@@ -701,7 +706,7 @@ Vue.component('collection-entry-details', {
                     <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
                     </div>
-                    <div class="dialogue-entry-info">
+                    <div class="dialogue-entry-info" v-on:click="clicked_entry(name)">
                         <div class="entry-id">
                             {{name}}
                         </div>
@@ -712,8 +717,12 @@ Vue.component('collection-entry-details', {
                 </div>
             </li>
         </ul>
+        <reduced-supervision-view
+            v-bind:selectedCollection="selectedCollection"
+            v-bind:selectedDialogue="clickedDialogueToEdit">
+        </reduced-supervision-view>
     </div>
-    </div>
+ </div>
   `
 });
 
@@ -884,10 +893,10 @@ Vue.component('collection-creation', {
                             </div>
                             <div class="entry-annotated">
                                 <template v-if="user.role == 'administrator'">
-                                    Role: <span class="gold-true">Administrator</span>
+                                    {{guiMessages.selected.admin.role}}: <span class="gold-true">Administrator</span>
                                 </template>
                                 <template v-else>
-                                    Role: <span class="gold-false">Annotator</span>
+                                    {{guiMessages.selected.admin.role}} <span class="gold-false">Annotator</span>
                                 </template>
                             </div>
                         </label>
@@ -908,3 +917,40 @@ Vue.component('collection-creation', {
     </div>
   `
 });
+
+Vue.component("reduced-supervision-view", {
+
+    props: [
+       "selectedCollection", "selectedDialogue"
+    ],
+ 
+    data () {
+       return {
+          guiMessages,
+          selectedAnnotator:'admin',
+       }
+    },
+ 
+    mounted () {
+       //
+    },
+ 
+    created () {
+    },
+ 
+    methods: {        
+       load_in_dialogue_in_supervision: function () {
+       },
+
+    },
+    template:
+    `
+ <div id="supervision-container" v-if="selectedDialogue != ''">
+    <supervision-annotation-app
+       v-bind:selectedCollection="selectedCollection"
+       v-bind:selectedAnnotator="selectedAnnotator"
+       v-bind:dialogueId="selectedDialogue">
+    </supervision-annotation-app>
+ </div>
+   `
+ });
