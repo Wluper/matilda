@@ -65,6 +65,8 @@ guiMessages = {
             confirmSave: "Do you want to save the new configuration?",
             confGuide: "Configuration Guide",
             noAnnotations: "No users started to annotate this collection yet.",
+            newDialogueNameInput: "Insert the name of the new dialogue. The name must be unique in the selected collection and must not contain dots nor be longer than 20 chars. The dialogue will be empty unless you enter it and edit its turns.",
+            cancelledDialogueNameInput: "Not a valid name. Operation cancelled."
         },
         lida: {
             button_fileFormatInfo: "Format Info",
@@ -142,6 +144,7 @@ guiMessages = {
             turnId: "Turn Id",
             enter: "Enter",
             save: "Save",
+            saveAssignement: "Save new assignement and info",
             enterQuery:"Enter New Query",
             allSaved: "All Changes Saved",
             unsaved: "Unsaved Changes",
@@ -439,6 +442,8 @@ guiMessages = {
             confirmSave: "Vuoi salvare la nuova configurazione?",
             confGuide: "Guida alla Configurazione",
             noAnnotations: "Nessun utente ha iniziato ad annotare questa collezione.",
+            newDialogueNameInput: "Inserisci un nome per il nuovo dialogo. Il nome deve essere univoco nella collezione selezionata e non può contenere punti o essere più lungo di 20 caratteri. Il nuovo dialogo sarà vuoto, una volta inserito potrai modificarlo come avviene per gli altri dialoghi.",
+            cancelledDialogueNameInput: "Il nome inserito non è valido. Operazione cancellata."
         },
         lida: {
             button_fileFormatInfo: "Info sui formati",
@@ -517,6 +522,7 @@ guiMessages = {
             turnId: "Id Turno",
             enter: "Invia",
             save: "Salva",
+            saveAssignement: "Salva nuovi assegnamenti e informazioni",
             enterQuery: "Nuova richiesta",
             allSaved: "Modifiche salvate",
             unsaved: "Cambiamenti non salvati",
@@ -784,6 +790,8 @@ guiMessages = {
             confirmSave: "Do you want to save the new configuration?",
             confGuide: "Configuration Guide",
             noAnnotations: "No users started to annotate this collection yet.",
+            newDialogueNameInput: "Insert the name of the new dialogue. The name must be unique in the selected collection and must not contain dots. The dialogue will be empty unless you enter it and edit its turns.",
+            cancelledDialogueNameInput: "Not a valid name. Operation cancelled."
         },
         lida: {
             button_fileFormatInfo: "Info formatieren",
@@ -863,6 +871,7 @@ guiMessages = {
             turnId: "Dialogueschritt",
             enter: "Eintretten",
             save: "Speichern",
+            saveAssignement: "Save new assignement and info",
             enterQuery: "Neue Abfrage eingeben",
             allSaved: "Alle Änderungen gespeichert",
             unsaved: "Nicht gespeicherte Änderungen",

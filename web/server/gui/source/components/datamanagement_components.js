@@ -577,7 +577,8 @@ Vue.component('collection-entry-details', {
             changesSaved:"",
             showGold: {boo: false, code:""},
             clickedDialogueToEdit: "",
-            selectedAnnotator:"_matilda_editor_",
+            selectedAnnotator:"matilda_editor",
+            editorMode:"true",
          }
    },
 
@@ -673,12 +674,29 @@ Vue.component('collection-entry-details', {
             databaseEventBus.$emit("load_dialogue_editor", clickedDialogue);
             if (clickedDialogue != "")
                 adminEventBus.$emit("open_dialogue_editor");
+        },
+
+        add_dialogue(){
+            let new_dialogue_name = prompt(guiMessages.selected.admin.newDialogueNameInput);
+            if ((new_dialogue_name == "") || (new_dialogue_name == null) || (new_dialogue_name == undefined) 
+                || (new_dialogue_name.includes(".",0)) || (new_dialogue_name.length > 20)) {
+                alert(guiMessages.selected.admin.cancelledDialogueNameInput);
+                return;
+            }
+            let params = {
+               "new_dialogue_name":new_dialogue_name
+            }
+            backend.admin_change_dialogue_content(this.selectedCollection, params, "new_dialogue", this.editorMode)
+               .then((response) => {
+                  this.init();
+               }
+            );
         }
   },
   template:
   ` 
   <div class="inner-wrap">
-    <div id="collection-editing" v-if="clickedDialogueToEdit == ''">
+    <div id="collection-editing" style="padding-bottom: 2%;" v-if="clickedDialogueToEdit == ''">
         <div id="collection-fields" class="collection-list two-columns tc-no-min">
             <h2>{{guiMessages.selected.admin.editButton}}: {{entry.id}}</h2>
             <strong>{{guiMessages.selected.collection.collTitle}}:</strong>
@@ -719,12 +737,12 @@ Vue.component('collection-entry-details', {
             </li>
         </ul>
 
-        <div class="closing-list">
+        <div class="closing-list" style="float: right; margin-right: 1%;">
             <button class="help-button btn btn-sm" @click="close_document_view()">
                 {{guiMessages.selected.admin.button_abort}}
             </button>
             <button class="help-button btn btn-sm btn-primary" @click="update()">
-                {{guiMessages.selected.annotation_app.save}}
+                {{guiMessages.selected.annotation_app.saveAssignement}}
             </button>
         </div>
 
@@ -732,6 +750,9 @@ Vue.component('collection-entry-details', {
             <h2>{{entry.documentLength}} {{guiMessages.selected.admin.dataItems}}</h2>
             <li v-for='(content,name) in entry.document' v-bind:id="name" class="listed-entry">
                 <div class="dialogue-entry-list">
+                    <div class="edit-dialogue-button" v-on:click="clicked_entry(name)">
+                        {{guiMessages.selected.admin.editButton}}
+                    </div>
                     <div class="del-dialogue-button" v-on:click="delete_entry(name)">
                         {{guiMessages.selected.lida.button_delete}}
                     </div>
@@ -740,16 +761,13 @@ Vue.component('collection-entry-details', {
                             {{name}}
                         </div>
                         <div class="entry-annotated">
-                            <span>{{guiMessages.selected.lida.turns}}</span>: {{content.length}}
+                            <span>{{guiMessages.selected.lida.turns}}</span>: {{content.length-1}}
                         </div>
                     </div>
                 </div>
             </li>
         </ul>
-        <reduced-supervision-view
-            v-bind:selectedCollection="selectedCollection"
-            v-bind:selectedDialogue="clickedDialogueToEdit">
-        </reduced-supervision-view>
+        <button id="add_new_dialogue" v-on:click="add_dialogue()" class="help-button btn btn-sm btn-primary" style="margin-bottom:4%">{{guiMessages.selected.admin.addDialogue}}</button>
     </div>
     
     <!-- Dialogue content editor -->
@@ -757,7 +775,8 @@ Vue.component('collection-entry-details', {
         <supervision-annotation-app
             v-bind:dialogueId="clickedDialogueToEdit"
             v-bind:selectedCollection="selectedCollection"
-            v-bind:selectedAnnotator="selectedAnnotator">
+            v-bind:selectedAnnotator="selectedAnnotator"
+            v-bind:editorMode="editorMode">
         </supervision-annotation-app>
     </div>
 
@@ -956,40 +975,3 @@ Vue.component('collection-creation', {
     </div>
   `
 });
-
-Vue.component("reduced-supervision-view", {
-
-    props: [
-       "selectedCollection", "selectedDialogue"
-    ],
- 
-    data () {
-       return {
-          guiMessages,
-          selectedAnnotator:'admin',
-       }
-    },
- 
-    mounted () {
-       //
-    },
- 
-    created () {
-    },
- 
-    methods: {        
-       load_in_dialogue_in_supervision: function () {
-       },
-
-    },
-    template:
-    `
- <div id="supervision-container" v-if="selectedDialogue != ''">
-    <supervision-annotation-app
-       v-bind:selectedCollection="selectedCollection"
-       v-bind:selectedAnnotator="selectedAnnotator"
-       v-bind:dialogueId="selectedDialogue">
-    </supervision-annotation-app>
- </div>
-   `
- });

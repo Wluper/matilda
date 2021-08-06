@@ -255,8 +255,9 @@ def handle_dialogues_metadata_resource(user, id=None, collection=None):
             except:
                 #reload session
                 dialogueFile.create_userspace(user)
+                #import and format new dialogues
                 for docCollection in docRetrieved:
-                    dialogueFile.update_dialogues(user, docCollection["document"])
+                    __add_new_dialogues_from_json_dict(user, collection, responseObject, dialogueDict=docCollection["document"])
 
             dialogueFile.change_collection(user, collection)
 
@@ -308,8 +309,8 @@ def handle_collections_and_annotations_metadata():
 @MatildaApp.route('/<user>/dialogues/<id>/<fileName>',methods=['GET','POST','DELETE'])
 @MatildaApp.route('/<user>/dialogues/<fileName>/<id>',methods=['PUT'])
 @MatildaApp.route('/<user>/dialogues/collection/<fileName>',methods=['POST'])
-@MatildaApp.route('/supervision/<supervisor>/dialogues/<id>',methods=['GET'])
-def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None):
+@MatildaApp.route('/supervision/<supervisor>/<fileName>/<id>/<editorMode>',methods=['GET'])
+def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None, editorMode=None):
     """
     GET - All dialogues
 
@@ -338,7 +339,24 @@ def handle_dialogues_resource(user=None, id=None, fileName=None, supervisor=None
         responseObject = { "status": "success" }
 
     if supervisor:
-        responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+
+        if editorMode == "true":
+            #direct access to database
+            docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":fileName})
+            return jsonify({"dialogue":docRetrieved[0]["document"][id]})
+
+        try:
+            responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        except:
+            #reload session
+            dialogueFile.clean_workspace("Su_"+supervisor)
+            #then load and import dialogues
+            docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":fileName})
+            if len(docRetrieved) != 0:
+                for docCollection in docRetrieved:
+                    __add_new_dialogues_from_json_dict("Su_"+supervisor, fileName, {}, dialogueDict=docCollection["document"])
+            responseObject = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        
         return jsonify(responseObject)
 
     elif fileName:
@@ -385,8 +403,8 @@ def retrieve_and_return_annotation_styles():
 
 @MatildaApp.route('/dialogue_annotationstyle/<collection>', methods=['GET'])
 @MatildaApp.route('/<user>/dialogue_annotationstyle/<collection>/<id>',methods=['GET'])
-@MatildaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>', methods=['GET'])
-def handle_annotation_style_resource(collection,user=None,id=None,supervisor=None):
+@MatildaApp.route('/supervision/<supervisor>/dialogue_annotationstyle/<collection>/<id>/<editorMode>', methods=['GET'])
+def handle_annotation_style_resource(collection,user=None,id=None,supervisor=None,editorMode=None):
     """
     GET - Returns the annotation style for different workspace "global admin", "user specific" or "supervision"
     """
@@ -396,7 +414,18 @@ def handle_annotation_style_resource(collection,user=None,id=None,supervisor=Non
 
     #return data for the correct view
     if supervisor:
-        dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        try:
+            dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+        except:
+            #reload session
+            dialogueFile.clean_workspace("Su_"+supervisor)
+            #then load and import dialogues
+            docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":collection})
+            if len(docRetrieved) != 0:
+                for docCollection in docRetrieved:
+                    __add_new_dialogues_from_json_dict("Su_"+supervisor, collection, {}, dialogueDict=docCollection["document"])
+            dialogue = dialogueFile.get_dialogue("Su_"+supervisor, id = id)
+            
         Configuration.validate_dialogue(annotationStyle,dialogue["dialogue"])
         return jsonify( Configuration.create_annotation_dict(annotationStyle) )
     
@@ -459,9 +488,10 @@ def handle_name_resource(user):
 
 @MatildaApp.route('/database', methods=['GET'])
 @MatildaApp.route('/<user>/database/<mode>/<activecollection>',methods=['PUT'])
+@MatildaApp.route('/<user>/database/<mode>/<activecollection>/<editorMode>',methods=['PUT'])
 @MatildaApp.route('/database/<DBcollection>',methods=['POST'])
 @MatildaApp.route('/database/<id>/<DBcollection>',methods=['GET','POST'])
-def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None):
+def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, activecollection=None, editorMode=False):
     """
     GET - Gets the dialogues id in the database collection for the user
         or Gets an entire database document 
@@ -504,9 +534,13 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
                     "document."+str(values["dialogue"])+"."+str(values["turn"])+".sys":values["sys"]}
                 )
                 # update the viewed collection in the dialogue source to keep the gui in sync
-                docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":values["selected_annotator"]})
-                __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
-                responseObject = {"status":"success", "dialogue":docRetrieved[0]["document"][str(values["dialogue"])]}
+                if editorMode != "true":
+                    docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":values["selected_annotator"]})
+                    __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
+                    responseObject = {"status":"success", "dialogue":docRetrieved[0]["document"][str(values["dialogue"])]}
+                else:
+                    docRetrieved = DatabaseManagement.readDatabase("dialogues_collections",{"id":activecollection})
+                    responseObject = {"status":"success", "dialogue":docRetrieved[0]["document"][str(values["dialogue"])]}
             
             elif mode == "new_turn" or mode == "remove_turn":
                 # retrive the dialogue
@@ -528,9 +562,12 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
                     "annotated_collections", 
                     {"document."+str(values["dialogue"]):dialogue}
                 )
-                # update the viewed collection in the dialogue source to keep the gui in sync
-                docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":values["selected_annotator"]})
-                __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
+                
+                if editorMode != "true":
+                    # update the viewed collection in the dialogue source to keep the gui in sync
+                    docRetrieved = DatabaseManagement.readDatabase("annotated_collections",{"id":activecollection,"annotator":values["selected_annotator"]})
+                    if len(docRetrieved) != 0:
+                        __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=docRetrieved[0]["document"])
                 
                 responseObject = {"status":"success", "dialogue":dialogue}
             
@@ -548,9 +585,13 @@ def handle_database_resource(id=None, user=None, mode=None, DBcollection=None, a
                     {"document."+str(values["new_dialogue_name"]):new_dialogue}
                 )
                 # update the viewed collection in the dialogue source to keep the gui in sync
-                collection = DatabaseManagement.readDatabase("annotated_collections", {"id":activecollection, "annotator":values["selected_annotator"], "fromCollection":activecollection}, {"document":1, "_id":0})
-                __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=collection[0]["document"])
-                responseObject = {"status":"success", "collection":collection}          
+                if editorMode != "true":
+                    collection = DatabaseManagement.readDatabase("annotated_collections", {"id":activecollection, "annotator":values["selected_annotator"], "fromCollection":activecollection}, {"document":1, "_id":0})
+                    __add_new_dialogues_from_json_dict("Su_"+user, activecollection, responseObject, dialogueDict=collection[0]["document"])
+                    responseObject = {"status":"success", "collection":collection}
+                else:
+                    collection = DatabaseManagement.readDatabase("dialogues_collections", {"id":activecollection}, {"document":1, "_id":0})
+                    responseObject = {"status":"success", "collection":collection}
 
 
     

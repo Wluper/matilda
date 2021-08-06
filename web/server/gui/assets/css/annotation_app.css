@@ -129,7 +129,7 @@ textarea {
     margin: 0;
     outline: none;
     border: 1px solid #e1e1e3;
-    padding: 1px 15px;
+    padding: 10px 15px;
     border-left:none;
 }
 textarea:focus {

@@ -15,6 +15,7 @@ Vue.component("supervision-view", {
          selectedAnnotationRate:'',
          allAnnotators:[],
          mode:'supervision-collections-list',
+         editorMode:false,
       }
    },
 
@@ -204,7 +205,8 @@ Vue.component("supervision-view", {
    <supervision-annotation-app v-else-if="mode == 'supervision-annotating'"
       v-bind:selectedCollection="selectedCollection"
       v-bind:selectedAnnotator="selectedAnnotator"
-      v-bind:dialogueId="displayingDialogue">
+      v-bind:dialogueId="displayingDialogue"
+      v-bind:editorMode="editorMode">
    </supervision-annotation-app>
 </div>
   `
@@ -610,11 +612,17 @@ Vue.component("supervision-dialogues", {
       },
 
       add_dialogue(){
+         let new_dialogue_name = prompt(guiMessages.selected.admin.newDialogueNameInput);
+         if ((new_dialogue_name == "") || (new_dialogue_name == null) || (new_dialogue_name == undefined) 
+            || (new_dialogue_name.includes(".",0)) || (new_dialogue_name.length > 20)) {
+             alert(guiMessages.selected.admin.cancelledDialogueNameInput);
+             return;
+         }
          let params = {
-            "new_dialogue_name":"new_dialogue5", 
+            "new_dialogue_name":new_dialogue_name, 
             "selected_annotator":this.selectedAnnotator
          }
-         backend.admin_change_dialogue_content(this.Su_activeCollection, params, "new_dialogue")
+         backend.admin_change_dialogue_content(this.Su_activeCollection, params, "new_dialogue", this.editorMode)
             .then((response) => {
                this.getAllDialogueIdsFromServer();
             }
@@ -675,7 +683,7 @@ Vue.component("supervision-dialogues", {
 
 Vue.component("supervision-annotation-app", {
 
-    props: ["dialogueId","selectedCollection","selectedAnnotator"],
+    props: ["dialogueId","selectedCollection","selectedAnnotator","editorMode"],
 
     data () {
         return {
@@ -690,7 +698,7 @@ Vue.component("supervision-annotation-app", {
             metaTags: [],
             annotatedTurns: [],
             annotationRate: '0%',
-            readOnly: true,
+            readOnly: true
         }
     },
 
@@ -741,7 +749,7 @@ Vue.component("supervision-annotation-app", {
 
         init: function() {
             // Step One :: Download a Single Dialogue
-            backend.get_single_dialogue_async(this.dialogueId, null, "supervision")
+            backend.get_single_dialogue_async(this.dialogueId, this.selectedCollection, "supervision", this.editorMode)
                 .then( (response) => {
                     console.log('---- RECEIVED DATA FROM THE SERVER ----')
                     console.log(response);
@@ -756,7 +764,7 @@ Vue.component("supervision-annotation-app", {
                 })
 
           // Step Two :: Get the Annotation Styles
-          backend.get_annotation_style_async(this.selectedCollection, this.dialogueId, "supervision")
+          backend.get_annotation_style_async(this.selectedCollection, this.dialogueId, "supervision", this.editorMode)
               .then( (response) => {
                   this.annotationFormat = response;
                   if (this.annotationFormat.global_slot != undefined) {
@@ -764,6 +772,12 @@ Vue.component("supervision-annotation-app", {
                   }
               });
 
+        },
+
+        editorModeWidth: function() {
+            if (this.editorMode == 'true') {
+               return "grid-column-end: 1; padding:0;"
+            }
         },
 
         remove_turn: function(event) {
@@ -828,7 +842,7 @@ Vue.component("supervision-annotation-app", {
                turn: this.dCurrentId,
                selected_annotator: this.selectedAnnotator
             };
-            backend.admin_change_dialogue_content(this.selectedCollection, out, "content") 
+            backend.admin_change_dialogue_content(this.selectedCollection, out, "content", this.editorMode) 
                .then((response) => {
                   this.allDataSaved = true;
                   //reload dialogue
@@ -855,7 +869,7 @@ Vue.component("supervision-annotation-app", {
                turn:this.dCurrentId,
                selected_annotator: this.selectedAnnotator
             }
-            backend.admin_change_dialogue_content(this.selectedCollection, params, "new_turn") 
+            backend.admin_change_dialogue_content(this.selectedCollection, params, "new_turn", this.editorMode) 
                .then((response) => {
                   this.allDataSaved = true;
                   //reload dialogue
@@ -877,7 +891,7 @@ Vue.component("supervision-annotation-app", {
                turn:event,
                selected_annotator: this.selectedAnnotator
             }
-            backend.admin_change_dialogue_content(this.selectedCollection, params, "remove_turn") 
+            backend.admin_change_dialogue_content(this.selectedCollection, params, "remove_turn", this.editorMode) 
                .then((response) => {
                   this.allDataSaved = true;
                   //reload dialogue
@@ -916,10 +930,12 @@ Vue.component("supervision-annotation-app", {
                            v-bind:turns="dTransformedTurns"
                            v-bind:currentId="dCurrentId"
                            v-bind:metaTags="metaTags"
-                           v-bind:readOnly="readOnly">
+                           v-bind:readOnly="readOnly"
+                           :style="editorModeWidth()">
          </dialogue-turns>
 
-         <annotations v-bind:globalSlot="annotationFormat.global_slot"
+         <annotations v-if="editorMode != 'true'" 
+                        v-bind:globalSlot="annotationFormat.global_slot"
                         v-bind:globalSlotNonEmpty="globalSlotNonEmpty"
                         v-bind:classifications="dCurrentTurn.multilabel_classification"
                         v-bind:classifications_strings="dCurrentTurn.multilabel_classification_string"

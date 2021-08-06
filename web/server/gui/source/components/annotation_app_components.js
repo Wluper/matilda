@@ -762,7 +762,7 @@ Vue.component('dialogue-turn',{
 
         <button type="button"
             v-if="editing == true" class="help-button btn btn-sm btn-primary turn-editing-btn"
-            v-on:click="send_new_turn(currentId)" v-bind:id="'editing-done-'+currentId" style="margin-right: 25%;">
+            v-on:click="send_new_turn(currentId)" v-bind:id="'editing-done-'+currentId" style="margin-right: 1%;">
                 {{guiMessages.selected.annotation_app.doneEditing}}
         </button>
 

@@ -103,7 +103,7 @@ async function manage_configuration_file(mode,id,jsonFile) {
     }
 }
 
-async function get_annotation_style_async(collection,id,supervision){
+async function get_annotation_style_async(collection, id, supervision, editorMode=false){
 
     var dialogues = {}
 
@@ -113,7 +113,7 @@ async function get_annotation_style_async(collection,id,supervision){
     } else {
         
         if (supervision != undefined) {
-            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
+            var apiLink = API_BASE+"/supervision/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}/${editorMode}`
         } else { 
             var apiLink = API_BASE+"/"+mainApp.userName+`/dialogue_annotationstyle/${collection}/${id}`
         }
@@ -316,11 +316,11 @@ async function get_all_dialogues_async(admin) {
 };
 
 
-async function get_single_dialogue_async(id, collection, supervision) {
+async function get_single_dialogue_async(id, collection, supervision, editorMode=false) {
 
     if (supervision != undefined) {
 
-        apiLink = API_BASE+"/supervision/"+mainApp.userName+"/dialogues/"+id;
+        apiLink = API_BASE+"/supervision/"+mainApp.userName+"/"+collection+"/"+id+"/"+editorMode;
 
         var response = await axios.get( apiLink )
 
@@ -977,10 +977,10 @@ async function admin_import_for_interannotation(collection, newFile=undefined) {
 }
 
 
-async function admin_change_dialogue_content(activeColl, fields, mode) {
+async function admin_change_dialogue_content(activeColl, fields, mode, editorMode=false) {
 
     document.body.style.cursor = "progress";
-    var apiLink = API_BASE+"/"+mainApp.userName+`/database/${mode}/${activeColl}`
+    var apiLink = API_BASE+"/"+mainApp.userName+`/database/${mode}/${activeColl}/${editorMode}`
 
     try {
 
