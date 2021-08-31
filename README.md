@@ -142,7 +142,7 @@ You can test it's running by:
 `ps aux | grep -v grep | grep mongod`
 
 #### NOTE: Manual operations on the MongoDB database
-Whatver type of database you choose to use, if you perform manual operation on it such as document copies, document deletions or backup recovering, it's very important not to create duplicated documents. This precaution will prevent inconsistent and unexepected behaviour during the software workflow.
+Whatever solution you choose to use to deploy your MongoDB database, if you perform manual operations on it such as document copies, document deletions or backup recovering, it's very important not to create duplicated documents. This precaution will prevent inconsistent and unexepected behaviour during Matilda's workflow.
 
 
 ### Accessing the interface
